@@ -40,6 +40,10 @@
             textBox2 = new TextBox();
             label6 = new Label();
             label7 = new Label();
+            label8 = new Label();
+            label9 = new Label();
+            label10 = new Label();
+            label11 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -124,7 +128,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(372, 113);
+            textBox2.Location = new Point(372, 91);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(121, 23);
             textBox2.TabIndex = 9;
@@ -132,7 +136,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(266, 116);
+            label6.Location = new Point(266, 94);
             label6.Name = "label6";
             label6.Size = new Size(100, 15);
             label6.TabIndex = 10;
@@ -141,17 +145,57 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(499, 116);
+            label7.Location = new Point(499, 94);
             label7.Name = "label7";
             label7.Size = new Size(267, 15);
             label7.TabIndex = 11;
             label7.Text = "String length limited by the original string length.";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(290, 139);
+            label8.Name = "label8";
+            label8.Size = new Size(476, 15);
+            label8.TabIndex = 12;
+            label8.Text = "&&0 Is for dark green text, while &&1 is for light green highlighted text. [Mission Objectives]";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(290, 154);
+            label9.Name = "label9";
+            label9.Size = new Size(327, 15);
+            label9.TabIndex = 13;
+            label9.Text = "Remember to return to dark green after initiating a highlight.";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(290, 169);
+            label10.Name = "label10";
+            label10.Size = new Size(429, 15);
+            label10.TabIndex = 14;
+            label10.Text = "EG : \"&&0 Kill &&1Xenomorphs&&0 and destroy &&1barrels&&0 where you find them.\"";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(260, 139);
+            label11.Name = "label11";
+            label11.Size = new Size(29, 15);
+            label11.TabIndex = 15;
+            label11.Text = "Tip :";
             // 
             // TextEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label11);
+            Controls.Add(label10);
+            Controls.Add(label9);
+            Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(textBox2);
@@ -184,5 +228,9 @@
         private TextBox textBox2;
         private Label label6;
         private Label label7;
+        private Label label8;
+        private Label label9;
+        private Label label10;
+        private Label label11;
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace ALTViewer
+﻿using System.Text;
+using System.Text.RegularExpressions;
+
+namespace ALTViewer
 {
     public partial class TextEditor : Form
     {
@@ -17,6 +20,7 @@
         public TextEditor()
         {
             InitializeComponent();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             foreach (string language in languages) { comboBox1.Items.Add(language); }
             foreach (string mission in missions) { listBox1.Items.Add(mission); }
             comboBox1.SelectedIndex = 0; // Default to English
@@ -26,11 +30,89 @@
         {
             textBox2.Text = languages[comboBox1.SelectedIndex];
             if (!setup) { return; }
+
+            if(listBox1.SelectedIndex != -1)
+            {
+                richTextBox1.Text = GetMissionText(listBox1.SelectedIndex, languages[comboBox1.SelectedIndex]);
+            }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox1.Text = missions[listBox1.SelectedIndex];
+            richTextBox1.Text = GetMissionText(listBox1.SelectedIndex, languages[comboBox1.SelectedIndex]);
+        }
+
+        private string GetMissionText(int index, string language)
+        {
+            string missionText = "";
+
+            //string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION"; // presuming the program is at the base directory of the game files as per the repacked version.
+            string filePath = "TRILOGY\\CD\\LANGUAGE\\MISSION"; // temporary testing
+
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0:
+                    filePath = filePath + "E";
+                    break;
+                case 1:
+                    filePath = filePath + "F";
+                    break;
+                case 2:
+                    filePath = filePath + "I";
+                    break;
+                case 3:
+                    filePath = filePath + "S";
+                    break;
+                default:
+                    MessageBox.Show("Unsupported language selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return missionText;
+            }
+            filePath += ".TXT";
+
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("Missions file not found: " + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return missionText;
+            }
+
+            using (StreamReader reader = new StreamReader(filePath, Encoding.GetEncoding(858))) // 858	IBM00858	OEM Multilingual Latin I
+            {
+                int entryIndex = -1;
+                bool insideBlock = false;
+                List<string> blockLines = new List<string>();
+
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Trim() == "*")
+                    {
+                        if (!insideBlock)
+                        {
+                            // Start of a block
+                            insideBlock = true;
+                            blockLines.Clear();
+                        }
+                        else
+                        {
+                            // End of a block
+                            entryIndex++;
+
+                            if (entryIndex == index)
+                            {
+                                missionText = string.Join(Environment.NewLine, blockLines);
+                                break;
+                            }
+
+                            insideBlock = false;
+                        }
+                        continue;
+                    }
+
+                    if (insideBlock) { blockLines.Add(line); }
+                }
+            }
+            return missionText; // Placeholder for the method that retrieves the mission text based on index and language
         }
     }
 }
