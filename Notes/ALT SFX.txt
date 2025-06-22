@@ -1,0 +1,4 @@
+SFX = Unigned 8-bit PCM
+Little-endian
+1 Channel (Mono)
+11025Hz
