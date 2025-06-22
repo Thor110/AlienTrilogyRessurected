@@ -6,11 +6,13 @@ namespace ALTViewer
     public partial class SoundEffects : Form
     {
         private SoundPlayer soundPlayer = null!;
+        private string outputPath = "";
         public SoundEffects()
         {
             InitializeComponent();
             DetectAudioFiles(); // Automatically detect audio files on form load
         }
+        // Detect audio files in the default game directory
         public void DetectAudioFiles()
         {
             try
@@ -23,16 +25,17 @@ namespace ALTViewer
             catch (Exception ex) { MessageBox.Show("Error detecting audio files: " + ex.Message); }
         }
         private bool FileExists(string fileName) { return File.Exists($"TRILOGY\\CD\\SFX\\{fileName}.RAW"); }
+        // list box selection changed event
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); return; } // safety first
+            if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
             byte[] audioData = File.ReadAllBytes($"TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW"); // load selected audio file
             pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
         }
         // play sound method
         private void PlayRawSound()
         {
-            if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); return; } // safety first
+            if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
             byte[] rawData = File.ReadAllBytes($"TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW");
             byte[] wavHeader = CreateWavHeader(rawData.Length);
             using var ms = new MemoryStream();
@@ -72,6 +75,7 @@ namespace ALTViewer
                 return ms.ToArray();
             }
         }
+        // draw waveform from raw audio data
         private Bitmap DrawWaveform(byte[] wavData, int width, int height, int sampleRate = 11025)
         {
             var bmp = new Bitmap(width, height);
@@ -122,5 +126,30 @@ namespace ALTViewer
         private void listBox1_DoubleClick(object sender, EventArgs e) { PlayRawSound(); }
         // play sound on button click
         private void button1_Click(object sender, EventArgs e) { PlayRawSound(); }
+        // extract to file button click
+        private void button2_Click(object sender, EventArgs e) { if (outputPath != "") { ExtractToFile(outputPath); } }
+        // extract to file method
+        private void ExtractToFile(string outputPath)
+        {
+            if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
+            byte[] rawData = File.ReadAllBytes($"TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW");
+            using var fs = new FileStream(Path.Combine(outputPath, $"{listBox1.SelectedItem}.WAV"), FileMode.Create);
+            byte[] wavHeader = CreateWavHeader(rawData.Length);
+            fs.Write(wavHeader, 0, wavHeader.Length);
+            fs.Write(rawData, 0, rawData.Length);
+            MessageBox.Show($"Audio file extracted to : {outputPath}");
+        }
+        // select output path button click
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            fbd.Description = "Select output folder to save the WAV file.";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                outputPath = fbd.SelectedPath;
+                textBox1.Text = outputPath; // update text box with selected path
+                button2.Enabled = true; // enable extract button
+            }
+        }
     }
 }

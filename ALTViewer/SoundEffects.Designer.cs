@@ -32,6 +32,9 @@
             button1 = new Button();
             pictureBox1 = new PictureBox();
             label1 = new Label();
+            button2 = new Button();
+            button3 = new Button();
+            textBox1 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -73,11 +76,43 @@
             label1.TabIndex = 3;
             label1.Text = "Sound Length :";
             // 
+            // button2
+            // 
+            button2.Enabled = false;
+            button2.Location = new Point(288, 93);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 4;
+            button2.Text = "Export";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(288, 122);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 5;
+            button3.Text = "Output";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(369, 123);
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(419, 23);
+            textBox1.TabIndex = 6;
+            // 
             // SoundEffects
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(textBox1);
+            Controls.Add(button3);
+            Controls.Add(button2);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
             Controls.Add(button1);
@@ -95,5 +130,8 @@
         private Button button1;
         private PictureBox pictureBox1;
         private Label label1;
+        private Button button2;
+        private Button button3;
+        private TextBox textBox1;
     }
 }
