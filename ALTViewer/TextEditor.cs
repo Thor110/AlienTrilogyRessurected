@@ -31,7 +31,7 @@ namespace ALTViewer
             textBox2.Text = languages[comboBox1.SelectedIndex];
             if (!setup) { return; }
 
-            if(listBox1.SelectedIndex != -1)
+            if (listBox1.SelectedIndex != -1)
             {
                 richTextBox1.Text = GetMissionText(listBox1.SelectedIndex, languages[comboBox1.SelectedIndex]);
             }
@@ -113,6 +113,25 @@ namespace ALTViewer
                 }
             }
             return missionText; // Placeholder for the method that retrieves the mission text based on index and language
+        }
+        // Mission Text Selected
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            setup = false;
+            comboBox1.Items.Clear();
+            listBox1.Items.Clear();
+            foreach (string language in languages) { comboBox1.Items.Add(language); }
+            foreach (string mission in missions) { listBox1.Items.Add(mission); }
+            setup = true;
+        }
+        // UI Text Selected
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            setup = false;
+            comboBox1.Items.Clear();
+            listBox1.Items.Clear();
+            // parse BIN files here
+            setup = true;
         }
     }
 }

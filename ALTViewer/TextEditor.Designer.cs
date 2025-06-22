@@ -44,6 +44,8 @@
             label9 = new Label();
             label10 = new Label();
             label11 = new Label();
+            radioButton1 = new RadioButton();
+            radioButton2 = new RadioButton();
             SuspendLayout();
             // 
             // listBox1
@@ -59,7 +61,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(260, 26);
+            label1.Location = new Point(260, 61);
             label1.Name = "label1";
             label1.Size = new Size(488, 15);
             label1.TabIndex = 1;
@@ -84,7 +86,7 @@
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(372, 62);
+            comboBox1.Location = new Point(372, 91);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 4;
@@ -93,7 +95,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(254, 65);
+            label2.Location = new Point(254, 94);
             label2.Name = "label2";
             label2.Size = new Size(112, 15);
             label2.TabIndex = 5;
@@ -120,7 +122,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(499, 65);
+            label5.Location = new Point(499, 94);
             label5.Name = "label5";
             label5.Size = new Size(248, 15);
             label5.TabIndex = 8;
@@ -128,7 +130,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(372, 91);
+            textBox2.Location = new Point(372, 120);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(121, 23);
             textBox2.TabIndex = 9;
@@ -136,7 +138,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(266, 94);
+            label6.Location = new Point(266, 123);
             label6.Name = "label6";
             label6.Size = new Size(100, 15);
             label6.TabIndex = 10;
@@ -145,7 +147,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(499, 94);
+            label7.Location = new Point(499, 123);
             label7.Name = "label7";
             label7.Size = new Size(267, 15);
             label7.TabIndex = 11;
@@ -154,7 +156,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(290, 139);
+            label8.Location = new Point(290, 156);
             label8.Name = "label8";
             label8.Size = new Size(476, 15);
             label8.TabIndex = 12;
@@ -163,7 +165,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(290, 154);
+            label9.Location = new Point(290, 171);
             label9.Name = "label9";
             label9.Size = new Size(327, 15);
             label9.TabIndex = 13;
@@ -172,7 +174,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(290, 169);
+            label10.Location = new Point(290, 186);
             label10.Name = "label10";
             label10.Size = new Size(429, 15);
             label10.TabIndex = 14;
@@ -181,17 +183,43 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(260, 139);
+            label11.Location = new Point(260, 156);
             label11.Name = "label11";
             label11.Size = new Size(29, 15);
             label11.TabIndex = 15;
             label11.Text = "Tip :";
+            // 
+            // radioButton1
+            // 
+            radioButton1.AutoSize = true;
+            radioButton1.Location = new Point(372, 23);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new Size(60, 19);
+            radioButton1.TabIndex = 16;
+            radioButton1.Text = "UI Text";
+            radioButton1.UseVisualStyleBackColor = true;
+            radioButton1.CheckedChanged += radioButton1_CheckedChanged;
+            // 
+            // radioButton2
+            // 
+            radioButton2.AutoSize = true;
+            radioButton2.Checked = true;
+            radioButton2.Location = new Point(276, 23);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new Size(90, 19);
+            radioButton2.TabIndex = 17;
+            radioButton2.TabStop = true;
+            radioButton2.Text = "Mission Text";
+            radioButton2.UseVisualStyleBackColor = true;
+            radioButton2.CheckedChanged += radioButton2_CheckedChanged;
             // 
             // TextEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(radioButton2);
+            Controls.Add(radioButton1);
             Controls.Add(label11);
             Controls.Add(label10);
             Controls.Add(label9);
@@ -232,5 +260,7 @@
         private Label label9;
         private Label label10;
         private Label label11;
+        private RadioButton radioButton1;
+        private RadioButton radioButton2;
     }
 }
