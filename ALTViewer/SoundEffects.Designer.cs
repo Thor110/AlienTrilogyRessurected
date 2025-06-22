@@ -35,6 +35,9 @@
             button2 = new Button();
             button3 = new Button();
             textBox1 = new TextBox();
+            button4 = new Button();
+            label2 = new Label();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -51,7 +54,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(288, 49);
+            button1.Location = new Point(250, 258);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 1;
@@ -70,7 +73,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(276, 75);
+            label1.Location = new Point(250, 284);
             label1.Name = "label1";
             label1.Size = new Size(87, 15);
             label1.TabIndex = 3;
@@ -79,7 +82,7 @@
             // button2
             // 
             button2.Enabled = false;
-            button2.Location = new Point(288, 93);
+            button2.Location = new Point(250, 12);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
@@ -89,7 +92,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(288, 122);
+            button3.Location = new Point(250, 41);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
@@ -99,17 +102,50 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(369, 123);
+            textBox1.Location = new Point(331, 42);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(419, 23);
+            textBox1.Size = new Size(457, 23);
             textBox1.TabIndex = 6;
+            // 
+            // button4
+            // 
+            button4.Enabled = false;
+            button4.Location = new Point(331, 13);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 7;
+            button4.Text = "Export All";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(312, 97);
+            label2.Name = "label2";
+            label2.Size = new Size(476, 15);
+            label2.TabIndex = 8;
+            label2.Text = "Music is available in .ogg format within the game directory already. Thanks to the repack.";
+            // 
+            // button5
+            // 
+            button5.Location = new Point(713, 71);
+            button5.Name = "button5";
+            button5.Size = new Size(75, 23);
+            button5.TabIndex = 9;
+            button5.Text = "Music";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // SoundEffects
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button5);
+            Controls.Add(label2);
+            Controls.Add(button4);
             Controls.Add(textBox1);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -133,5 +169,8 @@
         private Button button2;
         private Button button3;
         private TextBox textBox1;
+        private Button button4;
+        private Label label2;
+        private Button button5;
     }
 }
