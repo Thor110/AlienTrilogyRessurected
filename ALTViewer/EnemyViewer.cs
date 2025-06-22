@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace ALTViewer
+{
+    public partial class EnemyViewer : Form
+    {
+        public EnemyViewer()
+        {
+            InitializeComponent();
+        }
+    }
+}

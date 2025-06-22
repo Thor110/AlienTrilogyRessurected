@@ -1,0 +1,57 @@
+MISSING Levels are listed in the executable, but not present in the game files.
+
+L111LEV.MAP = 1.1.1 Entrance
+L112LEV.MAP = 1.1.2 Outer Complex
+L113LEV.MAP = 1.1.3 Ammunition Dump 1
+L114LEV.MAP = 1.1.4 Ammunition Dump 2
+L115LEV.MAP = 1.1.5 Ammunition Dump 3
+L121LEV.MAP = MISSING
+L122LEV.MAP = 1.2.2 Recreation Rooms
+L123LEV.MAP = MISSING
+L131LEV.MAP = 1.3.1 Medical Laboratory
+L132LEV.MAP = MISSING
+L141LEV.MAP = 1.4.1 Garage
+L151LEV.MAP = MISSING
+L152LEV.MAP = MISSING
+L153LEV.MAP = MISSING
+L154LEV.MAP = 1.5.4 Atmosphere Sub-level
+L155LEV.MAP = 1.5.5 Security Catwalks
+L161LEV.MAP = 1.6.1 Atmosphere Sub-Basement
+L162LEV.MAP = 1.6.2 Queen's Lair
+L211LEV.MAP = 2.1.1 Living Area
+L212LEV.MAP = 2.1.2 Canteen
+L213LEV.MAP = 2.1.3 Meeting Tower
+L222LEV.MAP = 2.2.2 Leadworks
+L231LEV.MAP = 2.3.1 Mining and Smelting
+L232LEV.MAP = 2.3.2 Furnace Controls
+L242LEV.MAP = 2.4.2 Tunnels and Ducts
+L243LEV.MAP = 2.4.3 Tunnels and Ducts
+L262LEV.MAP = 2.6.2 Lead Mould
+L263LEV.MAP = 2.6.3 Queen's Lair
+L311LEV.MAP = 3.1.1 Tunnels.
+L321LEV.MAP = 3.2.1 Pilot's Chamber
+L331LEV.MAP = 3.3.1 Canyons and Catacombs
+L322LEV.MAP = 3.2.2 Pilot's Chamber
+L351LEV.MAP = 3.5.1 Secrets
+L352LEV.MAP = 3.5.2 Inorganics 1
+L323LEV.MAP = 3.2.3 Pilot's Chamber
+L361LEV.MAP = PRESENT ( SECRET LEVEL )
+L324LEV.MAP = 3.2.4 Pilot's Chamber
+L371LEV.MAP = 3.7.1 Droplifts
+L353LEV.MAP = 3.5.3 Inorganics 2
+L325LEV.MAP = 3.2.5 Pilot's Chamber
+L381LEV.MAP = 3.8.1 Egg Chambers
+L391LEV.MAP = 3.9.1 Queen's lair
+
+Multiplayer Levels
+
+L900LEV.MAP
+L901LEV.MAP
+L902LEV.MAP
+L903LEV.MAP
+L904LEV.MAP
+L905LEV.MAP
+L906LEV.MAP
+L907LEV.MAP
+L908LEV.MAP
+L909LEV.MAP
