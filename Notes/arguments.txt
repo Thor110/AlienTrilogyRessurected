@@ -1,0 +1,20 @@
+Extracted from the executable, this shows six arguments that can be passed to the game when launching it.
+
+                     --= Alien(tm) Trilogy PC CDROM  =--
+���                                 (Ver 2.0b)
+����
+���      -H or -?  -       This Screen
+����      -nomovies -       Don't play any movies
+��      -nocd     -       Don't play any CD music
+����      -noblood  -       Don't generate any blood
+���      -noric    -       Don't generate any ricochets
+���      -pal      -       Fix certain palettes
+���                     (C) 1996 Acclaim Entertainment, Inc.
+��                     Developed by Probe Entertainment Ltd.
+�                        Internet: http//www.probe.co.uk
+����             TM & (C) 1996 Twentieth Century Fox Film Corporation.
+�     TM Designates a trademark of Twentieth Century Fox Film Corporation.
+��                            ALIEN, ALIENS, ALIEN 3,
+����                      TM and (C) 1979, 1986, 1992, 1996,
+���                    Twentieth Century Fox Film Corporation.
+����                              All rights reserved.
