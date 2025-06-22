@@ -38,6 +38,8 @@
             button4 = new Button();
             label2 = new Label();
             button5 = new Button();
+            label3 = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -122,7 +124,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(312, 97);
+            label2.Location = new Point(250, 75);
             label2.Name = "label2";
             label2.Size = new Size(476, 15);
             label2.TabIndex = 8;
@@ -130,7 +132,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(713, 71);
+            button5.Location = new Point(250, 93);
             button5.Name = "button5";
             button5.Size = new Size(75, 23);
             button5.TabIndex = 9;
@@ -138,11 +140,31 @@
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(250, 119);
+            label3.Name = "label3";
+            label3.Size = new Size(378, 15);
+            label3.TabIndex = 10;
+            label3.Text = "The audio files themselves are just raw audio data, 8-bit pcm, 11025Hz,";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(250, 135);
+            label4.Name = "label4";
+            label4.Size = new Size(502, 15);
+            label4.TabIndex = 11;
+            label4.Text = "for anyone that wants to view them manually, or use this tool to package them all as wav files.";
+            // 
             // SoundEffects
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
+            Controls.Add(label3);
             Controls.Add(button5);
             Controls.Add(label2);
             Controls.Add(button4);
@@ -172,5 +194,7 @@
         private Button button4;
         private Label label2;
         private Button button5;
+        private Label label3;
+        private Label label4;
     }
 }

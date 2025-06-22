@@ -93,7 +93,7 @@ namespace ALTViewer
                     int val = Math.Abs((int)samples[start + i]);
                     if (val > max) max = val;
                 }
-                float normalized = max / (float)short.MaxValue;
+                float normalized = max / (float)short.MaxValue; // correct scaling
                 int y = (int)(normalized * height / 2);
                 g.DrawLine(Pens.LimeGreen, x, height / 2 - y, x, height / 2 + y);
             }
@@ -111,7 +111,7 @@ namespace ALTViewer
             {
                 byte b = br.ReadByte();
                 // Convert unsigned 8-bit (0-255) to signed short (-32768 to 32767) scale
-                samples[i] = (short)((b - 128) * 256);
+                samples[i] = (short)Math.Clamp((b - 128) * 256, short.MinValue, short.MaxValue);
             }
             double duration = sampleCount / (double)sampleRate;
             if (duration > 60)
