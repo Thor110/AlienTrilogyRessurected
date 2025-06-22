@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.RegularExpressions;
 
 namespace ALTViewer
 {
@@ -26,23 +25,23 @@ namespace ALTViewer
             comboBox1.SelectedIndex = 0; // Default to English
             setup = true;
         }
+        // language selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox2.Text = languages[comboBox1.SelectedIndex];
             if (!setup) { return; }
-
             if (listBox1.SelectedIndex != -1)
             {
                 richTextBox1.Text = GetMissionText(listBox1.SelectedIndex, languages[comboBox1.SelectedIndex]);
             }
         }
-
+        // entry selection ( missions or UI text )
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox1.Text = missions[listBox1.SelectedIndex];
             richTextBox1.Text = GetMissionText(listBox1.SelectedIndex, languages[comboBox1.SelectedIndex]);
         }
-
+        // get mission text from file based on index and language
         private string GetMissionText(int index, string language)
         {
             string missionText = "";
