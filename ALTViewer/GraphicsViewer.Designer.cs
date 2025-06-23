@@ -35,25 +35,29 @@
             radioButton2 = new RadioButton();
             radioButton3 = new RadioButton();
             radioButton4 = new RadioButton();
+            listBox2 = new ListBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(427, 12);
+            pictureBox1.Location = new Point(407, 46);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(361, 426);
+            pictureBox1.Size = new Size(320, 240);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
             // button1
             // 
-            button1.Location = new Point(330, 52);
+            button1.Location = new Point(210, 413);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(120, 23);
             button1.TabIndex = 1;
-            button1.Text = "button1";
+            button1.Text = "Detect Palette";
             button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
+            button1.Click += button1_Click;
             // 
             // listBox1
             // 
@@ -63,12 +67,13 @@
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(192, 424);
             listBox1.TabIndex = 2;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // radioButton1
             // 
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
-            radioButton1.Location = new Point(210, 21);
+            radioButton1.Location = new Point(216, 21);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(71, 19);
             radioButton1.TabIndex = 3;
@@ -80,7 +85,7 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(210, 46);
+            radioButton2.Location = new Point(216, 46);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(69, 19);
             radioButton2.TabIndex = 4;
@@ -91,7 +96,7 @@
             // radioButton3
             // 
             radioButton3.AutoSize = true;
-            radioButton3.Location = new Point(210, 71);
+            radioButton3.Location = new Point(216, 71);
             radioButton3.Name = "radioButton3";
             radioButton3.Size = new Size(57, 19);
             radioButton3.TabIndex = 5;
@@ -102,7 +107,7 @@
             // radioButton4
             // 
             radioButton4.AutoSize = true;
-            radioButton4.Location = new Point(210, 96);
+            radioButton4.Location = new Point(216, 96);
             radioButton4.Name = "radioButton4";
             radioButton4.Size = new Size(59, 19);
             radioButton4.TabIndex = 6;
@@ -111,11 +116,34 @@
             radioButton4.UseVisualStyleBackColor = true;
             radioButton4.CheckedChanged += radioButton4_CheckedChanged;
             // 
+            // listBox2
+            // 
+            listBox2.FormattingEnabled = true;
+            listBox2.ItemHeight = 15;
+            listBox2.Location = new Point(210, 147);
+            listBox2.Name = "listBox2";
+            listBox2.Size = new Size(120, 259);
+            listBox2.TabIndex = 7;
+            listBox2.Visible = false;
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(223, 129);
+            label1.Name = "label1";
+            label1.Size = new Size(94, 15);
+            label1.TabIndex = 8;
+            label1.Text = "Palette Selection";
+            label1.Visible = false;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
+            Controls.Add(listBox2);
             Controls.Add(radioButton4);
             Controls.Add(radioButton3);
             Controls.Add(radioButton2);
@@ -139,5 +167,7 @@
         private RadioButton radioButton2;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
+        private ListBox listBox2;
+        private Label label1;
     }
 }
