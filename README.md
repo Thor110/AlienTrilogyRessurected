@@ -23,7 +23,7 @@ The road map for this project.
 Listen to and extract audio files.
 
 <div align="center">
-  <img src="images/soundeffects.png" alt="Sound Effects Viewer">
+  <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
 </div>
 
 ## Graphics Viewer
@@ -31,6 +31,6 @@ WIP
 
 ## Text Editor
 
-![Text Editor](images/texteditor.png)
+![Text Editor](Images/texteditor.png)
 
 Discord : https://discord.gg/Mk2YUuPmdU
