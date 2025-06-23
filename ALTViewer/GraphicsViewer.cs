@@ -1,6 +1,4 @@
-﻿using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
@@ -82,11 +80,11 @@ namespace ALTViewer
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedFile) { return; } // do not reselect same file
             lastSelectedFile = selected; // store last selected file
-
+            // show palette controls
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
-
+            // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
@@ -96,6 +94,7 @@ namespace ALTViewer
                     if (File.Exists(listBox1.SelectedItem!.ToString()! + ".BIN"))
                     {
                         GetFile(level);
+                        return; // exit after finding the first matching level
                     }
                 }
             }
