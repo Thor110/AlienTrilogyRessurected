@@ -39,7 +39,7 @@ View and extract textures and sprites. (WIP)
 
 ## Text Editor
 
-Edit text in the game, intended for localisation efforts.
+Edit text in the game, intended for localisation efforts. (WIP)
 
 <div align="center">
   <img src="Images/texteditor.png" alt="Text Editor">
