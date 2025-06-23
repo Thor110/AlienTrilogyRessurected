@@ -137,15 +137,19 @@ namespace ALTViewer
             string palette = Path.Combine(paletteDirectory, filename + ".PAL");
             //
             // discover the palettes for the following files
-            //DEMO111
-            //DEMO211
-            //DEMO311
-            //EXPLGFX ( Possibly GUNPALS.PAL )
-            //OBJ3D
-            //OPTGFX
-            //OPTOBJ
-            //PICKGFX
-            //PICKMOD
+            //DEMO111   ( Try LEV111.PAL )
+            //DEMO211   ( Try LEV211.PAL )
+            //DEMO311   ( Try LEV311.PAL )
+            //EXPLGFX   ( Try GUNPALS.PAL )
+            //OBJ3D     ( UNKNOWN )
+            //OPTGFX    ( UNKNOWN )
+            //OPTOBJ    ( UNKNOWN )
+            //PICKGFX   ( UNKNOWN )
+            //PICKMOD   ( UNKNOWN )
+            //
+            // unused palettes currently
+            // MBRF_PAL.PAL ( Possibly LANGUAGE folder panels )
+            // WSELECT.PAL  ( UNKNOWN )
             //
             // hard coded palette lookups
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
