@@ -111,8 +111,6 @@
                 // Process the BND file as needed
                 // For example, display its contents or render it
                 // get palette and associated files
-                //MessageBox.Show(selected);
-                //MessageBox.Show(chosen);
                 SelectPalette(chosen); // select the detected palette
                 RenderImage("", filePathA, chosen);
                 return;
@@ -149,8 +147,7 @@
             // hard coded palette lookups
             if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
-            if(hardcodedPalettes.Contains(filename))
-            { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
+            if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
             if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
             if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
@@ -193,6 +190,16 @@
             lastSelectedPalette = selected; // store last selected file
             // use the selected palette to render the image
             RenderImage("", "", selected + ".PAL");
+        }
+        // export selected button
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+        // export all button
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
