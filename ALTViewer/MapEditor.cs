@@ -24,6 +24,7 @@
             "Multiplayer Level" + " 1", "Multiplayer Level" + " 2", "Multiplayer Level" + " 3", "Multiplayer Level" + " 4", "Multiplayer Level" + " 5",
             "Multiplayer Level" + " 6", "Multiplayer Level" + " 7", "Multiplayer Level" + " 8", "Multiplayer Level" + " 9", "Multiplayer Level" + " 10"
         };
+        private string lastSelectedLevel = "";
         public MapEditor()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@
         }
         public void ListLevels()
         {
-            foreach (string level in levels) // determine level folder based on selected item
+            foreach (string level in levels)
             {
                 string[] levelFiles = Directory.GetFiles(level, "*" + ".MAP");
                 foreach (string levelFile in levelFiles) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(levelFile)); }
@@ -40,7 +41,11 @@
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label1.Text = "Level Name : " + missions[listBox1.SelectedIndex]; // display level name
+            string selected = listBox1.SelectedItem!.ToString()!; // get selected item
+            if (selected == lastSelectedLevel) { return; } // do not reselect same file
+            lastSelectedLevel = selected; // store last selected file
+            if (listBox1.SelectedIndex < missions.Count) { label1.Text = "Level Name : " + missions[listBox1.SelectedIndex]; } // display level name
+            else { label1.Text = "Level Name : " + "Unknown"; }
         }
     }
 }
