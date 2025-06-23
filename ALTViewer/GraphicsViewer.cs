@@ -23,6 +23,7 @@
             InitializeComponent();
             GetPalettes(); // Load palettes from the palette directory
             ListFiles(gfxDirectory); // Load graphics files by default on startup
+            //RenderImage("LEGAL.TNT", "LEGAL.BND", "LEGAL.PAL"); // Clear the image on startup
         }
         // Load palettes from the palette directory
         private void GetPalettes()
@@ -103,6 +104,7 @@
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
+            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected)); // detect palette for the selected item
             string filePathA = Path.Combine(path, selected + ".BND");
             string filePathB = Path.Combine(path, selected + ".BIN");
             string fileLookup = "";
@@ -112,7 +114,8 @@
                 // Process the BND file as needed
                 // For example, display its contents or render it
                 // get palette and associated files
-                string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected)); // detect palette for the selected item
+                //MessageBox.Show(selected);
+                //MessageBox.Show(chosen);
                 SelectPalette(chosen); // select the detected palette
                 RenderImage("", filePathA, chosen);
                 return;
@@ -124,7 +127,6 @@
                 // Process the BND file as needed
                 // For example, display its contents or render it
                 // get palette and associated files
-                string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected)); // detect palette for the selected item
                 SelectPalette(chosen); // select the detected palette
                 RenderImage("", filePathB, chosen);
                 return;
@@ -135,6 +137,7 @@
         private string DetectPalette(string filename)
         {
             string palette = Path.Combine(paletteDirectory, filename + ".PAL");
+            MessageBox.Show(filename);
             //
             // discover the palettes for the following files
             //DEMO111
@@ -173,11 +176,20 @@
                 MessageBox.Show("No palette found for " + filename);
                 return ""; // no palette found
             }
-            return "";
+            else
+            {
+                return Path.Combine(paletteDirectory, filename + ".PAL");
+            }
         }
         private void RenderImage(string tnt, string binbnd, string pal)
         {
             pictureBox1.Image = null; // clear previous image
+
+            //testing
+            tnt = "LEGAL.TNT";
+            binbnd = "LEGAL.BND";
+            pal = "LEGAL.PAL";
+
             if (pal == "") { return; } // do not render without palette
             if (tnt == "") { return; } // do not render without tnt? b16 16 or DPQ?
             // test render

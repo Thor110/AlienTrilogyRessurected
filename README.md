@@ -11,9 +11,9 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 The road map for this project.
 
 - [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
-	- .WoW archives can be extracted.
+	- .RAW audio files can be played and converted to wav files.
 - [✅ 2 : Graphics Viewer](#graphics-viewer) ( 5% Complete )
-	- .WoW archives can be extracted.
+	- Palette detection implemented.
 - [✅ 3 : Text Editor](#text-editor) ( 50% Complete )
 	- For localisation efforts.
 - ❌ 4 : Map Editor ( 0% Complete )
@@ -27,10 +27,16 @@ Listen to and extract audio files.
 </div>
 
 ## Graphics Viewer
-WIP
+
+<div align="center">
+  <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
+</div>
+
 
 ## Text Editor
 
-![Text Editor](Images/texteditor.png)
+<div align="center">
+  <img src="Images/texteditor.png" alt="Text Editor">
+</div>
 
 Discord : https://discord.gg/Mk2YUuPmdU
