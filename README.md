@@ -1,4 +1,4 @@
-# Alien Trilogy Ressurection
+# Alien Trilogy Resurrection
 
 This project aims to create a modding toolkit and possibly more for Alien Trilogy.
 
