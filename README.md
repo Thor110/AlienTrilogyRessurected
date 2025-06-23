@@ -20,6 +20,14 @@ The road map for this project.
 
 And possibly more to come.
 
+## Alien Trilogy Viewer
+
+The main program window.
+
+<div align="center">
+  <img src="Images/altviewer.png" alt="Alien Trilogy Viewer">
+</div>
+
 ## Sound Effects Viewer
 
 Listen to and extract audio files.
