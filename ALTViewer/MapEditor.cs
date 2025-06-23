@@ -34,7 +34,7 @@
         {
             foreach (string level in levels)
             {
-                string[] levelFiles = Directory.GetFiles(level, "*" + ".MAP");
+                string[] levelFiles = Directory.GetFiles(level, "*.MAP");
                 foreach (string levelFile in levelFiles) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(levelFile)); }
             }
         }
