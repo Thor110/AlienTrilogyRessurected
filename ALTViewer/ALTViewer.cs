@@ -19,6 +19,6 @@ namespace ALTViewer
         private void button1_Click(object sender, EventArgs e) { newForm(new TextEditor()); }
         private void button3_Click(object sender, EventArgs e) { newForm(new GraphicsViewer()); }
         private void button4_Click(object sender, EventArgs e) { newForm(new SoundEffects()); }
-        private void button6_Click(object sender, EventArgs e) { newForm(new LevelViewer()); }
+        private void button6_Click(object sender, EventArgs e) { newForm(new MapEditor()); }
     }
 }

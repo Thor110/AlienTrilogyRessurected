@@ -70,7 +70,7 @@
             button6.Name = "button6";
             button6.Size = new Size(99, 23);
             button6.TabIndex = 5;
-            button6.Text = "Level Viewer";
+            button6.Text = "Map Editor";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
