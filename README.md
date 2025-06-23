@@ -15,7 +15,7 @@ The road map for this project.
 - [✅ 2 : Graphics Viewer](#graphics-viewer) ( 5% Complete )
 	- Palette detection implemented.
 - [✅ 3 : Text Editor](#text-editor) ( 50% Complete )
-	- For localisation efforts.
+	- View text from the games missions.
 - ❌ 4 : Map Editor ( 0% Complete )
 
 And possibly more to come.
@@ -30,12 +30,16 @@ Listen to and extract audio files.
 
 ## Graphics Viewer
 
+View and extract textures and sprites. (WIP)
+
 <div align="center">
   <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
 </div>
 
 
 ## Text Editor
+
+Edit text in the game, intended for localisation efforts.
 
 <div align="center">
   <img src="Images/texteditor.png" alt="Text Editor">
