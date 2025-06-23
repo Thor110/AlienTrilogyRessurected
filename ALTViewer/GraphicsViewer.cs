@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System.Drawing.Imaging;
+
+namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
@@ -18,6 +20,7 @@
         public static string[] levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
+        private string outputPath = "";
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -89,7 +92,7 @@
             {
                 foreach (string level in levels) // determine level folder based on selected item
                 {
-                    if (File.Exists(listBox1.SelectedItem!.ToString()! + ".BIN"))
+                    if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".BIN")))
                     {
                         GetFile(level);
                         return; // exit after finding the first matching level
@@ -145,12 +148,13 @@
             //PICKMOD
             //
             // hard coded palette lookups
-            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
-            if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
-            if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
+            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
+            else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
+            else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
+            else if (radioButton3.Checked) { return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL"; }
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
-            if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
+            else if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
         private void RenderImage(string tnt, string binbnd, string pal)
@@ -177,6 +181,7 @@
             SelectPalette(chosen); // select the detected palette
             RenderImage("", "", chosen);
         }
+        // select palette for the chosen file in the palette listbox
         private void SelectPalette(string chosen)
         {
             if (listBox2.Items.Contains(chosen)) { listBox2.SelectedItem = chosen; } // select the detected palette
@@ -200,6 +205,19 @@
         private void button3_Click(object sender, EventArgs e)
         {
 
+        }
+        // select output path
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            fbd.Description = "Select output folder to save the WAV file.";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                outputPath = fbd.SelectedPath;
+                textBox1.Text = outputPath; // update text box with selected path
+                button2.Enabled = true; // enable extract button
+                button3.Enabled = true; // enable extract all button
+            }
         }
     }
 }
