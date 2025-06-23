@@ -26,7 +26,6 @@ namespace ALTViewer
             InitializeComponent();
             GetPalettes(); // Load palettes from the palette directory
             ListFiles(gfxDirectory); // Load graphics files by default on startup
-            //RenderImage("LEGAL.TNT", "LEGAL.BND", "LEGAL.PAL"); // Clear the image on startup
         }
         // Load palettes from the palette directory
         private void GetPalettes()
