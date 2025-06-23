@@ -28,7 +28,7 @@
         // Load palettes from the palette directory
         private void GetPalettes()
         {
-            string[] palFiles = Directory.GetFiles(paletteDirectory, "*.PAL");
+            string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL");
             foreach (string palFile in palFiles) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); }
         }
         // graphics GFX
@@ -134,7 +134,6 @@
         private string DetectPalette(string filename)
         {
             string palette = Path.Combine(paletteDirectory, filename + ".PAL");
-            MessageBox.Show(filename);
             //
             // discover the palettes for the following files
             //DEMO111
@@ -148,12 +147,12 @@
             //PICKMOD
             //
             // hard coded palette lookups
-            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT.PAL"); }
+            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
             if(hardcodedPalettes.Contains(filename))
-            { return Path.Combine(paletteDirectory, "GUNPALS.PAL"); }
-            if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES.PAL"); }
-            else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL.PAL"); }
+            { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
+            if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
+            else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
             if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
