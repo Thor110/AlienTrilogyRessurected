@@ -29,10 +29,7 @@
         private void GetPalettes()
         {
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*.PAL");
-            foreach (string palFile in palFiles)
-            {
-                listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile));
-            }
+            foreach (string palFile in palFiles) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); }
         }
         // graphics GFX
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -151,35 +148,14 @@
             //PICKMOD
             //
             // hard coded palette lookups
-            if (filename == "FONT1GFX")
-            {
-                return Path.Combine(paletteDirectory, "NEWFONT.PAL");
-            }
-            string[] hardcodedPalettes = new string[]
-            {
-                "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART"
-            };
+            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT.PAL"); }
+            string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
             if(hardcodedPalettes.Contains(filename))
-            {
-                return Path.Combine(paletteDirectory, "GUNPALS.PAL");
-            }
-            if (radioButton2.Checked)
-            {
-                return Path.Combine(paletteDirectory, "SPRITES.PAL");
-            }
-            else if (radioButton4.Checked || filename.Contains("PANEL"))
-            {
-                return Path.Combine(paletteDirectory, "PANEL.PAL");
-            }
-            if (!File.Exists(palette))
-            {
-                MessageBox.Show("No palette found for " + filename);
-                return ""; // no palette found
-            }
-            else
-            {
-                return Path.Combine(paletteDirectory, filename + ".PAL");
-            }
+            { return Path.Combine(paletteDirectory, "GUNPALS.PAL"); }
+            if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES.PAL"); }
+            else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL.PAL"); }
+            if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
+            else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
         private void RenderImage(string tnt, string binbnd, string pal)
         {
@@ -207,14 +183,8 @@
         }
         private void SelectPalette(string chosen)
         {
-            if (listBox2.Items.Contains(chosen))
-            {
-                listBox2.SelectedItem = chosen; // select the detected palette
-            }
-            else
-            {
-                MessageBox.Show("Palette not found: " + chosen);
-            }
+            if (listBox2.Items.Contains(chosen)) { listBox2.SelectedItem = chosen; } // select the detected palette
+            else { MessageBox.Show("Palette not found: " + chosen); }
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
