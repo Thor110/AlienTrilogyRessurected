@@ -1,121 +1,69 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
+        //directories
+        public static string gameDirectory = "HDD\\TRILOGY\\CD";
+        public static string gfxDirectory = Path.Combine(gameDirectory, "GFX");
+        public static string paletteDirectory = Path.Combine(gameDirectory, "PALS");
+        public static string enemyDirectory = Path.Combine(gameDirectory, "NME");
+        public static string languageDirectory = Path.Combine(gameDirectory, "LANGUAGE");
+        public static string levelPath1 = Path.Combine(gameDirectory, "SECT11");
+        public static string levelPath2 = Path.Combine(gameDirectory, "SECT12");
+        public static string levelPath3 = Path.Combine(gameDirectory, "SECT21");
+        public static string levelPath4 = Path.Combine(gameDirectory, "SECT22");
+        public static string levelPath5 = Path.Combine(gameDirectory, "SECT31");
+        public static string levelPath6 = Path.Combine(gameDirectory, "SECT32");
+        public static string levelPath7 = Path.Combine(gameDirectory, "SECT90");
+        public static string[] levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         public GraphicsViewer()
         {
             InitializeComponent();
-            //TestRender();
-            GraphicsViewer_Load(this, EventArgs.Empty); // Load the image on form load
+            radioButton1_CheckedChanged(this, null!); // Load graphics files on startup
+            // test render
+            byte[] tntBytes = File.ReadAllBytes("LEGAL.TNT");
+            byte[] bndBytes = File.ReadAllBytes("LEGAL.BND");
+            byte[] palBytes = File.ReadAllBytes("LEGAL.PAL");
+            pictureBox1.Image = TileRenderer.RenderTiledImage(tntBytes, bndBytes, palBytes);
         }
-        public void TestRender()
+        // graphics GFX
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            var palette = LoadPalette("TRILOGY\\CD\\PALS\\NEWFONT.PAL");
-            var bmp = RenderIndexedImage("TRILOGY\\CD\\GFX\\FONT1GFX.BND", palette); // Adjust width/height if needed
-            pictureBox1.Image = bmp;
+            listBox1.Items.Clear();
+            ListFiles(gfxDirectory);
         }
-        private void GraphicsViewer_Load(object sender, EventArgs e)
+        // enemies NME
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            try
-            {
-                string imagePath = "TRILOGY\\CD\\GFX\\FONT1GFX.BND"; // your test file
-                string palettePath = "TRILOGY\\CD\\PALS\\NEWFONT.PAL";
-                Color[] palette = LoadPalette(palettePath);
-                Bitmap bmp = RenderIndexedImage(imagePath, palette);
-
-                if (bmp != null)
-                {
-                    pictureBox1.Image = bmp;
-                }
-                else
-                {
-                    MessageBox.Show("Bitmap render failed.");
-                }
-            }
-            catch (Exception ex)
-            {
-                File.WriteAllText("fatal_error_log.txt", ex.ToString());
-                MessageBox.Show("Exception thrown: " + ex.Message);
-            }
-        }
-        private Color[] LoadPalette(string path)
+            listBox1.Items.Clear();
+            ListFiles(enemyDirectory);
+        } // no .BIN in NME folder
+        // levels SECT##
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] paletteBytes = File.ReadAllBytes(path);
-
-            int colorCount = paletteBytes.Length / 3;
-            if (colorCount == 0 || paletteBytes.Length % 3 != 0)
-            {
-                throw new Exception("Invalid palette file length.");
-            }
-
-            Color[] palette = new Color[colorCount];
-
-            for (int i = 0; i < colorCount; i++)
-            {
-                int r = paletteBytes[i * 3];
-                int g = paletteBytes[i * 3 + 1];
-                int b = paletteBytes[i * 3 + 2];
-                palette[i] = Color.FromArgb(r << 2, g << 2, b << 2); // Often 6-bit VGA (multiply by 4)
-            }
-
-            return palette;
+            listBox1.Items.Clear();
+            foreach (string level in levels) { ListFiles(level); } // no .BND in SECT folders
         }
-        public static Bitmap RenderIndexedImage(string imagePath, Color[] palette)
+        // panels LANGUAGE
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] fileBytes = File.ReadAllBytes(imagePath);
-
-            if (fileBytes.Length < 32)
-            {
-                MessageBox.Show("File too small to contain valid image data.");
-                return null;
-            }
-
-            // Print header for debugging
-            string header = BitConverter.ToString(fileBytes.Take(32).ToArray());
-            File.WriteAllText("header_debug.txt", header);
-
-            // Attempt to read header dimensions
-            ushort width = BitConverter.ToUInt16(fileBytes, 0);   // e.g., 0x00 0x01 = 256 (LE)
-            ushort height = BitConverter.ToUInt16(fileBytes, 2);  // e.g., 0x06 0x14 = 5126 (LE), possibly wrong
-
-            if (width > 1024 || height > 1024)
-            {
-                // Possibly incorrect — try alternative bytes
-                width = BitConverter.ToUInt16(fileBytes, 4);   // Try offset 4
-                height = BitConverter.ToUInt16(fileBytes, 6);  // Try offset 6
-            }
-
-            // Print decoded dimensions
-            File.AppendAllText("header_debug.txt", $"\nWidth: {width}, Height: {height}, FileLength: {fileBytes.Length}");
-
-            int pixelDataStart = 8;  // Guess
-            int pixelCount = width * height;
-
-            if (pixelDataStart + pixelCount > fileBytes.Length)
-            {
-                MessageBox.Show("Image size exceeds file length.");
-                return null;
-            }
-
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-            ColorPalette bmpPalette = bmp.Palette;
-            for (int i = 0; i < 256; i++)
-                bmpPalette.Entries[i] = palette[i];
-            bmp.Palette = bmpPalette;
-
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
-            IntPtr ptr = data.Scan0;
-
-            // Copy pixel data
-            Marshal.Copy(fileBytes, pixelDataStart, ptr, pixelCount);
-            bmp.UnlockBits(data);
-
-            return bmp;
+            listBox1.Items.Clear();
+            ListFiles(languageDirectory, ".NOPE", ".16");
         }
-
+        public void ListFiles(string path, string type1 = ".BND", string type2 = ".BIN", string type3 = ".B16")
+        {
+            string[] files = DiscoverFiles(path, type1, type2, type3);
+            foreach (string file in files)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(file);
+                if (!listBox1.Items.Contains(fileName)) { listBox1.Items.Add(fileName); }
+            }
+        }
+        private string[] DiscoverFiles(string path, string type1, string type2, string type3)
+        {
+            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories)
+                .Where(file => file.EndsWith(type1) || file.EndsWith(type2) || file.EndsWith(type3))
+                .ToArray();
+        }
     }
 }
