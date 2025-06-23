@@ -18,6 +18,8 @@ The road map for this project.
 	- For localisation efforts.
 - ❌ 4 : Map Editor ( 0% Complete )
 
+And possibly more to come.
+
 ## Sound Effects Viewer
 
 Listen to and extract audio files.
