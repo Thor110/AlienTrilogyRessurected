@@ -30,6 +30,7 @@
         {
             listBox1 = new ListBox();
             label1 = new Label();
+            label2 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -47,15 +48,25 @@
             label1.AutoSize = true;
             label1.Location = new Point(166, 12);
             label1.Name = "label1";
-            label1.Size = new Size(75, 15);
+            label1.Size = new Size(92, 15);
             label1.TabIndex = 1;
-            label1.Text = "Level Name :";
+            label1.Text = "Mission Name : ";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(166, 421);
+            label2.Name = "label2";
+            label2.Size = new Size(69, 15);
+            label2.TabIndex = 2;
+            label2.Text = "File Name : ";
             // 
             // MapEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(listBox1);
             Name = "MapEditor";
@@ -68,5 +79,6 @@
 
         private ListBox listBox1;
         private Label label1;
+        private Label label2;
     }
 }

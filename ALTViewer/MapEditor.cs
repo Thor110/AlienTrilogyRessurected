@@ -44,8 +44,16 @@
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedLevel) { return; } // do not reselect same file
             lastSelectedLevel = selected; // store last selected file
-            if (listBox1.SelectedIndex < missions.Count) { label1.Text = "Level Name : " + missions[listBox1.SelectedIndex]; } // display level name
-            else { label1.Text = "Level Name : " + "Unknown"; }
+            if (listBox1.SelectedIndex < missions.Count) { label1.Text = "Mission Name : " + missions[listBox1.SelectedIndex]; } // display level name
+            else { label1.Text = "Mission Name : " + "Unknown"; }
+            foreach (string level in levels) // determine level folder based on selected item
+            {
+                if (File.Exists(Path.Combine(level, selected + ".MAP")))
+                {
+                    label2.Text = "File Name : " + selected + ".MAP";
+                    return; // exit after finding the first matching level
+                }
+            }
         }
     }
 }

@@ -28,10 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ALTViewer));
             button1 = new Button();
             button3 = new Button();
             button4 = new Button();
             button6 = new Button();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // button1
@@ -74,17 +77,30 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(117, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(583, 263);
+            pictureBox1.TabIndex = 6;
+            pictureBox1.TabStop = false;
+            // 
             // ALTViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(714, 288);
+            Controls.Add(pictureBox1);
             Controls.Add(button6);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "ALTViewer";
             Text = "ALTViewer";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -94,5 +110,6 @@
         private Button button3;
         private Button button4;
         private Button button6;
+        private PictureBox pictureBox1;
     }
 }
