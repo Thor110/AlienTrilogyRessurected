@@ -36,7 +36,7 @@ The main program window.
 
 ## Sound Effects Viewer
 
-Listen to and extract audio files.
+Listen to, extract, replace or restore audio files.
 
 <div align="center">
   <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
