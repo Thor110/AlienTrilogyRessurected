@@ -20,7 +20,10 @@ namespace ALTViewer
         public static string[] levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
+        private string lastSelectedFilePath = "";
+        private string lastSelectedTilePath = "";
         private string outputPath = "";
+        private bool firstSelection;
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -86,9 +89,9 @@ namespace ALTViewer
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
-            // determine which directory to use based on selected radio button
             CheckFile();
         }
+        // determine which directory to use based on selected radio button
         private void CheckFile()
         {
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
@@ -109,38 +112,29 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected)); // detect palette for the selected item
-            string filePathA = Path.Combine(path, selected + ".BND");
-            string filePathB = Path.Combine(path, selected + ".BIN");
-            string fileLookup = "";
-            string palette = Path.Combine(paletteDirectory, chosen + ".PAL");
-            if (File.Exists(filePathA))
+            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected, ".PAL")); // detect palette for the selected item
+            string palettePath = Path.Combine(paletteDirectory, chosen + ".PAL"); // actual palette path
+            string tilePath = Path.Combine(paletteDirectory, Path.GetFileNameWithoutExtension(DetectPalette(selected, ".TNT")) + ".TNT");
+            string filePath = "";
+            foreach (string ext in new[] { ".BND", ".BIN", ".B16", ".16" })
             {
-                byte[] bndBytes = File.ReadAllBytes(filePathA);
-                // Process the BND file as needed
-                // For example, display its contents or render it
-                // get palette and associated files
-                SelectPalette(chosen); // select the detected palette
-                RenderImage("", filePathA, palette);
+                string candidate = Path.Combine(path, selected + ext);
+                if (File.Exists(candidate))
+                {
+                    filePath = candidate;
+                    break;
+                }
+            }
+            if (string.IsNullOrEmpty(filePath))
+            {
+                MessageBox.Show("No usable graphics file found for: " + selected);
                 return;
             }
-            fileLookup = filePathA;
-            if (File.Exists(filePathB))
-            {
-                byte[] bndBytes = File.ReadAllBytes(filePathB);
-                // Process the BND file as needed
-                // For example, display its contents or render it
-                // get palette and associated files
-                SelectPalette(chosen); // select the detected palette
-                RenderImage("", filePathB, palette);
-                return;
-            }
-            fileLookup = filePathB;
-            MessageBox.Show("Selected file does not exist: " + fileLookup);
+            RenderImage(tilePath, filePath, palettePath, chosen);
         }
-        private string DetectPalette(string filename)
+        private string DetectPalette(string filename, string extension)
         {
-            string palette = Path.Combine(paletteDirectory, filename + ".PAL");
+            string palette = Path.Combine(paletteDirectory, filename + extension);
             //
             // discover the palettes for the following files
             //DEMO111   ( Try LEV111.PAL )
@@ -164,33 +158,35 @@ namespace ALTViewer
             else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
             else if (radioButton3.Checked) { return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL"; }
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
-            else if (!File.Exists(palette)) { MessageBox.Show("No palette found for " + filename); return ""; }
+            else if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
-        private void RenderImage(string tnt, string binbnd, string pal)
+        private void RenderImage(string tnt, string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
-
-            //testing
-            tnt = "LEGAL.TNT";
-            binbnd = "LEGAL.BND";
-            pal = "LEGAL.PAL";
-
-            if (pal == "") { return; } // do not render without palette
-            if (tnt == "") { return; } // do not render without tnt? b16 16 or DPQ?
+            // event handler removal to prevent rendering the image twice
+            listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!;
+            SelectPalette(select); // select the detected palette and render the image
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
+            //
+            lastSelectedTilePath = tnt;
+            lastSelectedFilePath = binbnd;
+            //
+            if (!File.Exists(pal)) return; // bin bnd already checked
+            if (!File.Exists(tnt)) { tnt = Path.Combine(paletteDirectory, "LEGAL.TNT"); } // temporary backup rather than return which prevents rendering
             // test render
-            byte[] tntBytes = File.ReadAllBytes(tnt);
+            //byte[] tntBytes = File.ReadAllBytes(tnt);
+            byte[]? tntBytes = File.Exists(tnt) ? File.ReadAllBytes(tnt) : null;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             byte[] palBytes = File.ReadAllBytes(pal);
-            pictureBox1.Image = TileRenderer.RenderTiledImage(tntBytes, bndBytes, palBytes);
+            pictureBox1.Image = TileRenderer.RenderTiledImage(tntBytes!, bndBytes, palBytes);
+            firstSelection = true;
         }
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
         {
-            //string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!)); // detect palette for the selected item
-            //SelectPalette(chosen); // select the detected palette
-            //RenderImage("", "", Path.Combine(paletteDirectory, chosen + ".PAL"));
-            CheckFile();
+            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!, ".PAL")); // detect palette for the selected item
+            RenderImage(lastSelectedTilePath, lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen);
         }
         // select palette for the chosen file in the palette listbox
         private void SelectPalette(string chosen)
@@ -201,11 +197,12 @@ namespace ALTViewer
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!firstSelection) { return; }
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
-            // use the selected palette to render the image
-            RenderImage("", "", selected + ".PAL");
+            string palettePath = Path.Combine(paletteDirectory, selected + ".PAL");
+            RenderImage(lastSelectedTilePath, lastSelectedFilePath, palettePath, selected); // use the selected palette to render the image
         }
         // export selected button
         private void button2_Click(object sender, EventArgs e)
