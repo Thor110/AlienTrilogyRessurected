@@ -34,6 +34,7 @@ namespace ALTViewer
             if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
             byte[] audioData = File.ReadAllBytes($"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW"); // load selected audio file
             pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
+            button6.Enabled = true; // enable replace button
         }
         // play sound method
         private void PlayRawSound()
@@ -148,14 +149,16 @@ namespace ALTViewer
         // select output path button click
         private void button3_Click(object sender, EventArgs e)
         {
-            using var fbd = new FolderBrowserDialog();
-            fbd.Description = "Select output folder to save the WAV file.";
-            if (fbd.ShowDialog() == DialogResult.OK)
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                outputPath = fbd.SelectedPath;
-                textBox1.Text = outputPath; // update text box with selected path
-                button2.Enabled = true; // enable extract button
-                button4.Enabled = true; // enable extract all button
+                fbd.Description = "Select output folder to save the WAV file.";
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    outputPath = fbd.SelectedPath;
+                    textBox1.Text = outputPath; // update text box with selected path
+                    button2.Enabled = true; // enable extract button
+                    button4.Enabled = true; // enable extract all button
+                }
             }
         }
         // extract all button click
@@ -177,7 +180,81 @@ namespace ALTViewer
         {
             string musicPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CD\\ALT");
             if (!Directory.Exists(musicPath)) { MessageBox.Show("Directory not found, please reinstall the game."); return; }
-            Process.Start(new ProcessStartInfo() { FileName = musicPath, UseShellExecute = true, Verb = "open" } );
+            Process.Start(new ProcessStartInfo() { FileName = musicPath, UseShellExecute = true, Verb = "open" });
+        }
+        // replace sound button click
+        private void button6_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = "Select a Container (.wav) file";
+                if (openFileDialog.ShowDialog() == DialogResult.OK) { ReplaceWAV(openFileDialog.FileName); }
+            }
+        }
+        private void ReplaceWAV(string filepath)
+        {
+            using (BinaryReader br = new BinaryReader(File.OpenRead(filepath)))
+            {
+                // Read the RIFF header
+                string riff = Encoding.ASCII.GetString(br.ReadBytes(4));
+                if (riff != "RIFF")
+                {
+                    MessageBox.Show("File is not a valid WAV file.");
+                    return;
+                }
+                br.ReadInt32(); // Skip file size
+                string wave = Encoding.ASCII.GetString(br.ReadBytes(4));
+                if (wave != "WAVE")
+                {
+                    MessageBox.Show("File is not a valid WAV file.");
+                    return;
+                }
+                // Search for the 'data' chunk
+                while (br.BaseStream.Position < br.BaseStream.Length)
+                {
+                    string chunkID = Encoding.ASCII.GetString(br.ReadBytes(4));
+                    int chunkSize = br.ReadInt32();
+                    // Check for 'fmt ' and 'data' chunks
+                    if (chunkID == "fmt ")
+                    {
+                        byte[] fmtData = br.ReadBytes(chunkSize);
+                        ushort audioFormat = BitConverter.ToUInt16(fmtData, 0);
+                        ushort numChannels = BitConverter.ToUInt16(fmtData, 2);
+                        int sampleRate = BitConverter.ToInt32(fmtData, 4);
+                        ushort bitsPerSample = BitConverter.ToUInt16(fmtData, 14);
+                        if (audioFormat != 1 || numChannels != 1 || sampleRate != 11025 || bitsPerSample != 8)
+                        {
+                            MessageBox.Show("Unsupported WAV format. Only 8-bit PCM mono at 11025Hz is supported.");
+                            return;
+                        }
+                    }
+                    if (chunkID == "data")
+                    {
+                        if (chunkSize > int.MaxValue) // limit would really be uint but int.MaxValue is sufficient for our needs
+                        {
+                            MessageBox.Show("Audio data chunk is too large to handle.");
+                            return;
+                        }
+                        string item = listBox1.SelectedItem!.ToString()!;
+                        string original = $"HDD\\TRILOGY\\CD\\SFX\\{item}.RAW";
+                        if (checkBox1.Checked) // if the backup checkbox is checked, create a backup of the original file
+                        {
+                            File.Copy(original, original + ".BAK", false); // do not overwrite the existing file ( preserve the original file )
+                        }
+                        byte[] audioData = br.ReadBytes(chunkSize);
+                        using var fs = new FileStream(original, FileMode.Create);
+                        fs.Write(audioData, 0, audioData.Length);
+                        pictureBox1.Image = DrawWaveform(audioData, 538, 128, 11025); // re-draw the selected wave form to match the new file
+                        MessageBox.Show($"{item}.RAW : replaced successfully.");
+                        return;
+                    }
+                    else { br.BaseStream.Seek(chunkSize + (chunkSize % 2), SeekOrigin.Current); } // Skip this chunk
+                }
+                MessageBox.Show("No audio data found in WAV file.");
+            }
         }
     }
 }

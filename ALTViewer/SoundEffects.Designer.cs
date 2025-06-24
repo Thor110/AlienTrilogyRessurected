@@ -40,6 +40,8 @@
             button5 = new Button();
             label3 = new Label();
             label4 = new Label();
+            button6 = new Button();
+            checkBox1 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -164,11 +166,38 @@
             label4.TabIndex = 11;
             label4.Text = "for anyone that wants to view them manually, or use this tool to package them all as wav files.";
             // 
+            // button6
+            // 
+            button6.AccessibleDescription = "Replace selected audio file with a .WAV file of your choosing.";
+            button6.Enabled = false;
+            button6.Location = new Point(250, 153);
+            button6.Name = "button6";
+            button6.Size = new Size(75, 23);
+            button6.TabIndex = 12;
+            button6.Text = "Replace";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AccessibleDescription = "If this is checked the file you replace will be backed up with the extension .bak at the default SFX directory.";
+            checkBox1.AutoSize = true;
+            checkBox1.Checked = true;
+            checkBox1.CheckState = CheckState.Checked;
+            checkBox1.Location = new Point(331, 156);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(131, 19);
+            checkBox1.TabIndex = 13;
+            checkBox1.Text = "Backup Original File";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
             // SoundEffects
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBox1);
+            Controls.Add(button6);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(button5);
@@ -204,5 +233,7 @@
         private Button button5;
         private Label label3;
         private Label label4;
+        private Button button6;
+        private CheckBox checkBox1;
     }
 }
