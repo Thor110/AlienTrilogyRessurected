@@ -25,12 +25,14 @@
             "Multiplayer Level" + " 6", "Multiplayer Level" + " 7", "Multiplayer Level" + " 8", "Multiplayer Level" + " 9", "Multiplayer Level" + " 10"
         };
         private string lastSelectedLevel = "";
+        FullScreen fullScreen;
         public MapEditor()
         {
             InitializeComponent();
             //ToolTip tooltip = new ToolTip(); // no tooltips added yet
             //ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             ListLevels();
+            fullScreen = new FullScreen(this);
         }
         public void ListLevels()
         {
@@ -56,6 +58,11 @@
                     return; // exit after finding the first matching level
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            fullScreen.Toggle();
         }
     }
 }
