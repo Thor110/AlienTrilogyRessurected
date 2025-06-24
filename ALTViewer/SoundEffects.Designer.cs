@@ -181,6 +181,8 @@
             Controls.Add(pictureBox1);
             Controls.Add(button1);
             Controls.Add(listBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "SoundEffects";
             Text = "SoundEffects";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

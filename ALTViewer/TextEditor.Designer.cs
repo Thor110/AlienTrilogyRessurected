@@ -264,6 +264,8 @@
             Controls.Add(richTextBox1);
             Controls.Add(label1);
             Controls.Add(listBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "TextEditor";
             Text = "TextEditor";
             ResumeLayout(false);

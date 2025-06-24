@@ -208,6 +208,8 @@
             Controls.Add(listBox1);
             Controls.Add(button1);
             Controls.Add(pictureBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "GraphicsViewer";
             Text = "GraphicsViewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

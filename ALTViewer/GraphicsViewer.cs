@@ -87,6 +87,10 @@ namespace ALTViewer
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
             // determine which directory to use based on selected radio button
+            CheckFile();
+        }
+        private void CheckFile()
+        {
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
@@ -109,6 +113,7 @@ namespace ALTViewer
             string filePathA = Path.Combine(path, selected + ".BND");
             string filePathB = Path.Combine(path, selected + ".BIN");
             string fileLookup = "";
+            string palette = Path.Combine(paletteDirectory, chosen + ".PAL");
             if (File.Exists(filePathA))
             {
                 byte[] bndBytes = File.ReadAllBytes(filePathA);
@@ -116,7 +121,7 @@ namespace ALTViewer
                 // For example, display its contents or render it
                 // get palette and associated files
                 SelectPalette(chosen); // select the detected palette
-                RenderImage("", filePathA, chosen);
+                RenderImage("", filePathA, palette);
                 return;
             }
             fileLookup = filePathA;
@@ -127,7 +132,7 @@ namespace ALTViewer
                 // For example, display its contents or render it
                 // get palette and associated files
                 SelectPalette(chosen); // select the detected palette
-                RenderImage("", filePathB, chosen);
+                RenderImage("", filePathB, palette);
                 return;
             }
             fileLookup = filePathB;
@@ -182,9 +187,10 @@ namespace ALTViewer
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
         {
-            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!)); // detect palette for the selected item
-            SelectPalette(chosen); // select the detected palette
-            RenderImage("", "", chosen);
+            //string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!)); // detect palette for the selected item
+            //SelectPalette(chosen); // select the detected palette
+            //RenderImage("", "", Path.Combine(paletteDirectory, chosen + ".PAL"));
+            CheckFile();
         }
         // select palette for the chosen file in the palette listbox
         private void SelectPalette(string chosen)
@@ -204,12 +210,22 @@ namespace ALTViewer
         // export selected button
         private void button2_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                string filename = lastSelectedFile;
+                string filepath = Path.Combine(outputPath, filename + ".png");
+                pictureBox1.Image.Save(filepath, ImageFormat.Png);
+                MessageBox.Show($"Image saved to:\n{filepath}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving image:\n" + ex.Message);
+            }
         }
         // export all button
         private void button3_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Batch export not supported yet!");
         }
         // select output path
         private void button4_Click(object sender, EventArgs e)
