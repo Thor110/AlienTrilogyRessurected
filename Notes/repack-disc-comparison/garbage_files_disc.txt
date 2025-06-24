@@ -1,0 +1,11 @@
+FREN.BIN
+ITAL.BIN
+JAPA.BIN
+SPAN.BIN
+
+just contain placeholder text repeated over and over again
+
+FRENCH TEXT
+ITALIAN TEXT
+JAPANESE TEXT
+SPANISH TEXT

@@ -1,0 +1,497 @@
+1.1.1 Entrance
+--------------
+*
+&0Sie sind damit beauftragt, den Eingang
+fr die Marines Truppen frei zu machen,
+indem Sie jegliche Kisten und F„sser aus
+dem Weg r„umen und eventuell
+auftauchende &1Aliens&0 vernichten.
+#
+&0Beachten Sie, daá Ihre 9mm Geschosse
+&0auf die &1F„sser&0 keinen Einfluá haben
+werden [aus Sicherheitsgrnden]. Wir
+raten Ihnen, andere Alternativen
+zu finden.
+*
+Icon: Crate & barrel
+
+1.1.2 Outer Complex
+-------------------
+*
+&0Sie mssen die Hauptschalterzentrale
+&0finden und alle drei Schalter
+aktivieren. So erm”glichen Sie uns den
+Zugang zu anderen Bereichen der Kolonie.
+#
+&0Sammeln Sie &1Sprengladungen&0 auf, um
+&1brchige W„nde&0 aufzusprengen und
+&0neue Bereiche zu erschlieáen.
+
+*
+
+Icon: Survey Charge
+
+1.1.3 Ammunition Dump 1
+-----------------------
+*
+&0Hier k”nnen Sie Ihr Waffenarsenal
+&0aufrsten. Sie haben allerdings nur
+&160 Sekunden&0 Zeit, da dieses Geb„ude
+&0zu explodieren droht!
+#
+&0Vergewissern Sie sich, daá Sie sich
+&0ausreichend ausgerstet haben. Wir
+&0werden am Ausgang auf Sie warten.
+*
+
+1.2.2 Recreation Rooms
+----------------------
+*
+&0Die Zurckeroberung der Kolonie macht
+&0Fortschritte. Wie wir vermuteten
+wurden die Kolonisten jedoch bereits
+von Aliens infiziert und sind tot.
+#
+&0Schalten Sie die &1gesamte
+&0Beleuchtung&0 ein, zerst”ren Sie die
+&0Aliens und ziehen Sie sofort ab,
+damit wir die Toten abholen und den
+Bereich absichern k”nnen.
+*
+
+1.3.1 Medical Laboratory
+------------------------
+*
+&0Erneut wurde ein Bereich der Kolonie
+&0vollkommen erobert und infiziert.
+
+&0Eleminieren Sie alle &1auáerirdischen
+&1Lebensformen&0, damit die Marines
+&0diesen Bereich versiegeln und
+&0biologisches Material untersuchen und
+&0vernichten k”nnen.
+&0#
+&0Finden Sie alle &1Identit„tskarten&0.
+&0Nur so k”nnen wir feststellen, wie
+&0groá der Schaden wirklich ist.
+*
+
+Icon: Security tag
+
+1.1.4 Ammunition Dump 2
+-----------------------
+*
+&0Erneut k”nnen Sie hier Ihr
+Waffenarsenal aufrsten. Sie haben
+allerdings nur &160 Sekunden&0 Zeit,
+da dieses Geb„ude zu explodieren
+droht!
+#
+&0Vergewissern Sie sich, daá Sie sich
+&0ausreichend ausgerstet haben. Wir
+&0werden am Ausgang auf Sie warten.
+*
+
+1.4.1 Garage
+------------
+*
+&0Vor der Masseninfizierung haben einige
+&0der Kolonisten versucht
+&0Alien Proben hinauszuschmuggeln -
+&0angeblich auf Befehl der Gesellschaft.
+#
+&0Der Garagenbereich war der
+Umschlagsort fr gesendete und
+empfangene Beh„lter der Kolonie. Es ist
+notwendig, daá Sie &1alle Kisten und
+deren Inhalte zerst”ren, damit sich der
+illegale Handel nicht wiederholen kann.
+*
+
+Icon: Crate
+
+1.1.5 Ammunition Dump 3
+-----------------------
+*
+&0Hier k”nnen Sie Ihr Waffenarsenal
+&0aufrsten. Sie haben allerdings nur
+&160 Sekunden&0 Zeit, da dieses Geb„ude
+&0zu explodieren scheint!
+#
+&0Vergewissern Sie sich, daá Sie sich
+&0ausreichend ausgerstet haben. Wir
+&0werden am Ausgang auf Sie warten.
+*
+
+1.5.4 Atmosphere Sub-level
+--------------------------
+*
+&0Diese gesamte Sektion w„re eine ideale
+&0Brutst„tte fr die Aliens und k”nnte
+&0einer der Auáenbereiche des vermuteten
+&0K”niginnennests sein.
+#
+&0In diesem gesamten Bereich wimmelt
+&0es von feindlichen Aliens. Vernichten
+&0Sie sie, um tiefer in das Nest
+vordringen zu k”nnen.
+*
+
+1.5.5 Security Catwalks
+-----------------------
+*
+&0Sie k”nnen sich hier ausrsten. Die
+extreme Hitze des Generators macht
+einen langen Aufenthalt allerdings
+unm”glich. Wir k”nnen nur &130 Sekunden&0
+auf Sie warten.
+*
+
+1.6.1 Atmosphere Sub-Basement
+-----------------------------
+*
+&0Sie mssen alle infizierten Kolonisten
+&0finden und ihre &1Identit„tskarten
+&0mitnehmen, damit wir die Ausmaáe der
+&0Invasion besser einsch„tzen k”nnen.
+#
+&0Wir vermuten, daá die &1Kolonisten&0
+&0tot sind. Wir bestehen aber auf eine
+&0grndliche Suche nach Nestern und
+anderen Geheimbereichen, wo sich
+šberlebende versteckt haben k”nnten.
+*
+
+1.6.2 Queen's Lair
+------------------
+*
+&0Sie haben offenbar die &1Alien K”nigin
+&0aufgesprt. Vernichten Sie sie, damit
+&0die Plage ein Ende hat und wir die
+&0Kolonie neu aufbauen k”nnen.
+#
+&0Viel Glck.
+*
+Icon: Queen's head/ Egg closed
+
+
+2.1.1 Living Area
+-----------------
+*
+&0Das Gef„ngnis wurde von einer
+&1neuartigen&0 Alienmutation erobert.
+Alle H„ftlinge wurden bereits von Aliens
+infiziert.
+#
+&0Zerst”ren Sie die Aliens
+&0und entdecken Sie die &1versteckten
+&1Waffenarsenale&0 der Str„flinge.
+*
+
+2.1.2 Canteen
+-------------
+*
+&0Sie befinden sich in dem Hochsicher-
+&0heitstrakt des Gef„ngnisses. Die
+&0H„ftlinge sind spurlos verschwunden.
+&0Ihre &1Identit„tskarten&0 wurden
+&0ber das gesamte Gebiet verstreut.
+#
+&1Finden Sie die Karten&0, damit wir uns
+&0ein Bild von den F„higkeiten der neuen
+&0Alienart machen k”nnen.
+*
+
+2.1.3 Meeting Tower
+-------------------
+*
+&0Wir mssen uns den Zugang zum
+&1zentralen Treffpunkt&0 im Turm
+verschaffen. Wegen dem Alter dieser
+Anlage k”nnten einige Schalter auch weit
+entfernte Plattformen aktivieren.
+#
+&0Vergewissern Sie sich, daá Sie &1alle
+&1Lifte gesenkt&0 und &1alle Tore ge”ffnet
+&0haben, damit wir den gesamten
+&0Turmkomplex absuchen k”nnen.
+*
+
+2.2.2 Leadworks
+---------------
+*
+&0Wegen der offensichtlich
+vernachl„ssigten Reparaturen sind die
+&1Brennstoffrohre in dieser Sektion
+brchig geworden.  Entweichende
+Flammen gef„hrden die Sicherheit unserer
+Truppen.
+#
+&0Finden Sie die Kontrollschalter, die die
+&1Brennstoffversorgung regulieren&0 und
+&0vermindern Sie die Zirkulation.
+*
+
+2.4.2 Tunnels and Ducts
+-----------------------
+*
+&0Wir k”nnen die groáen Lftungsturbinen
+&0fr kurze Zeit anhalten. Sie mssen
+&0hinein und sich im Waffenvorratslager
+&0der H„ftlinge bewaffnen.
+#
+&0Wir sch„tzen Ihre verbleibende Zeit
+&0auf &160 Sekunden&0.
+*
+
+2.3.1 Mining and Smelting
+-------------------------
+*
+&0Erneut haben wir herausgefunden, daá
+&0eine illegale Organisation gegrndet
+&0wurde, um Aliens zur Erde zu
+&0exportieren. Dies &1widerspricht&0 der
+&0strengen Religion der Str„flinge.
+#
+&1Zerst”ren Sie alle Beh„lter&0, die
+Proben enthalten k”nnten und lassen
+Sie sich von nichts aufhalten!
+*
+
+2.3.2 Furnace Controls
+----------------------
+*
+&0Die groáe Hitze und der hohe Druck
+&0brachten einige Dampfleitungen zum
+&0Bersten. Es ist im Moment zu
+gef„hrlich Forschungen anzustellen.
+#
+&0Betreten Sie das Gebiet, finden Sie
+die Schalter fr den &1Dampf&0 und
+versichern Sie sich, daá sie
+&1ausgeschaltet&0 sind.
+*
+
+2.4.3 Tunnels and Ducts
+-----------------------
+*
+&0Wir k”nnen die Lftungsturbinen
+&0fr kurze Zeit anhalten. Sie mssen
+&0hinein und sich mit den Waffenvorr„ten
+&0der H„ftlinge ausrsten.
+
+&0Wir sch„tzen Ihre verbleibende Zeit
+&0auf &160 Sekunden&0.
+*
+
+
+2.6.2 Lead Mould
+----------------
+*
+&0Sie werden in einem Gebiet abgesetzt,
+&0das von der &1Hundemutation&0 der Aliens
+beherrscht wird. Die „uáerst gef„hrliche
+Genkombination des Hundealiens hat es
+keiner unserer Truppen erm”glicht, dieses
+Gebiet einzunehmen.#
+&0Betreten Sie den Bereich und
+verschaffen Sie sich &1Zugang zu
+allen R„umen&0, indem Sie die
+&1Kontrollschalter&0 in der
+Hauptzentrale bet„tigen.
+*
+
+
+2.6.3 Queen's Lair
+------------------
+*
+&0Die K”nigin wurde lokalisiert und muá
+&0dringend vernichtet werden, um das
+&0Gef„ngnis fr neue H„ftlinge bewohnbar
+&0zu machen.
+#
+&1Vernichten Sie sie&0 und &1ihre Brut&0.
+&0Wir werden dann mit den
+Aufr„umarbeiten beginnen und alle
+šberbleibsel dieses Monsters ausl”schen.
+*
+
+
+
+3.1.1 Tunnels.
+--------------
+*
+&0Wir vermuten, daá alle Aliens von dem
+&0abgestrzten &1Raumschiffwrack&0
+stammen.  Wir mssen herausfinden, was
+die Aliens hierher getrieben hat.
+#
+&0Verwenden Sie die biomechanischen
+&0&1Lifte&0 und erschlieáen Sie sich
+den Weg zur Piloten-Kammer. Die Leiche
+des Piloten k”nnte sehr aufschluáreich
+fr unsere Forschungen sein.
+*
+
+3.2.1 Pilot's Chamber
+---------------------
+*
+&0Sie haben nun von diesen Kammern aus
+&0Zugang zum gesamten Raumschiff. Finden
+&0Sie die &1aktive Luftschleuse&0, um
+tiefer vorzudringen.
+#
+&0Sie mssen jeden Abschnitt des
+gesamten Raumschiffs absichern, damit
+wir die sichere Ankunft unserer
+Suchtrupps garantieren k”nnen.
+*
+
+3.3.1 Canyons and Catacombs
+---------------------------
+*
+&0Bei dem Versuch diesen Bereich des
+&0Schiffs zu erschlieáen sind uns
+besonders hartn„ckige &1Hundealiens&0
+entwischt.
+#
+&0Suchen Sie nach versteckten R„umen,
+&0in denen sie sich aufhalten k”nnten und
+&1eliminieren Sie diese Aliens&0.
+*
+
+3.2.2 Pilot's Chamber
+---------------------
+*
+&0Gut gemacht. Sie sind wieder im Haupt-
+&0bereich des Schiffs angelangt. Auáerdem
+&0”ffneten Sie eine &1weitere Luftschleuse&0.
+#
+&0Vergeuden Sie keine Zeit. Der Kampf
+&0ist noch nicht vorber!
+*
+
+3.5.1 Secrets
+-------------
+*
+&0Ein unvorsichtiger Suchtrupp wurde
+&0gefangen und infiziert. Finden Sie
+&0die Toten, damit sie keine weiteren
+&0Aliens ausbrten k”nnen.
+#
+&0Denken Sie daran, ihre
+&1Identit„tskarten&0 mitzunehmen, damit
+wir Sicher sein k”nnen, daá Sie alle
+gefunden haben.
+*
+
+3.5.2 Inorganics 1
+------------------
+*
+&0Inorganisches Material wurde in der
+N„he eines Alien-Krieger-Reviers
+entdeckt. Wir gehen davon aus, daá es
+sich dabei um Munition handelt.
+#
+&0Wir geben Ihnen &145 Sekunden&0,
+&0Ihre Munitionsvorr„te aufzufllen und
+das potentiell gef„hrliche Gebiet zu
+verlassen.
+*
+
+3.2.3 Pilot's Chamber
+---------------------
+*
+&0Sie betreten wieder die &1Hauptkammer&0
+des Raumschiffes. Durch Ihre Mitarbeit
+konnte eine weitere Sektion erschlossen
+werden.
+#
+&0Unglcklicher Weise haben Sie einigen
+&1Aliens&0 den Weg zurck in diese Kammern
+&0erm”glicht. Es w„re ratsam, sie zu
+&0erledigen, bevor Sie weitermachen.
+*
+
+3.7.1 Droplifts
+---------------
+*
+&0Dieses Gebiet enh„lt eine groáe Anzahl
+&0der ausgewachsenen Aliens. Wir
+vermuten, daá sie das Hauptnest
+bewachen.
+#
+&0Beseitigen Sie alle Alien-Lebensformen,
+&0und wir k”nnen mit der Erforschung des
+&0Schiffes fortfahren.
+*
+
+3.5.3 Inorganics 2
+------------------
+*
+&0Weiteres Inorganisches Material wurde
+&0in dem Raumschiff entdeckt. Wir gehen
+&0wieder davon aus, daá es sich um
+&0Munition handelt.
+#
+&0Sie haben &145 Sekunden&0, Ihre
+Munitionsvorr„te aufzufllen und das
+potentiell gef„hrliche Gebiet zu
+verlassen.
+*
+
+3.2.4 Pilot's Chamber
+---------------------
+*
+&0Sie betreten erneut die Hauptkammer des
+&0Raumschiffes. Durch Ihre Hilfe konnte
+&0eine weitere Sektion ge”ffnet werden.
+&0Gemessen an der steigenden Anzahl der
+&0Alien-Krieger, gehen wir davon aus, daá
+&0Sie sehr nah am Ziel sind.
+*
+
+
+3.8.1 Egg Chambers
+------------------
+*
+&0Wir sch„tzen, daá Sie sich in der
+&1N„he&0 der &1Hauptbrutst„tte&0 befinden
+mssen. Sie enth„lt genug Eier, um eine
+gesamte Kolonie zu infizieren.
+#
+&1Zerst”ren&0 Sie alle &1Eier&0, um die
+&0Sicherheit der zuknftigen Besucher zu
+&0gew„hrleisten.
+*
+
+3.2.5 Pilot's Chamber
+---------------------
+*
+&0Sie n„hern sich den letzten Bereichen
+&0des &1Raumschiffs&0. Seien Sie
+vorsichtig, da unsere Nachforschungen
+darauf schlieáen lassen, daá sich eine
+m„chtige &1K”nigin&0 in dieses Schiff
+eingenistet hat.
+#
+&0Vergewissern Sie sich, daá die
+&1Hauptkammer&0 von allen Aliens
+&1ges„ubert&0 ist, damit wir den toten
+Piloten fr Forschungszwecke entfernen
+k”nnen.
+*
+
+3.9.1 Queen's lair
+------------------
+*
+&0Die letzte Aufgabe steht Ihnen bevor.
+#
+&0Alles endet dort, wo es angefangen hat.
+#
+&0Sie &1mssen&0 es schaffen.
+#
+*
+
+
+

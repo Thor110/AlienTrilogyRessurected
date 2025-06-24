@@ -1,0 +1,476 @@
+1.1.1 Entrance
+--------------
+*
+&0You are advised to clear the entrance
+&0for the marine drop crew by removing 
+&0crate and barrel barricades and 
+&0dispatching any &1xenomorphs&0 you may
+&0encounter.
+#
+&0Note that due to the protective design
+&0of the &1barrels&0 [for transportation],
+&0your 9mm will be ineffective in their
+&0removal. Search out alternative means.
+*
+Icon: Crate & barrel
+
+1.1.2 Outer Complex
+-------------------
+*
+&0You must locate the main junction room
+&0and activate all three control panels.
+&0This will allow further penetration
+&0into the colony.
+#
+&0Pick up any &1seismic survey charges&0 as
+&0they are essential for the removal of
+&1temporary walls.&0
+
+*
+
+Icon: Survey Charge
+
+1.1.3 Ammunition Dump 1
+-----------------------
+*
+&0You may re-arm your arsenal here but 
+&0we can only hover for &160 seconds&0 as
+&0the area is about to self-destruct.
+#
+&0Ensure that you arm up before we pull 
+&0you out.
+*
+
+1.2.2 Recreation Rooms
+----------------------
+*
+&0The recapture of the colony is
+&0progressing well. However, as we have 
+&0feared, our &1security&0 people have been 
+&0infected and must be eliminated.
+#
+&0Power up &1all of the lights&0, destroy 
+&0anything that lives, and pull out so that
+&0we may remove any carcasses and 
+&0secure the area for re-habitation.
+*
+
+1.3.1 Medical Laboratory
+------------------------
+*
+&0Once again, an area of the colony 
+&0has been totally infected. 
+
+&0Retire all &1enemy lifeforms
+&0so that the marines may enter and 
+&0secure the area and remove any 
+&0suspect biological samples for 
+&0destruction.
+&0#
+&0Collect all &1ID tags&0 so we can confirm
+&0that no samples have been removed 
+&0without our knowledge.
+*
+
+Icon: Security tag
+
+1.1.4 Ammunition Dump 2
+-----------------------
+*
+&0You may re-arm your arsenal here but 
+&0we can only hover for &160 seconds&0 as
+&0the area is about to self-destruct.
+#
+&0Ensure that you arm up before we pull 
+&0you out.
+*
+
+1.4.1 Garage
+------------
+*
+&0Before the mass infection, some
+&0colonists sought to smuggle samples 
+&0out for personal gain: allegedly on 
+&0behalf of the Company.
+#
+&0The garage area was the central point
+&0for crates entering and leaving the 
+&0colony. It is imperative that you
+&1destroy all crates and their contents
+&0to ensure that this illegal trade does 
+&0not resume.
+*
+
+Icon: Crate
+
+1.1.5 Ammunition Dump 3
+-----------------------
+*
+&0You may re-arm your arsenal here but 
+&0we can only hover for &160 seconds&0 as
+&0the area is about to self-destruct.
+#
+&0Ensure that you arm up before we pull 
+&0you out.
+*
+
+1.5.4 Atmosphere Sub-level
+--------------------------
+*
+&0This entire section is the beginning
+&0of an ideal cocoon storage area for the 
+&0xenomorph and is the outer reaches of
+&0what we believe to be the Queen's nest.
+#
+&0Previously, &1Synthetics&0 were dropped in
+&0to protect the colonists, but it seems
+&0that all colonists &1have been infected.
+&0The &1Synthetics&0 are still guarding. 
+&0Remove them to gain access to the 
+&0xenomorph lair.
+*
+
+1.5.5 Security Catwalks
+-----------------------
+*
+&0You may re-arm your arsenal here. The 
+&0heat from the processor is extreme and
+&0may cause the craft to stall. We can 
+&0only hover for &130 seconds&0.
+*
+
+1.6.1 Atmosphere Sub-Basement
+-----------------------------
+*
+&0You must seek out all the remaining
+&0colonists and retrieve their &1ID tags&0 so
+&0that we may assess the speed and level
+&0of infection.
+#
+&0We believe that these &1colonists&0 are
+&0alive. We must insist that you 
+&0perform a thorough search of the area
+&0to check for nests, where the colonists
+&0may be stored.
+*
+
+1.6.2 Queen's Lair
+------------------
+*
+&0It appears you have found the &1Queen&0.
+&0Eliminate her so that any traces of life
+&0may be removed from the area and we 
+&0can re-populate the colony once again.
+#
+&0Good luck.
+*
+Icon: Queen's head/ Egg closed
+2.1.1 Living Area
+-----------------
+*
+&0The prison has been lost to a &1new&0 
+&0strain of xenomorph.
+#
+&0Destroy any living organism and &1seek 
+&0out any hidden weapons caches&0 that 
+&0were stockpiled by the former inmates.
+&0Do not let anything stand in your way.
+*
+
+2.1.2 Canteen
+-------------
+*
+&0This is a maximum security area.
+&0
+&0All of the prisoners are missing.
+&0Their &1ID tags&0 are scattered throughout
+&0this section.
+#
+&1Retrieve&0 all of these &1ID tags&0 so that
+&0a thorough assessment can be made
+&0of the capability of this new strain
+&0of xenomorph.
+*
+
+2.1.3 Meeting Tower
+-------------------
+*
+&0We must have access to the &1Central&0
+&1Meeting Tower&0. The age and design
+&0of the machinery within this area
+&0has many of the control panels for
+&0activating access-platforms away
+&0from the vicinity of their 
+&0respective mechanisms.
+#
+&0Ensure that you &1lower all lifts&0 and
+&1open all doors&0 to give free access
+&0to the entire tower complex.
+*
+
+2.2.2 Leadworks
+---------------
+*
+&0Due to the amount of time this section
+&0has been without maintenance, many of
+&0the &1pressurized gas-pipes&0 supplying the
+&0leadworks have fallen into decay and
+&0make entry very treacherous.
+#
+&0Find the control panels that activate the
+&0gas supply to &1the flame jets&0 and &1stem&0
+&1the flow of gas&0.
+*
+
+2.4.2 Tunnels and Ducts
+-----------------------
+*
+&0We have managed to hold the fans for
+&0a short period of time. You must get 
+&0in there and re-arm from the stockpile 
+&0hidden by the inmates.
+#
+&0We estimate that you have &160 seconds&0.
+*
+
+2.3.1 Mining and Smelting
+-------------------------
+*
+&0Once again, we have information that 
+&0leads us to the conclusion that an illegal 
+&0operation was being set up to export
+&0samples back to earth for personal
+&0gain. This was totally &1against&0 the prison
+&0religion.
+#
+&1Destroy any crates&0 that may contain
+&0samples and any organisms that stand
+&0in your way.
+*
+
+2.3.2 Furnace Controls
+----------------------
+*
+&0The high level of heat and pressure
+&0has caused steam pipes to burst,
+&0making the area highly dangerous.
+#
+&0Get in there, find the control panels
+&0for the &1steam&0 and make sure that
+&0they are &1turned off&0 to allow a
+&0follow-up crew safe access.
+*
+
+2.4.3 Tunnels and Ducts
+-----------------------
+*
+&0We have managed to hold the fans for
+&0a short period of time. You must get 
+&0in there and re-arm from the stockpile 
+&0hidden by the inmates.
+#
+&0We estimate that you have &160 seconds&0.
+*
+
+
+2.6.2 Lead Mould
+----------------
+*
+&0You will be dropped into an area known
+&0to be inhabited by a &1Dog strain&0 of the
+&0xenomorph. This strain is highly
+&0dangerous and has, so far, managed to
+&0stop any attempt of securing the
+&0area.
+#
+&0Get in there and &1access all areas&0
+&0by opening all &1doors via control panels&0
+&0in the main chamber.
+#
+*
+
+
+2.6.3 Queen's Lair
+------------------
+*
+&0The Queen has been located and has to
+&0be destroyed if we are to rebuild
+&0the prison for other offenders.
+#
+&1Destroy her&0 and &1her spawn&0 so
+&0we may clean up and remove any 
+&0evidence of this thing.
+*
+
+3.1.1 Tunnels.
+--------------
+*
+&0We believe the original xenomorph 
+&0infection came from within this 
+&0derelict &1Boneship&0. We must 
+&0investigate the area to find the origin 
+&0of the xenomorph on this planet.
+#
+&0Use the bio-mechanical &1lifts&0 and clear 
+&0the way to the main Pilot's Chamber 
+&0so that we may enter freely and 
+&0remove the carcasses for testing
+&0and subsequent destruction.
+*
+
+3.2.1 Pilot's Chamber
+---------------------
+*
+&0You now have free access to the entire
+&0Boneship from these chambers. Find the 
+&1active airlock&0 to progress deeper.
+#
+&0You must secure each section of the 
+&0entire vessel from this central point 
+&0to ensure that our landing crews
+&0may enter freely.
+*
+
+3.3.1 Canyons and Catacombs
+---------------------------
+*
+&0In a previous attempt to hold this
+&0area of the vessel, rogue &1dog&0
+&0strains of the xenomorph escaped
+&0captivity.
+#
+&0Search for hidden lairs where 
+&0they may reside and &1destroy these &0
+&1xenomorphs&0.
+*
+
+3.2.2 Pilot's Chamber
+---------------------
+*
+&0Well done. You have arrived back at
+&0the central section of the ship and have
+&0opened &1another air-lock&0.
+#
+&0Do not delay. There are more areas to
+&0secure and time is against us.
+*
+
+3.5.1 Secrets
+-------------
+*
+&0The previous landing crew were
+&0caught and infected. Find these
+&0members and kill them so that they
+&0cannot spawn any more of their 
+&0kind.
+#
+&0Remember to collect their &1ID tags
+&0as proof that each is &1eliminated&0.
+*
+
+3.5.2 Inorganics 1
+------------------
+*
+&0We have detected Inorganic Materials
+&0near an area known to be inhabited
+&0by adult xenomorphs. We believe that 
+&0these are Munitions.
+#
+&0You have &145 seconds&0 
+&0to get in there and restock
+&0before we pull you out of this
+&0potentially dangerous area.
+*
+
+3.2.3 Pilot's Chamber
+---------------------
+*
+&0You are re-entering the &1main&0
+&1chamber&0 of this ship. Your efforts
+&0have opened up another section that
+&0can be secured. 
+#
+&0Unfortunately, you have inadvertently 
+&0allowed some &1xenomorphs&0 back into 
+&0these chambers. It would be wise to
+&1dispatch them&0 before moving on.
+*
+
+3.7.1 Droplifts
+---------------
+*
+&1Synthetics&0 have previously been placed
+&0in this area to &1deter&0 any potential
+&0sample &1smugglers&0. We are now unable
+&0to remove them. These synthetic 
+&0workers will kill on sight.
+#
+&0After studying our data we feel that
+&0the company can sustain the credit loss 
+&0of these... employees. &1Remove them&0 so 
+&0the area can be accessed.
+*
+
+3.5.3 Inorganics 2
+------------------
+*
+&0We have detected more Inorganic 
+&0Materials in the Boneship. We again
+&0believe that these are Munitions.
+#
+&0You have &145 seconds&0 
+&0to get in there and restock
+&0before we pull you out of this
+&0potentially dangerous area.
+*
+
+3.2.4 Pilot's Chamber
+---------------------
+*
+&0You are re-entering the main
+&0chamber of this ship. Your efforts
+&0have opened up another section that
+&0can be secured. Judging by the
+&0warrior presence, you must be very
+&0deep into the Boneship.
+*
+
+
+3.8.1 Egg Chambers
+------------------
+*
+&0We believe that you are &1close&0 to 
+&0the &1central&0 hatchery which contains
+&0enough eggs to infect any large
+&0colony.
+#
+&1Destroy&0 all of the &1eggs&0 to ensure
+&0the future of any visitors to this
+&0barren place.
+*
+
+3.2.5 Pilot's Chamber
+---------------------
+*
+&0You are approaching the last few 
+&0sections of the &1Boneship&0. Beware as
+&0our information leads us to 
+&0understand that a &1Queen&0 has been 
+&0building a nest.
+#
+&0Make sure that you &1clear the main&0
+&1chamber&0 of any threats so we may
+&0remove the dead pilot for study.
+*
+
+3.9.1 Queen's lair
+------------------
+*
+&0The final task is at hand.
+#
+&0It ends where it once began.
+#
+&0You &1must&0 succeed.
+#
+*
+
