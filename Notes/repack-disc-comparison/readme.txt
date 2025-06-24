@@ -12,7 +12,7 @@ This directory contains a curated archive of differences between a known repack 
 - `MISSINGFILES/`: Files missing from the repack, organized into their original directories.
 
 Disc sourced from [Archive.org](https://archive.org/details/Acclaim_Alien_Trilogy_MSDOS_1996_Eng)  
-Total files: **125**  
+Total files: **119**  
 Total size: ~**3.29MB**
 
 All files kept as-is for integrity and preservation.
