@@ -26,6 +26,11 @@ And possibly more to come.
 
 Discord : https://discord.gg/Mk2YUuPmdU
 
+## Documentation
+
+Special thanks to Bobblen147 who created this repository : https://github.com/Bobblen147/atril_geom_extract
+They also pointed me to the file format documentation, the links to which are also in their repository on the great preserver archive.org which will save me endless amounts of time manually decoding the filetypes.
+
 ## Alien Trilogy Viewer
 
 The main program window.
