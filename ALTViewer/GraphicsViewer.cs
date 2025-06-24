@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace ALTViewer
 {
@@ -28,14 +29,9 @@ namespace ALTViewer
             InitializeComponent();
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
-            GetPalettes(); // Load palettes from the palette directory
-            ListFiles(gfxDirectory); // Load graphics files by default on startup
-        }
-        // Load palettes from the palette directory
-        private void GetPalettes()
-        {
-            string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL");
+            string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
             foreach (string palFile in palFiles) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); }
+            ListFiles(gfxDirectory); // Load graphics files by default on startup
         }
         // graphics GFX
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -59,24 +55,22 @@ namespace ALTViewer
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            ListFiles(languageDirectory, ".BND", ".NOPE", ".16");
+            ListFiles(languageDirectory, ".BND", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
-        public void ListFiles(string path, string type1 = ".BND", string type2 = ".BIN", string type3 = ".B16")
+        public void ListFiles(string path, string type1 = ".BND", string type2 = ".BIN")
         {
-            string[] files = DiscoverFiles(path, type1, type2, type3);
+            string[] files = DiscoverFiles(path, type1, type2);
             foreach (string file in files)
             {
                 string fileName = Path.GetFileNameWithoutExtension(file);
-                if (!listBox1.Items.Contains(fileName)) { listBox1.Items.Add(fileName); }
+                listBox1.Items.Add(fileName);
             }
         }
         // discover files in directory
-        private string[] DiscoverFiles(string path, string type1, string type2, string type3)
+        private string[] DiscoverFiles(string path, string type1, string type2)
         {
-            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories)
-                .Where(file => file.EndsWith(type1) || file.EndsWith(type2) || file.EndsWith(type3))
-                .ToArray();
+            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(type1) || file.EndsWith(type2)).ToArray();
         }
         // display selected file
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -88,11 +82,7 @@ namespace ALTViewer
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
-            CheckFile();
-        }
-        // determine which directory to use based on selected radio button
-        private void CheckFile()
-        {
+            // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
@@ -160,12 +150,15 @@ namespace ALTViewer
             else if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
+        // render the selected image
         private void RenderImage(string tnt, string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
             // event handler removal to prevent rendering the image twice
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!;
-            SelectPalette(select); // select the detected palette and render the image
+            // select palette for the chosen file in the palette listbox
+            if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette
+            else { MessageBox.Show("Palette not found: " + select); }
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
             lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
@@ -189,12 +182,6 @@ namespace ALTViewer
         {
             string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!, ".PAL")); // detect palette for the selected item
             RenderImage(lastSelectedTilePath, lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen);
-        }
-        // select palette for the chosen file in the palette listbox
-        private void SelectPalette(string chosen)
-        {
-            if (listBox2.Items.Contains(chosen)) { listBox2.SelectedItem = chosen; } // select the detected palette
-            else { MessageBox.Show("Palette not found: " + chosen); }
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -223,7 +210,7 @@ namespace ALTViewer
         // export all button
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Batch export not supported yet!");
+            MessageBox.Show("Batch export not supported yet!"); // until the rendering pipeline actually works
         }
         // select output path
         private void button4_Click(object sender, EventArgs e)
