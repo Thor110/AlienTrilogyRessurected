@@ -47,36 +47,21 @@ namespace ALTViewer
         private string GetMissionText(int index, string language)
         {
             string missionText = "";
-
-            //string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION"; // presuming the program is at the base directory of the game files as per the repacked version.
-            string filePath = "TRILOGY\\CD\\LANGUAGE\\MISSION"; // temporary testing
-
+            string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION";
             switch (comboBox1.SelectedIndex)
             {
-                case 0:
-                    filePath = filePath + "E";
-                    break;
-                case 1:
-                    filePath = filePath + "F";
-                    break;
-                case 2:
-                    filePath = filePath + "I";
-                    break;
-                case 3:
-                    filePath = filePath + "S";
-                    break;
-                default:
-                    MessageBox.Show("Unsupported language selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return missionText;
+                case 0: filePath = filePath + "E"; break;
+                case 1: filePath = filePath + "F"; break;
+                case 2: filePath = filePath + "I"; break;
+                case 3: filePath = filePath + "S"; break;
+                default: MessageBox.Show("Unsupported language selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return missionText;
             }
             filePath += ".TXT";
-
             if (!File.Exists(filePath))
             {
                 MessageBox.Show("Missions file not found: " + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return missionText;
             }
-
             using (StreamReader reader = new StreamReader(filePath, Encoding.GetEncoding(858))) // 858	IBM00858	OEM Multilingual Latin I
             {
                 int entryIndex = -1;
@@ -84,7 +69,7 @@ namespace ALTViewer
                 List<string> blockLines = new List<string>();
 
                 string line;
-                while ((line = reader.ReadLine()) != null)
+                while ((line = reader.ReadLine()!) != null)
                 {
                     if (line.Trim() == "*")
                     {
@@ -98,18 +83,15 @@ namespace ALTViewer
                         {
                             // End of a block
                             entryIndex++;
-
                             if (entryIndex == index)
                             {
                                 missionText = string.Join(Environment.NewLine, blockLines);
                                 break;
                             }
-
                             insideBlock = false;
                         }
                         continue;
                     }
-
                     if (insideBlock) { blockLines.Add(line); }
                 }
             }
