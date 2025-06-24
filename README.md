@@ -24,6 +24,8 @@ The road map for this project.
 
 And possibly more to come.
 
+Discord : https://discord.gg/Mk2YUuPmdU
+
 ## Alien Trilogy Viewer
 
 The main program window.
@@ -56,5 +58,3 @@ Edit text in the game, intended for localisation efforts. (WIP)
 <div align="center">
   <img src="Images/texteditor.png" alt="Text Editor">
 </div>
-
-Discord : https://discord.gg/Mk2YUuPmdU
