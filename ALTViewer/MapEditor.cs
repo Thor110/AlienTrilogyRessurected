@@ -64,5 +64,17 @@
         {
             fullScreen.Toggle();
         }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            listBox1.Visible = true;
+            button3.Enabled = true;
+            button2.Enabled = false;
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            listBox1.Visible = false;
+            button3.Enabled = false;
+            button2.Enabled = true;
+        }
     }
 }
