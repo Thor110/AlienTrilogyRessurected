@@ -55,9 +55,10 @@
                 if (File.Exists(Path.Combine(level, selected + ".MAP")))
                 {
                     label2.Text = "File Name : " + selected + ".MAP";
-                    return; // exit after finding the first matching level
+                    break; // exit after finding the first matching level
                 }
             }
+            button3.Enabled = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -67,8 +68,13 @@
         private void button2_Click(object sender, EventArgs e)
         {
             listBox1.Visible = true;
-            button3.Enabled = true;
             button2.Enabled = false;
+            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            listBox1.ClearSelected(); // reset listbox
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            label1.Text = "Mission Name : "; // reset mission name label
+            label2.Text = "File Name : "; // reset file name label
+            lastSelectedLevel = ""; // reset last selected level
         }
         private void button3_Click(object sender, EventArgs e)
         {
