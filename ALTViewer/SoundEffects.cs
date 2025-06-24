@@ -32,9 +32,12 @@ namespace ALTViewer
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
-            byte[] audioData = File.ReadAllBytes($"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW"); // load selected audio file
+            string selectedFile = $"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW";
+            byte[] audioData = File.ReadAllBytes(selectedFile); // load selected audio file
             pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
             button6.Enabled = true; // enable replace button
+            if (File.Exists(selectedFile + ".BAK")) { button7.Enabled = true; } // enable restore button if backup exists
+            else { button7.Enabled = false; } // disable restore button if no backup exists
         }
         // play sound method
         private void PlayRawSound()
@@ -235,6 +238,17 @@ namespace ALTViewer
                 }
                 MessageBox.Show("No audio data found in WAV file.");
             }
+        }
+        // restore backup button click
+        private void button7_Click(object sender, EventArgs e)
+        {
+            string selectedFile = $"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW";
+            File.Copy($"{selectedFile}.BAK", selectedFile, true);
+            File.Delete($"{selectedFile}.BAK");
+            button7.Enabled = false;
+            byte[] audioData = File.ReadAllBytes(selectedFile); // load restored audio file
+            pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
+            MessageBox.Show("Backup successfully restored!");
         }
     }
 }

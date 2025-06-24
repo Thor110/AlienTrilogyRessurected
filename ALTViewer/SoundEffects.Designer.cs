@@ -42,6 +42,7 @@
             label4 = new Label();
             button6 = new Button();
             checkBox1 = new CheckBox();
+            button7 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -191,11 +192,24 @@
             checkBox1.Text = "Backup Original File";
             checkBox1.UseVisualStyleBackColor = true;
             // 
+            // button7
+            // 
+            button7.AccessibleDescription = "Restore file from the backup if it exists.";
+            button7.Enabled = false;
+            button7.Location = new Point(468, 153);
+            button7.Name = "button7";
+            button7.Size = new Size(75, 23);
+            button7.TabIndex = 14;
+            button7.Text = "Restore";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // SoundEffects
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button7);
             Controls.Add(checkBox1);
             Controls.Add(button6);
             Controls.Add(label4);
@@ -235,5 +249,6 @@
         private Label label4;
         private Button button6;
         private CheckBox checkBox1;
+        private Button button7;
     }
 }
