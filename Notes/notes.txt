@@ -9,3 +9,11 @@ Inaccessible secret area.
 If you want to see it for yourself, backup and open L371LEV.MAP in a hex editor, change byte at offset 28 to 0x17 and byte at offset 30 to 0x3E, then just use the NADIAPOPOV29 cheat code to warp. I'd love to find the magic bytes to get that lift working again, but this will have to do.
 
 https://www.avpgalaxy.net/forum/index.php?topic=67544.0
+
+Notes from ^
+
+https://web.archive.org/web/20230518104114/https://wiki.xentax.com/index.php/Alien_Trilogy_BND
+
+https://web.archive.org/web/20230518104117/https://wiki.xentax.com/index.php/Alien_Trilogy_MAP
+
+https://github.com/Bobblen147/atril_geom_extract
