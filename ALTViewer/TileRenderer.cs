@@ -4,7 +4,7 @@ namespace ALTViewer
 {
     public class TileRenderer
     {
-        public static Bitmap RenderTiledImage(byte[] tntData, byte[] bndData, byte[] paletteData, int tileSize = 16, int width = 320, int height = 240)
+        public static Bitmap RenderTiledImage(byte[]? tntData, byte[] bndData, byte[] paletteData, int tileSize = 16, int width = 320, int height = 240)
         {
             int tilesPerRow = width / tileSize;
             int tilesPerCol = height / tileSize;
@@ -14,16 +14,25 @@ namespace ALTViewer
             g.Clear(Color.Transparent);
 
             var palette = LoadPalette(paletteData);
-            var tiles = ExtractTiles(tntData, tileSize, palette);
+            var tiles = tntData != null ? ExtractTiles(tntData, tileSize, palette) : new List<Bitmap>();
 
             for (int y = 0; y < tilesPerCol; y++)
             {
                 for (int x = 0; x < tilesPerRow; x++)
                 {
-                    int tileIndex = bndData[y * tilesPerRow + x]; // assuming 1 byte per tile index
-                    if (tileIndex >= 0 && tileIndex < tiles.Count)
+                    int index = y * tilesPerRow + x;
+                    if (index < bndData.Length)
                     {
-                        g.DrawImage(tiles[tileIndex], x * tileSize, y * tileSize);
+                        int tileIndex = bndData[index];
+
+                        if (tiles.Count > 0 && tileIndex >= 0 && tileIndex < tiles.Count)
+                        {
+                            g.DrawImage(tiles[tileIndex], x * tileSize, y * tileSize);
+                        }
+                        else
+                        {
+                            // optional: draw fallback tile (transparent by default)
+                        }
                     }
                 }
             }

@@ -23,7 +23,6 @@ namespace ALTViewer
         private string lastSelectedFilePath = "";
         private string lastSelectedTilePath = "";
         private string outputPath = "";
-        private bool firstSelection;
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -168,19 +167,22 @@ namespace ALTViewer
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!;
             SelectPalette(select); // select the detected palette and render the image
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
-            //
             lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
-            //
-            if (!File.Exists(pal)) return; // bin bnd already checked
-            if (!File.Exists(tnt)) { tnt = Path.Combine(paletteDirectory, "LEGAL.TNT"); } // temporary backup rather than return which prevents rendering
+            if (!File.Exists(pal)) { return; } // bin bnd already checked
             // test render
-            //byte[] tntBytes = File.ReadAllBytes(tnt);
             byte[]? tntBytes = File.Exists(tnt) ? File.ReadAllBytes(tnt) : null;
+            // Palettes without TNT files
+            // GUNPALS.PAL
+            // MBRF_PAL.PAL
+            // NEWFONT.PAL
+            // PANEL.PAL
+            // SPRITES.PAL
+            // WSELECT.PAL
+            //
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             byte[] palBytes = File.ReadAllBytes(pal);
             pictureBox1.Image = TileRenderer.RenderTiledImage(tntBytes!, bndBytes, palBytes);
-            firstSelection = true;
         }
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
@@ -197,7 +199,6 @@ namespace ALTViewer
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!firstSelection) { return; }
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
