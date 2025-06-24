@@ -24,6 +24,8 @@ namespace ALTViewer
         public GraphicsViewer()
         {
             InitializeComponent();
+            ToolTip tooltip = new ToolTip();
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             GetPalettes(); // Load palettes from the palette directory
             ListFiles(gfxDirectory); // Load graphics files by default on startup
         }

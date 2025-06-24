@@ -56,6 +56,7 @@
             // 
             // button1
             // 
+            button1.AccessibleDescription = "Play the selected sound file. ( you can also double click them in the list box )";
             button1.Location = new Point(250, 258);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
@@ -83,6 +84,7 @@
             // 
             // button2
             // 
+            button2.AccessibleDescription = "Export the selected file to the output directory in WAV format.";
             button2.Enabled = false;
             button2.Location = new Point(250, 12);
             button2.Name = "button2";
@@ -94,6 +96,7 @@
             // 
             // button3
             // 
+            button3.AccessibleDescription = "Select output directory for the files.";
             button3.Location = new Point(250, 41);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
@@ -104,6 +107,7 @@
             // 
             // textBox1
             // 
+            textBox1.AccessibleDescription = "The output directory.";
             textBox1.Location = new Point(331, 42);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -112,6 +116,7 @@
             // 
             // button4
             // 
+            button4.AccessibleDescription = "Export all files to the output directory in WAV format.";
             button4.Enabled = false;
             button4.Location = new Point(331, 13);
             button4.Name = "button4";
@@ -132,6 +137,7 @@
             // 
             // button5
             // 
+            button5.AccessibleDescription = "Open the music folder in explorer.";
             button5.Location = new Point(250, 93);
             button5.Name = "button5";
             button5.Size = new Size(75, 23);

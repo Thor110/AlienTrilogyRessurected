@@ -11,6 +11,8 @@ namespace ALTViewer
         public SoundEffects()
         {
             InitializeComponent();
+            ToolTip tooltip = new ToolTip();
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             DetectAudioFiles(); // Automatically detect audio files on form load
         }
         // Detect audio files in the default game directory

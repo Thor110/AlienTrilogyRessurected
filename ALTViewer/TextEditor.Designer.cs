@@ -71,6 +71,7 @@
             // 
             // richTextBox1
             // 
+            richTextBox1.AccessibleDescription = "The mission briefing.";
             richTextBox1.Location = new Point(343, 242);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(445, 194);
@@ -79,6 +80,7 @@
             // 
             // textBox1
             // 
+            textBox1.AccessibleDescription = "The name of the mission.";
             textBox1.Location = new Point(343, 213);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -87,6 +89,7 @@
             // 
             // comboBox1
             // 
+            comboBox1.AccessibleDescription = "The selected language.";
             comboBox1.FormattingEnabled = true;
             comboBox1.Location = new Point(362, 52);
             comboBox1.Name = "comboBox1";
@@ -132,6 +135,7 @@
             // 
             // textBox2
             // 
+            textBox2.AccessibleDescription = "Language name as shown in the menu in-game.";
             textBox2.Location = new Point(362, 81);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(121, 23);
@@ -193,6 +197,7 @@
             // 
             // radioButton1
             // 
+            radioButton1.AccessibleDescription = "List the UI text entries.";
             radioButton1.AutoSize = true;
             radioButton1.Location = new Point(362, 12);
             radioButton1.Name = "radioButton1";
@@ -204,6 +209,7 @@
             // 
             // radioButton2
             // 
+            radioButton2.AccessibleDescription = "List the mission briefings text.";
             radioButton2.AutoSize = true;
             radioButton2.Checked = true;
             radioButton2.Location = new Point(266, 12);

@@ -19,6 +19,8 @@ namespace ALTViewer
         public TextEditor()
         {
             InitializeComponent();
+            ToolTip tooltip = new ToolTip();
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             foreach (string language in languages) { comboBox1.Items.Add(language); }
             foreach (string mission in missions) { listBox1.Items.Add(mission); }

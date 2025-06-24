@@ -28,6 +28,8 @@
         public MapEditor()
         {
             InitializeComponent();
+            //ToolTip tooltip = new ToolTip(); // no tooltips added yet
+            //ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             ListLevels();
         }
         public void ListLevels()

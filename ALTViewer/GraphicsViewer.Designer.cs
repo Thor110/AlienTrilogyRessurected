@@ -54,6 +54,7 @@
             // 
             // button1
             // 
+            button1.AccessibleDescription = "Automatically detect the palette again incase you have changed it and forgotten which palette it used.";
             button1.Location = new Point(210, 413);
             button1.Name = "button1";
             button1.Size = new Size(120, 23);
@@ -75,6 +76,7 @@
             // 
             // radioButton1
             // 
+            radioButton1.AccessibleDescription = "Show files from the GFX folder.";
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
             radioButton1.Location = new Point(216, 21);
@@ -88,6 +90,7 @@
             // 
             // radioButton2
             // 
+            radioButton2.AccessibleDescription = "Show files from the NME folder.";
             radioButton2.AutoSize = true;
             radioButton2.Location = new Point(216, 46);
             radioButton2.Name = "radioButton2";
@@ -99,6 +102,7 @@
             // 
             // radioButton3
             // 
+            radioButton3.AccessibleDescription = "Show files from the level folders.";
             radioButton3.AutoSize = true;
             radioButton3.Location = new Point(216, 71);
             radioButton3.Name = "radioButton3";
@@ -110,6 +114,7 @@
             // 
             // radioButton4
             // 
+            radioButton4.AccessibleDescription = "Show files from the LANGUAGE folder.";
             radioButton4.AutoSize = true;
             radioButton4.Location = new Point(216, 96);
             radioButton4.Name = "radioButton4";
@@ -143,6 +148,7 @@
             // 
             // button2
             // 
+            button2.AccessibleDescription = "Export the selected file to the output directory in PNG format.";
             button2.Enabled = false;
             button2.Location = new Point(407, 292);
             button2.Name = "button2";
@@ -154,6 +160,7 @@
             // 
             // button3
             // 
+            button3.AccessibleDescription = "Export all listed files to the output directory in PNG format.";
             button3.Enabled = false;
             button3.Location = new Point(652, 292);
             button3.Name = "button3";
@@ -165,6 +172,7 @@
             // 
             // textBox1
             // 
+            textBox1.AccessibleDescription = "The output directory.";
             textBox1.Location = new Point(407, 12);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -173,6 +181,7 @@
             // 
             // button4
             // 
+            button4.AccessibleDescription = "Select output directory for the files.";
             button4.Location = new Point(326, 11);
             button4.Name = "button4";
             button4.Size = new Size(75, 23);
