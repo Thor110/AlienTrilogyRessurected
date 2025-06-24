@@ -11,12 +11,16 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 The road map for this project.
 
 - [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
-	- .RAW audio files can be played and converted to wav files.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 5% Complete )
+	- .RAW audio files can be played and converted to .WAV files.
+	- Waveform preview for selected sound files.
+- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 25% Complete )
 	- Palette detection implemented.
+	- Basic rendering pipeline created which isn't fully functional yet.
 - [✅ 3 : Text Editor](#text-editor) ( 50% Complete )
-	- View text from the games missions.
-- ❌ 4 : Map Editor ( 0% Complete )
+	- View text from the games missions and user interface.
+	- Editing and saving functions not implemented yet.
+- ❌ 4 : Map Editor ( 1% Complete )
+	- Map files detected and listed.
 
 And possibly more to come.
 
