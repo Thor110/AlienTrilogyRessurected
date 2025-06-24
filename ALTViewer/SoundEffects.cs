@@ -198,27 +198,16 @@ namespace ALTViewer
         {
             using (BinaryReader br = new BinaryReader(File.OpenRead(filepath)))
             {
-                // Read the RIFF header
-                string riff = Encoding.ASCII.GetString(br.ReadBytes(4));
-                if (riff != "RIFF")
-                {
-                    MessageBox.Show("File is not a valid WAV file.");
-                    return;
-                }
+                string riff = Encoding.ASCII.GetString(br.ReadBytes(4)); // Read the RIFF header
+                if (riff != "RIFF") { MessageBox.Show("File is not a valid WAV file."); return; }
                 br.ReadInt32(); // Skip file size
                 string wave = Encoding.ASCII.GetString(br.ReadBytes(4));
-                if (wave != "WAVE")
-                {
-                    MessageBox.Show("File is not a valid WAV file.");
-                    return;
-                }
-                // Search for the 'data' chunk
-                while (br.BaseStream.Position < br.BaseStream.Length)
+                if (wave != "WAVE") { MessageBox.Show("File is not a valid WAV file."); return; }
+                while (br.BaseStream.Position < br.BaseStream.Length) // Search for the 'data' chunk
                 {
                     string chunkID = Encoding.ASCII.GetString(br.ReadBytes(4));
                     int chunkSize = br.ReadInt32();
-                    // Check for 'fmt ' and 'data' chunks
-                    if (chunkID == "fmt ")
+                    if (chunkID == "fmt ") // Check for 'fmt ' and 'data' chunks
                     {
                         byte[] fmtData = br.ReadBytes(chunkSize);
                         ushort audioFormat = BitConverter.ToUInt16(fmtData, 0);
@@ -226,24 +215,15 @@ namespace ALTViewer
                         int sampleRate = BitConverter.ToInt32(fmtData, 4);
                         ushort bitsPerSample = BitConverter.ToUInt16(fmtData, 14);
                         if (audioFormat != 1 || numChannels != 1 || sampleRate != 11025 || bitsPerSample != 8)
-                        {
-                            MessageBox.Show("Unsupported WAV format. Only 8-bit PCM mono at 11025Hz is supported.");
-                            return;
-                        }
+                        { MessageBox.Show("Unsupported WAV format. Only 8-bit PCM mono at 11025Hz is supported."); return; }
                     }
-                    if (chunkID == "data")
+                    else if (chunkID == "data")
                     {
-                        if (chunkSize > int.MaxValue) // limit would really be uint but int.MaxValue is sufficient for our needs
-                        {
-                            MessageBox.Show("Audio data chunk is too large to handle.");
-                            return;
-                        }
+                        if (chunkSize > int.MaxValue) { MessageBox.Show("Audio data chunk is too large to handle."); return; } // limit would really be uint
                         string item = listBox1.SelectedItem!.ToString()!;
                         string original = $"HDD\\TRILOGY\\CD\\SFX\\{item}.RAW";
-                        if (checkBox1.Checked) // if the backup checkbox is checked, create a backup of the original file
-                        {
-                            File.Copy(original, original + ".BAK", false); // do not overwrite the existing file ( preserve the original file )
-                        }
+                        string backup = original + ".BAK";
+                        if (checkBox1.Checked && !File.Exists(backup)) { File.Copy(original, backup); } // create backup if it doesn't exist
                         byte[] audioData = br.ReadBytes(chunkSize);
                         using var fs = new FileStream(original, FileMode.Create);
                         fs.Write(audioData, 0, audioData.Length);

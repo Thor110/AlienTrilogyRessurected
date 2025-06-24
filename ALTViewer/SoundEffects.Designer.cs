@@ -180,7 +180,7 @@
             // 
             // checkBox1
             // 
-            checkBox1.AccessibleDescription = "If this is checked the file you replace will be backed up with the extension .bak at the default SFX directory.";
+            checkBox1.AccessibleDescription = "If this is checked the file you replace will be backed up with the extension .bak at the default SFX directory if a backup doesn't already exist.";
             checkBox1.AutoSize = true;
             checkBox1.Checked = true;
             checkBox1.CheckState = CheckState.Checked;
