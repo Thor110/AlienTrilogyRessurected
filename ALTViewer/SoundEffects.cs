@@ -231,6 +231,7 @@ namespace ALTViewer
                         using var fs = new FileStream(original, FileMode.Create);
                         fs.Write(audioData, 0, audioData.Length);
                         pictureBox1.Image = DrawWaveform(audioData, 538, 128, 11025); // re-draw the selected wave form to match the new file
+                        button7.Enabled = true;
                         MessageBox.Show($"{item}.RAW : replaced successfully.");
                         return;
                     }
@@ -246,8 +247,7 @@ namespace ALTViewer
             File.Copy($"{selectedFile}.BAK", selectedFile, true);
             File.Delete($"{selectedFile}.BAK");
             button7.Enabled = false;
-            byte[] audioData = File.ReadAllBytes(selectedFile); // load restored audio file
-            pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
+            pictureBox1.Image = DrawWaveform(File.ReadAllBytes(selectedFile), 538, 128); // redraw waveform and update labels
             MessageBox.Show("Backup successfully restored!");
         }
     }
