@@ -133,14 +133,14 @@ namespace ALTViewer
         private void listBox1_DoubleClick(object sender, EventArgs e) { PlayRawSound(); }
         // play sound on button click
         private void button1_Click(object sender, EventArgs e) { PlayRawSound(); }
-        // extract to file button click
+        // export to file button click
         private void button2_Click(object sender, EventArgs e)
         {
             if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
             ExtractToFile(outputPath, listBox1.SelectedItem!.ToString()!);
             MessageBox.Show($"Audio file extracted to : {outputPath}");
         }
-        // extract to file method
+        // export to file method
         private void ExtractToFile(string outputPath, string chosenFile)
         {
             byte[] rawData = File.ReadAllBytes($"HDD\\TRILOGY\\CD\\SFX\\{chosenFile}.RAW");
@@ -159,22 +159,23 @@ namespace ALTViewer
                 {
                     outputPath = fbd.SelectedPath;
                     textBox1.Text = outputPath; // update text box with selected path
-                    button2.Enabled = true; // enable extract button
-                    button4.Enabled = true; // enable extract all button
+                    button2.Enabled = true; // enable export button
+                    button4.Enabled = true; // enable export all button
                 }
             }
         }
-        // extract all button click
+        // export all button click
         private void button4_Click(object sender, EventArgs e)
         {
             foreach (var item in listBox1.Items)
             {
-                if (!FileExists(item.ToString()!)) // safety first
+                string audio = item.ToString()!;
+                if (!FileExists(audio)) // safety first
                 {
-                    MessageBox.Show($"Audio file {item} does not exist.");
+                    MessageBox.Show($"Audio file {audio} does not exist.");
                     continue;
                 }
-                else { ExtractToFile(outputPath, item.ToString()!); }
+                else { ExtractToFile(outputPath, audio); }
             }
             MessageBox.Show($"Audio files extracted to : {outputPath}");
         }

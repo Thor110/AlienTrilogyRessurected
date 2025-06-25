@@ -77,5 +77,4 @@ namespace ALTViewer
             return colors;
         }
     }
-
 }
