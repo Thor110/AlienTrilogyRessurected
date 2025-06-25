@@ -49,7 +49,7 @@
             // 
             pictureBox1.Location = new Point(407, 46);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(320, 240);
+            pictureBox1.Size = new Size(256, 256);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
@@ -151,7 +151,7 @@
             // 
             button2.AccessibleDescription = "Export the selected file to the output directory in PNG format.";
             button2.Enabled = false;
-            button2.Location = new Point(407, 292);
+            button2.Location = new Point(407, 308);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 9;
@@ -163,7 +163,7 @@
             // 
             button3.AccessibleDescription = "Export all listed files to the output directory in PNG format.";
             button3.Enabled = false;
-            button3.Location = new Point(652, 292);
+            button3.Location = new Point(588, 308);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 10;
@@ -195,9 +195,9 @@
             // 
             comboBox1.Enabled = false;
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(507, 292);
+            comboBox1.Location = new Point(488, 308);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
+            comboBox1.Size = new Size(94, 23);
             comboBox1.TabIndex = 13;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 

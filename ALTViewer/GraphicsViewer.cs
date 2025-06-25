@@ -26,6 +26,7 @@ namespace ALTViewer
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
+        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            foreach (string level in levels) { ListFiles(level); }
+            foreach (string level in levels) { ListFiles(level, ".BIN", ".B16"); } // BIN and B16 files look identical?
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
@@ -72,6 +73,8 @@ namespace ALTViewer
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 listBox1.Items.Add(fileName);
             }
+            if (radioButton1.Checked) { foreach (string file in removal) { if (listBox1.Items.Contains(file)) { listBox1.Items.Remove(file); } } } // remove known unusable files
+            if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
         private string[] DiscoverFiles(string path, string type1, string type2)
@@ -151,7 +154,9 @@ namespace ALTViewer
             //
             // hard coded palette lookups
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
-            if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
+            if (filename == "EXPLGFX" || filename == "PICKGFX") { return Path.Combine(paletteDirectory, "WSELECT" + ".PAL"); }
+            else if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
+            else if (filename == "OPTGFX") { return Path.Combine(paletteDirectory, "BONESHIP" + ".PAL"); }
             else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
             else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
             else if (radioButton3.Checked) { return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL"; }
@@ -184,15 +189,10 @@ namespace ALTViewer
             //
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             byte[] palBytes = File.ReadAllBytes(pal);
-
-
-
             // Store palette for reuse on selection change
             currentPalette = palBytes;
-
             // Parse all sections (TP00, TP01, etc.)
             currentSections = TileRenderer.ParseBndFormSections(bndBytes);
-
             // Populate ComboBox with section names
             comboBox1.Items.Clear();
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -227,7 +227,7 @@ namespace ALTViewer
             try
             {
                 string filename = lastSelectedFile;
-                string filepath = Path.Combine(outputPath, filename + ".png");
+                string filepath = Path.Combine(outputPath, filename + "_" + comboBox1.SelectedItem!.ToString() + ".png");
                 pictureBox1.Image.Save(filepath, ImageFormat.Png);
                 MessageBox.Show($"Image saved to:\n{filepath}");
             }
@@ -256,13 +256,12 @@ namespace ALTViewer
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (currentPalette == null) { return; }
-
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette, w, h);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+                MessageBox.Show($"Height : {w} Height : {h}"); // all report 256 x 256
             }
             catch (Exception ex)
             {

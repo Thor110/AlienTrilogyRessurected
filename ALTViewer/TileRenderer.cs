@@ -35,7 +35,7 @@ namespace ALTViewer
 
                 byte[] chunkData = br.ReadBytes(chunkSize);
 
-                if (chunkName.StartsWith("TP"))
+                if (chunkName.StartsWith("TP") || chunkName.StartsWith("F0"))
                 {
                     sections.Add(new BndSection
                     {
@@ -55,11 +55,26 @@ namespace ALTViewer
         public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
         {
             int totalPixels = imageData.Length;
+
+            // Try common known resolutions (width, height)
+            var knownResolutions = new List<(int Width, int Height)>
+            {
+                //(320, 240),
+                (256, 256),
+                (256, 128)//,
+                //(128, 128),
+                //(64, 64),
+                //(32, 32),
+            };
+
+            foreach (var res in knownResolutions) { if (res.Width * res.Height == totalPixels) { return res; } }
+
+            // Try square fallback
             int dim = (int)Math.Sqrt(totalPixels);
             if (dim * dim == totalPixels)
-                return (dim, dim); // square image
+                return (dim, dim);
 
-            throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes (not a perfect square).");
+            throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
         }
         public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
         {
