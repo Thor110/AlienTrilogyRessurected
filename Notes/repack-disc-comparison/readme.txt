@@ -10,24 +10,23 @@ This directory contains a curated archive of differences between a known repack 
 - `garbage_files_disc.txt`: Placeholder files with no localization value not included.
 - `DIFFERENTFILES/`: Higher-quality, differing or corrected versions of existing assets.
 - `MISSINGFILES/`: Files missing from the repack, organized into their original directories.
+- `DEMO/`: Files unique to the official *Alien Trilogy* demo release.
 
 Disc sourced from [Archive.org](https://archive.org/details/Acclaim_Alien_Trilogy_MSDOS_1996_Eng)  
 Total files: **119**  
 Total size: ~**3.29MB**
 
-All files kept as-is for integrity and preservation.
-
 Other versions checked :
 
-demo version ( comparison in progress )
-https://archive.org/details/AlienTrilogy_1020
-Lots of files differ, all archived. ~22.1MB
+Demo files: [AlienTrilogy_1020](https://archive.org/details/AlienTrilogy_1020)  
+Demo archive total size: ~**22.1MB** (files unique to the standalone demo release, not present in the full game)
 
-identical to disc version already checked
-https://archive.org/details/AlienTrilogyUSA
+TRILOGY ( the executable ) folder was not compared, I saw nothing of interest, a slightly larger executable and very similar driver and executable files.
 
-identical to repack
-https://archive.org/details/alien-trilogy.-7z
+## Other versions checked:
 
-practically identical to repack, just contains installer batch files for each language and nothing of interest
-https://archive.org/details/Redump.org16276
+- [AlienTrilogyUSA](https://archive.org/details/AlienTrilogyUSA) — Identical to the verified disc version.
+- [alien-trilogy.-7z](https://archive.org/details/alien-trilogy.-7z) — Identical to the repack.
+- [Redump.org16276](https://archive.org/details/Redump.org16276) — Practically identical to the repack, only contains extra installer batch files.
+
+All files kept as-is for integrity and preservation.
