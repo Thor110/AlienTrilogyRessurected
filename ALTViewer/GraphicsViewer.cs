@@ -24,6 +24,8 @@ namespace ALTViewer
         private string lastSelectedFilePath = "";
         private string lastSelectedTilePath = "";
         private string outputPath = "";
+        private List<BndSection> currentSections = new();
+        private byte[]? currentPalette;
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -37,24 +39,28 @@ namespace ALTViewer
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            comboBox1.Enabled = false;
             ListFiles(gfxDirectory);
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            comboBox1.Enabled = false;
             ListFiles(enemyDirectory);
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            comboBox1.Enabled = false;
             foreach (string level in levels) { ListFiles(level); }
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            comboBox1.Enabled = false;
             ListFiles(languageDirectory, ".BND", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
@@ -82,6 +88,9 @@ namespace ALTViewer
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
+
+            comboBox1.Enabled = true;
+
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
@@ -175,7 +184,27 @@ namespace ALTViewer
             //
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             byte[] palBytes = File.ReadAllBytes(pal);
-            pictureBox1.Image = TileRenderer.RenderTiledImage(tntBytes!, bndBytes, palBytes);
+
+
+
+            // Store palette for reuse on selection change
+            currentPalette = palBytes;
+
+            // Parse all sections (TP00, TP01, etc.)
+            currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+
+            // Populate ComboBox with section names
+            comboBox1.Items.Clear();
+            foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
+
+            if (comboBox1.Items.Count > 0)
+            {
+                comboBox1.SelectedIndex = 0; // triggers rendering
+            }
+            else
+            {
+                MessageBox.Show("No image sections found in BND file.");
+            }
         }
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
@@ -223,6 +252,21 @@ namespace ALTViewer
                 textBox1.Text = outputPath; // update text box with selected path
                 button2.Enabled = true; // enable extract button
                 button3.Enabled = true; // enable extract all button
+            }
+        }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (currentPalette == null) { return; }
+
+            var section = currentSections[comboBox1.SelectedIndex];
+            try
+            {
+                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette, w, h);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Render failed: " + ex.Message);
             }
         }
     }

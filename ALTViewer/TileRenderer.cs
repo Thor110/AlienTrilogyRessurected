@@ -1,80 +1,88 @@
 ﻿using System.Drawing.Imaging;
+using System.Text;
 
 namespace ALTViewer
 {
-    public class TileRenderer
+    public class BndSection
     {
-        public static Bitmap RenderTiledImage(byte[]? tntData, byte[] bndData, byte[] paletteData, int tileSize = 16, int width = 320, int height = 240)
+        public string Name { get; set; } = "";
+        public byte[] Data { get; set; } = Array.Empty<byte>();
+    }
+
+    public static class TileRenderer
+    {
+        public static List<BndSection> ParseBndFormSections(byte[] bnd)
         {
-            int tilesPerRow = width / tileSize;
-            int tilesPerCol = height / tileSize;
+            var sections = new List<BndSection>();
+            using var br = new BinaryReader(new MemoryStream(bnd));
 
-            var bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            using var g = Graphics.FromImage(bmp);
-            g.Clear(Color.Transparent);
+            // Read FORM header
+            string formTag = Encoding.ASCII.GetString(br.ReadBytes(4));
+            if (formTag != "FORM")
+                throw new Exception("Invalid BND file: missing FORM header.");
 
-            var palette = LoadPalette(paletteData);
-            var tiles = tntData != null ? ExtractTiles(tntData, tileSize, palette) : new List<Bitmap>();
+            int formSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
+            string platform = Encoding.ASCII.GetString(br.ReadBytes(4)); // e.g., "PSXT"
 
-            for (int y = 0; y < tilesPerCol; y++)
+            // Parse chunks
+            while (br.BaseStream.Position + 8 <= br.BaseStream.Length)
             {
-                for (int x = 0; x < tilesPerRow; x++)
-                {
-                    int index = y * tilesPerRow + x;
-                    if (index < bndData.Length)
-                    {
-                        int tileIndex = bndData[index];
+                string chunkName = Encoding.ASCII.GetString(br.ReadBytes(4));
+                int chunkSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
 
-                        if (tiles.Count > 0 && tileIndex >= 0 && tileIndex < tiles.Count)
-                        {
-                            g.DrawImage(tiles[tileIndex], x * tileSize, y * tileSize);
-                        }
-                        else
-                        {
-                            // optional: draw fallback tile (transparent by default)
-                        }
-                    }
+                if (br.BaseStream.Position + chunkSize > br.BaseStream.Length)
+                    break;
+
+                byte[] chunkData = br.ReadBytes(chunkSize);
+
+                if (chunkName.StartsWith("TP"))
+                {
+                    sections.Add(new BndSection
+                    {
+                        Name = chunkName,
+                        Data = chunkData
+                    });
+                }
+
+                // IFF padding to 2-byte alignment
+                if ((chunkSize % 2) != 0)
+                    br.BaseStream.Seek(1, SeekOrigin.Current);
+            }
+
+            return sections;
+        }
+
+        public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
+        {
+            int totalPixels = imageData.Length;
+            int dim = (int)Math.Sqrt(totalPixels);
+            if (dim * dim == totalPixels)
+                return (dim, dim); // square image
+
+            throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes (not a perfect square).");
+        }
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
+        {
+            int colors = palette.Length / 3;
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int idx = y * width + x;
+                    if (idx >= pixelData.Length) continue;
+
+                    byte colorIndex = pixelData[idx];
+                    Color color = (colorIndex < colors)
+                        ? Color.FromArgb(255, palette[colorIndex * 3], palette[colorIndex * 3 + 1], palette[colorIndex * 3 + 2])
+                        : Color.Transparent;
+
+                    bmp.SetPixel(x, y, color);
                 }
             }
 
             return bmp;
-        }
-
-        private static List<Bitmap> ExtractTiles(byte[] tntData, int tileSize, Color[] palette)
-        {
-            int tileByteSize = tileSize * tileSize;
-            int tileCount = tntData.Length / tileByteSize;
-            var tiles = new List<Bitmap>();
-
-            for (int i = 0; i < tileCount; i++)
-            {
-                var bmp = new Bitmap(tileSize, tileSize, PixelFormat.Format32bppArgb);
-                for (int y = 0; y < tileSize; y++)
-                {
-                    for (int x = 0; x < tileSize; x++)
-                    {
-                        int idx = i * tileByteSize + y * tileSize + x;
-                        byte colorIndex = tntData[idx];
-                        bmp.SetPixel(x, y, palette[colorIndex]);
-                    }
-                }
-                tiles.Add(bmp);
-            }
-
-            return tiles;
-        }
-
-        private static Color[] LoadPalette(byte[] paletteData)
-        {
-            var colors = new Color[256];
-            for (int i = 0; i < Math.Min(paletteData.Length / 3, 256); i++)
-            {
-                int r = paletteData[i * 3] * 4;
-                int g = paletteData[i * 3 + 1] * 4;
-                int b = paletteData[i * 3 + 2] * 4;
-                colors[i] = Color.FromArgb(r, g, b);
-            }
-            return colors;
         }
     }
 }
