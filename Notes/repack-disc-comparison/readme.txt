@@ -11,6 +11,9 @@ This directory contains a curated archive of differences between a known repack 
 - `DIFFERENTFILES/`: Higher-quality, differing or corrected versions of existing assets.
 - `MISSINGFILES/`: Files missing from the repack, organized into their original directories.
 - `DEMO/`: Files unique to the official *Alien Trilogy* demo release.
+- `DOCUMENTATION/`: Copies of the BND and MAP documentation from the Archive.org backups.
+	- https://web.archive.org/web/20230518104114/https://wiki.xentax.com/index.php/Alien_Trilogy_BND
+	- https://web.archive.org/web/20230518104117/https://wiki.xentax.com/index.php/Alien_Trilogy_MAP
 
 Disc sourced from [Archive.org](https://archive.org/details/Acclaim_Alien_Trilogy_MSDOS_1996_Eng)  
 Total files: **119**  
@@ -21,7 +24,7 @@ Other versions checked :
 Demo files: [AlienTrilogy_1020](https://archive.org/details/AlienTrilogy_1020)  
 Demo archive total size: ~**22.1MB** (files unique to the standalone demo release, not present in the full game)
 
-TRILOGY ( the executable ) folder was not compared, I saw nothing of interest, a slightly larger executable and very similar driver and executable files.
+The TRILOGY (executable) folder was not compared, I saw nothing of interest, a slightly larger executable and very similar driver and executable files.
 
 ## Other versions checked:
 
@@ -29,4 +32,4 @@ TRILOGY ( the executable ) folder was not compared, I saw nothing of interest, a
 - [alien-trilogy.-7z](https://archive.org/details/alien-trilogy.-7z) — Identical to the repack.
 - [Redump.org16276](https://archive.org/details/Redump.org16276) — Practically identical to the repack, only contains extra installer batch files.
 
-All files kept as-is for integrity and preservation.
+All files are preserved *as-is* for the sake of historical integrity and future research.
