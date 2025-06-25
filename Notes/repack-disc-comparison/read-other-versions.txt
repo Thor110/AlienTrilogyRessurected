@@ -1,0 +1,11 @@
+identical to repack
+https://archive.org/details/alien-trilogy.-7z
+
+identical to disc version already checked
+https://archive.org/details/AlienTrilogyUSA
+
+demo version ( comparison in progress )
+https://archive.org/details/AlienTrilogy_1020
+
+practically identical to repack, just contains installer batch files for each language and nothing of interest
+https://archive.org/details/Redump.org16276
