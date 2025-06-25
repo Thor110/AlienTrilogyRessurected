@@ -1,0 +1,287 @@
+Programming Crew
+
+PC Programmers
+Cameron Sheppard
+Chris Walsh
+
+Original Programmers
+Greg Michael
+David Shea
+
+Alien Editor
+Tony Monckton
+
+Viewports
+John Croudy
+
+
+---
+
+
+Game Designer
+Matt Nagy
+
+Senior Storyboard Artist
+Alex Lawrence
+
+
+---
+
+
+Video and Sprite Crew
+
+
+Acclaim Advanced Technology Group (ATG)
+VP Engineering and Advanced Technology
+Wes Trager
+
+ATG Studio Services
+Director
+Jeremy Schwartz
+
+Motion Capture Studio
+Larry Kelley - Manager
+
+Andy Acquilino
+Sharon Dougherty
+John Farve
+Cynthia Graham
+Phil Grunfelder
+Joe Gibbons
+Chuck Mongelli
+Rich Nelson
+Danielle Papsidero
+Mike Passuello
+Nicole Scharff
+Brian Windsor
+
+Digital Production Group
+Mark Chavez
+Scott Douglas
+Patrick Kenny
+Annmarie Koenig
+Mark Neumann
+Patrick Runyon
+Jason Yanofsky
+
+Post Processing
+Howard Schwartz - Senior Manager
+Rob Muzer
+Peter Klimek
+
+ATG Research and Development
+Director of Research and Development
+Mark Schafer
+
+Don Hunt - Facial Animation
+
+Cast
+Motion Capture
+Gregory Caccia
+Larry Kelley
+Brad Martin
+Daryl Meyer
+Steve Rein
+Brian Smyj
+Jenny Way
+
+Jeff Gibson - Stunt Co-ordinator
+
+FMV Composition
+Bob Scumaci
+
+Head Scans
+Tracy Lopez
+Tyrone Miller
+Michael Passuello
+
+Technical Support
+Harry Reimer
+Howard Perlman
+Rob Coffey
+
+
+---
+
+
+Game Modelling Crew
+
+Lead 3D World Modeller
+Charlie Jackson
+
+3D World Modellers
+Errol Gale
+Dave Kite
+
+
+---
+
+
+Game Creation Crew
+
+PC Graphic Artists
+Lloyd Murphy
+Guy Mills
+
+Original Artists
+Steve Middleton
+Mark Frazer
+Guy Mills
+Ben McGrath
+Lloyd Murphy
+Kevin McMahon
+
+Texture Mappers
+Ben O'Reilly
+Vicky Cheale
+Paul Collingwood
+
+Gameplay and World Mappers
+Andy Squirrell
+Kevin Watts
+Jon Gibson
+
+
+---
+
+
+Audio crew
+
+Music
+Stephen Root
+
+In-Game Sound Effects
+Dow Mckeever
+
+Voice
+Carter Inskeep
+Michael Margotta
+Pat Weber Sones
+
+Additional Sound Effects
+Andy Brock
+
+
+---
+
+
+QA/QC Crew
+
+QA Managers
+Clifford Ramsey
+Mike Weiner
+
+QA/QC Staff
+
+Lead Tester (NY)
+Tom Falzone 
+
+Mark Viccary
+Mat Kraemer
+Barbara Strnad
+James Brown
+Jeff Zentil
+Brian Regan
+Michael Patrick
+Russell Tucker
+Damion Pinnock
+Anthony Scaduto
+Tom Geddes
+Greg Pasquale
+Craig Kerrison
+Joe Rubin
+Bonchi Martinez
+Ray Yeomans
+
+
+---
+
+
+Management Crew
+
+Product Development Licensing
+Nina Skalka - Asst. Manager
+Erin Maloney - Licensing Asst.
+Tim Logan - 20th Century Fox Licensing
+
+Interactive Director
+Fiona Milburn
+
+Acclaim White Team
+Phil Alne
+Brett Gow
+Seth Rosenfield
+Mark Thievanich
+Linda Spellman
+
+Analysts
+Pete Wanet
+Nathaniel Gunter
+Shawn Rosen
+
+
+Producers
+Peter Jones
+Clifford Falls
+
+
+Executive Producers
+Joe Bonar
+Dan Feinstein
+Amy Smith-Boylan
+
+
+---
+
+
+Special thanks go to
+
+Simon Stoney
+Asif Chaudhri
+Fish
+Roger Booth
+Simon Pick
+Peter Buccellato
+Justin Garvanovic
+Carl Jazwinski
+Greg Modern
+Dave Minogue
+Gary J Foreman
+Mixed Nuts
+Post Perfect
+Bob Armour
+Howard Perlman
+Eric Samulski
+Gary Noden
+Rob Zimmerman
+Dan Phillips
+Frances Esposito
+Phil Williams
+Scott Marcus
+Christopher Hadley
+Bob Timbello
+Reza Memari
+and anyone else who has 
+contributed to this product.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+END
+

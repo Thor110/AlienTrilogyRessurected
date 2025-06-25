@@ -16,3 +16,18 @@ Total files: **119**
 Total size: ~**3.29MB**
 
 All files kept as-is for integrity and preservation.
+
+Other versions checked :
+
+demo version ( comparison in progress )
+https://archive.org/details/AlienTrilogy_1020
+Lots of files differ, all archived. ~22.1MB
+
+identical to disc version already checked
+https://archive.org/details/AlienTrilogyUSA
+
+identical to repack
+https://archive.org/details/alien-trilogy.-7z
+
+practically identical to repack, just contains installer batch files for each language and nothing of interest
+https://archive.org/details/Redump.org16276
