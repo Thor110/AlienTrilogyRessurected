@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using System.Text;
 using System.Windows.Forms.VisualStyles;
 using static System.Collections.Specialized.BitVector32;
 
@@ -116,17 +117,11 @@ namespace ALTViewer
             foreach (string ext in new[] { ".BND", ".BIN", ".B16", ".16" })
             {
                 string candidate = Path.Combine(path, selected + ext);
-                if (File.Exists(candidate))
-                {
-                    filePath = candidate;
-                    break;
-                }
+                if (File.Exists(candidate)) { filePath = candidate; break; }
             }
-            if (string.IsNullOrEmpty(filePath))
-            {
-                MessageBox.Show("No usable graphics file found for: " + selected);
-                return;
-            }
+            if(File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
+            else { button6.Enabled = false; }
+            if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
             RenderImage(filePath, palettePath, chosen);
         }
         private string DetectPalette(string filename, string extension)
@@ -213,14 +208,19 @@ namespace ALTViewer
         private void button2_Click(object sender, EventArgs e)
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            try
-            {
-                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                string filepath = Path.Combine(outputPath, lastSelectedFile + "_" + comboBox1.SelectedItem!.ToString() + ".png");
-                TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h).Save(filepath, ImageFormat.Png);
-                MessageBox.Show($"Image saved to:\n{filepath}");
-            }
+            try { MessageBox.Show($"Image saved to:\n{ExportFile(section)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
+        }
+        private string ExportFile(BndSection section)
+        {
+            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+            string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{comboBox1.SelectedItem!.ToString()}.png");
+            Bitmap image = checkBox2.Checked
+                ? TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h)
+                : TileRenderer.BuildIndexedBitmap(section.Data, w, h, currentPalette!);
+
+            image.Save(filepath, ImageFormat.Png);
+            return filepath;
         }
         // export all button
         private void button3_Click(object sender, EventArgs e)
@@ -230,9 +230,7 @@ namespace ALTViewer
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
                     var section = currentSections[i];
-                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    string filepath = Path.Combine(outputPath, lastSelectedFile + "_" + section.Name + ".png");
-                    TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h).Save(filepath, ImageFormat.Png);
+                    ExportFile(section);
                 }
                 MessageBox.Show($"Images saved to:\n{outputPath}");
             }
@@ -280,26 +278,50 @@ namespace ALTViewer
             if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
             // replace texture
             int length = filename.Length;
-            if (length == 1)
+            if (length == 1) // replace single frame
             {
-                // replace frame
-                //byte[] frame = File.ReadAllBytes(filename[0]);
-                // Single-frame replacement
                 Bitmap frameImage = new Bitmap(filename[0]);
-                // sizes account for everything we can read currently
                 if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
                 if (!CheckDimensions(frameImage)) { return; }
                 byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
                 currentSections[comboBox1.SelectedIndex].Data = indexedData;
-                File.WriteAllBytes(selectedFile, TileRenderer.RebuildBndForm(currentSections));
+                var section = currentSections[comboBox1.SelectedIndex];
+                string sectionName = $"TP0{comboBox1.SelectedIndex}";
+                long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
+                List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
+                BinaryUtility.ReplaceBytes(list, selectedFile);
                 MessageBox.Show("Texture replaced successfully.");
             }
-            else if (length == currentSections.Count)
+            else if (length == currentSections.Count) // replace all frames
             {
                 // replace all frames
                 List<string> images = filename.ToList();
                 // parse the image dimensions
             }
+        }
+        public static long FindSectionDataOffset(string filePath, string sectionName)
+        {
+            byte[] label = Encoding.ASCII.GetBytes(sectionName);
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+
+            for (int i = 0; i < fileBytes.Length - label.Length; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < label.Length; j++)
+                {
+                    if (fileBytes[i + j] != label[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    return i + 8; // label (4) + size (4) = data starts here
+                }
+            }
+            throw new Exception("Section not found in file.");
         }
         private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
         private bool CheckDimensions (Bitmap frameImage)

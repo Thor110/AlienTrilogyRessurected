@@ -91,7 +91,7 @@ namespace ALTViewer
 
             return buffer;
         }
-        public static byte[] RebuildBndForm(List<BndSection> sections)
+        public static byte[] RebuildBndForm(List<BndSection> sections, byte[] infoData)
         {
             using var ms = new MemoryStream();
             using var bw = new BinaryWriter(ms);
@@ -104,7 +104,8 @@ namespace ALTViewer
 
             // Write platform signature, assumed fixed
             bw.Write(Encoding.ASCII.GetBytes("PSXT"));
-
+            bw.Write(Encoding.ASCII.GetBytes("INFO"));
+            bw.Write(infoData); // 16 bytes INFO section
             foreach (var section in sections)
             {
                 bw.Write(Encoding.ASCII.GetBytes(section.Name));
@@ -128,6 +129,29 @@ namespace ALTViewer
             bw.Write(formSizeBytes);
 
             return ms.ToArray();
+        }
+        public static Bitmap BuildIndexedBitmap(byte[] pixelData, int width, int height, byte[] palette)
+        {
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+
+            // Set the palette
+            ColorPalette pal = bmp.Palette;
+            for (int i = 0; i < palette.Length / 3 && i < 256; i++)
+            {
+                pal.Entries[i] = Color.FromArgb(255, palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
+            }
+            bmp.Palette = pal;
+
+            // Lock and copy the pixel data
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+            int stride = data.Stride;
+            for (int y = 0; y < height; y++)
+            {
+                Marshal.Copy(pixelData, y * width, data.Scan0 + y * stride, width);
+            }
+            bmp.UnlockBits(data);
+
+            return bmp;
         }
     }
 }

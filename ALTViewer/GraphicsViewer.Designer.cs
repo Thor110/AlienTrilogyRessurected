@@ -45,6 +45,7 @@
             button5 = new Button();
             button6 = new Button();
             checkBox1 = new CheckBox();
+            checkBox2 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -219,7 +220,8 @@
             // button6
             // 
             button6.AccessibleDescription = "Restore file from the backup if it exists.";
-            button6.Location = new Point(625, 337);
+            button6.Enabled = false;
+            button6.Location = new Point(588, 337);
             button6.Name = "button6";
             button6.Size = new Size(75, 23);
             button6.TabIndex = 15;
@@ -231,18 +233,32 @@
             // 
             checkBox1.AccessibleDescription = "If this is checked the file you replace will be backed up with the extension .bak at the default SFX directory if a backup doesn't already exist.";
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(488, 341);
+            checkBox1.Checked = true;
+            checkBox1.CheckState = CheckState.Checked;
+            checkBox1.Location = new Point(495, 341);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(131, 19);
+            checkBox1.Size = new Size(86, 19);
             checkBox1.TabIndex = 16;
-            checkBox1.Text = "Backup Original File";
+            checkBox1.Text = "Backup File";
             checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            checkBox2.AccessibleDescription = "Export with corrected colours for viewing.";
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(669, 310);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(121, 19);
+            checkBox2.TabIndex = 17;
+            checkBox2.Text = "Colour Correction";
+            checkBox2.UseVisualStyleBackColor = true;
             // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(button6);
             Controls.Add(button5);
@@ -288,5 +304,6 @@
         private Button button5;
         private Button button6;
         private CheckBox checkBox1;
+        private CheckBox checkBox2;
     }
 }
