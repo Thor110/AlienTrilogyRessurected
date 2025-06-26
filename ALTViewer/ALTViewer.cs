@@ -2,10 +2,7 @@ namespace ALTViewer
 {
     public partial class ALTViewer : Form
     {
-        public ALTViewer()
-        {
-            InitializeComponent();
-        }
+        public ALTViewer() { InitializeComponent(); }
         // create new form method
         private void newForm(Form form)
         {

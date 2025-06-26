@@ -14,6 +14,7 @@ namespace ALTViewer
             // see https://aka.ms/applicationconfiguration.
             Process[] processes = Process.GetProcessesByName("ALTViewer");
             if (processes.Length > 1) { return; }
+            if (!File.Exists("Run.exe")) { MessageBox.Show("This toolkit is only designed to work with the repacked version of the game for now!"); return; }
             ApplicationConfiguration.Initialize();
             Application.Run(new ALTViewer());
         }

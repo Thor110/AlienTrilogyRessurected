@@ -342,12 +342,12 @@ namespace ALTViewer
                     case "PULSE":
                     case "SHOTGUN":
                     case "SMART":
-                        filetype = "B16"; break;
+                        filetype = ".B16"; break;
                     default:
-                        filetype = "BND"; break;
+                        filetype = ".BND"; break;
                 }
             }
-            else if (radioButton2.Checked) { directory = "NME"; filetype = "B16"; }
+            else if (radioButton2.Checked) { directory = "NME"; filetype = ".B16"; }
             else if (radioButton3.Checked)
             {
                 switch (directory)
@@ -382,10 +382,10 @@ namespace ALTViewer
                         MessageBox.Show("Unknown section selected!");
                         return false;
                 }
-                filetype = "B16";
+                filetype = ".B16";
             }
-            else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = "16"; }
-            fullPath = $"HDD\\TRILOGY\\CD\\{directory}\\{listBox1.SelectedItem}.{filetype}";
+            else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = ".16"; }
+            fullPath = $"HDD\\TRILOGY\\CD\\{directory}\\{listBox1.SelectedItem}{filetype}";
             backupPath = fullPath + ".BAK";
             return true;
         }
