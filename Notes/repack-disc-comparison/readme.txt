@@ -8,6 +8,7 @@ This directory contains a curated archive of differences between a known repack 
 - `absent_from_repack.txt`: Files present on the disc but not in the repack.
 - `different_files_disc.txt`: Files differing between the two versions from the disc.
 - `garbage_files_disc.txt`: Placeholder files with no localization value not included.
+- `unnecessary-files.txt`: A list of files that are not required for the repacked version of the game to run, some appear to be development leftovers and others are not required because the repack mounts the disc image (such as the video files) to a virtual drive.
 - `DIFFERENTFILES/`: Higher-quality, differing or corrected versions of existing assets.
 - `MISSINGFILES/`: Files missing from the repack, organized into their original directories.
 - `DEMO/`: Files unique to the official *Alien Trilogy* demo release.
