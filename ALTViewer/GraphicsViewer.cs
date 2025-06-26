@@ -281,7 +281,7 @@ namespace ALTViewer
             if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
             {
-                for (int i = 0; i < length; i++) { ReplaceFrame(i); }
+                for (int i = 0; i < length; i++) { ReplaceFrame(i); } // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
                 MessageBox.Show("All texture frames replaced successfully.");
             }
             else
