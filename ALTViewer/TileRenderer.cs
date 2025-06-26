@@ -67,17 +67,12 @@ namespace ALTViewer
         }
         public static byte[] Extract8bppData(Bitmap bmp)
         {
-            BitmapData data = bmp.LockBits(
-                new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format8bppIndexed);
-
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
             int stride = data.Stride;
             int height = data.Height;
             byte[] buffer = new byte[stride * height];
             Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
             bmp.UnlockBits(data);
-
             // Remove padding if necessary
             if (stride != bmp.Width)
             {
@@ -88,20 +83,16 @@ namespace ALTViewer
                 }
                 return cropped;
             }
-
             return buffer;
         }
         public static byte[] RebuildBndForm(List<BndSection> sections, byte[] infoData)
         {
             using var ms = new MemoryStream();
             using var bw = new BinaryWriter(ms);
-
             // Write FORM header
             bw.Write(Encoding.ASCII.GetBytes("FORM"));
-
             // Placeholder for form size (will update later)
             bw.Write(new byte[4]);
-
             // Write platform signature, assumed fixed
             bw.Write(Encoding.ASCII.GetBytes("PSXT"));
             bw.Write(Encoding.ASCII.GetBytes("INFO"));
@@ -113,27 +104,23 @@ namespace ALTViewer
                 byte[] sizeBytes = BitConverter.GetBytes(chunkSize).Reverse().ToArray(); // big endian
                 bw.Write(sizeBytes);
                 bw.Write(section.Data);
-
                 // Align to even byte count
                 if (chunkSize % 2 != 0)
                 {
                     bw.Write((byte)0);
                 }
             }
-
             // Go back and write correct FORM size
             long fileSize = ms.Length;
             int formSize = (int)(fileSize - 8); // FORM size excludes first 8 bytes
             ms.Position = 4;
             byte[] formSizeBytes = BitConverter.GetBytes(formSize).Reverse().ToArray(); // big endian
             bw.Write(formSizeBytes);
-
             return ms.ToArray();
         }
         public static Bitmap BuildIndexedBitmap(byte[] pixelData, int width, int height, byte[] palette)
         {
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-
             // Set the palette
             ColorPalette pal = bmp.Palette;
             for (int i = 0; i < palette.Length / 3 && i < 256; i++)
@@ -141,7 +128,6 @@ namespace ALTViewer
                 pal.Entries[i] = Color.FromArgb(255, palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
             }
             bmp.Palette = pal;
-
             // Lock and copy the pixel data
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
             int stride = data.Stride;
@@ -150,7 +136,6 @@ namespace ALTViewer
                 Marshal.Copy(pixelData, y * width, data.Scan0 + y * stride, width);
             }
             bmp.UnlockBits(data);
-
             return bmp;
         }
     }

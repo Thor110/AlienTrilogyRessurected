@@ -284,11 +284,7 @@ namespace ALTViewer
                 for (int i = 0; i < length; i++) { ReplaceFrame(i); } // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
                 MessageBox.Show("All texture frames replaced successfully.");
             }
-            else
-            {
-                MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames.");
-                return;
-            }
+            else { MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames."); return; }
             void ReplaceFrame(int frame)
             {
                 Bitmap frameImage = new Bitmap(filename[frame]);
