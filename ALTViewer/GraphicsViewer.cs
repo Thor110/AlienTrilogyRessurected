@@ -84,7 +84,7 @@ namespace ALTViewer
             }
             if (radioButton1.Checked)
             {
-                foreach (string file in removal)
+                foreach (string file in removal) // TODO : needs updating to exclude .BND weapon entries IE : to prevent duplicates for users who do not purge unused files
                 {
                     if (listBox1.Items.Contains(file))
                     {
@@ -110,8 +110,8 @@ namespace ALTViewer
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
             // determine which directory to use based on selected radio button
-            if (radioButton1.Checked) { palfile = false; GetFile(gfxDirectory); }
-            else if (radioButton2.Checked) { palfile = false; GetFile(enemyDirectory); }
+            if (radioButton1.Checked) { GetFile(gfxDirectory); }
+            else if (radioButton2.Checked) { GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
             {
                 foreach (string level in levels) // determine level folder based on selected item
@@ -124,7 +124,7 @@ namespace ALTViewer
                     }
                 }
             }
-            else if (radioButton4.Checked) { palfile = false; GetFile(languageDirectory); }
+            else if (radioButton4.Checked) { GetFile(languageDirectory); }
         }
         // get the file from the selected directory then render it
         private void GetFile(string path)
@@ -183,6 +183,7 @@ namespace ALTViewer
             if (levelPalette != null) { currentPalette = levelPalette; }
             // Parse all sections (TP00, TP01, etc.)
             currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+            palfile = false; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
             // Populate ComboBox with section names
             comboBox1.Items.Clear();
