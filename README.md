@@ -13,9 +13,11 @@ The road map for this project.
 - [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
 	- .RAW audio files can be played and converted to .WAV files.
 	- Waveform preview for selected sound files.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 25% Complete )
+	- Automatic backup of the original file by default.
+- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 75% Complete )
 	- Palette detection implemented.
-	- Basic rendering pipeline created which isn't fully functional yet.
+	- View and replace textures.
+	- Automatic backup of the original file by default.
 - [✅ 3 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
