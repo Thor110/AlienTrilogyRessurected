@@ -47,7 +47,7 @@ namespace ALTViewer
             listBox1.Items.Clear();
             listBox2.Enabled = true;
             comboBox1.Enabled = false;
-            ListFiles(gfxDirectory);
+            ListFiles(gfxDirectory); // TODO : exclude .BND files that are not used in the game such as the weapons etc
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -143,10 +143,10 @@ namespace ALTViewer
             if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
             RenderImage(filePath, palettePath, chosen);
         }
+        // detect palette and hard coded palette lookups
         private string DetectPalette(string filename, string extension)
         {
             string palette = Path.Combine(paletteDirectory, filename + extension);
-            // hard coded palette lookups
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
             if (filename == "EXPLGFX" || filename == "PICKGFX") { return Path.Combine(paletteDirectory, "WSELECT" + ".PAL"); }
             else if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
@@ -161,11 +161,9 @@ namespace ALTViewer
         private void RenderImage(string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
-            // event handler removal to prevent rendering the image twice
             byte[] levelPalette = null!;
-            listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!;
-            // select palette for the chosen file in the palette listbox
-            if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette
+            listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
+            if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
             else if (palfile) // load palette from levelfile
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
@@ -174,19 +172,14 @@ namespace ALTViewer
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: " + select); return; } // bin bnd already checked
             else { MessageBox.Show("Palette not found: " + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
-            //lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd); // TODO : replace binbnd with lastSelectedFile
-            //byte[] palBytes = File.ReadAllBytes(pal);
-            if(!palfile) { levelPalette = File.ReadAllBytes(pal); }
-            // Store palette for reuse on selection change
-            if (levelPalette != null) { currentPalette = levelPalette; }
-            // Parse all sections (TP00, TP01, etc.)
-            currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+            if (!palfile) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
+            if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
+            currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             palfile = false; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
-            // Populate ComboBox with section names
-            comboBox1.Items.Clear();
+            comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
             else { MessageBox.Show("No image sections found in BND file."); }
@@ -195,7 +188,7 @@ namespace ALTViewer
         private void button1_Click(object sender, EventArgs e)
         {
             string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!, ".PAL")); // detect palette for the selected item
-            RenderImage(lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen);
+            RenderImage(lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen); // TODO : fix palette detection in these odd places
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -203,7 +196,7 @@ namespace ALTViewer
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
-            string palettePath = Path.Combine(paletteDirectory, selected + ".PAL");
+            string palettePath = Path.Combine(paletteDirectory, selected + ".PAL"); // TODO : fix palette detection in these odd places
             RenderImage(lastSelectedFilePath, palettePath, selected); // use the selected palette to render the image
         }
         // export selected button
