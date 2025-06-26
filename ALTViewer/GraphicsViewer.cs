@@ -273,46 +273,21 @@ namespace ALTViewer
                 if (openFileDialog.ShowDialog() == DialogResult.OK) { ReplaceTexture(openFileDialog.FileNames); }
             }
         }
+        // replace texture
         private void ReplaceTexture(string[] filename)
         {
             if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
-            // replace texture
             int length = filename.Length;
-            if (length == 1) // replace single frame
-            {
-                /*Bitmap frameImage = new Bitmap(filename[0]);
-                if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
-                if (!CheckDimensions(frameImage)) { return; }
-                byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
-                currentSections[comboBox1.SelectedIndex].Data = indexedData;
-                var section = currentSections[comboBox1.SelectedIndex];
-                string sectionName = $"TP0{comboBox1.SelectedIndex}";
-                long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
-                List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
-                BinaryUtility.ReplaceBytes(list, selectedFile);
-                MessageBox.Show("Texture replaced successfully.");*/
-                ReplaceFrame(comboBox1.SelectedIndex); // replace the first frame
-            }
+            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
             {
-                // replace all frames
-                List<string> images = filename.ToList();
-                for (int i = 0; i < length; i++)
-                {
-                    /*Bitmap frameImage = new Bitmap(filename[i]);
-                    if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
-                    if (!CheckDimensions(frameImage)) { return; }
-                    byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
-                    currentSections[i].Data = indexedData;
-                    var section = currentSections[i];
-                    string sectionName = $"TP0{i}";
-                    long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
-                    List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
-                    BinaryUtility.ReplaceBytes(list, selectedFile);*/
-                    ReplaceFrame(i);
-                }
+                for (int i = 0; i < length; i++) { ReplaceFrame(i); }
                 MessageBox.Show("All texture frames replaced successfully.");
-                // parse the image dimensions
+            }
+            else
+            {
+                MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames.");
+                return;
             }
             void ReplaceFrame(int frame)
             {
