@@ -56,8 +56,7 @@ namespace ALTViewer
                         int r = palette[colorIndex * 3] * 4;
                         int g = palette[colorIndex * 3 + 1] * 4;
                         int b = palette[colorIndex * 3 + 2] * 4;
-                        // Clamp values to 255 just in case
-                        bmp.SetPixel(x, y, Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255)));
+                        bmp.SetPixel(x, y, Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255))); // Clamp values to 255 just in case
                     }
                     else // Fallback color for invalid palette index
                     {
@@ -75,17 +74,14 @@ namespace ALTViewer
             for (int i = 0; i < 256; i++)
             {
                 ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
-
                 // BGR555 format (PlayStation-style): 0BBBBBGGGGGRRRRR
                 int b = (color >> 10) & 0x1F;
                 int g = (color >> 5) & 0x1F;
                 int r = color & 0x1F;
-
                 // Scale to 0–255 range
                 r = (r * 255) / 31;
                 g = (g * 255) / 31;
                 b = (b * 255) / 31;
-
                 rgbPalette[i * 3 + 0] = (byte)r;
                 rgbPalette[i * 3 + 1] = (byte)g;
                 rgbPalette[i * 3 + 2] = (byte)b;
@@ -100,8 +96,7 @@ namespace ALTViewer
             byte[] buffer = new byte[stride * height];
             Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
             bmp.UnlockBits(data);
-            // Remove padding if necessary
-            if (stride != bmp.Width)
+            if (stride != bmp.Width) // Remove padding if necessary
             {
                 byte[] cropped = new byte[bmp.Width * height];
                 for (int y = 0; y < height; y++) { Array.Copy(buffer, y * stride, cropped, y * bmp.Width, bmp.Width); }
