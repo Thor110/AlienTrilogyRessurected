@@ -46,6 +46,7 @@
             button6 = new Button();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
+            button7 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -254,11 +255,23 @@
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
+            // button7
+            // 
+            button7.AccessibleDescription = "This modifies the file to use the selected palette.";
+            button7.Location = new Point(336, 413);
+            button7.Name = "button7";
+            button7.Size = new Size(120, 23);
+            button7.TabIndex = 18;
+            button7.Text = "Apply New Palette";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button7);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(button6);
@@ -306,5 +319,6 @@
         private Button button6;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
+        private Button button7;
     }
 }

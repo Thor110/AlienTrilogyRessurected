@@ -289,7 +289,7 @@ namespace ALTViewer
             void ReplaceFrame(int frame, string message, bool single)
             {
                 int framestore = frame; // frame is the frame to be replaced
-                if(single) { framestore = 0; } // get only one frame if single is true
+                if (single) { framestore = 0; } // get only one frame if single is true
                 Bitmap frameImage;
                 try { frameImage = new Bitmap(filename[framestore]); } // safety first...
                 catch (Exception ex) { MessageBox.Show("Failed to load image:\n" + ex.Message); return; }
@@ -401,10 +401,16 @@ namespace ALTViewer
             // refresh the image after restoring
             MessageBox.Show("Backup successfully restored!");
         }
+        // colour correction transparency setting
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             transparency = checkBox2.Checked;
             comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
+        }
+        // replace palette button click
+        private void button7_Click(object sender, EventArgs e)
+        {
+            // replace the palette byte when it is known
         }
     }
 }
