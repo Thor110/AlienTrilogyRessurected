@@ -27,6 +27,7 @@ namespace ALTViewer
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
+        private bool transparency;
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
         public GraphicsViewer()
         {
@@ -119,7 +120,7 @@ namespace ALTViewer
                 string candidate = Path.Combine(path, selected + ext);
                 if (File.Exists(candidate)) { filePath = candidate; break; }
             }
-            if(File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
+            if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
             RenderImage(filePath, palettePath, chosen);
@@ -216,7 +217,7 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+            Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
             image.Save(filepath, ImageFormat.Png);
             return filepath;
         }
@@ -253,7 +254,7 @@ namespace ALTViewer
             try
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
                 //MessageBox.Show($"Height : {w} Height : {h}");
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
@@ -274,20 +275,27 @@ namespace ALTViewer
         // replace texture
         private void ReplaceTexture(string[] filename)
         {
-            if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
             int length = filename.Length;
-            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex); MessageBox.Show("Texture frame replaced successfully."); } // replace single frame
+            if (length == 1)
+            {
+                ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); // replace single frame
+            }
             else if (length == currentSections.Count) // replace all frames
             {
-                for (int i = 0; i < length; i++) { ReplaceFrame(i); } // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
-                MessageBox.Show("All texture frames replaced successfully.");
+                for (int i = 0; i < length; i++) { ReplaceFrame(i, "All texture frames replaced successfully.", false); }
+                // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
             }
             else { MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames."); return; }
-            void ReplaceFrame(int frame)
+            void ReplaceFrame(int frame, string message, bool single)
             {
-                Bitmap frameImage = new Bitmap(filename[frame]);
+                int framestore = frame; // frame is the frame to be replaced
+                if(single) { framestore = 0; } // get only one frame if single is true
+                Bitmap frameImage;
+                try { frameImage = new Bitmap(filename[framestore]); } // safety first...
+                catch (Exception ex) { MessageBox.Show("Failed to load image:\n" + ex.Message); return; }
                 if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
-                if (!CheckDimensions(frameImage)) { return; }
+                else if (!CheckDimensions(frameImage)) { return; }
+                if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
                 byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
                 currentSections[frame].Data = indexedData;
                 var section = currentSections[frame];
@@ -295,6 +303,11 @@ namespace ALTViewer
                 long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
+                if (frame + 1 == currentSections.Count || single) // account for zero based indexing
+                {
+                    MessageBox.Show(message);
+                    comboBox1_SelectedIndexChanged(null!, null!); // re-render the image
+                }
             }
         }
         public static long FindSectionDataOffset(string filePath, string sectionName)
@@ -321,11 +334,11 @@ namespace ALTViewer
             throw new Exception("Section not found in file.");
         }
         private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
-        private bool CheckDimensions (Bitmap frameImage)
+        private bool CheckDimensions(Bitmap frameImage)
         {
             var section = currentSections[comboBox1.SelectedIndex];
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-            if(frameImage.Width == w && frameImage.Height == h) { return true; }
+            if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;
         }
@@ -387,6 +400,11 @@ namespace ALTViewer
             button6.Enabled = false;
             // refresh the image after restoring
             MessageBox.Show("Backup successfully restored!");
+        }
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            transparency = checkBox2.Checked;
+            comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
         }
     }
 }

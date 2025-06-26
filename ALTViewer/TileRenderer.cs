@@ -45,27 +45,38 @@ namespace ALTViewer
             if (dim * dim == totalPixels) { return (dim, dim); }
             throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
         }
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, bool transparency)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
                     int idx = y * width + x;
                     if (idx >= pixelData.Length) { continue; }
+
                     byte colorIndex = pixelData[idx];
-                    int r = palette[colorIndex * 3] * 4;
-                    int g = palette[colorIndex * 3 + 1] * 4;
-                    int b = palette[colorIndex * 3 + 2] * 4;
 
-                    // Clamp values to 255 just in case
-                    Color color = Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255));
+                    if (colorIndex < colors)
+                    {
+                        int r = palette[colorIndex * 3] * 4;
+                        int g = palette[colorIndex * 3 + 1] * 4;
+                        int b = palette[colorIndex * 3 + 2] * 4;
 
-                    bmp.SetPixel(x, y, color);
+                        // Clamp values to 255 just in case
+                        bmp.SetPixel(x, y, Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255)));
+                    }
+                    else
+                    {
+                        // Fallback color for invalid palette index
+                        if (!transparency) { bmp.SetPixel(x, y, Color.Magenta); }
+                        else { bmp.SetPixel(x, y, Color.Transparent); }
+                    }
                 }
             }
+
             return bmp;
         }
         public static byte[] Extract8bppData(Bitmap bmp)
