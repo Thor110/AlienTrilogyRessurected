@@ -328,9 +328,25 @@ namespace ALTViewer
         {
             fullPath = "";
             backupPath = "";
-            string directory = listBox1.SelectedItem!.ToString()!.Substring(0, 2);
+            string directory = lastSelectedFile.Substring(0, 2);
             string filetype = "";
-            if (radioButton1.Checked) { directory = "GFX"; filetype = "BND"; }
+            if (radioButton1.Checked)
+            {
+                directory = "GFX";
+                switch(lastSelectedFile)
+                {
+                    case "3EXPLGFX9":
+                    case "FLAME":
+                    case "MM9":
+                    case "OPTGFX":
+                    case "PULSE":
+                    case "SHOTGUN":
+                    case "SMART":
+                        filetype = "B16"; break;
+                    default:
+                        filetype = "BND"; break;
+                }
+            }
             else if (radioButton2.Checked) { directory = "NME"; filetype = "B16"; }
             else if (radioButton3.Checked)
             {
