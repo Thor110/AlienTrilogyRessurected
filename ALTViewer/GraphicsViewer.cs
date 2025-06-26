@@ -1,4 +1,6 @@
 ﻿using System.Drawing.Imaging;
+using System.Windows.Forms.VisualStyles;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
@@ -72,7 +74,7 @@ namespace ALTViewer
                 listBox1.Items.Add(fileName);
             }
             if (radioButton1.Checked) { foreach (string file in removal) { if (listBox1.Items.Contains(file)) { listBox1.Items.Remove(file); } } } // remove known unusable files
-            if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
+            else if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
         private string[] DiscoverFiles(string path, string type1, string type2)
@@ -256,12 +258,116 @@ namespace ALTViewer
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
-                //MessageBox.Show($"Height : {w} Height : {h}"); // all report 256 x 256
+                //MessageBox.Show($"Height : {w} Height : {h}");
             }
-            catch (Exception ex)
+            catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
+        }
+        // replace button click event
+        private void button5_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                MessageBox.Show("Render failed: " + ex.Message);
+                openFileDialog.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = "Select an image (.png) file";
+                openFileDialog.Multiselect = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK) { ReplaceTexture(openFileDialog.FileNames); }
             }
+        }
+        private void ReplaceTexture(string[] filename)
+        {
+            if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
+            // replace texture
+            int length = filename.Length;
+            if (length == 1)
+            {
+                // replace frame
+                //byte[] frame = File.ReadAllBytes(filename[0]);
+                // Single-frame replacement
+                Bitmap frameImage = new Bitmap(filename[0]);
+                // sizes account for everything we can read currently
+                if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
+                if (!CheckDimensions(frameImage)) { return; }
+                byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
+                currentSections[comboBox1.SelectedIndex].Data = indexedData;
+                File.WriteAllBytes(selectedFile, TileRenderer.RebuildBndForm(currentSections));
+                MessageBox.Show("Texture replaced successfully.");
+            }
+            else if (length == currentSections.Count)
+            {
+                // replace all frames
+                List<string> images = filename.ToList();
+                // parse the image dimensions
+            }
+        }
+        private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
+        private bool CheckDimensions (Bitmap frameImage)
+        {
+            var section = currentSections[comboBox1.SelectedIndex];
+            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+            if(frameImage.Width == w && frameImage.Height == h) { return true; }
+            MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
+            return false;
+        }
+        private bool TryGetTargetPath(out string fullPath, out string backupPath)
+        {
+            fullPath = "";
+            backupPath = "";
+            string directory = listBox1.SelectedItem!.ToString()!.Substring(0, 2);
+            string filetype = "";
+            if (radioButton1.Checked) { directory = "GFX"; filetype = "BND"; }
+            else if (radioButton2.Checked) { directory = "NME"; filetype = "B16"; }
+            else if (radioButton3.Checked)
+            {
+                switch (directory)
+                {
+                    case "11":
+                    case "12":
+                    case "13":
+                    case "14":
+                    case "15":
+                    case "16":
+                        directory = "SECT11"; break;
+                    case "21":
+                    case "22":
+                    case "23":
+                        directory = "SECT21"; break;
+                    case "24":
+                    case "26":
+                        directory = "SECT22"; break;
+                    case "31":
+                    case "32":
+                    case "33":
+                        directory = "SECT31"; break;
+                    case "35":
+                    case "36":
+                    case "37":
+                    case "38":
+                    case "39":
+                        directory = "SECT32"; break;
+                    case "90":
+                        directory = "SECT90"; break;
+                    default:
+                        MessageBox.Show("Unknown section selected!");
+                        return false;
+                }
+                filetype = "B16";
+            }
+            else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = "16"; }
+            fullPath = $"HDD\\TRILOGY\\CD\\{directory}\\{listBox1.SelectedItem}.{filetype}";
+            backupPath = fullPath + ".BAK";
+            return true;
+        }
+        // restore backup click event
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (!TryGetTargetPath(out string selectedFile, out string backupFile)) { return; }
+            File.Copy($"{backupFile}", selectedFile, true);
+            File.Delete($"{backupFile}");
+            button6.Enabled = false;
+            // refresh the image after restoring
+            MessageBox.Show("Backup successfully restored!");
         }
     }
 }

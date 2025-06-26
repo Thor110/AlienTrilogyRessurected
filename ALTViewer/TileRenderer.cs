@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ALTViewer
@@ -63,6 +64,70 @@ namespace ALTViewer
                 }
             }
             return bmp;
+        }
+        public static byte[] Extract8bppData(Bitmap bmp)
+        {
+            BitmapData data = bmp.LockBits(
+                new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format8bppIndexed);
+
+            int stride = data.Stride;
+            int height = data.Height;
+            byte[] buffer = new byte[stride * height];
+            Marshal.Copy(data.Scan0, buffer, 0, buffer.Length);
+            bmp.UnlockBits(data);
+
+            // Remove padding if necessary
+            if (stride != bmp.Width)
+            {
+                byte[] cropped = new byte[bmp.Width * height];
+                for (int y = 0; y < height; y++)
+                {
+                    Array.Copy(buffer, y * stride, cropped, y * bmp.Width, bmp.Width);
+                }
+                return cropped;
+            }
+
+            return buffer;
+        }
+        public static byte[] RebuildBndForm(List<BndSection> sections)
+        {
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+
+            // Write FORM header
+            bw.Write(Encoding.ASCII.GetBytes("FORM"));
+
+            // Placeholder for form size (will update later)
+            bw.Write(new byte[4]);
+
+            // Write platform signature, assumed fixed
+            bw.Write(Encoding.ASCII.GetBytes("PSXT"));
+
+            foreach (var section in sections)
+            {
+                bw.Write(Encoding.ASCII.GetBytes(section.Name));
+                int chunkSize = section.Data.Length;
+                byte[] sizeBytes = BitConverter.GetBytes(chunkSize).Reverse().ToArray(); // big endian
+                bw.Write(sizeBytes);
+                bw.Write(section.Data);
+
+                // Align to even byte count
+                if (chunkSize % 2 != 0)
+                {
+                    bw.Write((byte)0);
+                }
+            }
+
+            // Go back and write correct FORM size
+            long fileSize = ms.Length;
+            int formSize = (int)(fileSize - 8); // FORM size excludes first 8 bytes
+            ms.Position = 4;
+            byte[] formSizeBytes = BitConverter.GetBytes(formSize).Reverse().ToArray(); // big endian
+            bw.Write(formSizeBytes);
+
+            return ms.ToArray();
         }
     }
 }

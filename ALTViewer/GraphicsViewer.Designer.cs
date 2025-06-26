@@ -42,6 +42,9 @@
             textBox1 = new TextBox();
             button4 = new Button();
             comboBox1 = new ComboBox();
+            button5 = new Button();
+            button6 = new Button();
+            checkBox1 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -202,11 +205,47 @@
             comboBox1.TabIndex = 13;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
+            // button5
+            // 
+            button5.AccessibleDescription = "Replace selected texture file with a .PNG file of your choosing.";
+            button5.Location = new Point(407, 337);
+            button5.Name = "button5";
+            button5.Size = new Size(75, 23);
+            button5.TabIndex = 14;
+            button5.Text = "Replace";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // button6
+            // 
+            button6.AccessibleDescription = "Restore file from the backup if it exists.";
+            button6.Location = new Point(625, 337);
+            button6.Name = "button6";
+            button6.Size = new Size(75, 23);
+            button6.TabIndex = 15;
+            button6.Text = "Restore";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AccessibleDescription = "If this is checked the file you replace will be backed up with the extension .bak at the default SFX directory if a backup doesn't already exist.";
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(488, 341);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(131, 19);
+            checkBox1.TabIndex = 16;
+            checkBox1.Text = "Backup Original File";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBox1);
+            Controls.Add(button6);
+            Controls.Add(button5);
             Controls.Add(comboBox1);
             Controls.Add(button4);
             Controls.Add(textBox1);
@@ -246,5 +285,8 @@
         private TextBox textBox1;
         private Button button4;
         private ComboBox comboBox1;
+        private Button button5;
+        private Button button6;
+        private CheckBox checkBox1;
     }
 }
