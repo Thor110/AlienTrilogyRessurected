@@ -250,7 +250,7 @@ namespace ALTViewer
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
-                //MessageBox.Show($"Height : {w} Height : {h}");
+                //MessageBox.Show($"Height : {w} Height : {h}"); // TODO : remove once dimensions are confirmed for weapon files
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
         }
@@ -271,10 +271,7 @@ namespace ALTViewer
         private void ReplaceTexture(string[] filename)
         {
             int length = filename.Length;
-            if (length == 1)
-            {
-                ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); // replace single frame
-            }
+            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
             {
                 for (int i = 0; i < length; i++) { ReplaceFrame(i, "All texture frames replaced successfully.", false); }
@@ -310,7 +307,6 @@ namespace ALTViewer
         {
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
             byte[] fileBytes = File.ReadAllBytes(filePath);
-
             for (int i = 0; i < fileBytes.Length - label.Length; i++)
             {
                 bool match = true;
@@ -322,10 +318,7 @@ namespace ALTViewer
                         break;
                     }
                 }
-                if (match)
-                {
-                    return i + length; // label (4) + size (4) = data starts here
-                }
+                if (match) { return i + length; } // label (4) + size (4) = data starts here
             }
             throw new Exception("Section not found in file.");
         }
@@ -380,7 +373,7 @@ namespace ALTViewer
             File.Copy($"{backupFile}", selectedFile, true);
             File.Delete($"{backupFile}");
             button6.Enabled = false;
-            // refresh the image after restoring
+            comboBox1_SelectedIndexChanged(sender, e); // refresh the image after restoring
             MessageBox.Show("Backup successfully restored!");
         }
         // colour correction transparency setting
@@ -392,15 +385,14 @@ namespace ALTViewer
         // replace palette button click
         private void button7_Click(object sender, EventArgs e)
         {
-            // replace the palette byte when it is known
+            // replace the palette byte when it is known // TODO : implement palette editing
             //BinaryUtility.ReplaceByte(0x1A, 0x00, lastSelectedFilePath);
         }
         public static byte[] ExtractLevelPalette(string filePath, string clSectionName)
         {
-            // Read entire file once
-            byte[] fileBytes = File.ReadAllBytes(filePath);
-            // CL section starts 8 bytes after the header
-            long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8);
+            
+            byte[] fileBytes = File.ReadAllBytes(filePath); // Read entire file once
+            long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8); // CL section starts 8 bytes after the header
             if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
             return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
         }
