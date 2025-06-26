@@ -328,64 +328,31 @@ namespace ALTViewer
         {
             fullPath = "";
             backupPath = "";
-            string directory = lastSelectedFile.Substring(0, 2);
+            string directory = "";
             string filetype = "";
             if (radioButton1.Checked)
             {
                 directory = "GFX";
-                switch(lastSelectedFile)
-                {
-                    case "3EXPLGFX9":
-                    case "FLAME":
-                    case "MM9":
-                    case "OPTGFX":
-                    case "PULSE":
-                    case "SHOTGUN":
-                    case "SMART":
-                        filetype = ".B16"; break;
-                    default:
-                        filetype = ".BND"; break;
-                }
+                filetype = lastSelectedFile switch { "EXPLGFX" or "FLAME" or "MM9" or "OPTGFX" or "PULSE" or "SHOTGUN" or "SMART" => ".B16", _ => ".BND" };
             }
             else if (radioButton2.Checked) { directory = "NME"; filetype = ".B16"; }
             else if (radioButton3.Checked)
             {
-                switch (directory)
+                directory = lastSelectedFile.Substring(0, 2) switch
                 {
-                    case "11":
-                    case "12":
-                    case "13":
-                    case "14":
-                    case "15":
-                    case "16":
-                        directory = "SECT11"; break;
-                    case "21":
-                    case "22":
-                    case "23":
-                        directory = "SECT21"; break;
-                    case "24":
-                    case "26":
-                        directory = "SECT22"; break;
-                    case "31":
-                    case "32":
-                    case "33":
-                        directory = "SECT31"; break;
-                    case "35":
-                    case "36":
-                    case "37":
-                    case "38":
-                    case "39":
-                        directory = "SECT32"; break;
-                    case "90":
-                        directory = "SECT90"; break;
-                    default:
-                        MessageBox.Show("Unknown section selected!");
-                        return false;
-                }
+                    "11" or "12" or "13" => "SECT11",
+                    "14" or "15" or "16" => "SECT12",
+                    "21" or "22" or "23" => "SECT21",
+                    "24" or "26" => "SECT22",
+                    "31" or "32" or "33" => "SECT31",
+                    "35" or "36" or "37" or "38" or "39" => "SECT32",
+                    "90" => "SECT90",
+                    _ => throw new Exception("Unknown section selected!")
+                }; // TODO : change switch expression to search every directory for lastSelectedFile instead when level editing is implemented
                 filetype = ".B16";
             }
             else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = ".16"; }
-            fullPath = $"HDD\\TRILOGY\\CD\\{directory}\\{listBox1.SelectedItem}{filetype}";
+            fullPath = $"{gameDirectory}\\{directory}\\{listBox1.SelectedItem}{filetype}";
             backupPath = fullPath + ".BAK";
             return true;
         }
@@ -409,6 +376,7 @@ namespace ALTViewer
         private void button7_Click(object sender, EventArgs e)
         {
             // replace the palette byte when it is known
+            //BinaryUtility.ReplaceByte(0x1A, 0x00, lastSelectedFilePath);
         }
     }
 }
