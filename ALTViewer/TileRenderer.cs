@@ -71,7 +71,7 @@ namespace ALTViewer
                     else
                     {
                         // Fallback color for invalid palette index
-                        if (!transparency) { bmp.SetPixel(x, y, Color.Magenta); }
+                        if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
                         else { bmp.SetPixel(x, y, Color.Transparent); }
                     }
                 }
@@ -81,22 +81,24 @@ namespace ALTViewer
         }
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
         {
-            if (rawPalette.Length != 512) throw new ArgumentException("Expected 512-byte 16-bit palette.");
+            if (rawPalette == null || rawPalette.Length != 512)
+                throw new ArgumentException("Expected 512-byte 16-bit palette.");
 
             byte[] rgbPalette = new byte[256 * 3];
 
             for (int i = 0; i < 256; i++)
             {
-                ushort color = BitConverter.ToUInt16(rawPalette, i * 2);
+                ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
 
-                int r = (color & 0x1F) << 3;         // 5 bits red
-                int g = ((color >> 5) & 0x1F) << 3;  // 5 bits green
-                int b = ((color >> 10) & 0x1F) << 3; // 5 bits blue
+                // BGR555 format (PlayStation-style): 0BBBBBGGGGGRRRRR
+                int b = (color >> 10) & 0x1F;
+                int g = (color >> 5) & 0x1F;
+                int r = color & 0x1F;
 
-                // Optional: Clamp to 0-255
-                r = Math.Min(r, 255);
-                g = Math.Min(g, 255);
-                b = Math.Min(b, 255);
+                // Scale to 0–255 range
+                r = (r * 255) / 31;
+                g = (g * 255) / 31;
+                b = (b * 255) / 31;
 
                 rgbPalette[i * 3 + 0] = (byte)r;
                 rgbPalette[i * 3 + 1] = (byte)g;

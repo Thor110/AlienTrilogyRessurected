@@ -29,7 +29,9 @@ namespace ALTViewer
         private byte[]? currentPalette;
         private bool transparency;
         private bool palfile; // true if no .PAL file is used ( level files )
-        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
+        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D", // demo files and models
+        "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART"}; // remove duplicate entries
+        // TODO : only add .B16 entries for these files, rather than removing them as if the unused files are removed, that will result in no entries for these files
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -76,7 +78,16 @@ namespace ALTViewer
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 listBox1.Items.Add(fileName);
             }
-            if (radioButton1.Checked) { foreach (string file in removal) { if (listBox1.Items.Contains(file)) { listBox1.Items.Remove(file); } } } // remove known unusable files
+            if (radioButton1.Checked)
+            {
+                foreach (string file in removal)
+                {
+                    if (listBox1.Items.Contains(file))
+                    {
+                        listBox1.Items.Remove(file);
+                    }
+                }
+            } // remove known unusable files
             else if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
