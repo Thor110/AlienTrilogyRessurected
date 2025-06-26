@@ -208,17 +208,17 @@ namespace ALTViewer
         private void button2_Click(object sender, EventArgs e)
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            try { MessageBox.Show($"Image saved to:\n{ExportFile(section)}"); }
+            try { MessageBox.Show($"Image saved to:\n{ExportFile(section, comboBox1.SelectedItem!.ToString()!)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
-        private string ExportFile(BndSection section)
+        // export file
+        private string ExportFile(BndSection section, string sectionName)
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-            string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{comboBox1.SelectedItem!.ToString()}.png");
+            string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
             Bitmap image = checkBox2.Checked
                 ? TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h)
                 : TileRenderer.BuildIndexedBitmap(section.Data, w, h, currentPalette!);
-
             image.Save(filepath, ImageFormat.Png);
             return filepath;
         }
@@ -230,7 +230,7 @@ namespace ALTViewer
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
                     var section = currentSections[i];
-                    ExportFile(section);
+                    ExportFile(section, comboBox1.Items[i]!.ToString()!);
                 }
                 MessageBox.Show($"Images saved to:\n{outputPath}");
             }
@@ -280,7 +280,7 @@ namespace ALTViewer
             int length = filename.Length;
             if (length == 1) // replace single frame
             {
-                Bitmap frameImage = new Bitmap(filename[0]);
+                /*Bitmap frameImage = new Bitmap(filename[0]);
                 if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
                 if (!CheckDimensions(frameImage)) { return; }
                 byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
@@ -290,13 +290,42 @@ namespace ALTViewer
                 long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
-                MessageBox.Show("Texture replaced successfully.");
+                MessageBox.Show("Texture replaced successfully.");*/
+                ReplaceFrame(comboBox1.SelectedIndex); // replace the first frame
             }
             else if (length == currentSections.Count) // replace all frames
             {
                 // replace all frames
                 List<string> images = filename.ToList();
+                for (int i = 0; i < length; i++)
+                {
+                    /*Bitmap frameImage = new Bitmap(filename[i]);
+                    if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
+                    if (!CheckDimensions(frameImage)) { return; }
+                    byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
+                    currentSections[i].Data = indexedData;
+                    var section = currentSections[i];
+                    string sectionName = $"TP0{i}";
+                    long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
+                    List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
+                    BinaryUtility.ReplaceBytes(list, selectedFile);*/
+                    ReplaceFrame(i);
+                }
+                MessageBox.Show("All texture frames replaced successfully.");
                 // parse the image dimensions
+            }
+            void ReplaceFrame(int frame)
+            {
+                Bitmap frameImage = new Bitmap(filename[frame]);
+                if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
+                if (!CheckDimensions(frameImage)) { return; }
+                byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
+                currentSections[frame].Data = indexedData;
+                var section = currentSections[frame];
+                string sectionName = $"TP0{frame}";
+                long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
+                List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
+                BinaryUtility.ReplaceBytes(list, selectedFile);
             }
         }
         public static long FindSectionDataOffset(string filePath, string sectionName)
@@ -315,7 +344,6 @@ namespace ALTViewer
                         break;
                     }
                 }
-
                 if (match)
                 {
                     return i + 8; // label (4) + size (4) = data starts here
