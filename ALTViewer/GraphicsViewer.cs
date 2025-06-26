@@ -28,6 +28,7 @@ namespace ALTViewer
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
         private bool transparency;
+        private bool palfile; // true if no .PAL file is used ( level files )
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
         public GraphicsViewer()
         {
@@ -50,7 +51,7 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            ListFiles(enemyDirectory, ".NOPE");
+            ListFiles(enemyDirectory, ".B16", ".NOPE");
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
@@ -67,7 +68,7 @@ namespace ALTViewer
             ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
-        public void ListFiles(string path, string type1 = ".BND", string type2 = ".BIN")
+        public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16")
         {
             string[] files = DiscoverFiles(path, type1, type2);
             foreach (string file in files)
@@ -94,20 +95,21 @@ namespace ALTViewer
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
             // determine which directory to use based on selected radio button
-            if (radioButton1.Checked) { GetFile(gfxDirectory); }
-            else if (radioButton2.Checked) { GetFile(enemyDirectory); }
+            if (radioButton1.Checked) { palfile = false; GetFile(gfxDirectory); }
+            else if (radioButton2.Checked) { palfile = false; GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
             {
                 foreach (string level in levels) // determine level folder based on selected item
                 {
                     if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".BIN")))
                     {
+                        palfile = true;
                         GetFile(level);
                         return; // exit after finding the first matching level
                     }
                 }
             }
-            else if (radioButton4.Checked) { GetFile(languageDirectory); }
+            else if (radioButton4.Checked) { palfile = false; GetFile(languageDirectory); }
         }
         // get the file from the selected directory then render it
         private void GetFile(string path)
@@ -151,18 +153,25 @@ namespace ALTViewer
         {
             pictureBox1.Image = null; // clear previous image
             // event handler removal to prevent rendering the image twice
+            byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!;
             // select palette for the chosen file in the palette listbox
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette
-            else { MessageBox.Show("Palette not found: " + select); }
+            else if (palfile) // load palette from levelfile
+            {
+                string clSection = $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}";
+                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractLevelPalette(binbnd, clSection));
+            }
+            else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: " + select); return; } // bin bnd already checked
+            else { MessageBox.Show("Palette not found: " + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
             //lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
-            if (!File.Exists(pal)) { return; } // bin bnd already checked
-            byte[] bndBytes = File.ReadAllBytes(binbnd);
-            byte[] palBytes = File.ReadAllBytes(pal);
+            byte[] bndBytes = File.ReadAllBytes(binbnd); // TODO : replace binbnd with lastSelectedFile
+            //byte[] palBytes = File.ReadAllBytes(pal);
+            if(!palfile) { levelPalette = File.ReadAllBytes(pal); }
             // Store palette for reuse on selection change
-            currentPalette = palBytes;
+            if (levelPalette != null) { currentPalette = levelPalette; }
             // Parse all sections (TP00, TP01, etc.)
             currentSections = TileRenderer.ParseBndFormSections(bndBytes);
             comboBox1.Enabled = true; // enable section selection combo box
@@ -283,7 +292,7 @@ namespace ALTViewer
                 currentSections[frame].Data = indexedData;
                 var section = currentSections[frame];
                 string sectionName = $"TP0{frame}";
-                long dataOffset = FindSectionDataOffset(selectedFile, sectionName);
+                long dataOffset = FindSectionDataOffset(selectedFile, sectionName, 8);
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
                 if (frame + 1 == currentSections.Count || single) // account for zero based indexing
@@ -294,7 +303,7 @@ namespace ALTViewer
             }
         }
         // find the offset of the section data in the file
-        public static long FindSectionDataOffset(string filePath, string sectionName)
+        public static long FindSectionDataOffset(string filePath, string sectionName, int length)
         {
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
             byte[] fileBytes = File.ReadAllBytes(filePath);
@@ -312,7 +321,7 @@ namespace ALTViewer
                 }
                 if (match)
                 {
-                    return i + 8; // label (4) + size (4) = data starts here
+                    return i + length; // label (4) + size (4) = data starts here
                 }
             }
             throw new Exception("Section not found in file.");
@@ -382,6 +391,15 @@ namespace ALTViewer
         {
             // replace the palette byte when it is known
             //BinaryUtility.ReplaceByte(0x1A, 0x00, lastSelectedFilePath);
+        }
+        public static byte[] ExtractLevelPalette(string filePath, string clSectionName)
+        {
+            // Read entire file once
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            // CL section starts 8 bytes after the header
+            long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8);
+            if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
+            return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
         }
     }
 }

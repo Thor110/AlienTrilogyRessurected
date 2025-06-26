@@ -79,6 +79,32 @@ namespace ALTViewer
 
             return bmp;
         }
+        public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
+        {
+            if (rawPalette.Length != 512) throw new ArgumentException("Expected 512-byte 16-bit palette.");
+
+            byte[] rgbPalette = new byte[256 * 3];
+
+            for (int i = 0; i < 256; i++)
+            {
+                ushort color = BitConverter.ToUInt16(rawPalette, i * 2);
+
+                int r = (color & 0x1F) << 3;         // 5 bits red
+                int g = ((color >> 5) & 0x1F) << 3;  // 5 bits green
+                int b = ((color >> 10) & 0x1F) << 3; // 5 bits blue
+
+                // Optional: Clamp to 0-255
+                r = Math.Min(r, 255);
+                g = Math.Min(g, 255);
+                b = Math.Min(b, 255);
+
+                rgbPalette[i * 3 + 0] = (byte)r;
+                rgbPalette[i * 3 + 1] = (byte)g;
+                rgbPalette[i * 3 + 2] = (byte)b;
+            }
+
+            return rgbPalette;
+        }
         public static byte[] Extract8bppData(Bitmap bmp)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
