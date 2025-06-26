@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace ALTViewer
 {
@@ -54,7 +53,7 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            foreach (string level in levels) { ListFiles(level, ".BIN", ".B16"); } // BIN and B16 files look identical?
+            foreach (string level in levels) { ListFiles(level); } // BIN and B16 files look identical?
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
@@ -211,10 +210,12 @@ namespace ALTViewer
         // export selected button
         private void button2_Click(object sender, EventArgs e)
         {
+            var section = currentSections[comboBox1.SelectedIndex];
             try
             {
+                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 string filepath = Path.Combine(outputPath, lastSelectedFile + "_" + comboBox1.SelectedItem!.ToString() + ".png");
-                pictureBox1.Image.Save(filepath, ImageFormat.Png);
+                TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h).Save(filepath, ImageFormat.Png);
                 MessageBox.Show($"Image saved to:\n{filepath}");
             }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
