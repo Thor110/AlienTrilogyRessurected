@@ -22,7 +22,6 @@ namespace ALTViewer
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
         private string lastSelectedFilePath = "";
-        private string lastSelectedTilePath = "";
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
@@ -91,9 +90,6 @@ namespace ALTViewer
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
-
-            comboBox1.Enabled = true;
-
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
@@ -115,7 +111,6 @@ namespace ALTViewer
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected, ".PAL")); // detect palette for the selected item
             string palettePath = Path.Combine(paletteDirectory, chosen + ".PAL"); // actual palette path
-            string tilePath = Path.Combine(paletteDirectory, Path.GetFileNameWithoutExtension(DetectPalette(selected, ".TNT")) + ".TNT");
             string filePath = "";
             foreach (string ext in new[] { ".BND", ".BIN", ".B16", ".16" })
             {
@@ -131,7 +126,7 @@ namespace ALTViewer
                 MessageBox.Show("No usable graphics file found for: " + selected);
                 return;
             }
-            RenderImage(tilePath, filePath, palettePath, chosen);
+            RenderImage(filePath, palettePath, chosen);
         }
         private string DetectPalette(string filename, string extension)
         {
@@ -165,7 +160,7 @@ namespace ALTViewer
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
         // render the selected image
-        private void RenderImage(string tnt, string binbnd, string pal, string select)
+        private void RenderImage(string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
             // event handler removal to prevent rendering the image twice
@@ -174,11 +169,9 @@ namespace ALTViewer
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette
             else { MessageBox.Show("Palette not found: " + select); }
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
-            lastSelectedTilePath = tnt;
+            //lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
             if (!File.Exists(pal)) { return; } // bin bnd already checked
-            // test render
-            byte[]? tntBytes = File.Exists(tnt) ? File.ReadAllBytes(tnt) : null;
             // Palettes without TNT files
             // GUNPALS.PAL
             // MBRF_PAL.PAL
@@ -193,24 +186,18 @@ namespace ALTViewer
             currentPalette = palBytes;
             // Parse all sections (TP00, TP01, etc.)
             currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+            comboBox1.Enabled = true; // enable section selection combo box
             // Populate ComboBox with section names
             comboBox1.Items.Clear();
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-
-            if (comboBox1.Items.Count > 0)
-            {
-                comboBox1.SelectedIndex = 0; // triggers rendering
-            }
-            else
-            {
-                MessageBox.Show("No image sections found in BND file.");
-            }
+            if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
+            else { MessageBox.Show("No image sections found in BND file."); }
         }
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
         {
             string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!, ".PAL")); // detect palette for the selected item
-            RenderImage(lastSelectedTilePath, lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen);
+            RenderImage(lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen);
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -219,27 +206,34 @@ namespace ALTViewer
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
             string palettePath = Path.Combine(paletteDirectory, selected + ".PAL");
-            RenderImage(lastSelectedTilePath, lastSelectedFilePath, palettePath, selected); // use the selected palette to render the image
+            RenderImage(lastSelectedFilePath, palettePath, selected); // use the selected palette to render the image
         }
         // export selected button
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                string filename = lastSelectedFile;
-                string filepath = Path.Combine(outputPath, filename + "_" + comboBox1.SelectedItem!.ToString() + ".png");
+                string filepath = Path.Combine(outputPath, lastSelectedFile + "_" + comboBox1.SelectedItem!.ToString() + ".png");
                 pictureBox1.Image.Save(filepath, ImageFormat.Png);
                 MessageBox.Show($"Image saved to:\n{filepath}");
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error saving image:\n" + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
         // export all button
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Batch export not supported yet!"); // until the rendering pipeline actually works
+            try
+            {
+                for (int i = 0; i < comboBox1.Items.Count; i++)
+                {
+                    var section = currentSections[i];
+                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    string filepath = Path.Combine(outputPath, lastSelectedFile + "_" + section.Name + ".png");
+                    TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h).Save(filepath, ImageFormat.Png);
+                }
+                MessageBox.Show($"Images saved to:\n{outputPath}");
+            }
+            catch (Exception ex) { MessageBox.Show("Error saving images:\n" + ex.Message); }
         }
         // select output path
         private void button4_Click(object sender, EventArgs e)
@@ -261,7 +255,7 @@ namespace ALTViewer
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
-                MessageBox.Show($"Height : {w} Height : {h}"); // all report 256 x 256
+                //MessageBox.Show($"Height : {w} Height : {h}"); // all report 256 x 256
             }
             catch (Exception ex)
             {
