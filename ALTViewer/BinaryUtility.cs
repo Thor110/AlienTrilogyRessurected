@@ -6,6 +6,17 @@ public static class BinaryUtility
     /// <summary>
     /// The ReplaceByte method opens the relevant file to replace a byte in.
     /// </summary>
+    /// <param name="patches">The byte to replace and the address at which to replace it.</param>
+    /// <param name="filename">The BinaryWriter Object.</param>
+    public static void ReplaceByte(long offset, byte value, string filename)
+    {
+        using var fs = new FileStream(filename, FileMode.Open, FileAccess.Write, FileShare.None);
+        fs.Seek(offset, SeekOrigin.Begin);
+        fs.WriteByte(value);
+    }
+    /// <summary>
+    /// The ReplaceByte method opens the relevant file to replace multiple bytes in a sequence.
+    /// </summary>
     /// <param name="replacements">The byte to replace and the address at which to replace it.</param>
     /// <param name="filename">The BinaryWriter Object.</param>
     public static void ReplaceBytes(List<Tuple<long, byte[]>> replacements, string filename)
