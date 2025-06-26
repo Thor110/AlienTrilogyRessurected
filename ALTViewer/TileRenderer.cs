@@ -76,7 +76,6 @@ namespace ALTViewer
                     }
                 }
             }
-
             return bmp;
         }
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)

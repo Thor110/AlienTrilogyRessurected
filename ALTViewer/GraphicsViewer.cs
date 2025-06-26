@@ -45,6 +45,7 @@ namespace ALTViewer
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            listBox2.Enabled = true;
             comboBox1.Enabled = false;
             ListFiles(gfxDirectory);
         }
@@ -52,6 +53,7 @@ namespace ALTViewer
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            listBox2.Enabled = true;
             comboBox1.Enabled = false;
             ListFiles(enemyDirectory, ".B16", ".NOPE");
         }
@@ -59,6 +61,7 @@ namespace ALTViewer
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            listBox2.Enabled = false;
             comboBox1.Enabled = false;
             foreach (string level in levels) { ListFiles(level, ".NOPE"); }
         }
@@ -66,6 +69,7 @@ namespace ALTViewer
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
+            listBox2.Enabled = true;
             comboBox1.Enabled = false;
             ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
