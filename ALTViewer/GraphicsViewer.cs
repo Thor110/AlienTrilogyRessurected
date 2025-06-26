@@ -50,21 +50,21 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            ListFiles(enemyDirectory);
+            ListFiles(enemyDirectory, ".NOPE");
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            foreach (string level in levels) { ListFiles(level); } // BIN and B16 files look identical?
+            foreach (string level in levels) { ListFiles(level, ".NOPE"); }
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             comboBox1.Enabled = false;
-            ListFiles(languageDirectory, ".BND", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
+            ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
         public void ListFiles(string path, string type1 = ".BND", string type2 = ".BIN")
@@ -79,9 +79,9 @@ namespace ALTViewer
             else if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
-        private string[] DiscoverFiles(string path, string type1, string type2)
+        private string[] DiscoverFiles(string path, string type1 = ".BND", string type2 = ".B16", string type3 = ".16")
         {
-            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(type1) || file.EndsWith(type2)).ToArray();
+            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(type1) || file.EndsWith(type2) || file.EndsWith(type3)).ToArray();
         }
         // display selected file
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -109,13 +109,14 @@ namespace ALTViewer
             }
             else if (radioButton4.Checked) { GetFile(languageDirectory); }
         }
+        // get the file from the selected directory then render it
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected, ".PAL")); // detect palette for the selected item
             string palettePath = Path.Combine(paletteDirectory, chosen + ".PAL"); // actual palette path
             string filePath = "";
-            foreach (string ext in new[] { ".BND", ".BIN", ".B16", ".16" })
+            foreach (string ext in new[] { ".BND", ".B16", ".16" })
             {
                 string candidate = Path.Combine(path, selected + ext);
                 if (File.Exists(candidate)) { filePath = candidate; break; }
@@ -128,22 +129,6 @@ namespace ALTViewer
         private string DetectPalette(string filename, string extension)
         {
             string palette = Path.Combine(paletteDirectory, filename + extension);
-            //
-            // discover the palettes for the following files
-            //DEMO111   ( Try LEV111.PAL )
-            //DEMO211   ( Try LEV211.PAL )
-            //DEMO311   ( Try LEV311.PAL )
-            //EXPLGFX   ( Try GUNPALS.PAL )
-            //OBJ3D     ( UNKNOWN )
-            //OPTGFX    ( UNKNOWN )
-            //OPTOBJ    ( UNKNOWN )
-            //PICKGFX   ( UNKNOWN )
-            //PICKMOD   ( UNKNOWN )
-            //
-            // unused palettes currently
-            // MBRF_PAL.PAL ( Possibly LANGUAGE folder panels )
-            // WSELECT.PAL  ( UNKNOWN )
-            //
             // hard coded palette lookups
             string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
             if (filename == "EXPLGFX" || filename == "PICKGFX") { return Path.Combine(paletteDirectory, "WSELECT" + ".PAL"); }
@@ -169,14 +154,6 @@ namespace ALTViewer
             //lastSelectedTilePath = tnt;
             lastSelectedFilePath = binbnd;
             if (!File.Exists(pal)) { return; } // bin bnd already checked
-            // Palettes without TNT files
-            // GUNPALS.PAL
-            // MBRF_PAL.PAL
-            // NEWFONT.PAL
-            // PANEL.PAL
-            // SPRITES.PAL
-            // WSELECT.PAL
-            //
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             byte[] palBytes = File.ReadAllBytes(pal);
             // Store palette for reuse on selection change
@@ -248,6 +225,7 @@ namespace ALTViewer
                 button3.Enabled = true; // enable extract all button
             }
         }
+        // render the image when a section is selected
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var section = currentSections[comboBox1.SelectedIndex];
@@ -310,6 +288,7 @@ namespace ALTViewer
                 }
             }
         }
+        // find the offset of the section data in the file
         public static long FindSectionDataOffset(string filePath, string sectionName)
         {
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
@@ -333,7 +312,9 @@ namespace ALTViewer
             }
             throw new Exception("Section not found in file.");
         }
+        // check if the image is indexed 8bpp
         private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
+        // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {
             var section = currentSections[comboBox1.SelectedIndex];
@@ -342,6 +323,7 @@ namespace ALTViewer
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;
         }
+        // get the target path for the selected file
         private bool TryGetTargetPath(out string fullPath, out string backupPath)
         {
             fullPath = "";
