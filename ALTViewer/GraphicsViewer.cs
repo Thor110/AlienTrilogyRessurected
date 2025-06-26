@@ -35,7 +35,7 @@ namespace ALTViewer
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
-            foreach (string palFile in palFiles) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); }
+            foreach (string palFile in palFiles) { if(!palFile.Contains("LEV")) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); } } // exclude level palettes
             ListFiles(gfxDirectory); // Load graphics files by default on startup
         }
         // graphics GFX
@@ -136,7 +136,12 @@ namespace ALTViewer
             else if (filename == "OPTGFX") { return Path.Combine(paletteDirectory, "BONESHIP" + ".PAL"); }
             else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
             else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
-            else if (radioButton3.Checked) { return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL"; }
+            else if (radioButton3.Checked)
+            {
+                // load palette from inside the .B16 level file
+                // load from lastSelectedFile
+                return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL";
+            }
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
             else if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
