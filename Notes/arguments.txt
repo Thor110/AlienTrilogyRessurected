@@ -18,3 +18,7 @@ Extracted from the executable, this shows six arguments that can be passed to th
 ����                      TM and (C) 1979, 1986, 1992, 1996,
 ���                    Twentieth Century Fox Film Corporation.
 ����                              All rights reserved.
+
+-nvd
+-so Speed	-	compensation overridden
+-control	-	SpaceOrb Detected & Enabled
