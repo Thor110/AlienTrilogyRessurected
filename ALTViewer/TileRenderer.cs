@@ -56,9 +56,12 @@ namespace ALTViewer
                     int idx = y * width + x;
                     if (idx >= pixelData.Length) { continue; }
                     byte colorIndex = pixelData[idx];
-                    Color color = (colorIndex < colors)
-                        ? Color.FromArgb(255, palette[colorIndex * 3], palette[colorIndex * 3 + 1], palette[colorIndex * 3 + 2])
-                        : Color.Transparent;
+                    int r = palette[colorIndex * 3] * 4;
+                    int g = palette[colorIndex * 3 + 1] * 4;
+                    int b = palette[colorIndex * 3 + 2] * 4;
+
+                    // Clamp values to 255 just in case
+                    Color color = Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255));
 
                     bmp.SetPixel(x, y, color);
                 }

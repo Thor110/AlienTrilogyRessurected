@@ -216,9 +216,7 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            Bitmap image = checkBox2.Checked
-                ? TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h)
-                : TileRenderer.BuildIndexedBitmap(section.Data, w, h, currentPalette!);
+            Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
             image.Save(filepath, ImageFormat.Png);
             return filepath;
         }
@@ -278,7 +276,7 @@ namespace ALTViewer
         {
             if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
             int length = filename.Length;
-            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex); } // replace single frame
+            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex); MessageBox.Show("Texture frame replaced successfully."); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
             {
                 for (int i = 0; i < length; i++) { ReplaceFrame(i); } // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION

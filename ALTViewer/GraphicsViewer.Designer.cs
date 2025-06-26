@@ -45,7 +45,6 @@
             button5 = new Button();
             button6 = new Button();
             checkBox1 = new CheckBox();
-            checkBox2 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -242,23 +241,11 @@
             checkBox1.Text = "Backup File";
             checkBox1.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
-            // 
-            checkBox2.AccessibleDescription = "Export with corrected colours for viewing.";
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(669, 310);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(121, 19);
-            checkBox2.TabIndex = 17;
-            checkBox2.Text = "Colour Correction";
-            checkBox2.UseVisualStyleBackColor = true;
-            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(button6);
             Controls.Add(button5);
@@ -304,6 +291,5 @@
         private Button button5;
         private Button button6;
         private CheckBox checkBox1;
-        private CheckBox checkBox2;
     }
 }
