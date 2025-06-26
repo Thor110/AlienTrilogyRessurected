@@ -1,7 +1,5 @@
 ﻿using System.Drawing.Imaging;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
-using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
