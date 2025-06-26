@@ -138,12 +138,6 @@ namespace ALTViewer
             else if (filename == "OPTGFX") { return Path.Combine(paletteDirectory, "BONESHIP" + ".PAL"); }
             else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
             else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
-            else if (radioButton3.Checked)
-            {
-                // load palette from inside the .B16 level file
-                // load from lastSelectedFile
-                return "LEV" + listBox1.SelectedItem!.ToString()!.Substring(0, 3) + ".PAL";
-            }
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
             else if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
@@ -159,8 +153,8 @@ namespace ALTViewer
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette
             else if (palfile) // load palette from levelfile
             {
-                string clSection = $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}";
-                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractLevelPalette(binbnd, clSection));
+                levelPalette = TileRenderer.Convert16BitPaletteToRGB(
+                    ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}"));
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: " + select); return; } // bin bnd already checked
             else { MessageBox.Show("Palette not found: " + select); } // TODO : might not need this else
