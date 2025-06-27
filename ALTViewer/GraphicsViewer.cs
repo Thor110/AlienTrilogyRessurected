@@ -231,8 +231,8 @@ namespace ALTViewer
             //MessageBox.Show("D");
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            MessageBox.Show(palfile.ToString());
-            MessageBox.Show(binbnd);
+            //MessageBox.Show(palfile.ToString());
+            //MessageBox.Show(binbnd);
             if (!palfile && !lastSelectedFile.Contains("GF")) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
@@ -454,7 +454,7 @@ namespace ALTViewer
             return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
         }
         // palette editor button click
-        private void button7_Click(object sender, EventArgs e) { newForm(new PaletteEditor(lastSelectedPalette, palfile)); }
+        private void button7_Click(object sender, EventArgs e) { newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections)); }
         // create new form method
         private void newForm(Form form)
         {

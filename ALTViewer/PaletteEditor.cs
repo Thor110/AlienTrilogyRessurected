@@ -1,4 +1,7 @@
-﻿namespace ALTViewer
+﻿using System.Formats.Tar;
+using static System.Collections.Specialized.BitVector32;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -6,11 +9,18 @@
         public string backupDirectory = "";
         public string fileDirectory = "";
         private byte[] palette;
-        public PaletteEditor(string selected, bool embedded)
+        private bool compressed;
+        private List<BndSection> currentSections = new();
+        public PaletteEditor(string selected, bool embedded, List<BndSection> loadedSections)
         {
             InitializeComponent();
             fileDirectory = paletteDirectory + selected + ".PAL";
             palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+            currentSections = loadedSections;
+            foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
+            comboBox1.SelectedIndex = 0;
+            RenderImage();
+            compressed = embedded;
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
             backupDirectory = fileDirectory + ".BAK";
@@ -74,6 +84,25 @@
         {
             palette = File.ReadAllBytes(fileDirectory);
             Invalidate(); // Redraw with original colors
+        }
+        // frame selection
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RenderImage();
+        }
+        private void RenderImage()
+        {
+            var section = currentSections[comboBox1.SelectedIndex];
+            if (compressed)
+            {
+                var selectedSection = currentSections[comboBox1.SelectedIndex];
+                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(selectedSection.Data, currentPalette, width, height);
+            }
+            else
+            {
+                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, false);
+            }
         }
     }
 }
