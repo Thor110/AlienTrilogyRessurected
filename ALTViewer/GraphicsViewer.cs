@@ -27,6 +27,7 @@ namespace ALTViewer
         private bool transparency;
         private bool palfile; // true if no .PAL file is used ( level files, enemies and weapons )
         private bool compressed;
+        private bool refresh; // set to true when entering the palette editor
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public GraphicsViewer()
@@ -109,7 +110,7 @@ namespace ALTViewer
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            if (selected == lastSelectedFile) { return; } // do not reselect same file
+            if (selected == lastSelectedFile && !refresh) { return; } // do not reselect same file
             lastSelectedFile = selected; // store last selected file
             // show palette controls
             label1.Visible = true; // show label
@@ -454,7 +455,7 @@ namespace ALTViewer
             return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
         }
         // palette editor button click
-        private void button7_Click(object sender, EventArgs e) { newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections)); }
+        private void button7_Click(object sender, EventArgs e) { refresh = true; newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections)); }
         // create new form method
         private void newForm(Form form)
         {
@@ -462,7 +463,12 @@ namespace ALTViewer
             form.Location = this.Location;
             form.Show();
             this.Hide();
-            form.FormClosed += (s, args) => this.Show();
+            form.FormClosed += (s, args) =>
+            {
+                this.Show();
+                listBox1_SelectedIndexChanged(this, EventArgs.Empty); // Re-run selected palette loading logic and rerender image
+                refresh = false; // reset refresh boolean
+            };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
     }
