@@ -88,10 +88,7 @@ namespace ALTViewer
             Invalidate(); // Redraw with original colors
         }
         // frame selection
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            RenderImage();
-        }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { RenderImage(); }
         private void RenderImage()
         {
             var section = currentSections[comboBox1.SelectedIndex];
