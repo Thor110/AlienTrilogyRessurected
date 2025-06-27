@@ -144,16 +144,34 @@ namespace ALTViewer
         private void button1_Click(object sender, EventArgs e)
         {
             string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION";
-            switch (comboBox1.SelectedIndex)
+            string binPath = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
+            string backupPath = "";
+            if (radioButton1.Checked) // restore mission text file
             {
-                case 0: filePath = filePath + "E"; break;
-                case 1: filePath = filePath + "F"; break;
-                case 2: filePath = filePath + "I"; break;
-                case 3: filePath = filePath + "S"; break;
-                default: MessageBox.Show("This error should never happen!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+                switch (comboBox1.SelectedIndex)
+                {
+                    case 0: filePath = filePath + "E"; break;
+                    case 1: filePath = filePath + "F"; break;
+                    case 2: filePath = filePath + "I"; break;
+                    case 3: filePath = filePath + "S"; break;
+                    default: MessageBox.Show("This error should never happen! Error : A", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+                }
+                filePath += ".TXT";
+                backupPath = filePath + ".BAK";
             }
-            filePath += ".TXT";
-            string backupPath = filePath + ".BAK";
+            else if (radioButton2.Checked) // restore ui text bin file
+            {
+                switch (comboBox1.SelectedIndex)
+                {
+                    case 0: filePath = binPath + "ENGL"; break;
+                    case 1: filePath = binPath + "FREN"; break;
+                    case 2: filePath = binPath + "ITAL"; break;
+                    case 3: filePath = binPath + "SPAN"; break;
+                    default: MessageBox.Show("This error should never happen! Error : B", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+                }
+                filePath += ".BIN";
+                backupPath = filePath + ".BAK";
+            }
             if (File.Exists(filePath))
             {
                 File.Move(backupPath, filePath, true);
