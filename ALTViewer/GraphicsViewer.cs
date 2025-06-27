@@ -180,14 +180,17 @@ namespace ALTViewer
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
+            MessageBox.Show("A");
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
-            else if (palfile && radioButton3.Checked || binbnd.Contains("GF")) // load palette from levelfile or enemies
+            else if (palfile && radioButton3.Checked || radioButton1.Checked && lastSelectedFile.Contains("GF")) // load embedded palettes
             {
+                MessageBox.Show("B");
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
             else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
             {
+                MessageBox.Show("C");
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
@@ -221,9 +224,12 @@ namespace ALTViewer
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
+            MessageBox.Show("D");
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            if (!palfile && !binbnd.Contains("GF")) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
+            MessageBox.Show(palfile.ToString());
+            MessageBox.Show(binbnd);
+            if (!palfile && !lastSelectedFile.Contains("GF")) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             palfile = false; // reset palfile to false for next file
