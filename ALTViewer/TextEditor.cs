@@ -7,6 +7,7 @@ namespace ALTViewer
         public bool setup;
         // instead of hard coding language names, dynamically read them from the executable at the relevant offsets
         // this way it supports user changes
+        public static string languageDirectory = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
         public List<string> languages = new List<string> { "English", "Français", "Italiano", "Español" };
         public List<string> missions = new List<string>
         {
@@ -59,7 +60,7 @@ namespace ALTViewer
         private string GetMissionText(int index, string language)
         {
             string missionText = "";
-            string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION";
+            string filePath = languageDirectory + "MISSION";
             switch (comboBox1.SelectedIndex)
             {
                 case 0: filePath = filePath + "E"; break;
@@ -143,8 +144,7 @@ namespace ALTViewer
         // restore backup button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION";
-            string binPath = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
+            string filePath = languageDirectory + "MISSION";
             string backupPath = "";
             if (radioButton1.Checked) // restore mission text file
             {
@@ -163,10 +163,10 @@ namespace ALTViewer
             {
                 switch (comboBox1.SelectedIndex)
                 {
-                    case 0: filePath = binPath + "ENGL"; break;
-                    case 1: filePath = binPath + "FREN"; break;
-                    case 2: filePath = binPath + "ITAL"; break;
-                    case 3: filePath = binPath + "SPAN"; break;
+                    case 0: filePath = languageDirectory + "ENGL"; break;
+                    case 1: filePath = languageDirectory + "FREN"; break;
+                    case 2: filePath = languageDirectory + "ITAL"; break;
+                    case 3: filePath = languageDirectory + "SPAN"; break;
                     default: MessageBox.Show("This error should never happen! Error : B", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
                 }
                 filePath += ".BIN";
