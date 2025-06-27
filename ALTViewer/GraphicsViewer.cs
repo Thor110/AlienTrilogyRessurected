@@ -447,15 +447,8 @@ namespace ALTViewer
         public static byte[] ExtractLevelPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
         {
             byte[] fileBytes = null!;
-            if (compressed)
-            {
-                fileBytes = data; // Use provided data if compressed
-            }
-            else
-            {
-                fileBytes = File.ReadAllBytes(filePath); // Read entire file once
-            }
-
+            if (compressed) { fileBytes = data; } // Use provided data if compressed
+            else { fileBytes = File.ReadAllBytes(filePath); } // Read entire file once
             long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8); // CL section starts 8 bytes after the header
             if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
             return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
