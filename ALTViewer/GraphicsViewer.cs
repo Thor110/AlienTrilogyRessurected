@@ -5,8 +5,7 @@ namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
-        // default directories
-        public static string gameDirectory = "HDD\\TRILOGY\\CD";
+        public static string gameDirectory = "HDD\\TRILOGY\\CD"; // default directories
         public static string gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
         public static string paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
         public static string enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
@@ -26,9 +25,9 @@ namespace ALTViewer
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
         private bool transparency;
-        private bool palfile; // true if no .PAL file is used ( level files )
-        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D", // demo files and models
-        "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART"}; // remove duplicate entries
+        private bool palfile; // true if no .PAL file is used ( level files, enemies and weapons )
+        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
+        public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries
         // TODO : only add .B16 entries for these files, rather than removing them as if the unused files are removed, that will result in no entries for these files
         public GraphicsViewer()
         {
@@ -44,23 +43,23 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            comboBox1.Enabled = false;
+            button1.Enabled = true; // enable re-detect palette button
             ListFiles(gfxDirectory); // TODO : exclude .BND files that are not used in the game such as the weapons etc
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            listBox2.Enabled = true;
-            comboBox1.Enabled = false;
-            ListFiles(enemyDirectory, ".B16", ".NOPE");
+            listBox2.Enabled = false;
+            button1.Enabled = false;
+            ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are compressed
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             listBox2.Enabled = false;
-            comboBox1.Enabled = false;
+            button1.Enabled = false;
             foreach (string level in levels) { ListFiles(level, ".NOPE"); }
         }
         // panels LANGUAGE
@@ -68,7 +67,7 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            comboBox1.Enabled = false;
+            button1.Enabled = true; // enable re-detect palette button
             ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
@@ -80,16 +79,22 @@ namespace ALTViewer
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 listBox1.Items.Add(fileName);
             }
-            if (radioButton1.Checked)
+            if (radioButton1.Checked) // remove known unusable files
             {
-                foreach (string file in removal) // TODO : needs updating to exclude .BND weapon entries IE : to prevent duplicates for users who do not purge unused files
+                var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                foreach (string item in listBox1.Items) // Count occurrences
                 {
-                    if (listBox1.Items.Contains(file))
-                    {
-                        listBox1.Items.Remove(file);
-                    }
+                    if (!counts.ContainsKey(item)) { counts[item] = 0; }
+                    counts[item]++;
                 }
-            } // remove known unusable files
+                var toRemove = new List<string>(); // Items to remove
+                foreach (var file in removal) { if (listBox1.Items.Contains(file)) { toRemove.Add(file); } } // Add always-remove items
+                foreach (var file in duplicate) // Add duplicate-only items
+                {
+                    if (counts.TryGetValue(file, out int count) && count > 1) { toRemove.Add(file); }
+                }
+                foreach (var file in toRemove) { listBox1.Items.Remove(file); } // Remove items
+            }
             else if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
@@ -109,7 +114,7 @@ namespace ALTViewer
             button1.Visible = true; // show re-detect palette button
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
-            else if (radioButton2.Checked) { GetFile(enemyDirectory); }
+            else if (radioButton2.Checked) { palfile = true; GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
             {
                 foreach (string level in levels) // determine level folder based on selected item
@@ -139,18 +144,38 @@ namespace ALTViewer
             if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
+            if (radioButton1.Checked)
+            {
+                foreach (string weapon in duplicate)
+                {
+                    if (filePath.Contains(weapon))
+                    {
+                        filePath = filePath.Replace(".BND", ".B16");
+                        button1.Enabled = false; // disable re-detect palette button for weapons
+                        listBox2.Enabled = false;
+                        palfile = true;
+                        break;
+                    }
+                    else
+                    {
+                        button1.Enabled = true;
+                        listBox2.Enabled = true;
+                        palfile = false;
+                    }
+                }
+            }
             RenderImage(filePath, palettePath, chosen);
         }
         // detect palette and hard coded palette lookups
         private string DetectPalette(string filename, string extension)
         {
             string palette = Path.Combine(paletteDirectory, filename + extension);
-            string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" };
+            //string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // KEEP : for now
             if (filename == "EXPLGFX" || filename == "PICKGFX") { return Path.Combine(paletteDirectory, "WSELECT" + ".PAL"); }
             else if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
             else if (filename == "OPTGFX") { return Path.Combine(paletteDirectory, "BONESHIP" + ".PAL"); }
-            else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); }
-            else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); }
+            //else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); } // KEEP : for now
+            //else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); } // KEEP : for now
             else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
             else if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
@@ -162,13 +187,17 @@ namespace ALTViewer
             byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
-            else if (palfile) // load palette from levelfile
+            else if (palfile && radioButton3.Checked) // load palette from levelfile or enemies
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}"));
             }
-            else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: " + select); return; } // bin bnd already checked
-            else { MessageBox.Show("Palette not found: " + select); } // TODO : might not need this else
+            else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
+            {
+                MessageBox.Show("DECOMPRESS NME & WEAPON FILES");
+            }
+            else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
+            //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd); // TODO : replace binbnd with lastSelectedFile
@@ -248,7 +277,6 @@ namespace ALTViewer
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
-                //MessageBox.Show($"Height : {w} Height : {h}"); // TODO : remove once dimensions are confirmed for weapon files
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
         }
