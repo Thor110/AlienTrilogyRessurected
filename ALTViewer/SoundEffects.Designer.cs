@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoundEffects));
             listBox1 = new ListBox();
             button1 = new Button();
             pictureBox1 = new PictureBox();
@@ -225,6 +226,7 @@
             Controls.Add(button1);
             Controls.Add(listBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "SoundEffects";
             Text = "SoundEffects";

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PaletteEditor));
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
@@ -95,6 +96,7 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PaletteEditor";
             Text = "PaletteEditor";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

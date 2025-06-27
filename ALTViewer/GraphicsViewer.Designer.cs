@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GraphicsViewer));
             pictureBox1 = new PictureBox();
             listBox1 = new ListBox();
             radioButton1 = new RadioButton();
@@ -278,6 +279,7 @@
             Controls.Add(listBox1);
             Controls.Add(pictureBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "GraphicsViewer";
             Text = "GraphicsViewer";

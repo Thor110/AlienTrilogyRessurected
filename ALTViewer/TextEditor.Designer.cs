@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextEditor));
             listBox1 = new ListBox();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
@@ -265,6 +266,7 @@
             Controls.Add(label1);
             Controls.Add(listBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "TextEditor";
             Text = "TextEditor";

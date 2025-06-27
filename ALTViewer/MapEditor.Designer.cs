@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapEditor));
             listBox1 = new ListBox();
             label1 = new Label();
             label2 = new Label();
@@ -109,6 +110,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(listBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MapEditor";
             Text = "LevelViewer";
             ResumeLayout(false);

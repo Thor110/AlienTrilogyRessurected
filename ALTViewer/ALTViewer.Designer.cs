@@ -97,6 +97,7 @@
             Controls.Add(button3);
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "ALTViewer";
             Text = "ALTViewer";
