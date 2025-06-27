@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             pictureBox1 = new PictureBox();
-            button1 = new Button();
             listBox1 = new ListBox();
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
@@ -58,18 +57,6 @@
             pictureBox1.Size = new Size(256, 256);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            // 
-            // button1
-            // 
-            button1.AccessibleDescription = "Automatically detect the palette again incase you have changed it and forgotten which palette it used.";
-            button1.Location = new Point(336, 413);
-            button1.Name = "button1";
-            button1.Size = new Size(120, 23);
-            button1.TabIndex = 1;
-            button1.Text = "Detect Palette";
-            button1.UseVisualStyleBackColor = true;
-            button1.Visible = false;
-            button1.Click += button1_Click;
             // 
             // listBox1
             // 
@@ -289,7 +276,6 @@
             Controls.Add(radioButton2);
             Controls.Add(radioButton1);
             Controls.Add(listBox1);
-            Controls.Add(button1);
             Controls.Add(pictureBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -303,7 +289,6 @@
         #endregion
 
         private PictureBox pictureBox1;
-        private Button button1;
         private ListBox listBox1;
         private RadioButton radioButton1;
         private RadioButton radioButton2;

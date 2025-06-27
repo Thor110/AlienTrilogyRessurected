@@ -50,7 +50,6 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            button1.Enabled = true; // enable re-detect palette button
             ListFiles(gfxDirectory);
         }
         // enemies NME
@@ -58,7 +57,6 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = false;
-            button1.Enabled = false;
             ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are compressed
         }
         // levels SECT##
@@ -66,7 +64,6 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = false;
-            button1.Enabled = false;
             foreach (string level in levels) { ListFiles(level, ".NOPE"); }
         }
         // panels LANGUAGE
@@ -74,7 +71,6 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            button1.Enabled = true; // enable re-detect palette button
             ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
         }
         // list files in directory
@@ -118,7 +114,6 @@ namespace ALTViewer
             // show palette controls
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
-            button1.Visible = true; // show re-detect palette button
             button7.Visible = true; // show palette editor button
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
@@ -159,14 +154,12 @@ namespace ALTViewer
                     if (filePath.Contains(weapon))
                     {
                         filePath = filePath.Replace(".BND", ".B16");
-                        button1.Enabled = false; // disable re-detect palette button for weapons
                         listBox2.Enabled = false;
                         palfile = true;
                         break;
                     }
                     else
                     {
-                        button1.Enabled = true;
                         listBox2.Enabled = true;
                         palfile = false;
                     }
@@ -187,21 +180,14 @@ namespace ALTViewer
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
-            //MessageBox.Show(palfile.ToString());
-            /*if(select == "")
-            {
-                listBox2.Enabled = false;
-            }*/
-            //MessageBox.Show(select); // TODO use if select == "" instead of palfile boolean?
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
-            else if (palfile && radioButton3.Checked) // load palette from levelfile or enemies
+            else if (palfile && radioButton3.Checked || binbnd.Contains("GF")) // load palette from levelfile or enemies
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
             else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
             {
-                //MessageBox.Show("DECOMPRESS NME & WEAPON FILES"); // TODO : decompress NME & WEAPON files to extract palette and image data
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
@@ -221,7 +207,6 @@ namespace ALTViewer
                     counter++;
                     decompressedF0Sections.Add(new BndSection{ Name = section.Name, Data = decompressedData }); // Store for UI
                 }
-                //MessageBox.Show("decompressed data output");
                 lastSelectedFilePath = binbnd;
                 currentSections = decompressedF0Sections;
                 comboBox1.Enabled = true;
@@ -230,15 +215,15 @@ namespace ALTViewer
                 if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; }
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
                 compressed = true; // compressed sprite
-                // We handled everything; skip rest of RenderImage.
-                return;
+                palfile = false; // reset palfile boolean for next detection
+                return; // We handled everything; skip rest of RenderImage.
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            if (!palfile) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
+            if (!palfile && !binbnd.Contains("GF")) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             palfile = false; // reset palfile to false for next file
@@ -248,12 +233,6 @@ namespace ALTViewer
             if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
             else { MessageBox.Show("No image sections found in BND file."); }
             compressed = false; // not compressed
-        }
-        // re-detect image palette and refresh the image
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(listBox1.SelectedItem!.ToString()!, ".PAL")); // detect palette for the selected item
-            RenderImage(lastSelectedFilePath, Path.Combine(paletteDirectory, chosen + ".PAL"), chosen); // TODO : fix palette detection in these odd places
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
