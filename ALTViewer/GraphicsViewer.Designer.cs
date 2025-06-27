@@ -62,7 +62,7 @@
             // button1
             // 
             button1.AccessibleDescription = "Automatically detect the palette again incase you have changed it and forgotten which palette it used.";
-            button1.Location = new Point(210, 413);
+            button1.Location = new Point(336, 413);
             button1.Name = "button1";
             button1.Size = new Size(120, 23);
             button1.TabIndex = 1;
@@ -258,12 +258,13 @@
             // button7
             // 
             button7.AccessibleDescription = "This modifies the file to use the selected palette.";
-            button7.Location = new Point(336, 413);
+            button7.Location = new Point(210, 412);
             button7.Name = "button7";
             button7.Size = new Size(120, 23);
             button7.TabIndex = 18;
-            button7.Text = "Apply New Palette";
+            button7.Text = "Edit Current Palette";
             button7.UseVisualStyleBackColor = true;
+            button7.Visible = false;
             button7.Click += button7_Click;
             // 
             // GraphicsViewer

@@ -37,7 +37,8 @@ namespace ALTViewer
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
             foreach (string palFile in palFiles)
             {
-                if(!palFile.Contains("LEV") && !palFile.Contains("GUNPALS") && !palFile.Contains("SPRITES")) // exclude unused palettes
+                if(!palFile.Contains("LEV") && !palFile.Contains("GUNPALS") && !palFile.Contains("SPRITES")
+                    && !palFile.Contains("WSELECT") && !palFile.Contains("PANEL") && !palFile.Contains("NEWFONT")) // exclude unused palettes
                 {
                     listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile));
                 }
@@ -118,6 +119,7 @@ namespace ALTViewer
             label1.Visible = true; // show label
             listBox2.Visible = true; // show palette list
             button1.Visible = true; // show re-detect palette button
+            button7.Visible = true; // show palette editor button
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { palfile = true; GetFile(enemyDirectory); }
@@ -176,14 +178,7 @@ namespace ALTViewer
         private string DetectPalette(string filename, string extension)
         {
             string palette = Path.Combine(paletteDirectory, filename + extension);
-            //string[] hardcodedPalettes = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // KEEP : for now
-            if (filename == "EXPLGFX" || filename == "PICKGFX") { return Path.Combine(paletteDirectory, "WSELECT" + ".PAL"); }
-            else if (filename == "FONT1GFX") { return Path.Combine(paletteDirectory, "NEWFONT" + ".PAL"); }
-            else if (filename == "OPTGFX") { return Path.Combine(paletteDirectory, "BONESHIP" + ".PAL"); }
-            //else if (hardcodedPalettes.Contains(filename)) { return Path.Combine(paletteDirectory, "GUNPALS" + ".PAL"); } // KEEP : for now
-            //else if (radioButton2.Checked) { return Path.Combine(paletteDirectory, "SPRITES" + ".PAL"); } // KEEP : for now
-            else if (radioButton4.Checked || filename.Contains("PANEL")) { return Path.Combine(paletteDirectory, "PANEL" + ".PAL"); }
-            else if (!File.Exists(palette)) { return ""; }
+            if (!File.Exists(palette)) { return ""; }
             else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
         }
         // render the selected image
@@ -192,6 +187,12 @@ namespace ALTViewer
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
+            //MessageBox.Show(palfile.ToString());
+            /*if(select == "")
+            {
+                listBox2.Enabled = false;
+            }*/
+            //MessageBox.Show(select); // TODO use if select == "" instead of palfile boolean?
             if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
             else if (palfile && radioButton3.Checked) // load palette from levelfile or enemies
             {
