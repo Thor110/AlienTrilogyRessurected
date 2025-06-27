@@ -28,7 +28,6 @@ namespace ALTViewer
         private bool palfile; // true if no .PAL file is used ( level files, enemies and weapons )
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries
-        // TODO : only add .B16 entries for these files, rather than removing them as if the unused files are removed, that will result in no entries for these files
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -44,7 +43,7 @@ namespace ALTViewer
             listBox1.Items.Clear();
             listBox2.Enabled = true;
             button1.Enabled = true; // enable re-detect palette button
-            ListFiles(gfxDirectory); // TODO : exclude .BND files that are not used in the game such as the weapons etc
+            ListFiles(gfxDirectory);
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
