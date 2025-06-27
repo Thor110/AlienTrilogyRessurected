@@ -94,8 +94,8 @@ namespace ALTViewer
             var section = currentSections[comboBox1.SelectedIndex];
             if (compressed)
             {
-                var selectedSection = currentSections[comboBox1.SelectedIndex];
-                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(selectedSection.Data, currentPalette, width, height);
+                //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette, width, height);
             }
             else
             {
