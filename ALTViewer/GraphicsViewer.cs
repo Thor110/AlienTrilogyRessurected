@@ -182,9 +182,6 @@ namespace ALTViewer
         // render the selected image
         private void RenderImage(string binbnd, string pal, string select)
         {
-            //byte[] decompressed = null!;
-
-
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
@@ -200,28 +197,22 @@ namespace ALTViewer
 
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-
                 // Get only F0## sections
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
-
                 if (f0Sections.Count == 0)
                 {
                     MessageBox.Show("No F0 sections found.");
                     return;
                 }
-
                 List<BndSection> decompressedF0Sections = new();
                 int counter = 0;
-
                 foreach (var section in f0Sections)
                 {
                     byte[] decompressedData;
-
                     try
                     {
                         // Try decompressing individual F0 section
                         decompressedData = TileRenderer.DecompressSpriteSection(section.Data);
-
                         // Heuristic: If result is tiny, probably not valid
                         if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); }
                     }
@@ -230,11 +221,9 @@ namespace ALTViewer
                         // Fallback: Use raw data
                         decompressedData = section.Data;
                     }
-
                     // Optional: Write decompressed data for inspection
                     File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData);
                     counter++;
-
                     // Store for UI
                     decompressedF0Sections.Add(new BndSection
                     {
@@ -244,6 +233,7 @@ namespace ALTViewer
                 }
                 MessageBox.Show("decompressed data output");
 
+                lastSelectedFilePath = binbnd;
                 currentSections = decompressedF0Sections;
                 comboBox1.Enabled = true;
                 comboBox1.Items.Clear();
@@ -253,29 +243,12 @@ namespace ALTViewer
 
                 // We handled everything; skip rest of RenderImage.
                 return;
-
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
             lastSelectedFilePath = binbnd;
-
-
-            /*byte[] bndBytes = null!;
-            if (decompressed != null)
-            {
-                // TEMP : Use decompressed data if available
-                return; // prevent error for now from ParseBndFormSections
-            }
-            else
-            {
-                bndBytes = File.ReadAllBytes(binbnd); // TODO : replace binbnd with lastSelectedFile
-            }*/
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-
-
-
-
             if (!palfile) { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from .B16 palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)

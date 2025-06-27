@@ -146,38 +146,22 @@ namespace ALTViewer
             List<byte> output = new List<byte>();
             int i = 0;
             int ptr = 0; // input index
-
-            int controlBits = 0;
-
             while (true)
             {
-                // Refill control bits if needed
-                while (true)
+                while (true) // Refill control bits if needed
                 {
                     i >>= 1;
                     if ((i & 0xFF00) == 0)
                     {
-                        if (ptr >= input.Length)
-                            return output.ToArray();
-
+                        if (ptr >= input.Length) { return output.ToArray(); }
                         i = 0xFF00 | input[ptr++];
                     }
-
-                    if ((i & 1) == 1)
-                        break;
-
-                    // Copy literal byte
-                    if (ptr >= input.Length)
-                        return output.ToArray();
-
+                    if ((i & 1) == 1) { break; }
+                    if (ptr >= input.Length) { return output.ToArray(); } // Copy literal byte
                     output.Add(input[ptr++]);
                 }
-
-                if (ptr >= input.Length)
-                    return output.ToArray();
-
+                if (ptr >= input.Length) { return output.ToArray(); }
                 int offs, size;
-
                 if (input[ptr] >= 96)
                 {
                     offs = input[ptr++] - 256;
@@ -187,87 +171,46 @@ namespace ALTViewer
                 {
                     size = (input[ptr] & 0xF0) >> 4;
                     offs = (input[ptr] & 0x0F) << 8;
-
-                    if (++ptr >= input.Length)
-                        return output.ToArray();
-
+                    if (++ptr >= input.Length) { return output.ToArray(); }
                     offs |= input[ptr++];
-
-                    if (offs == 0)
-                        break; // End of stream
-
+                    if (offs == 0) { break; } // End of stream
                     offs = -offs;
-
                     if (size == 5)
                     {
-                        if (ptr >= input.Length)
-                            return output.ToArray();
-
+                        if (ptr >= input.Length) { return output.ToArray(); }
                         size = input[ptr++] + 9;
                     }
-                    else
-                    {
-                        size += 4;
-                    }
+                    else { size += 4; }
                 }
-
-                // Copy previous bytes from output
-                for (int j = 0; j < size - 1; j++)
+                for (int j = 0; j < size - 1; j++) // Copy previous bytes from output
                 {
                     int srcIndex = output.Count + offs;
-                    if (srcIndex < 0 || srcIndex >= output.Count)
-                        break; // safety check
-
+                    if (srcIndex < 0 || srcIndex >= output.Count) { break; } // safety check
                     output.Add(output[srcIndex]);
                 }
             }
-
             return output.ToArray();
         }
         public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
         {
-            if (decompress)
-            {
-                data = DecompressSpriteSection(data);
-            }
-
+            if (decompress) { data = DecompressSpriteSection(data); }
             List<byte[]> f0Sections = new();
             int offset = 0;
-
             while (offset < data.Length - 8)
             {
                 // Check for F0## marker (e.g. F000, F001...)
                 if (data[offset] == 'F' && (data[offset + 1] & 0xF0) == 0x30)
                 {
                     int sectionLength = BitConverter.ToInt32(data, offset + 4);
-
-                    if (sectionLength <= 0 || offset + 8 + sectionLength > data.Length)
-                        break; // malformed or truncated
-
+                    if (sectionLength <= 0 || offset + 8 + sectionLength > data.Length) { break; } // malformed or truncated
                     byte[] section = new byte[4 + 4 + sectionLength]; // header + length + body
                     Array.Copy(data, offset, section, 0, section.Length);
                     f0Sections.Add(section);
-
                     offset += section.Length; // move to next section
                 }
-                else
-                {
-                    offset++;
-                }
+                else { offset++; }
             }
-
             return f0Sections;
         }
-
-
-        // Helper to read Big Endian
-        private static int ReadBigEndianInt32(BinaryReader br)
-        {
-            var bytes = br.ReadBytes(4);
-            if (bytes.Length < 4) return 0;
-            Array.Reverse(bytes);
-            return BitConverter.ToInt32(bytes, 0);
-        }
-
     }
 }
