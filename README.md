@@ -23,7 +23,7 @@ The road map for this project.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
-- ❌ 5 : Map Editor ( 1% Complete )
+- [❌ 5 : Map Editor](#map-editor) ( 1% Complete )
 	- Map files detected and listed.
 
 And possibly more to come.
@@ -73,4 +73,12 @@ Edit text in the game, intended for localisation efforts. (WIP)
 
 <div align="center">
   <img src="Images/texteditor.png" alt="Text Editor">
+</div>
+
+## Map Editor
+
+Preview and edit levels. (WIP)
+
+<div align="center">
+  <img src="Images/levelviewer.png" alt="Text Editor">
 </div>
