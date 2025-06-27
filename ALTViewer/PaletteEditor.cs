@@ -44,7 +44,7 @@ namespace ALTViewer
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
-            int index = (e.Y / 16) * 16 + (e.X / 16);
+            int index = ((e.Y - 32) / 16) * 16 + ((e.X - 32) / 16);
             if (index < palette.Length / 3)
             {
                 using ColorDialog dlg = new();
@@ -55,6 +55,7 @@ namespace ALTViewer
                     palette[index * 3 + 1] = dlg.Color.G;
                     palette[index * 3 + 2] = dlg.Color.B;
                     Invalidate();
+                    RenderImage();
                 }
             }
         }
