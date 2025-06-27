@@ -26,6 +26,7 @@ namespace ALTViewer
         private byte[]? currentPalette;
         private bool transparency;
         private bool palfile; // true if no .PAL file is used ( level files, enemies and weapons )
+        private bool compressed;
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public GraphicsViewer()
@@ -34,7 +35,13 @@ namespace ALTViewer
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
-            foreach (string palFile in palFiles) { if(!palFile.Contains("LEV")) { listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile)); } } // exclude level palettes
+            foreach (string palFile in palFiles)
+            {
+                if(!palFile.Contains("LEV") && !palFile.Contains("GUNPALS") && !palFile.Contains("SPRITES")) // exclude unused palettes
+                {
+                    listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile));
+                }
+            }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
         }
         // graphics GFX
@@ -193,17 +200,11 @@ namespace ALTViewer
             }
             else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
             {
-                MessageBox.Show("DECOMPRESS NME & WEAPON FILES"); // TODO : decompress NME & WEAPON files to extract palette and image data
-
+                //MessageBox.Show("DECOMPRESS NME & WEAPON FILES"); // TODO : decompress NME & WEAPON files to extract palette and image data
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-                // Get only F0## sections
-                var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
-                if (f0Sections.Count == 0)
-                {
-                    MessageBox.Show("No F0 sections found.");
-                    return;
-                }
+                var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
+                if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
                 List<BndSection> decompressedF0Sections = new();
                 int counter = 0;
                 foreach (var section in f0Sections)
@@ -211,28 +212,15 @@ namespace ALTViewer
                     byte[] decompressedData;
                     try
                     {
-                        // Try decompressing individual F0 section
-                        decompressedData = TileRenderer.DecompressSpriteSection(section.Data);
-                        // Heuristic: If result is tiny, probably not valid
-                        if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); }
+                        decompressedData = TileRenderer.DecompressSpriteSection(section.Data); // Try decompressing individual F0 section
+                        if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); } // Heuristic: If result is tiny, probably not valid
                     }
-                    catch
-                    {
-                        // Fallback: Use raw data
-                        decompressedData = section.Data;
-                    }
-                    // Optional: Write decompressed data for inspection
-                    File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData);
+                    catch { decompressedData = section.Data; } // Fallback: Use raw data
+                    File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData); // Optional: Write decompressed data for inspection
                     counter++;
-                    // Store for UI
-                    decompressedF0Sections.Add(new BndSection
-                    {
-                        Name = section.Name,
-                        Data = decompressedData
-                    });
+                    decompressedF0Sections.Add(new BndSection{ Name = section.Name, Data = decompressedData }); // Store for UI
                 }
-                MessageBox.Show("decompressed data output");
-
+                //MessageBox.Show("decompressed data output");
                 lastSelectedFilePath = binbnd;
                 currentSections = decompressedF0Sections;
                 comboBox1.Enabled = true;
@@ -240,7 +228,7 @@ namespace ALTViewer
                 foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
                 if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; }
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
-
+                compressed = true; // compressed sprite
                 // We handled everything; skip rest of RenderImage.
                 return;
             }
@@ -258,6 +246,7 @@ namespace ALTViewer
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
             else { MessageBox.Show("No image sections found in BND file."); }
+            compressed = false; // not compressed
         }
         // re-detect image palette and refresh the image
         private void button1_Click(object sender, EventArgs e)
@@ -323,8 +312,16 @@ namespace ALTViewer
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
-                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
+                if(compressed)
+                {
+                    var selectedSection = currentSections[comboBox1.SelectedIndex];
+                    //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(selectedSection.Data, currentPalette, width, height);
+                }
+                else
+                {
+                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
+                }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
         }
