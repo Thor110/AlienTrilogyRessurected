@@ -49,6 +49,7 @@
             radioButton2 = new RadioButton();
             label12 = new Label();
             label13 = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -119,11 +120,11 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(226, 245);
+            label4.Location = new Point(239, 245);
             label4.Name = "label4";
-            label4.Size = new Size(111, 15);
+            label4.Size = new Size(98, 15);
             label4.TabIndex = 7;
-            label4.Text = "Mission Statement :";
+            label4.Text = "Mission Briefing :";
             // 
             // label5
             // 
@@ -240,11 +241,23 @@
             label13.TabIndex = 19;
             label13.Text = "Tip :";
             // 
+            // button1
+            // 
+            button1.Enabled = false;
+            button1.Location = new Point(226, 413);
+            button1.Name = "button1";
+            button1.Size = new Size(111, 23);
+            button1.TabIndex = 20;
+            button1.Text = "Restore Backup";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // TextEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(label13);
             Controls.Add(label12);
             Controls.Add(radioButton2);
@@ -296,5 +309,6 @@
         private RadioButton radioButton2;
         private Label label12;
         private Label label13;
+        private Button button1;
     }
 }

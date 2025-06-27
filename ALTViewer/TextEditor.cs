@@ -5,6 +5,8 @@ namespace ALTViewer
     public partial class TextEditor : Form
     {
         public bool setup;
+        // instead of hard coding language names, dynamically read them from the executable at the relevant offsets
+        // this way it supports user changes
         public List<string> languages = new List<string> { "English", "Français", "Italiano", "Español" };
         public List<string> missions = new List<string>
         {
@@ -16,6 +18,16 @@ namespace ALTViewer
             "3.2.2 Pilot's Chamber", "3.5.1 Secrets", "3.5.2 Inorganics 1", "3.2.3 Pilot's Chamber", "3.7.1 Droplifts",
             "3.5.3 Inorganics 2", "3.2.4 Pilot's Chamber", "3.8.1 Egg Chambers", "3.2.5 Pilot's Chamber", "3.9.1 Queen's lair"
         };
+        // executable text offsets
+        private long englishOffset = 0xB24D0;
+        private long frenchOffset = 0xB24D8;
+        private long italianOffset = 0xB24E4;
+        private long spanishOffset = 0xB24F0;
+        // executable text length limits
+        private UInt16 englishLength = 7;
+        private UInt16 frenchLength = 8;
+        private UInt16 italianLength = 8;
+        private UInt16 spanishLength = 7;
         public TextEditor()
         {
             InitializeComponent();
@@ -101,20 +113,54 @@ namespace ALTViewer
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             setup = false;
-            comboBox1.Items.Clear();
+            //comboBox1.Items.Clear();
             listBox1.Items.Clear();
-            foreach (string language in languages) { comboBox1.Items.Add(language); }
+            //foreach (string language in languages) { comboBox1.Items.Add(language); }
             foreach (string mission in missions) { listBox1.Items.Add(mission); }
             setup = true;
+            label8.Visible = true;
+            label9.Visible = true;
+            label10.Visible = true;
+            label11.Visible = true;
+            label12.Visible = true;
+            label13.Visible = true;
         }
         // UI Text Selected
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             setup = false;
-            comboBox1.Items.Clear();
+            //comboBox1.Items.Clear();
             listBox1.Items.Clear();
             // parse BIN files here
             setup = true;
+            label8.Visible = false;
+            label9.Visible = false;
+            label10.Visible = false;
+            label11.Visible = false;
+            label12.Visible = false;
+            label13.Visible = false;
+        }
+        // restore backup button clicked
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string filePath = "HDD\\TRILOGY\\CD\\LANGUAGE\\MISSION";
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0: filePath = filePath + "E"; break;
+                case 1: filePath = filePath + "F"; break;
+                case 2: filePath = filePath + "I"; break;
+                case 3: filePath = filePath + "S"; break;
+                default: MessageBox.Show("This error should never happen!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+            }
+            filePath += ".TXT";
+            string backupPath = filePath + ".BAK";
+            if (File.Exists(filePath))
+            {
+                File.Move(backupPath, filePath, true);
+                File.Delete(backupPath);
+                MessageBox.Show("Text restored from backup.");
+                button1.Enabled = false;
+            }
         }
     }
 }

@@ -1,13 +1,11 @@
-﻿using System.Formats.Tar;
-using static System.Collections.Specialized.BitVector32;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
         public static string paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
         public string backupDirectory = "";
         public string fileDirectory = "";
+        public string selectedPalette = "";
         private byte[] palette;
         private bool compressed;
         private List<BndSection> currentSections = new();
@@ -16,6 +14,7 @@ namespace ALTViewer
             InitializeComponent();
             fileDirectory = paletteDirectory + selected + ".PAL";
             palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+            selectedPalette = selected;
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             comboBox1.SelectedIndex = 0;
@@ -101,6 +100,18 @@ namespace ALTViewer
             {
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, false);
+            }
+        }
+        // export palette file button click
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            fbd.Description = "Select output folder to save the .PAL file.";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                string path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
+                File.WriteAllBytes(path, palette);
+                MessageBox.Show($"Palette saved to : {path}");
             }
         }
     }

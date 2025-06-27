@@ -34,12 +34,13 @@
             button3 = new Button();
             pictureBox1 = new PictureBox();
             comboBox1 = new ComboBox();
+            button4 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(82, 317);
+            button1.Location = new Point(95, 295);
             button1.Name = "button1";
             button1.Size = new Size(119, 23);
             button1.TabIndex = 0;
@@ -50,7 +51,7 @@
             // button2
             // 
             button2.Enabled = false;
-            button2.Location = new Point(82, 346);
+            button2.Location = new Point(95, 324);
             button2.Name = "button2";
             button2.Size = new Size(119, 23);
             button2.TabIndex = 1;
@@ -60,7 +61,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(82, 375);
+            button3.Location = new Point(95, 353);
             button3.Name = "button3";
             button3.Size = new Size(119, 23);
             button3.TabIndex = 2;
@@ -86,11 +87,22 @@
             comboBox1.TabIndex = 4;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
+            // button4
+            // 
+            button4.Location = new Point(95, 382);
+            button4.Name = "button4";
+            button4.Size = new Size(119, 23);
+            button4.TabIndex = 5;
+            button4.Text = "Export Palette";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
             // PaletteEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(600, 411);
+            ClientSize = new Size(600, 418);
+            Controls.Add(button4);
             Controls.Add(comboBox1);
             Controls.Add(pictureBox1);
             Controls.Add(button3);
@@ -110,5 +122,6 @@
         private Button button3;
         private PictureBox pictureBox1;
         private ComboBox comboBox1;
+        private Button button4;
     }
 }
