@@ -73,10 +73,11 @@ namespace ALTViewer
         // restore backup button clicked
         private void button2_Click(object sender, EventArgs e)
         {
-            File.Move(backupDirectory, fileDirectory);
+            File.Move(backupDirectory, fileDirectory, true);
             File.Delete(backupDirectory);
             button2.Enabled = false;
             ReDrawPalette();
+            RenderImage();
             MessageBox.Show("Palette restored from backup.");
         }
         // undo changes button clicked
