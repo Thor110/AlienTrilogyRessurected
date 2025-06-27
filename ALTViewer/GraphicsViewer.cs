@@ -414,9 +414,9 @@ namespace ALTViewer
             // replace the palette byte when it is known // TODO : implement palette editing
             //BinaryUtility.ReplaceByte(0x1A, 0x00, lastSelectedFilePath);
         }
+        // extract level palette from a level file C0## sections
         public static byte[] ExtractLevelPalette(string filePath, string clSectionName)
         {
-            
             byte[] fileBytes = File.ReadAllBytes(filePath); // Read entire file once
             long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8); // CL section starts 8 bytes after the header
             if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
