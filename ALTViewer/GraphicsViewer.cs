@@ -194,7 +194,7 @@ namespace ALTViewer
             }
             else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
             {
-                MessageBox.Show("DECOMPRESS NME & WEAPON FILES");
+                MessageBox.Show("DECOMPRESS NME & WEAPON FILES"); // TODO : decompress NME & WEAPON files to extract palette and image data
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
