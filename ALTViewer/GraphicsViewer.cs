@@ -179,18 +179,23 @@ namespace ALTViewer
         {
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
+            //MessageBox.Show("A");
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
-            MessageBox.Show("A");
-            if (listBox2.Items.Contains(select)) { listBox2.SelectedItem = select; } // select the detected palette if it exists
-            else if (palfile && radioButton3.Checked || radioButton1.Checked && lastSelectedFile.Contains("GF")) // load embedded palettes
+            if (listBox2.Items.Contains(select)) // select the detected palette if it exists
             {
-                MessageBox.Show("B");
+                listBox2.SelectedItem = select;
+                lastSelectedPalette = select; // store last selected file
+            }
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
+            if (palfile && radioButton3.Checked || radioButton1.Checked && lastSelectedFile.Contains("GF")) // load embedded palettes
+            {
+                //MessageBox.Show("B");
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
             else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
             {
-                MessageBox.Show("C");
+                //MessageBox.Show("C");
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
@@ -223,8 +228,7 @@ namespace ALTViewer
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             //else { MessageBox.Show("Palette not found: Error A :" + select); } // TODO : might not need this else
-            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
-            MessageBox.Show("D");
+            //MessageBox.Show("D");
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             MessageBox.Show(palfile.ToString());
@@ -439,12 +443,6 @@ namespace ALTViewer
             transparency = checkBox2.Checked;
             comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
         }
-        // replace palette button click
-        private void button7_Click(object sender, EventArgs e)
-        {
-            // replace the palette byte when it is known // TODO : implement palette editing
-            //BinaryUtility.ReplaceByte(0x1A, 0x00, lastSelectedFilePath);
-        }
         // extract level palette from a level file C0## sections
         public static byte[] ExtractLevelPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
         {
@@ -461,6 +459,18 @@ namespace ALTViewer
             long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8); // CL section starts 8 bytes after the header
             if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
             return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
+        }
+        // palette editor button click
+        private void button7_Click(object sender, EventArgs e) { newForm(new PaletteEditor(lastSelectedPalette, palfile)); }
+        // create new form method
+        private void newForm(Form form)
+        {
+            form.StartPosition = FormStartPosition.Manual;
+            form.Location = this.Location;
+            form.Show();
+            this.Hide();
+            form.FormClosed += (s, args) => this.Show();
+            form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
     }
 }
