@@ -6,14 +6,21 @@
         public string backupDirectory = "";
         public string fileDirectory = "";
         public string selectedPalette = "";
-        private byte[] palette;
+        private byte[] palette = null!;
         private bool compressed;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool embedded, List<BndSection> loadedSections)
         {
             InitializeComponent();
-            fileDirectory = paletteDirectory + selected + ".PAL";
-            palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+            if(embedded)
+            {
+
+            }
+            else
+            {
+                fileDirectory = paletteDirectory + selected + ".PAL";
+                palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+            }
             selectedPalette = selected;
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
