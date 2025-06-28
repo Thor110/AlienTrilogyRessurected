@@ -253,12 +253,12 @@ namespace ALTViewer
             if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))  // read .PAL file if not reading from embedded palettes
             { currentPalette = File.ReadAllBytes(pal); } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
-            //palfile = true; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
             else { MessageBox.Show("No image sections found in BND file."); }
+            refresh = false;
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -281,11 +281,7 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            //Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
-            //image.Save(filepath, ImageFormat.Png);
-
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
-
             return filepath;
         }
         // export all button
@@ -394,10 +390,10 @@ namespace ALTViewer
                 if (frame + 1 == currentSections.Count || single) // account for zero based indexing
                 {
                     MessageBox.Show(message);
-                    comboBox1_SelectedIndexChanged(null!, null!); // re-render the image
                 }
             }
-            button3.Enabled = true; // enable restore backup button
+            comboBox1_SelectedIndexChanged(null!, null!); // re-render the image
+            button6.Enabled = true; // enable restore backup button
         }
         // check if the image is indexed 8bpp
         private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
@@ -450,7 +446,8 @@ namespace ALTViewer
             File.Copy($"{backupFile}", selectedFile, true);
             File.Delete($"{backupFile}");
             button6.Enabled = false;
-            comboBox1_SelectedIndexChanged(sender, e); // refresh the image after restoring
+            refresh = true;
+            listBox1_SelectedIndexChanged(sender, e); // re-render the image after restoring a backup
             MessageBox.Show("Backup successfully restored!");
         }
         // colour correction transparency setting
