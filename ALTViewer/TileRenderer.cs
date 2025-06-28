@@ -305,6 +305,39 @@ namespace ALTViewer
 
             return embeddedPalette;
         }
+        public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height)
+        {
+            using Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
 
+            // Set the palette
+            ColorPalette pal = bmp.Palette;
+            for (int i = 0; i < palette.Length && i < 256; i++)
+                pal.Entries[i] = palette[i];
+            bmp.Palette = pal;
+
+            // Lock the bitmap data
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+
+            // Copy indexed data into the bitmap
+            for (int y = 0; y < height; y++)
+            {
+                IntPtr dest = data.Scan0 + y * data.Stride;
+                Marshal.Copy(indexedData, y * width, dest, width);
+            }
+
+            bmp.UnlockBits(data);
+            bmp.Save(path, ImageFormat.Png);
+        }
+        public static Color[] ConvertPalette(byte[] rgbTriplets)
+        {
+            var colors = new Color[256];
+            for (int i = 0; i < 256; i++)
+                colors[i] = Color.FromArgb(
+                    rgbTriplets[i * 3] * 4,
+                    rgbTriplets[i * 3 + 1] * 4,
+                    rgbTriplets[i * 3 + 2] * 4
+                );
+            return colors;
+        }
     }
 }

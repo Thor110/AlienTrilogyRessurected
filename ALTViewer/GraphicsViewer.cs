@@ -281,8 +281,11 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
-            image.Save(filepath, ImageFormat.Png);
+            //Bitmap image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
+            //image.Save(filepath, ImageFormat.Png);
+
+            TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
+
             return filepath;
         }
         // export all button
@@ -394,6 +397,7 @@ namespace ALTViewer
                     comboBox1_SelectedIndexChanged(null!, null!); // re-render the image
                 }
             }
+            button3.Enabled = true; // enable restore backup button
         }
         // check if the image is indexed 8bpp
         private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
