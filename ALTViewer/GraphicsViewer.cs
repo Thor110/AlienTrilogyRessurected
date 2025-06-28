@@ -441,12 +441,32 @@ namespace ALTViewer
         // extract level palette from a level file C0## sections
         public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
         {
-            byte[] fileBytes = null!;
-            if (compressed) { fileBytes = data; } // Use provided data if compressed
-            else { fileBytes = File.ReadAllBytes(filePath); } // Read entire file once
-            long paletteStart = FindSectionDataOffset(filePath, clSectionName, 8); // CL section starts 8 bytes after the header
-            if (paletteStart + 512 > fileBytes.Length) { throw new Exception("Palette data exceeds file bounds."); }
-            return fileBytes.Skip((int)paletteStart).Take(512).ToArray();
+            byte[] fileBytes = compressed ? data : File.ReadAllBytes(filePath);
+            long startOffset = FindSectionDataOffset(filePath, clSectionName, 12);
+            if (startOffset < 0 || startOffset >= fileBytes.Length)
+                throw new Exception("CL section not found or out of bounds.");
+
+            // Search for the next section header
+            int maxSearch = Math.Min(fileBytes.Length - (int)startOffset, 4096); // Limit to avoid long scans
+            int sectionLength = maxSearch;
+
+            for (int i = 8; i < maxSearch - 3; i++) // Skip initial 8-byte CL header
+            {
+                // Check if we found a new section header: CLxx, TPxx, BX00, etc.
+                if ((fileBytes[startOffset + i] == 0x43 && fileBytes[startOffset + i + 1] == 0x4C) || // CL
+                    (fileBytes[startOffset + i] == 0x54 && fileBytes[startOffset + i + 1] == 0x50) || // TP
+                    (fileBytes[startOffset + i] == 0x42 && fileBytes[startOffset + i + 1] == 0x58))   // BX
+                {
+                    sectionLength = i;
+                    break;
+                }
+            }
+
+            byte[] palette = new byte[sectionLength];
+            Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
+            Console.WriteLine($"[CL Section {clSectionName}] Detected embedded palette length: {palette.Length} bytes");
+            File.WriteAllBytes("PALETTE", palette);
+            return palette;
         }
         // palette editor button click
         private void button7_Click(object sender, EventArgs e) { refresh = true; newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections)); }

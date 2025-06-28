@@ -69,16 +69,18 @@ namespace ALTViewer
         }
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
         {
-            if (rawPalette == null || rawPalette.Length != 512) { throw new ArgumentException("Expected 512-byte 16-bit palette."); }
+            if (rawPalette == null || rawPalette.Length < 2)
+                throw new ArgumentException("Palette data is missing or too short.");
+
+            int colorCount = rawPalette.Length / 2;
             byte[] rgbPalette = new byte[256 * 3];
-            for (int i = 0; i < 256; i++)
+
+            for (int i = 0; i < colorCount && i < 256; i++)
             {
                 ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
-                // BGR555 format (PlayStation-style): 0BBBBBGGGGGRRRRR
                 int b = (color >> 10) & 0x1F;
                 int g = (color >> 5) & 0x1F;
                 int r = color & 0x1F;
-                // Scale to 0–255 range
                 r = (r * 255) / 31;
                 g = (g * 255) / 31;
                 b = (b * 255) / 31;
@@ -86,6 +88,7 @@ namespace ALTViewer
                 rgbPalette[i * 3 + 1] = (byte)g;
                 rgbPalette[i * 3 + 2] = (byte)b;
             }
+
             return rgbPalette;
         }
         public static byte[] Extract8bppData(Bitmap bmp)
