@@ -508,14 +508,11 @@ namespace ALTViewer
             byte[] palette = new byte[sectionLength];
 
             Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
-            //File.WriteAllBytes("PALETTE", palette);
             return palette;
         }
         // palette editor button click
         private void button7_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(palfile.ToString());
-            //return;
             refresh = true;
             newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections));
         }
