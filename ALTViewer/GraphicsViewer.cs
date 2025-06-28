@@ -212,12 +212,13 @@ namespace ALTViewer
             if (radioButton4.Checked || radioButton3.Checked ||
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
+                MessageBox.Show("TEST");
                 palfile = false; // palette is embedded
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
             }
             else if (compressed) // load palette from level file or enemies
             {
-                binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the BND file
+                binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the B16 file variant
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
@@ -336,16 +337,13 @@ namespace ALTViewer
                 }
                 else
                 {
-                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
                     }
-                    else
-                    {
-                        pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean?
-                    }
+                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean?
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }

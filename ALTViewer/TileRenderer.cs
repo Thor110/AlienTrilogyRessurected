@@ -258,14 +258,10 @@ namespace ALTViewer
         {
             // TODO : stop this triggering twice
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
-            //MessageBox.Show(sectionName + "TEST");
             byte[] fileBytes = File.ReadAllBytes(filePath);
-            //File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
-            //if (fileBytes.Length < label.Length) { throw new Exception("File too small to contain the section."); }
             for (int i = 0; i < fileBytes.Length - label.Length; i++)
             {
                 bool match = true;
-                //for (int j = 0; j < label.Length && (i + j) < fileBytes.Length; j++)
                 for (int j = 0; j < label.Length; j++)
                 {
                     if (fileBytes[i + j] != label[j])
