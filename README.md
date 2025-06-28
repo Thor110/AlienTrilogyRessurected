@@ -18,8 +18,10 @@ The road map for this project.
 	- Palette detection implemented.
 	- View and replace textures.
 	- Automatic backup of the original file by default.
-- [✅ 3 : Palette Editor](#palette-editor) ( 25% Complete )
+	- Compressed images are not working yet.
+- [✅ 3 : Palette Editor](#palette-editor) ( 75% Complete )
 	- Palette editor and image preview.
+	- Compressed image palettes are not loaded yet.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
