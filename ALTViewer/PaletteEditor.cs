@@ -1,14 +1,11 @@
-﻿using static System.ComponentModel.Design.ObjectSelectorEditor;
-using System.Formats.Tar;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
         public static string paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
         public string backupDirectory = "";
         public string fileDirectory = "";
-        public string selectedPalette = ""; // either the name of the .PAL file or the name of the sourec file for the embedded palette
+        public string selectedPalette = ""; // either the name of the .PAL file or the name and location of the source file for the embedded palette
         private byte[] palette = null!;
         private bool compressed = false;
         private bool usePAL = false;
@@ -79,6 +76,10 @@ namespace ALTViewer
             if (!usePAL)
             {
                 MessageBox.Show("SAVE NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
+                //get file
+                //seek to palette
+                //check length
+                //write palette
             }
             else
             {
@@ -98,6 +99,10 @@ namespace ALTViewer
             if (!usePAL)
             {
                 MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
+                //seek to palette
+                //check length
+                //write palette
+                //delete backup
             }
             else
             {
@@ -152,7 +157,15 @@ namespace ALTViewer
             fbd.Description = "Select output folder to save the .PAL file.";
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                string path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
+                string path = "";
+                if (usePAL) // if using a .PAL file
+                {
+                    path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
+                }
+                else // embedded palette
+                {
+                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL0{comboBox1.SelectedIndex}.PAL");
+                }
                 File.WriteAllBytes(path, palette);
                 MessageBox.Show($"Palette saved to : {path}");
             }
@@ -170,7 +183,8 @@ namespace ALTViewer
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     palette = File.ReadAllBytes(openFileDialog.FileName);
-                    button3.Enabled = true;
+                    button3.Enabled = true; // enable undo button
+                    button1.Enabled = true; // enable save button
                     Invalidate();
                     RenderImage();
                 }

@@ -336,11 +336,16 @@ namespace ALTViewer
                 }
                 else
                 {
-                    // update embedded palette to match selected frame
-                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean
+                    if (!palfile) // update embedded palette to match selected frame
+                    {
+                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(
+                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                    }
+                    else
+                    {
+                        pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean?
+                    }
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
