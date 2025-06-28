@@ -35,6 +35,7 @@
             pictureBox1 = new PictureBox();
             comboBox1 = new ComboBox();
             button4 = new Button();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -61,6 +62,7 @@
             // 
             // button3
             // 
+            button3.Enabled = false;
             button3.Location = new Point(95, 353);
             button3.Name = "button3";
             button3.Size = new Size(119, 23);
@@ -97,11 +99,22 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // button5
+            // 
+            button5.Location = new Point(95, 411);
+            button5.Name = "button5";
+            button5.Size = new Size(119, 23);
+            button5.TabIndex = 6;
+            button5.Text = "Import Palette";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // PaletteEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(600, 418);
+            ClientSize = new Size(600, 441);
+            Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(comboBox1);
             Controls.Add(pictureBox1);
@@ -123,5 +136,6 @@
         private PictureBox pictureBox1;
         private ComboBox comboBox1;
         private Button button4;
+        private Button button5;
     }
 }

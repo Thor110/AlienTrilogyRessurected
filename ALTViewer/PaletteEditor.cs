@@ -12,7 +12,7 @@
         public PaletteEditor(string selected, bool embedded, List<BndSection> loadedSections)
         {
             InitializeComponent();
-            if(embedded)
+            if (embedded)
             {
 
             }
@@ -62,6 +62,7 @@
                     palette[index * 3 + 2] = dlg.Color.B;
                     Invalidate();
                     RenderImage();
+                    button3.Enabled = true;
                 }
             }
         }
@@ -82,16 +83,17 @@
             File.Move(backupDirectory, fileDirectory, true);
             File.Delete(backupDirectory);
             button2.Enabled = false;
-            ReDrawPalette();
+            palette = File.ReadAllBytes(fileDirectory);
+            Invalidate();
             RenderImage();
             MessageBox.Show("Palette restored from backup.");
         }
         // undo changes button clicked
-        private void button3_Click(object sender, EventArgs e) { ReDrawPalette(); }
-        public void ReDrawPalette()
+        private void button3_Click(object sender, EventArgs e)
         {
             palette = File.ReadAllBytes(fileDirectory);
-            Invalidate(); // Redraw with original colors
+            Invalidate();
+            button3.Enabled = false;
         }
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { RenderImage(); }
@@ -119,6 +121,25 @@
                 string path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
                 File.WriteAllBytes(path, palette);
                 MessageBox.Show($"Palette saved to : {path}");
+            }
+        }
+        // import palette file button click
+        private void button5_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "PAL Files (*.pal)|*.pal|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Title = "Select a palette (.pal) file";
+                openFileDialog.Multiselect = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    palette = File.ReadAllBytes(openFileDialog.FileName);
+                    button3.Enabled = true;
+                    Invalidate();
+                    RenderImage();
+                }
             }
         }
     }
