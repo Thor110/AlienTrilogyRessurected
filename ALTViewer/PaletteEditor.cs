@@ -7,7 +7,7 @@
         public string fileDirectory = "";
         public string selectedPalette = "";
         private byte[] palette = null!;
-        private bool compressed;
+        private bool compressed = false;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections)
         {

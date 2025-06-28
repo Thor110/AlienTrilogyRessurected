@@ -30,6 +30,7 @@ namespace ALTViewer
         private bool refresh; // set to true when entering the palette editor
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
+        public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -180,13 +181,37 @@ namespace ALTViewer
         {
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
+            if (radioButton1.Checked)
+            {
+                foreach (string weapon in weapons) // check if the selected file is a weapon
+                {
+                    if (lastSelectedFile.Contains(weapon))
+                    {
+                        palfile = false; // set palfile to false for weapons
+                        compressed = true; // set compressed to true for weapons
+                        MessageBox.Show("COMPRESSED");
+                        break;
+                    }
+                    else
+                    {
+                        palfile = true; // reset palfile to true for next detection
+                        compressed = false; // reset compressed to false for next detection
+                    }
+                }
+            }
+            else if (radioButton2.Checked)
+            {
+                palfile = false; // set palfile to false for weapons
+                compressed = true; // set compressed to true for weapons
+                MessageBox.Show("COMPRESSED");
+            }
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
-            if (listBox2.Items.Contains(select)) // select the detected palette if it exists
+            if (palfile && listBox2.Items.Contains(select)) // select the detected palette if it exists
             {
                 listBox2.SelectedItem = select;
                 lastSelectedPalette = select; // store last selected file
             }
-            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!; // re add the event handler
             if (radioButton4.Checked || !palfile && radioButton3.Checked ||
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
@@ -195,6 +220,7 @@ namespace ALTViewer
             }
             else if (!palfile && radioButton2.Checked || !palfile && radioButton1.Checked) // load palette from level file or enemies
             {
+                MessageBox.Show("COMPRESSED");
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
@@ -221,8 +247,7 @@ namespace ALTViewer
                 foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
                 if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; }
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
-                compressed = true; // compressed sprite
-                palfile = true; // reset palfile boolean for next detection
+                //palfile = true; // reset palfile boolean for next detection
                 return; // We handled everything; skip rest of RenderImage.
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
@@ -238,7 +263,6 @@ namespace ALTViewer
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
             else { MessageBox.Show("No image sections found in BND file."); }
-            compressed = false; // not compressed
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
