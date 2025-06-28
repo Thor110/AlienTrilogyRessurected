@@ -180,7 +180,6 @@ namespace ALTViewer
         private void RenderImage(string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
-            byte[] levelPalette = null!;
             if (radioButton1.Checked)
             {
                 foreach (string weapon in weapons) // check if the selected file is a weapon
@@ -213,14 +212,14 @@ namespace ALTViewer
             if (radioButton4.Checked || radioButton3.Checked ||
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
-                levelPalette = TileRenderer.Convert16BitPaletteToRGB(
+                currentPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", 12));
             }
             else if (compressed) // load palette from level file or enemies
             {
                 binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the BND file
                 byte[] fullFile = File.ReadAllBytes(binbnd);
-                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(binbnd, $"C000", 8));
+                currentPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
                 if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
@@ -252,9 +251,8 @@ namespace ALTViewer
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))
-            { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from embedded palettes
-            if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
+            if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))  // read .PAL file if not reading from embedded palettes
+            { currentPalette = File.ReadAllBytes(pal); } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             palfile = true; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
@@ -323,7 +321,17 @@ namespace ALTViewer
             {
                 if(compressed)
                 {
-                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    int w = 32; // BAMBI
+                    int h = 77;
+                    //int w = 84; // SHOTGUN
+                    //int h = 77;
+                    if(currentPalette == null)
+                    {
+                        MessageBox.Show("Palette is null");
+                        return;
+                    }
+                    File.WriteAllBytes("debug_dump_palette.bin", currentPalette!);
                     pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette!, w, h);
                 }
                 else
@@ -388,7 +396,7 @@ namespace ALTViewer
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
             MessageBox.Show(sectionName);
             byte[] fileBytes = File.ReadAllBytes(filePath);
-            File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
+            //File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
             //if (fileBytes.Length < label.Length) { throw new Exception("File too small to contain the section."); }
             for (int i = 0; i < fileBytes.Length - label.Length; i++)
             {
