@@ -513,6 +513,7 @@ namespace ALTViewer
         // palette editor button click
         private void button7_Click(object sender, EventArgs e)
         {
+            // TODO : pass embedded palettes and create a method for writing them accordingly
             refresh = true;
             newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections));
         }
