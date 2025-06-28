@@ -482,8 +482,7 @@ namespace ALTViewer
             form.FormClosed += (s, args) =>
             {
                 this.Show();
-                listBox1_SelectedIndexChanged(this, EventArgs.Empty); // Re-run selected palette loading logic and rerender image
-                refresh = false; // reset refresh boolean
+                listBox1_SelectedIndexChanged(this, EventArgs.Empty); // Re-run selected palette loading logic and re-render image
             };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
