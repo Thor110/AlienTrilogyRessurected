@@ -409,8 +409,6 @@ namespace ALTViewer
         // get the target path for the selected file
         private bool TryGetTargetPath(out string fullPath, out string backupPath)
         {
-            fullPath = "";
-            backupPath = "";
             string directory = "";
             string filetype = "";
             if (radioButton1.Checked)
