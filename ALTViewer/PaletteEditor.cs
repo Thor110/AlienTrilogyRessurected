@@ -80,6 +80,10 @@
                 //seek to palette
                 //check length
                 //write palette
+                if (compressed)
+                {
+                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                }
             }
             else
             {
@@ -103,6 +107,10 @@
                 //check length
                 //write palette
                 //delete backup
+                if (compressed)
+                {
+                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                }
             }
             else
             {
