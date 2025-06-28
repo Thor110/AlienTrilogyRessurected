@@ -190,9 +190,9 @@ namespace ALTViewer
             if (palfile && radioButton3.Checked || radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
-                    ExtractLevelPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
+                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
-            else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from levelfile or enemies
+            else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from level file or enemies
             {
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
@@ -439,7 +439,7 @@ namespace ALTViewer
             comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
         }
         // extract level palette from a level file C0## sections
-        public static byte[] ExtractLevelPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
+        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
         {
             byte[] fileBytes = null!;
             if (compressed) { fileBytes = data; } // Use provided data if compressed
