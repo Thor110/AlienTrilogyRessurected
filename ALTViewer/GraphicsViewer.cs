@@ -124,7 +124,7 @@ namespace ALTViewer
             {
                 foreach (string level in levels) // determine level folder based on selected item
                 {
-                    if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".BIN")))
+                    if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".B16")))
                     {
                         palfile = false;
                         GetFile(level);
@@ -245,7 +245,6 @@ namespace ALTViewer
                 foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
                 if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
-                //palfile = true; // reset palfile boolean for next detection
                 return; // We handled everything; skip rest of RenderImage.
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
@@ -479,11 +478,10 @@ namespace ALTViewer
         {
             byte[] fileBytes = File.ReadAllBytes(filePath);
             long startOffset = FindSectionDataOffset(filePath, clSectionName, skipHeader);
-            MessageBox.Show("COMPRESSED");
+
             if (startOffset < 0 || startOffset >= fileBytes.Length) { throw new Exception("CL section not found or out of bounds."); }
 
             // Search for the next section header
-            //int maxSearch = Math.Min(fileBytes.Length - (int)startOffset, 4096); // Limit to avoid long scans
             int maxSearch = fileBytes.Length;
             int sectionLength = maxSearch;
 
@@ -503,14 +501,14 @@ namespace ALTViewer
                     break;
                 }
             }
-
             if (startOffset + sectionLength > fileBytes.Length)
             {
                 sectionLength = fileBytes.Length - (int)startOffset;
             }
             byte[] palette = new byte[sectionLength];
+
             Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
-            File.WriteAllBytes("PALETTE", palette);
+            //File.WriteAllBytes("PALETTE", palette);
             return palette;
         }
         // palette editor button click
