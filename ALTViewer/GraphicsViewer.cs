@@ -461,15 +461,16 @@ namespace ALTViewer
         {
             // TODO : pass embedded palettes and create a method for writing them accordingly
             refresh = true;
+            string choice = "";
             if(!palfile)
             {
-                newForm(new PaletteEditor(lastSelectedFilePath, palfile, currentSections));
+                choice = lastSelectedFilePath; // use the last selected file path for embedded palettes
             }
             else
             {
-                newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections));
+                choice = lastSelectedPalette; // use the last selected palette
             }
-            
+            newForm(new PaletteEditor(choice, palfile, currentSections));
         }
         // create new form method
         private void newForm(Form form)

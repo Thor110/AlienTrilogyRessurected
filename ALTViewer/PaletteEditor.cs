@@ -28,7 +28,6 @@
                 palette = File.ReadAllBytes(fileDirectory); // store the selected palette
                 selectedPalette = selected;
             }
-            MessageBox.Show(palette.Length.ToString());
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             comboBox1.SelectedIndex = 0; // trigger rendering
