@@ -14,10 +14,19 @@
         {
             InitializeComponent();
             usePAL = palfile; // store boolean for latre use
-            if (!palfile)
+            if(compressed)
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
+                // duplicate code note
+                backupDirectory = selectedPalette + $"_C000.BAK"; // check for backup
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "C000", 8));
+            }
+            else if (!palfile)
+            {
+                fileDirectory = selected; // set selected filepath instead of palette path
+                selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
+                // duplicate code note
                 backupDirectory = selectedPalette + $"_CL00.BAK"; // check for backup
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
             }
@@ -91,6 +100,7 @@
                     //seek to palette
                     //check length
                     //write palette
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, "C000", palette, 8);
                 }
             }
             else // backup .PAL files
@@ -107,7 +117,6 @@
             {
                 if (!compressed)
                 {
-                    //MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
                     palette = File.ReadAllBytes(backupDirectory);
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
                 }
@@ -118,6 +127,7 @@
                     //check length
                     //write palette
                     //delete backup
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, "C000", palette, 8);
                 }
             }
             else
@@ -157,8 +167,8 @@
             var section = currentSections[comboBox1.SelectedIndex];
             if (compressed)
             {
-                //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette, width, height);
+                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
             }
             else
             {
