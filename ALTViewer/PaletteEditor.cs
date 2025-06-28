@@ -1,6 +1,4 @@
-﻿using System.Formats.Tar;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
