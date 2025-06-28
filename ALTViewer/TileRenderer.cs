@@ -274,5 +274,37 @@ namespace ALTViewer
             }
             throw new Exception("Section not found in file.");
         }
+        public static void OverwriteEmbeddedPalette(string filePath, string sectionName, byte[] newPalette, int skipHeader)
+        {
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            long offset = FindSectionDataOffset(filePath, sectionName, skipHeader);
+            var replacements = new List<Tuple<long, byte[]>>();
+            replacements.Add(new Tuple<long, byte[]>(offset, ConvertRGBTripletsToEmbeddedPalette(newPalette)));
+            BinaryUtility.ReplaceBytes(replacements, filePath);
+        }
+        public static byte[] ConvertRGBTripletsToEmbeddedPalette(byte[] rgbPalette768)
+        {
+            if (rgbPalette768.Length != 768)
+                throw new ArgumentException("Expected a 768-byte palette (256 RGB triplets).");
+
+            byte[] embeddedPalette = new byte[512]; // 256 entries × 2 bytes each
+
+            for (int i = 0; i < 256; i++)
+            {
+                int r = rgbPalette768[i * 3 + 0] >> 3; // 5 bits
+                int g = rgbPalette768[i * 3 + 1] >> 2; // 6 bits
+                int b = rgbPalette768[i * 3 + 2] >> 3; // 5 bits
+
+                // Pack into 16 bits (RGB565): RRRRRGGGGGGBBBBB
+                ushort packed = (ushort)((r << 11) | (g << 5) | b);
+
+                // Write as little-endian
+                embeddedPalette[i * 2] = (byte)(packed & 0xFF);
+                embeddedPalette[i * 2 + 1] = (byte)((packed >> 8) & 0xFF);
+            }
+
+            return embeddedPalette;
+        }
+
     }
 }

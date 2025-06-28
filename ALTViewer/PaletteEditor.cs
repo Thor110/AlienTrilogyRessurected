@@ -28,6 +28,7 @@
                 palette = File.ReadAllBytes(fileDirectory); // store the selected palette
                 selectedPalette = selected;
             }
+            MessageBox.Show(palette.Length.ToString());
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             comboBox1.SelectedIndex = 0; // trigger rendering
@@ -73,14 +74,18 @@
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!File.Exists(backupDirectory)) // make backup of the original file
+            {
+                File.Copy(fileDirectory, backupDirectory);
+                button2.Enabled = true; // enable restore backup button
+            }
             if (!usePAL) // backup embedded palettes
             {
-                MessageBox.Show("SAVE NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
-                //get file
-                //seek to palette
-                //check length
-                //write palette
-                if (compressed)
+                if (!compressed)
+                {
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
+                }
+                else
                 {
                     MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
                     //get file
@@ -91,11 +96,6 @@
             }
             else // backup .PAL files
             {
-                if (!File.Exists(backupDirectory)) // make backup of the original file
-                {
-                    File.Copy(fileDirectory, backupDirectory);
-                    button2.Enabled = true; // enable restore backup button
-                }
                 File.WriteAllBytes(fileDirectory, palette);
             }
             button1.Enabled = false; // disable save button
@@ -106,12 +106,15 @@
         {
             if (!usePAL)
             {
-                MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
-                //seek to palette
-                //check length
-                //write palette
-                //delete backup
-                if (compressed)
+                if (!compressed)
+                {
+                    MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
+                    //seek to palette
+                    //check length
+                    //write palette
+                    //delete backup
+                }
+                else
                 {
                     MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
                     //seek to palette
