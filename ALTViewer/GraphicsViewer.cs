@@ -448,14 +448,14 @@ namespace ALTViewer
             File.Delete($"{backupFile}");
             button6.Enabled = false;
             refresh = true;
-            listBox1_SelectedIndexChanged(sender, e); // re-render the image after restoring a backup
+            listBox1_SelectedIndexChanged(null!, null!); // re-render the image after restoring a backup
             MessageBox.Show("Backup successfully restored!");
         }
         // colour correction transparency setting
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             transparency = checkBox2.Checked;
-            comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
+            comboBox1_SelectedIndexChanged(null!, null!); // re-render the image with the new transparency setting
         }
         // palette editor button click
         private void button7_Click(object sender, EventArgs e)
@@ -482,7 +482,7 @@ namespace ALTViewer
             form.FormClosed += (s, args) =>
             {
                 this.Show();
-                listBox1_SelectedIndexChanged(this, EventArgs.Empty); // Re-run selected palette loading logic and re-render image
+                listBox1_SelectedIndexChanged(null!, null!); // Re-run selected palette loading logic and re-render image
             };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
