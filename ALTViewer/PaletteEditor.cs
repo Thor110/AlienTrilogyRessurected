@@ -82,7 +82,11 @@
                 //write palette
                 if (compressed)
                 {
-                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    //get file
+                    //seek to palette
+                    //check length
+                    //write palette
                 }
             }
             else
@@ -93,9 +97,9 @@
                     button2.Enabled = true; // enable restore backup button
                 }
                 File.WriteAllBytes(fileDirectory, palette);
-                button1.Enabled = false; // disable save button
-                MessageBox.Show("Palette saved successfully.");
             }
+            button1.Enabled = false; // disable save button
+            MessageBox.Show("Palette saved successfully.");
         }
         // restore backup button clicked
         private void button2_Click(object sender, EventArgs e)
@@ -109,20 +113,24 @@
                 //delete backup
                 if (compressed)
                 {
-                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    //seek to palette
+                    //check length
+                    //write palette
+                    //delete backup
                 }
             }
             else
             {
                 File.Move(backupDirectory, fileDirectory, true);
                 File.Delete(backupDirectory);
-                button2.Enabled = false; // restore backup button
-                button1.Enabled = false; // disable save button
                 palette = File.ReadAllBytes(fileDirectory);
-                Invalidate();
-                RenderImage();
-                MessageBox.Show("Palette restored from backup.");
             }
+            button2.Enabled = false; // restore backup button
+            button1.Enabled = false; // disable save button
+            Invalidate();
+            RenderImage();
+            MessageBox.Show("Palette restored from backup.");
         }
         // undo changes button clicked
         private void button3_Click(object sender, EventArgs e)
