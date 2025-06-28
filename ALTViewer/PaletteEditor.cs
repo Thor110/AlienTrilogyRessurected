@@ -73,7 +73,7 @@
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!usePAL)
+            if (!usePAL) // backup embedded palettes
             {
                 MessageBox.Show("SAVE NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
                 //get file
@@ -89,7 +89,7 @@
                     //write palette
                 }
             }
-            else
+            else // backup .PAL files
             {
                 if (!File.Exists(backupDirectory)) // make backup of the original file
                 {
