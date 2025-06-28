@@ -214,15 +214,13 @@ namespace ALTViewer
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
-                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}"));
+                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", 12));
             }
             else if (compressed) // load palette from level file or enemies
             {
-                MessageBox.Show("COMPRESSED");
                 binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the BND file
                 byte[] fullFile = File.ReadAllBytes(binbnd);
-                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(binbnd, $"C000"));
-                MessageBox.Show("COMPRESSED");
+                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
                 if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
@@ -374,7 +372,7 @@ namespace ALTViewer
                 currentSections[frame].Data = indexedData;
                 var section = currentSections[frame];
                 string sectionName = $"TP0{frame}";
-                long dataOffset = FindSectionDataOffset(selectedFile, sectionName, 8);
+                long dataOffset = FindSectionDataOffset(selectedFile, sectionName, 8); // TODO : update for compressed files
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
                 if (frame + 1 == currentSections.Count || single) // account for zero based indexing
@@ -385,13 +383,17 @@ namespace ALTViewer
             }
         }
         // find the offset of the section data in the file
-        public static long FindSectionDataOffset(string filePath, string sectionName, int length)
+        public static long FindSectionDataOffset(string filePath, string sectionName, int skipHeader)
         {
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
+            MessageBox.Show(sectionName);
             byte[] fileBytes = File.ReadAllBytes(filePath);
+            File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
+            //if (fileBytes.Length < label.Length) { throw new Exception("File too small to contain the section."); }
             for (int i = 0; i < fileBytes.Length - label.Length; i++)
             {
                 bool match = true;
+                //for (int j = 0; j < label.Length && (i + j) < fileBytes.Length; j++)
                 for (int j = 0; j < label.Length; j++)
                 {
                     if (fileBytes[i + j] != label[j])
@@ -400,7 +402,7 @@ namespace ALTViewer
                         break;
                     }
                 }
-                if (match) { return i + length; } // label (4) + size (4) = data starts here
+                if (match) { return i + skipHeader; } // label (4) + size (4) = data starts here ( 8 compressed / 12 uncompressed )
             }
             throw new Exception("Section not found in file.");
         }
@@ -465,12 +467,10 @@ namespace ALTViewer
             comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
         }
         // extract level palette from a level file C0## sections
-        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName)
+        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
         {
-            MessageBox.Show("COMPRESSED");
             byte[] fileBytes = File.ReadAllBytes(filePath);
-            MessageBox.Show("COMPRESSED");
-            long startOffset = FindSectionDataOffset(filePath, clSectionName, 12);
+            long startOffset = FindSectionDataOffset(filePath, clSectionName, skipHeader);
             MessageBox.Show("COMPRESSED");
             if (startOffset < 0 || startOffset >= fileBytes.Length) { throw new Exception("CL section not found or out of bounds."); }
 
@@ -479,18 +479,27 @@ namespace ALTViewer
             int maxSearch = fileBytes.Length;
             int sectionLength = maxSearch;
 
-            for (int i = 0; i < maxSearch - 3; i++)
+            for (int i = 0; i < maxSearch - 1; i++)
             {
-                // Check if we found a new section header: CLxx, TPxx, BX00, etc.
-                if ((fileBytes[startOffset + i] == 0x43 && fileBytes[startOffset + i + 1] == 0x4C) || // CL
-                    (fileBytes[startOffset + i] == 0x54 && fileBytes[startOffset + i + 1] == 0x50) || // TP
-                    (fileBytes[startOffset + i] == 0x42 && fileBytes[startOffset + i + 1] == 0x58))   // BX
+                if ((startOffset + i + 1) >= fileBytes.Length) break; // Avoid OOB
+
+                byte a = fileBytes[startOffset + i];
+                byte b = fileBytes[startOffset + i + 1];
+
+                if ((a == 0x43 && b == 0x30) || // C0 section ( compressed )
+                    (a == 0x43 && b == 0x4C) || // CL
+                    (a == 0x54 && b == 0x50) || // TP
+                    (a == 0x42 && b == 0x58))   // BX
                 {
                     sectionLength = i;
                     break;
                 }
             }
 
+            if (startOffset + sectionLength > fileBytes.Length)
+            {
+                sectionLength = fileBytes.Length - (int)startOffset;
+            }
             byte[] palette = new byte[sectionLength];
             Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
             File.WriteAllBytes("PALETTE", palette);
