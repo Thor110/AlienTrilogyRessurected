@@ -214,12 +214,15 @@ namespace ALTViewer
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
-                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
+                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}"));
             }
             else if (compressed) // load palette from level file or enemies
             {
                 MessageBox.Show("COMPRESSED");
+                binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the BND file
                 byte[] fullFile = File.ReadAllBytes(binbnd);
+                levelPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(binbnd, $"C000"));
+                MessageBox.Show("COMPRESSED");
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
                 if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
@@ -234,7 +237,7 @@ namespace ALTViewer
                         if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); } // Heuristic: If result is tiny, probably not valid
                     }
                     catch { decompressedData = section.Data; } // Fallback: Use raw data
-                    File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData); // Optional: Write decompressed data for inspection
+                    //File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData); // Optional: Write decompressed data for inspection
                     counter++;
                     decompressedF0Sections.Add(new BndSection{ Name = section.Name, Data = decompressedData }); // Store for UI
                 }
@@ -462,14 +465,18 @@ namespace ALTViewer
             comboBox1_SelectedIndexChanged(sender, e); // re-render the image with the new transparency setting
         }
         // extract level palette from a level file C0## sections
-        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, bool compressed, byte[] data = null!)
+        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName)
         {
-            byte[] fileBytes = compressed ? data : File.ReadAllBytes(filePath);
+            MessageBox.Show("COMPRESSED");
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            MessageBox.Show("COMPRESSED");
             long startOffset = FindSectionDataOffset(filePath, clSectionName, 12);
+            MessageBox.Show("COMPRESSED");
             if (startOffset < 0 || startOffset >= fileBytes.Length) { throw new Exception("CL section not found or out of bounds."); }
 
             // Search for the next section header
-            int maxSearch = Math.Min(fileBytes.Length - (int)startOffset, 4096); // Limit to avoid long scans
+            //int maxSearch = Math.Min(fileBytes.Length - (int)startOffset, 4096); // Limit to avoid long scans
+            int maxSearch = fileBytes.Length;
             int sectionLength = maxSearch;
 
             for (int i = 0; i < maxSearch - 3; i++)
