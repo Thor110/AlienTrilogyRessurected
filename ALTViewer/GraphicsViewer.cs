@@ -217,6 +217,7 @@ namespace ALTViewer
             }
             else if (compressed) // load palette from level file or enemies
             {
+                refresh = false;
                 binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the B16 file variant
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
