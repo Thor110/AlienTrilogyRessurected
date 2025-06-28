@@ -40,7 +40,7 @@ namespace ALTViewer
             if (dim * dim == totalPixels) { return (dim, dim); }
             throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
         }
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, bool transparency)
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, bool transparency = false)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -132,7 +132,7 @@ namespace ALTViewer
             bw.Write(formSizeBytes);
             return ms.ToArray();
         }
-        public static Bitmap BuildIndexedBitmap(byte[] pixelData, int width, int height, byte[] palette)
+        public static Bitmap BuildIndexedBitmap(byte[] pixelData, byte[] palette, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
             ColorPalette pal = bmp.Palette; // Set the palette

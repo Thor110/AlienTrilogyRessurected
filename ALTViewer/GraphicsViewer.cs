@@ -181,6 +181,7 @@ namespace ALTViewer
         {
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
+            palfile = true; // reset palfile to false for next file
             if (radioButton1.Checked)
             {
                 foreach (string weapon in weapons) // check if the selected file is a weapon
@@ -189,7 +190,6 @@ namespace ALTViewer
                     {
                         palfile = false; // set palfile to false for weapons
                         compressed = true; // set compressed to true for weapons
-                        MessageBox.Show("COMPRESSED");
                         break;
                     }
                     else
@@ -203,7 +203,6 @@ namespace ALTViewer
             {
                 palfile = false; // set palfile to false for weapons
                 compressed = true; // set compressed to true for weapons
-                MessageBox.Show("COMPRESSED");
             }
             listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
             if (palfile && listBox2.Items.Contains(select)) // select the detected palette if it exists
@@ -218,7 +217,7 @@ namespace ALTViewer
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
-            else if (!palfile && radioButton2.Checked || !palfile && radioButton1.Checked) // load palette from level file or enemies
+            else if (compressed) // load palette from level file or enemies
             {
                 MessageBox.Show("COMPRESSED");
                 byte[] fullFile = File.ReadAllBytes(binbnd);
@@ -245,7 +244,7 @@ namespace ALTViewer
                 comboBox1.Enabled = true;
                 comboBox1.Items.Clear();
                 foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-                if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; }
+                if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; } // trigger rendering
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
                 //palfile = true; // reset palfile boolean for next detection
                 return; // We handled everything; skip rest of RenderImage.
@@ -257,7 +256,6 @@ namespace ALTViewer
             { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from embedded palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
-            palfile = true; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -324,13 +322,13 @@ namespace ALTViewer
             {
                 if(compressed)
                 {
-                    //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette, width, height);
+                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette!, w, h);
                 }
                 else
                 {
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
