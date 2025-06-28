@@ -212,7 +212,6 @@ namespace ALTViewer
             if (radioButton4.Checked || radioButton3.Checked ||
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
-                MessageBox.Show("TEST");
                 palfile = false; // palette is embedded
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
             }
