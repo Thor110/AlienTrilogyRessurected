@@ -215,5 +215,68 @@ namespace ALTViewer
             }
             return f0Sections;
         }
+        // extract level palette from a level file C0## sections
+        public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
+        {
+            // TODO : this runs twice along with FindSectionDataOffset
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            long startOffset = FindSectionDataOffset(filePath, clSectionName, skipHeader);
+
+            if (startOffset < 0 || startOffset >= fileBytes.Length) { throw new Exception("CL section not found or out of bounds."); }
+
+            // Search for the next section header
+            int maxSearch = fileBytes.Length;
+            int sectionLength = maxSearch;
+
+            for (int i = 0; i < maxSearch - 1; i++)
+            {
+                if ((startOffset + i + 1) >= fileBytes.Length) break; // Avoid OOB
+
+                byte a = fileBytes[startOffset + i];
+                byte b = fileBytes[startOffset + i + 1];
+
+                if ((a == 0x43 && b == 0x30) || // C0 section ( compressed )
+                    (a == 0x43 && b == 0x4C) || // CL
+                    (a == 0x54 && b == 0x50) || // TP
+                    (a == 0x42 && b == 0x58))   // BX
+                {
+                    sectionLength = i;
+                    break;
+                }
+            }
+            if (startOffset + sectionLength > fileBytes.Length)
+            {
+                sectionLength = fileBytes.Length - (int)startOffset;
+            }
+            byte[] palette = new byte[sectionLength];
+
+            Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
+            return palette;
+        }
+        // find the offset of the section data in the file
+        public static long FindSectionDataOffset(string filePath, string sectionName, int skipHeader)
+        {
+            // TODO : stop this triggering twice
+            byte[] label = Encoding.ASCII.GetBytes(sectionName);
+            //MessageBox.Show(sectionName + "TEST");
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            //File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
+            //if (fileBytes.Length < label.Length) { throw new Exception("File too small to contain the section."); }
+            for (int i = 0; i < fileBytes.Length - label.Length; i++)
+            {
+                bool match = true;
+                //for (int j = 0; j < label.Length && (i + j) < fileBytes.Length; j++)
+                for (int j = 0; j < label.Length; j++)
+                {
+                    if (fileBytes[i + j] != label[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) { return i + skipHeader; } // label (4) + size (4) = data starts here ( 8 compressed / 12 uncompressed )
+            }
+            throw new Exception("Section not found in file.");
+        }
     }
 }

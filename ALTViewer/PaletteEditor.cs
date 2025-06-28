@@ -1,37 +1,42 @@
-﻿namespace ALTViewer
+﻿using static System.ComponentModel.Design.ObjectSelectorEditor;
+using System.Formats.Tar;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
         public static string paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
         public string backupDirectory = "";
         public string fileDirectory = "";
-        public string selectedPalette = "";
+        public string selectedPalette = ""; // either the name of the .PAL file or the name of the sourec file for the embedded palette
         private byte[] palette = null!;
         private bool compressed = false;
+        private bool usePAL = false;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections)
         {
             InitializeComponent();
+            usePAL = palfile; // store boolean for latre use
             if (!palfile)
             {
-                MessageBox.Show("TEST");
-                //compressed = palfile; // TODO : make this a separate check
-                return;
+                fileDirectory = selected; // set selected filepath instead of palette path
+                selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
+                backupDirectory = selectedPalette + $"_CL00.BAK"; // check for backup
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
             }
             else
             {
                 fileDirectory = paletteDirectory + selected + ".PAL";
+                backupDirectory = fileDirectory + ".BAK";
                 palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+                selectedPalette = selected;
             }
-            selectedPalette = selected;
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-            comboBox1.SelectedIndex = 0;
-            RenderImage();
+            comboBox1.SelectedIndex = 0; // trigger rendering
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
-            backupDirectory = fileDirectory + ".BAK";
-            if (File.Exists(backupDirectory)) { button2.Enabled = true; }
+            if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
         }
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
@@ -63,41 +68,69 @@
                     palette[index * 3 + 2] = dlg.Color.B;
                     Invalidate();
                     RenderImage();
-                    button3.Enabled = true;
+                    button3.Enabled = true; // enable undo button
+                    button1.Enabled = true; // enable save button
                 }
             }
         }
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(backupDirectory)) // make backup of the original file
+            if (!usePAL)
             {
-                File.Copy(fileDirectory, backupDirectory);
-                button2.Enabled = true; // enable restore backup button
+                MessageBox.Show("SAVE NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
             }
-            File.WriteAllBytes(fileDirectory, palette);
-            MessageBox.Show("Palette saved successfully.");
+            else
+            {
+                if (!File.Exists(backupDirectory)) // make backup of the original file
+                {
+                    File.Copy(fileDirectory, backupDirectory);
+                    button2.Enabled = true; // enable restore backup button
+                }
+                File.WriteAllBytes(fileDirectory, palette);
+                button1.Enabled = false; // disable save button
+                MessageBox.Show("Palette saved successfully.");
+            }
         }
         // restore backup button clicked
         private void button2_Click(object sender, EventArgs e)
         {
-            File.Move(backupDirectory, fileDirectory, true);
-            File.Delete(backupDirectory);
-            button2.Enabled = false;
-            palette = File.ReadAllBytes(fileDirectory);
-            Invalidate();
-            RenderImage();
-            MessageBox.Show("Palette restored from backup.");
+            if (!usePAL)
+            {
+                MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
+            }
+            else
+            {
+                File.Move(backupDirectory, fileDirectory, true);
+                File.Delete(backupDirectory);
+                button2.Enabled = false; // restore backup button
+                button1.Enabled = false; // disable save button
+                palette = File.ReadAllBytes(fileDirectory);
+                Invalidate();
+                RenderImage();
+                MessageBox.Show("Palette restored from backup.");
+            }
         }
         // undo changes button clicked
         private void button3_Click(object sender, EventArgs e)
         {
-            palette = File.ReadAllBytes(fileDirectory);
+            if (!usePAL)
+            {
+                palette = TileRenderer.Convert16BitPaletteToRGB(
+                    TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+            }
+            else { palette = File.ReadAllBytes(fileDirectory); }
             Invalidate();
-            button3.Enabled = false;
+            RenderImage();
+            button3.Enabled = false; // disable undo button
+            button1.Enabled = false; // disable save button
         }
         // frame selection
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { RenderImage(); }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            backupDirectory = selectedPalette + $"_CL0{comboBox1.SelectedIndex}.BAK";
+            RenderImage();
+        }
         private void RenderImage()
         {
             var section = currentSections[comboBox1.SelectedIndex];
