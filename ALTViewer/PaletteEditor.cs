@@ -108,15 +108,13 @@
             {
                 if (!compressed)
                 {
-                    MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
-                    //seek to palette
-                    //check length
-                    //write palette
-                    //delete backup
+                    //MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR EMBEDDED PALETTES YET!");
+                    palette = File.ReadAllBytes(backupDirectory);
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
                 }
                 else
                 {
-                    MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
                     //seek to palette
                     //check length
                     //write palette
@@ -126,9 +124,9 @@
             else
             {
                 File.Move(backupDirectory, fileDirectory, true);
-                File.Delete(backupDirectory);
                 palette = File.ReadAllBytes(fileDirectory);
             }
+            File.Delete(backupDirectory);
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button
             Invalidate();
