@@ -78,15 +78,15 @@ namespace ALTViewer
             for (int i = 0; i < colorCount && i < 256; i++)
             {
                 ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
-                int b = (color >> 10) & 0x1F;
-                int g = (color >> 5) & 0x1F;
+                // Extract 5-bit components
                 int r = color & 0x1F;
-                r = (r * 255) / 31;
-                g = (g * 255) / 31;
-                b = (b * 255) / 31;
-                rgbPalette[i * 3 + 0] = (byte)r;
-                rgbPalette[i * 3 + 1] = (byte)g;
-                rgbPalette[i * 3 + 2] = (byte)b;
+                int g = (color >> 5) & 0x1F;
+                int b = (color >> 10) & 0x1F;
+                // Match PAL interpretation by upscaling to 6-bit then multiplying by 4
+                // i.e., align to the same scale you'd get from (x * 4)
+                rgbPalette[i * 3 + 0] = (byte)Math.Min(r * 4, 255);
+                rgbPalette[i * 3 + 1] = (byte)Math.Min(g * 4, 255);
+                rgbPalette[i * 3 + 2] = (byte)Math.Min(b * 4, 255);
             }
 
             return rgbPalette;
