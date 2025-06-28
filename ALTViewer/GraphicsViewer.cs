@@ -25,7 +25,7 @@ namespace ALTViewer
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
         private bool transparency;
-        private bool palfile; // true if no .PAL file is used ( level files, enemies and weapons )
+        private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
@@ -118,14 +118,14 @@ namespace ALTViewer
             button7.Visible = true; // show palette editor button
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
-            else if (radioButton2.Checked) { palfile = true; GetFile(enemyDirectory); }
+            else if (radioButton2.Checked) { palfile = false; GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
             {
                 foreach (string level in levels) // determine level folder based on selected item
                 {
                     if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".BIN")))
                     {
-                        palfile = true;
+                        palfile = false;
                         GetFile(level);
                         return; // exit after finding the first matching level
                     }
@@ -156,13 +156,13 @@ namespace ALTViewer
                     {
                         filePath = filePath.Replace(".BND", ".B16");
                         listBox2.Enabled = false;
-                        palfile = true;
+                        palfile = false;
                         break;
                     }
                     else
                     {
                         listBox2.Enabled = true;
-                        palfile = false;
+                        //palfile = true;
                     }
                 }
             }
@@ -187,12 +187,13 @@ namespace ALTViewer
                 lastSelectedPalette = select; // store last selected file
             }
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!;
-            if (palfile && radioButton3.Checked || radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
+            if (radioButton4.Checked || !palfile && radioButton3.Checked ||
+                radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
                     ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", false));
             }
-            else if (palfile && radioButton2.Checked || palfile && radioButton1.Checked) // load palette from level file or enemies
+            else if (!palfile && radioButton2.Checked || !palfile && radioButton1.Checked) // load palette from level file or enemies
             {
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
@@ -221,17 +222,17 @@ namespace ALTViewer
                 if (comboBox1.Items.Count > 0) { comboBox1.SelectedIndex = 0; }
                 else { MessageBox.Show("No image sections found in decompressed F0 blocks."); }
                 compressed = true; // compressed sprite
-                palfile = false; // reset palfile boolean for next detection
+                palfile = true; // reset palfile boolean for next detection
                 return; // We handled everything; skip rest of RenderImage.
             }
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            if (!palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))
+            if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))
             { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from embedded palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
-            palfile = false; // reset palfile to false for next file
+            palfile = true; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -443,14 +444,13 @@ namespace ALTViewer
         {
             byte[] fileBytes = compressed ? data : File.ReadAllBytes(filePath);
             long startOffset = FindSectionDataOffset(filePath, clSectionName, 12);
-            if (startOffset < 0 || startOffset >= fileBytes.Length)
-                throw new Exception("CL section not found or out of bounds.");
+            if (startOffset < 0 || startOffset >= fileBytes.Length) { throw new Exception("CL section not found or out of bounds."); }
 
             // Search for the next section header
             int maxSearch = Math.Min(fileBytes.Length - (int)startOffset, 4096); // Limit to avoid long scans
             int sectionLength = maxSearch;
 
-            for (int i = 8; i < maxSearch - 3; i++) // Skip initial 8-byte CL header
+            for (int i = 0; i < maxSearch - 3; i++)
             {
                 // Check if we found a new section header: CLxx, TPxx, BX00, etc.
                 if ((fileBytes[startOffset + i] == 0x43 && fileBytes[startOffset + i + 1] == 0x4C) || // CL
@@ -464,12 +464,17 @@ namespace ALTViewer
 
             byte[] palette = new byte[sectionLength];
             Array.Copy(fileBytes, startOffset, palette, 0, sectionLength);
-            Console.WriteLine($"[CL Section {clSectionName}] Detected embedded palette length: {palette.Length} bytes");
             File.WriteAllBytes("PALETTE", palette);
             return palette;
         }
         // palette editor button click
-        private void button7_Click(object sender, EventArgs e) { refresh = true; newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections)); }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(palfile.ToString());
+            //return;
+            refresh = true;
+            newForm(new PaletteEditor(lastSelectedPalette, palfile, currentSections));
+        }
         // create new form method
         private void newForm(Form form)
         {

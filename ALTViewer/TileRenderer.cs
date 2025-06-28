@@ -67,6 +67,7 @@ namespace ALTViewer
             }
             return bmp;
         }
+        // used for embedded palettes
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
         {
             if (rawPalette == null || rawPalette.Length < 2)
@@ -82,11 +83,10 @@ namespace ALTViewer
                 int r = color & 0x1F;
                 int g = (color >> 5) & 0x1F;
                 int b = (color >> 10) & 0x1F;
-                // Match PAL interpretation by upscaling to 6-bit then multiplying by 4
-                // i.e., align to the same scale you'd get from (x * 4)
-                rgbPalette[i * 3 + 0] = (byte)Math.Min(r * 4, 255);
-                rgbPalette[i * 3 + 1] = (byte)Math.Min(g * 4, 255);
-                rgbPalette[i * 3 + 2] = (byte)Math.Min(b * 4, 255);
+                // Match PAL interpretation by upscaling to 6-bit, but not multiplying by 4 because the value is forwarded to RenderRaw8bppImage later on
+                rgbPalette[i * 3 + 0] = (byte)Math.Min(r, 255);
+                rgbPalette[i * 3 + 1] = (byte)Math.Min(g, 255);
+                rgbPalette[i * 3 + 2] = (byte)Math.Min(b, 255);
             }
 
             return rgbPalette;

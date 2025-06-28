@@ -9,12 +9,14 @@
         private byte[] palette = null!;
         private bool compressed;
         private List<BndSection> currentSections = new();
-        public PaletteEditor(string selected, bool embedded, List<BndSection> loadedSections)
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections)
         {
             InitializeComponent();
-            if (embedded)
+            if (!palfile)
             {
-
+                MessageBox.Show("TEST");
+                //compressed = palfile; // TODO : make this a separate check
+                return;
             }
             else
             {
@@ -26,7 +28,6 @@
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             comboBox1.SelectedIndex = 0;
             RenderImage();
-            compressed = embedded;
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
             backupDirectory = fileDirectory + ".BAK";
