@@ -181,7 +181,6 @@ namespace ALTViewer
         {
             pictureBox1.Image = null; // clear previous image
             byte[] levelPalette = null!;
-            palfile = true; // reset palfile to false for next file
             if (radioButton1.Checked)
             {
                 foreach (string weapon in weapons) // check if the selected file is a weapon
@@ -211,7 +210,7 @@ namespace ALTViewer
                 lastSelectedPalette = select; // store last selected file
             }
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!; // re add the event handler
-            if (radioButton4.Checked || !palfile && radioButton3.Checked ||
+            if (radioButton4.Checked || radioButton3.Checked ||
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 levelPalette = TileRenderer.Convert16BitPaletteToRGB(
@@ -256,6 +255,7 @@ namespace ALTViewer
             { levelPalette = File.ReadAllBytes(pal); } // read .PAL file if not reading from embedded palettes
             if (levelPalette != null) { currentPalette = levelPalette; } // Store palette for reuse on selection change
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
+            palfile = true; // reset palfile to false for next file
             comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
