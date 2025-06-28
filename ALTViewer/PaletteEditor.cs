@@ -162,11 +162,6 @@
             }
             else
             {
-                if (!usePAL) // update embedded palette to match selected frame
-                {
-                    palette = TileRenderer.Convert16BitPaletteToRGB(
-                    TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
-                }
                 var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, false);
             }
