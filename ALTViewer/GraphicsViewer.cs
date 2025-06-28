@@ -213,7 +213,7 @@ namespace ALTViewer
                 radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // load embedded palettes
             {
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                    ExtractEmbeddedPalette(binbnd, $"CL0{(comboBox1.SelectedIndex == -1 ? "0" : comboBox1.SelectedIndex.ToString())}", 12));
+                    ExtractEmbeddedPalette(binbnd, "CL00", 12));
             }
             else if (compressed) // load palette from level file or enemies
             {
@@ -315,6 +315,7 @@ namespace ALTViewer
         // render the image when a section is selected
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // TODO : ExtractEmbeddedPalette runs twice because this is called to render
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
@@ -335,6 +336,8 @@ namespace ALTViewer
                 }
                 else
                 {
+                    // update embedded palette to match selected frame
+                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean
                 }
@@ -392,8 +395,9 @@ namespace ALTViewer
         // find the offset of the section data in the file
         public static long FindSectionDataOffset(string filePath, string sectionName, int skipHeader)
         {
+            // TODO : stop this triggering twice
             byte[] label = Encoding.ASCII.GetBytes(sectionName);
-            MessageBox.Show(sectionName);
+            //MessageBox.Show(sectionName + "TEST");
             byte[] fileBytes = File.ReadAllBytes(filePath);
             //File.WriteAllBytes("debug_dump.bin", fileBytes.Skip(fileBytes.Length - 520).ToArray());
             //if (fileBytes.Length < label.Length) { throw new Exception("File too small to contain the section."); }
@@ -476,6 +480,7 @@ namespace ALTViewer
         // extract level palette from a level file C0## sections
         public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
         {
+            // TODO : this runs twice along with FindSectionDataOffset
             byte[] fileBytes = File.ReadAllBytes(filePath);
             long startOffset = FindSectionDataOffset(filePath, clSectionName, skipHeader);
 
