@@ -30,6 +30,7 @@ namespace ALTViewer
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
+        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "BONESHIP", "COLONY", "PRISHOLD" }; // excluded palettes
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -38,11 +39,10 @@ namespace ALTViewer
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
             foreach (string palFile in palFiles)
             {
-                if(!palFile.Contains("LEV") && !palFile.Contains("GUNPALS") && !palFile.Contains("SPRITES")
-                    && !palFile.Contains("WSELECT") && !palFile.Contains("PANEL") && !palFile.Contains("NEWFONT")
-                    && !palFile.Contains("BONESHIP") && !palFile.Contains("COLONY") && !palFile.Contains("PRISHOLD")) // exclude unused palettes
+                string name = Path.GetFileNameWithoutExtension(palFile);
+                if (!excluded.Any(e => name.Contains(e)))
                 {
-                    listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile));
+                    listBox2.Items.Add(name);
                 }
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
