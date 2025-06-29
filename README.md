@@ -21,7 +21,7 @@ The road map for this project.
 	- Compressed images are not working yet.
 - [✅ 3 : Palette Editor](#palette-editor) ( 75% Complete )
 	- Palette editor and image preview.
-	- Compressed image palettes are not loaded yet.
+	- Automatic backup of the original file by default.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
@@ -47,7 +47,7 @@ The main program window.
 
 ## Sound Effects Viewer
 
-Listen to, extract, replace or restore audio files.
+Listen to, extract, replace or restore audio files from backups.
 
 <div align="center">
   <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
@@ -61,7 +61,7 @@ View and extract textures and sprites.
   <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
 </div>
 
-Replace texture frames. ( Example : Barrel texture used for the Crate )
+Replace textures. ( Example : Barrel texture used for the Crate )
 
 <div align="center">
   <img src="Images/texturereplacement.png" alt="Replaced Texture">
@@ -69,7 +69,7 @@ Replace texture frames. ( Example : Barrel texture used for the Crate )
 
 ## Palette Editor
 
-Edit palettes and preview selected image.
+Previw, edit, save, import and export palettes with a selected image.
 
 <div align="center">
   <img src="Images/paletteeditor.png" alt="Graphics Viewer">
