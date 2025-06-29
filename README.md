@@ -55,15 +55,21 @@ Listen to, extract, replace or restore audio files.
 
 ## Graphics Viewer
 
-View and extract textures and sprites. (WIP)
+View and extract textures and sprites.
 
 <div align="center">
   <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
 </div>
 
+Replace texture frames. ( Example : Barrel texture used for the Crate )
+
+<div align="center">
+  <img src="Images/texturereplacement.png" alt="Replaced Texture">
+</div>
+
 ## Palette Editor
 
-Edit palettes and preview selected image. (WIP)
+Edit palettes and preview selected image.
 
 <div align="center">
   <img src="Images/paletteeditor.png" alt="Graphics Viewer">
@@ -71,7 +77,7 @@ Edit palettes and preview selected image. (WIP)
 
 ## Text Editor
 
-Edit text in the game, intended for localisation efforts. (WIP)
+Edit text in the game, intended for localisation efforts.
 
 <div align="center">
   <img src="Images/texteditor.png" alt="Text Editor">
