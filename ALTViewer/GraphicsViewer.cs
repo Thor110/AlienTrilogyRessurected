@@ -291,6 +291,10 @@ namespace ALTViewer
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
+                    if(!compressed)
+                    {
+                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{i}", 12));
+                    }
                     var section = currentSections[i];
                     ExportFile(section, comboBox1.Items[i]!.ToString()!);
                 }

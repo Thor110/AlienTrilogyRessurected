@@ -64,6 +64,7 @@ namespace ALTViewer
                     }
                     else // Fallback color for invalid palette index
                     {
+                        //MessageBox.Show("FALLBACK");
                         if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
                         else { bmp.SetPixel(x, y, Color.Transparent); }
                     }
