@@ -181,8 +181,16 @@ namespace ALTViewer
                         compressed = false; // reset compressed to false for next detection
                     }
                 }
+                // TODO : cleanup this logic
                 if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
                 {
+                    palfile = false;
+                    listBox2.Enabled = false;
+                    compressed = false; // reset compressed to false for next detection
+                }
+                if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
+                {
+                    binbnd = binbnd.Replace(".BND", ".B16"); // but these are B16 files
                     palfile = false;
                     listBox2.Enabled = false;
                     compressed = false; // reset compressed to false for next detection
@@ -190,6 +198,7 @@ namespace ALTViewer
             }
             else if (radioButton2.Checked)
             {
+                binbnd = binbnd.Replace(".BND", ".B16");
                 palfile = false; // set palfile to false for weapons
                 compressed = true; // set compressed to true for weapons
             }
