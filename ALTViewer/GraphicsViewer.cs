@@ -325,7 +325,7 @@ namespace ALTViewer
                     int h = 77;
                     //int w = 84; // SHOTGUN
                     //int h = 77;
-                    if(currentPalette == null)
+                    if(currentPalette == null) // TODO : remove this testing check when compressed image loading is working
                     {
                         MessageBox.Show("Palette is null");
                         return;

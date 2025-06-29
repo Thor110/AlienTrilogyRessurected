@@ -55,9 +55,12 @@
                 int y = (i / 16) * 16;
                 x += 32;
                 y += 32;
-                Color color = Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
-                using Brush b = new SolidBrush(color);
-                e.Graphics.FillRectangle(b, x, y, 16, 16);
+                int r = Math.Min(palette[i * 3] * 4, 255);
+                int g = Math.Min(palette[i * 3 + 1] * 4, 255);
+                int b = Math.Min(palette[i * 3 + 2] * 4, 255);
+                Color color = Color.FromArgb(r, g, b);
+                using Brush brush = new SolidBrush(color);
+                e.Graphics.FillRectangle(brush, x, y, 16, 16);
                 e.Graphics.DrawRectangle(Pens.Black, x, y, 16, 16);
             }
         }
@@ -68,12 +71,16 @@
             if (index < palette.Length / 3)
             {
                 using ColorDialog dlg = new();
-                dlg.Color = Color.FromArgb(palette[index * 3], palette[index * 3 + 1], palette[index * 3 + 2]);
+                // Show scaled color in the dialog
+                int r = Math.Min(palette[index * 3 + 0] * 4, 255);
+                int g = Math.Min(palette[index * 3 + 1] * 4, 255);
+                int b = Math.Min(palette[index * 3 + 2] * 4, 255);
+                dlg.Color = Color.FromArgb(r, g, b);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    palette[index * 3 + 0] = dlg.Color.R;
-                    palette[index * 3 + 1] = dlg.Color.G;
-                    palette[index * 3 + 2] = dlg.Color.B;
+                    palette[index * 3 + 0] = (byte)(dlg.Color.R / 4);
+                    palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
+                    palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
                     Invalidate();
                     RenderImage();
                     button3.Enabled = true; // enable undo button
@@ -97,7 +104,6 @@
                 }
                 else
                 {
-                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
                     var replacements = new List<Tuple<long, byte[]>>();
                     replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, TileRenderer.ConvertRGBTripletsToEmbeddedPalette(palette)));
                     BinaryUtility.ReplaceBytes(replacements, fileDirectory);
@@ -122,7 +128,6 @@
                 }
                 else
                 {
-                    //MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
                     var replacements = new List<Tuple<long, byte[]>>();
                     replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, File.ReadAllBytes(backupDirectory)));
                     BinaryUtility.ReplaceBytes(replacements, fileDirectory);
@@ -166,7 +171,11 @@
             if (compressed)
             {
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
+                int w = 32; // BAMBI
+                int h = 77;
+                //int w = 84; // SHOTGUN
+                //int h = 77;
+                pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
             }
             else
             {
