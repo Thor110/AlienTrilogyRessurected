@@ -39,7 +39,8 @@ namespace ALTViewer
             foreach (string palFile in palFiles)
             {
                 if(!palFile.Contains("LEV") && !palFile.Contains("GUNPALS") && !palFile.Contains("SPRITES")
-                    && !palFile.Contains("WSELECT") && !palFile.Contains("PANEL") && !palFile.Contains("NEWFONT")) // exclude unused palettes
+                    && !palFile.Contains("WSELECT") && !palFile.Contains("PANEL") && !palFile.Contains("NEWFONT")
+                    && !palFile.Contains("BONESHIP") && !palFile.Contains("COLONY") && !palFile.Contains("PRISHOLD")) // exclude unused palettes
                 {
                     listBox2.Items.Add(Path.GetFileNameWithoutExtension(palFile));
                 }
@@ -148,24 +149,6 @@ namespace ALTViewer
             if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
-            if (radioButton1.Checked)
-            {
-                foreach (string weapon in duplicate)
-                {
-                    if (filePath.Contains(weapon))
-                    {
-                        filePath = filePath.Replace(".BND", ".B16");
-                        listBox2.Enabled = false;
-                        palfile = false;
-                        break;
-                    }
-                    else
-                    {
-                        listBox2.Enabled = true;
-                        //palfile = true;
-                    }
-                }
-            }
             RenderImage(filePath, palettePath, chosen);
         }
         // detect palette and hard coded palette lookups
@@ -185,15 +168,24 @@ namespace ALTViewer
                 {
                     if (lastSelectedFile.Contains(weapon))
                     {
+                        binbnd = binbnd.Replace(".BND", ".B16");
+                        listBox2.Enabled = false;
                         palfile = false; // set palfile to false for weapons
                         compressed = true; // set compressed to true for weapons
                         break;
                     }
                     else
                     {
+                        listBox2.Enabled = true;
                         palfile = true; // reset palfile to true for next detection
                         compressed = false; // reset compressed to false for next detection
                     }
+                }
+                if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
+                {
+                    palfile = false;
+                    listBox2.Enabled = false;
+                    compressed = false; // reset compressed to false for next detection
                 }
             }
             else if (radioButton2.Checked)
@@ -273,7 +265,7 @@ namespace ALTViewer
         private void button2_Click(object sender, EventArgs e)
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            try { MessageBox.Show($"Image saved to:\n{ExportFile(section, comboBox1.SelectedItem!.ToString()!)}"); }
+            try { MessageBox.Show($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
         // export file
@@ -281,6 +273,8 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
+            MessageBox.Show("Section : " + section.Data.Length.ToString());
+            MessageBox.Show("Palette : " + currentPalette!.Length.ToString());
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
         }
@@ -291,12 +285,11 @@ namespace ALTViewer
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
-                    if(!compressed)
+                    if (!compressed)
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{i}", 12));
                     }
-                    var section = currentSections[i];
-                    ExportFile(section, comboBox1.Items[i]!.ToString()!);
+                    ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
                 MessageBox.Show($"Images saved to:\n{outputPath}");
             }
