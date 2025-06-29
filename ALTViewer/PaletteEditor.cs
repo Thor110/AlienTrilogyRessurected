@@ -91,7 +91,8 @@
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(backupDirectory)) // make backup of the original file
+            // TODO : backup logic needs to be improved, currently it only works for embedded palettes and .PAL files ( I think )
+            if (!File.Exists(backupDirectory) && checkBox1.Checked) // make a backup of the original file
             {
                 File.Copy(fileDirectory, backupDirectory);
                 button2.Enabled = true; // enable restore backup button
