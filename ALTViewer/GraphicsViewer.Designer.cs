@@ -47,6 +47,7 @@
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
             button7 = new Button();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -255,11 +256,21 @@
             button7.Visible = false;
             button7.Click += button7_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(336, 416);
+            label2.Name = "label2";
+            label2.Size = new Size(332, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Note : Only palette files actually used by the game are loaded.";
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label2);
             Controls.Add(button7);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
@@ -308,5 +319,6 @@
         private CheckBox checkBox1;
         private CheckBox checkBox2;
         private Button button7;
+        private Label label2;
     }
 }

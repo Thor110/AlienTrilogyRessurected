@@ -243,7 +243,11 @@ namespace ALTViewer
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))  // read .PAL file if not reading from embedded palettes
-            { currentPalette = File.ReadAllBytes(pal); } // Store palette for reuse on selection change
+            {
+                byte[] loaded = File.ReadAllBytes(pal);
+                currentPalette = new byte[768]; // Store palette for reuse on selection change
+                Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
+            }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
@@ -285,7 +289,7 @@ namespace ALTViewer
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
-                    if (!compressed)
+                    if (!compressed && !palfile)
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{i}", 12));
                     }
