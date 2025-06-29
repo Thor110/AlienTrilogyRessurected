@@ -10,17 +10,19 @@
         private bool compressed = false;
         private bool usePAL = false;
         private List<BndSection> currentSections = new();
-        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections)
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression)
         {
             InitializeComponent();
             usePAL = palfile; // store boolean for latre use
-            if(compressed)
+            compressed = compression; // is the file compressed or not
+            if (compressed)
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
                 // duplicate code note
                 backupDirectory = selectedPalette + $"_C000.BAK"; // check for backup
-                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "C000", 8));
+                palette = File.ReadAllBytes(fileDirectory);
+                palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
             }
             else if (!palfile)
             {
@@ -95,12 +97,10 @@
                 }
                 else
                 {
-                    MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
-                    //get file
-                    //seek to palette
-                    //check length
-                    //write palette
-                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, "C000", palette, 8);
+                    //MessageBox.Show("SAVE NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    var replacements = new List<Tuple<long, byte[]>>();
+                    replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, TileRenderer.ConvertRGBTripletsToEmbeddedPalette(palette)));
+                    BinaryUtility.ReplaceBytes(replacements, fileDirectory);
                 }
             }
             else // backup .PAL files
@@ -122,12 +122,10 @@
                 }
                 else
                 {
-                    MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
-                    //seek to palette
-                    //check length
-                    //write palette
-                    //delete backup
-                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, "C000", palette, 8);
+                    //MessageBox.Show("RESTORE BACKUP NOT IMPLEMENTED FOR COMPRESSED IMAGES YET!");
+                    var replacements = new List<Tuple<long, byte[]>>();
+                    replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, File.ReadAllBytes(backupDirectory)));
+                    BinaryUtility.ReplaceBytes(replacements, fileDirectory);
                 }
             }
             else
@@ -167,8 +165,8 @@
             var section = currentSections[comboBox1.SelectedIndex];
             if (compressed)
             {
-                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
+                //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                //pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
             }
             else
             {

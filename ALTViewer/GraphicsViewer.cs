@@ -459,7 +459,7 @@ namespace ALTViewer
         {
             refresh = true;
             string choice = palfile ? lastSelectedPalette : lastSelectedFilePath; // use the last selected file path for embedded palettes or use the last selected palette
-            newForm(new PaletteEditor(choice, palfile, currentSections));
+            newForm(new PaletteEditor(choice, palfile, currentSections, compressed));
         }
         // create new form method
         private void newForm(Form form)
