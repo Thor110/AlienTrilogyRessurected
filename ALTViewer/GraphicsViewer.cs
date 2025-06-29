@@ -242,10 +242,10 @@ namespace ALTViewer
             else if (!File.Exists(pal)) { MessageBox.Show("Palette not found: Error :" + select); return; } // bin bnd already checked
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
-            if (palfile && !lastSelectedFile.Contains("GF") || lastSelectedFile.Contains("LOGO"))  // read .PAL file if not reading from embedded palettes
+            if (palfile)  // read .PAL file if not reading from embedded palettes
             {
                 byte[] loaded = File.ReadAllBytes(pal);
-                currentPalette = new byte[768]; // Store palette for reuse on selection change
+                currentPalette = new byte[768];
                 Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
             }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
