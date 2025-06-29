@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ALTViewer
 {
+    // Represents a section in a BND file
     public class BndSection
     {
         public string Name { get; set; } = "";
@@ -11,6 +12,7 @@ namespace ALTViewer
     }
     public static class TileRenderer
     {
+        // Parse BND file sections from a byte array
         public static List<BndSection> ParseBndFormSections(byte[] bnd)
         {
             var sections = new List<BndSection>();
@@ -30,6 +32,7 @@ namespace ALTViewer
             }
             return sections;
         }
+        // Auto-detect dimensions based on the total pixel count in the image data
         public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
         {
             int totalPixels = imageData.Length;
@@ -40,6 +43,7 @@ namespace ALTViewer
             if (dim * dim == totalPixels) { return (dim, dim); }
             throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
         }
+        // Render a raw 8bpp image with a palette, optionally handling transparency
         public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, bool transparency = false)
         {
             int colors = palette.Length / 3;
@@ -67,7 +71,7 @@ namespace ALTViewer
             }
             return bmp;
         }
-        // used for embedded palettes
+        // used for embedded palettes 6-bit rgb 0-63
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
         {
             if (rawPalette == null || rawPalette.Length < 2)
@@ -78,7 +82,7 @@ namespace ALTViewer
 
             for (int i = 0; i < colorCount && i < 256; i++)
             {
-                ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
+                /* // previous version output 0-31
                 // Extract 5-bit components
                 int r = color & 0x1F;
                 int g = (color >> 5) & 0x1F;
@@ -87,10 +91,20 @@ namespace ALTViewer
                 rgbPalette[i * 3 + 0] = (byte)Math.Min(r, 255);
                 rgbPalette[i * 3 + 1] = (byte)Math.Min(g, 255);
                 rgbPalette[i * 3 + 2] = (byte)Math.Min(b, 255);
+                */
+                ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
+                int r = (color & 0x1F) * 63 / 31;
+                int g = ((color >> 5) & 0x1F) * 63 / 31;
+                int b = ((color >> 10) & 0x1F) * 63 / 31;
+
+                rgbPalette[i * 3 + 0] = (byte)r;
+                rgbPalette[i * 3 + 1] = (byte)g;
+                rgbPalette[i * 3 + 2] = (byte)b;
             }
 
             return rgbPalette;
         }
+        // Extract 8bpp indexed pixel data from a Bitmap
         public static byte[] Extract8bppData(Bitmap bmp)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
@@ -107,6 +121,7 @@ namespace ALTViewer
             }
             return buffer;
         }
+        // Rebuild a BND file from sections and INFO data
         public static byte[] RebuildBndForm(List<BndSection> sections, byte[] infoData)
         {
             using var ms = new MemoryStream();
@@ -132,6 +147,7 @@ namespace ALTViewer
             bw.Write(formSizeBytes);
             return ms.ToArray();
         }
+        // Build an indexed bitmap from pixel data and a palette
         public static Bitmap BuildIndexedBitmap(byte[] pixelData, byte[] palette, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
@@ -144,6 +160,7 @@ namespace ALTViewer
             bmp.UnlockBits(data);
             return bmp;
         }
+        // Decompress a sprite section using a custom compression algorithm
         public static byte[] DecompressSpriteSection(byte[] input)
         {
             List<byte> output = new List<byte>();
@@ -194,6 +211,7 @@ namespace ALTViewer
             }
             return output.ToArray();
         }
+        // Extract F0## sections from a byte array, optionally decompressing them
         public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
         {
             if (decompress) { data = DecompressSpriteSection(data); }
@@ -274,6 +292,7 @@ namespace ALTViewer
             }
             throw new Exception("Section not found in file.");
         }
+        // Overwrite an embedded palette in a file
         public static void OverwriteEmbeddedPalette(string filePath, string sectionName, byte[] newPalette, int skipHeader)
         {
             byte[] fileBytes = File.ReadAllBytes(filePath);
@@ -282,6 +301,7 @@ namespace ALTViewer
             replacements.Add(new Tuple<long, byte[]>(offset, ConvertRGBTripletsToEmbeddedPalette(newPalette)));
             BinaryUtility.ReplaceBytes(replacements, filePath);
         }
+        // Convert an RGB triplet palette (768 bytes) to an embedded 16-bit palette (512 bytes)
         public static byte[] ConvertRGBTripletsToEmbeddedPalette(byte[] rgbPalette768)
         {
             if (rgbPalette768.Length != 768)
@@ -305,6 +325,7 @@ namespace ALTViewer
 
             return embeddedPalette;
         }
+        // Save an 8bpp indexed image as a PNG file with a specified palette
         public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height)
         {
             using Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
@@ -328,6 +349,7 @@ namespace ALTViewer
             bmp.UnlockBits(data);
             bmp.Save(path, ImageFormat.Png);
         }
+        // Convert a 768-byte RGB triplet palette to a Color array
         public static Color[] ConvertPalette(byte[] rgbTriplets)
         {
             var colors = new Color[256];
