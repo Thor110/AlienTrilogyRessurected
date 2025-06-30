@@ -129,10 +129,8 @@
             {
                 if(trim)
                 {
-                    // TODO : trim the first 96 bytes when saving
-                    byte[] saving = palette;
+                    byte[] saving = new byte[672]; // resize to 672 bytes
                     Array.Copy(palette, 96, saving, 0, 672);
-                    Array.Resize(ref saving, 672); // resize to 672 bytes
                     File.WriteAllBytes(fileDirectory, saving);
                     MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                 }
