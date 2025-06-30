@@ -266,19 +266,22 @@
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     byte[] loaded = File.ReadAllBytes(openFileDialog.FileName);
-                    if (palette.Length == 672) // BONESHIP, COLONY & PRISHOLD
+                    if (loaded.Length == 672) // BONESHIP, COLONY & PRISHOLD
                     {
                         palette = new byte[768];
                         trim = true; // set trimmed to true for these files
                         Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                         MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                     }
-                    else if(palette.Length != 768)
+                    else if(loaded.Length != 768)
                     {
                         MessageBox.Show("Palettes smaller than 768 bytes not supported.");
                         return;
                     }
-                    palette = loaded;
+                    else
+                    {
+                        palette = loaded;
+                    }
                     button3.Enabled = true; // enable undo button
                     button1.Enabled = true; // enable save button
                     Invalidate();
