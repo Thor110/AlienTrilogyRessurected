@@ -318,13 +318,20 @@ namespace ALTViewer
             Export();
             radioButton4.Checked = true;
             Export();
-            // use this code to export all radio buttons at once, when compressed images are working
+            // TODO : use this code to export all radio buttons at once, when compressed images are working
             /*RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
+            int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
+            RadioButton selected = radioButton1.Checked ? radioButton1 :
+                       radioButton2.Checked ? radioButton2 :
+                       radioButton3.Checked ? radioButton3 :
+                       radioButton4;
             foreach (var button in buttons)
             {
                 button.Checked = true;
                 Export();
-            }*/
+            }
+            buttons[selectedIndex].Checked = true;
+            */
             //
             exporting = false;
             selected.Checked = true;
