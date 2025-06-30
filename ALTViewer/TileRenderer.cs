@@ -43,8 +43,8 @@ namespace ALTViewer
             if (dim * dim == totalPixels) { return (dim, dim); }
             throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
         }
-        // Render a raw 8bpp image with a palette, optionally handling transparency
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, bool transparency = false)
+        // Render a raw 8bpp image with a palette
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -64,9 +64,9 @@ namespace ALTViewer
                     }
                     else // Fallback color for invalid palette index
                     {
-                        //MessageBox.Show("FALLBACK");
-                        if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
-                        else { bmp.SetPixel(x, y, Color.Transparent); }
+                        MessageBox.Show("FALLBACK COLOUR ERROR");
+                        //if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
+                        //else { bmp.SetPixel(x, y, Color.Transparent); }
                     }
                 }
             }

@@ -45,10 +45,10 @@
             button5 = new Button();
             button6 = new Button();
             checkBox1 = new CheckBox();
-            checkBox2 = new CheckBox();
             button7 = new Button();
             label2 = new Label();
             button1 = new Button();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -233,18 +233,6 @@
             checkBox1.Text = "Backup File";
             checkBox1.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
-            // 
-            checkBox2.AccessibleDescription = "Add black backgrounds to exported and previewed image.";
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(669, 310);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(121, 19);
-            checkBox2.TabIndex = 17;
-            checkBox2.Text = "Colour Correction";
-            checkBox2.UseVisualStyleBackColor = true;
-            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
-            // 
             // button7
             // 
             button7.AccessibleDescription = "This modifies the file to use the selected palette.";
@@ -260,11 +248,12 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(336, 416);
+            label2.Location = new Point(334, 416);
             label2.Name = "label2";
             label2.Size = new Size(332, 15);
             label2.TabIndex = 19;
             label2.Text = "Note : Only palette files actually used by the game are loaded.";
+            label2.Visible = false;
             // 
             // button1
             // 
@@ -277,15 +266,25 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(334, 391);
+            label3.Name = "label3";
+            label3.Size = new Size(397, 15);
+            label3.TabIndex = 21;
+            label3.Text = "Note : Palette selection is disabled when the files have embedded palettes.";
+            label3.Visible = false;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label3);
             Controls.Add(button1);
             Controls.Add(label2);
             Controls.Add(button7);
-            Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(button6);
             Controls.Add(button5);
@@ -330,9 +329,9 @@
         private Button button5;
         private Button button6;
         private CheckBox checkBox1;
-        private CheckBox checkBox2;
         private Button button7;
         private Label label2;
         private Button button1;
+        private Label label3;
     }
 }

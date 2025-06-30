@@ -23,7 +23,6 @@ namespace ALTViewer
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
-        private bool transparency;
         private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
@@ -163,6 +162,8 @@ namespace ALTViewer
         // render the selected image
         private void RenderImage(string binbnd, string pal, string select)
         {
+            label2.Visible = true; // show palette note 1
+            label3.Visible = true; // show palette note 2
             pictureBox1.Image = null; // clear previous image
             if (radioButton1.Checked)
             {
@@ -417,7 +418,7 @@ namespace ALTViewer
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
                     }
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparency); // TODO : remove transparency boolean?
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h); // TODO : remove transparency boolean?
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
@@ -523,12 +524,6 @@ namespace ALTViewer
             refresh = true;
             listBox1_SelectedIndexChanged(null!, null!); // re-render the image after restoring a backup
             MessageBox.Show("Backup successfully restored!");
-        }
-        // colour correction transparency setting
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            transparency = checkBox2.Checked;
-            comboBox1_SelectedIndexChanged(null!, null!); // re-render the image with the new transparency setting
         }
         // palette editor button click
         private void button7_Click(object sender, EventArgs e)
