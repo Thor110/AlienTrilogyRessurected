@@ -6,6 +6,14 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 - 2 : Download and install the toolkit from here, place it in the same directory as the "Run.exe" file.
 	- Currently there is no release so you will have to build it yourself until the time I issue a release.
 
+# To Do List
+
+- OPTGFX.B16 textures 10-13 do not render for some reason.
+- Palettes aren't right for the following two files?
+	- PANEL3GF.BND
+	- PANELGFX.BND
+- Compressed images arent loading due to unknown width and height values.
+
 # Road Map
 
 The road map for this project.
@@ -14,12 +22,12 @@ The road map for this project.
 	- .RAW audio files can be played and converted to .WAV files.
 	- Waveform preview for selected sound files.
 	- Automatic backup of the original file by default.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 75% Complete )
+- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 90% Complete )
 	- Palette detection implemented.
 	- View and replace textures.
 	- Automatic backup of the original file by default.
 	- Compressed images are not working yet.
-- [✅ 3 : Palette Editor](#palette-editor) ( 75% Complete )
+- [✅ 3 : Palette Editor](#palette-editor) ( 90% Complete )
 	- Palette editor and image preview.
 	- Automatic backup of the original file by default.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
