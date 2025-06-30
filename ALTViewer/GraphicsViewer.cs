@@ -30,7 +30,7 @@ namespace ALTViewer
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
-        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "BONESHIP", "COLONY", "PRISHOLD" }; // excluded palettes
+        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT" }; // excluded palettes
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -181,13 +181,6 @@ namespace ALTViewer
                         compressed = false; // reset compressed to false for next detection
                     }
                 }
-                // TODO : cleanup this logic
-                if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
-                {
-                    palfile = false;
-                    listBox2.Enabled = false;
-                    compressed = false; // reset compressed to false for next detection
-                }
                 if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
                 {
                     binbnd = binbnd.Replace(".BND", ".B16"); // but these are B16 files
@@ -255,7 +248,14 @@ namespace ALTViewer
             {
                 byte[] loaded = File.ReadAllBytes(pal);
                 currentPalette = new byte[768];
-                Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
+                if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
+                {
+                    Array.Copy(loaded, 0, currentPalette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                }
+                else
+                {
+                    Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
+                }
             }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             comboBox1.Enabled = true; // enable section selection combo box
