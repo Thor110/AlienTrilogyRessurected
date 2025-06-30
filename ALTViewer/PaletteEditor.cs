@@ -199,15 +199,12 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!usePAL)
+            if (!usePAL && !compressed)
             {
-                if(!compressed)
-                {
-                    int index = comboBox1.SelectedIndex;
-                    backupDirectory = selectedPalette + $"_CL0{index}.BAK";
-                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{index}", 12));
-                    Invalidate();
-                }
+                int index = comboBox1.SelectedIndex;
+                backupDirectory = selectedPalette + $"_CL0{index}.BAK";
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{index}", 12));
+                Invalidate();
             }
             RenderImage();
         }
