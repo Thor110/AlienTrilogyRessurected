@@ -337,6 +337,7 @@ namespace ALTViewer
             selected.Checked = true;
             listBox1.SelectedIndex = previouslyselected; // restore previously selected index
             MessageBox.Show($"All images saved to:\n{outputPath}");
+            MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working.");
             void Export()
             {
                 for (int i = 0; i < listBox1.Items.Count; i++)
