@@ -60,7 +60,7 @@ namespace ALTViewer
                         int r = palette[colorIndex * 3] * 4;
                         int g = palette[colorIndex * 3 + 1] * 4;
                         int b = palette[colorIndex * 3 + 2] * 4;
-                        bmp.SetPixel(x, y, Color.FromArgb(255, Math.Min(r, 255), Math.Min(g, 255), Math.Min(b, 255))); // Clamp values to 255 just in case
+                        bmp.SetPixel(x, y, Color.FromArgb(r, g, b)); // Clamp values to 255 just in case
                     }
                     else // Fallback color for invalid palette index
                     {
@@ -83,16 +83,6 @@ namespace ALTViewer
 
             for (int i = 0; i < colorCount && i < 256; i++)
             {
-                /* // previous version output 0-31
-                // Extract 5-bit components
-                int r = color & 0x1F;
-                int g = (color >> 5) & 0x1F;
-                int b = (color >> 10) & 0x1F;
-                // Match PAL interpretation by upscaling to 6-bit, but not multiplying by 4 because the value is forwarded to RenderRaw8bppImage later on
-                rgbPalette[i * 3 + 0] = (byte)Math.Min(r, 255);
-                rgbPalette[i * 3 + 1] = (byte)Math.Min(g, 255);
-                rgbPalette[i * 3 + 2] = (byte)Math.Min(b, 255);
-                */
                 ushort color = (ushort)((rawPalette[i * 2 + 1] << 8) | rawPalette[i * 2]);
                 int r = (color & 0x1F) * 63 / 31;
                 int g = ((color >> 5) & 0x1F) * 63 / 31;

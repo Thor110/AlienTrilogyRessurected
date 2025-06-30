@@ -77,10 +77,7 @@ namespace ALTViewer
                 }
             }
         }
-        private Color ScaleColour(int index)
-        {
-            return Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4);
-        }
+        private Color ScaleColour(int index) { return Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4); }
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
