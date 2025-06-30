@@ -15,6 +15,12 @@ for /f "delims=" %%i in (create.txt) do (
 	  type nul > %%i
 	)
 )
+copy BONESHIP.BND "CD\GFX\BONESHIP.BND"
+copy COLONY.BND "CD\GFX\COLONY.BND"
+copy PRISHOLD.BND "CD\GFX\PRISHOLD.BND"
+del BONESHIP.BND
+del COLONY.BND
+del PRISHOLD.BND
 del delete.txt
 del create.txt
 echo Cleanup complete. Deleting this script...

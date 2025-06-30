@@ -17,6 +17,7 @@ This directory contains a curated archive of differences between a known repack 
 	- https://web.archive.org/web/20230518104117/https://wiki.xentax.com/index.php/Alien_Trilogy_MAP
 - `MISSINGFILES/`: Files missing from the repack, organized into their original directories.
 - `REQUIREDFILES/`: This empty file is required for the game to launch if the files from the unnecessary-files.txt list are removed from the game. [NOTE: This is still pending a full playthrough to be absolutely certain that it works, but when files are not there which are needed it generally doesn't launch.]
+- `TRIMMEDFILES/`: These three files ( BONESHIP.BND, COLONY.BND and PRISHOLD.BND ) had unused embedded palettes and model sections which can safely be deleted.
 
 Disc sourced from [Archive.org](https://archive.org/details/Acclaim_Alien_Trilogy_MSDOS_1996_Eng)  
 Total files: **119**  
