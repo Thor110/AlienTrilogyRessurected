@@ -77,7 +77,7 @@ Replace textures. ( Example : Barrel texture used for the Crate )
 
 ## Palette Editor
 
-Previw, edit, save, import and export palettes with a selected image.
+Preview, edit, save, import and export palettes with a selected image.
 
 <div align="center">
   <img src="Images/paletteeditor.png" alt="Graphics Viewer">
