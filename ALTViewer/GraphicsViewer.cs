@@ -332,7 +332,7 @@ namespace ALTViewer
             }
             buttons[selectedIndex].Checked = true;
             */
-            //
+            // TODO : integrate this commented code when compressed images are working
             exporting = false;
             selected.Checked = true;
             listBox1.SelectedIndex = previouslyselected; // restore previously selected index
