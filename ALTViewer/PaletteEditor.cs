@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -63,10 +65,7 @@
                 int x = (i % 16) * 16 + 32; // + 32 for the initial offset
                 int y = (i / 16) * 16 + 32;
 
-                int r = Math.Min(palette[i * 3] * 4, 255);
-                int g = Math.Min(palette[i * 3 + 1] * 4, 255);
-                int b = Math.Min(palette[i * 3 + 2] * 4, 255);
-                Color color = Color.FromArgb(r, g, b);
+                Color color = ScaleColour(i);
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
@@ -78,6 +77,10 @@
                 }
             }
         }
+        private Color ScaleColour(int index)
+        {
+            return Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4);
+        }
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
@@ -87,13 +90,10 @@
             {
                 using ColorDialog dlg = new();
                 // Show scaled color in the dialog
-                int r = Math.Min(palette[index * 3 + 0] * 4, 255);
-                int g = Math.Min(palette[index * 3 + 1] * 4, 255);
-                int b = Math.Min(palette[index * 3 + 2] * 4, 255);
-                dlg.Color = Color.FromArgb(r, g, b);
+                dlg.Color = ScaleColour(index);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    palette[index * 3 + 0] = (byte)(dlg.Color.R / 4);
+                    palette[index * 3] = (byte)(dlg.Color.R / 4);
                     palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
                     palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
                     Invalidate();
