@@ -203,8 +203,9 @@
             {
                 if(!compressed)
                 {
-                    backupDirectory = selectedPalette + $"_CL0{comboBox1.SelectedIndex}.BAK";
-                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                    int index = comboBox1.SelectedIndex;
+                    backupDirectory = selectedPalette + $"_CL0{index}.BAK";
+                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{index}", 12));
                     Invalidate();
                 }
             }
