@@ -9,17 +9,18 @@
         private byte[] palette = null!;
         private bool compressed = false;
         private bool usePAL = false;
+        private bool trim;
         private List<BndSection> currentSections = new();
-        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression)
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
             InitializeComponent();
             usePAL = palfile; // store boolean for latre use
             compressed = compression; // is the file compressed or not
+            trim = trimmed; // is the file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             if (compressed)
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                // duplicate code note
                 backupDirectory = selectedPalette + $"_C000.BAK"; // check for backup
                 palette = File.ReadAllBytes(fileDirectory);
                 palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
@@ -28,7 +29,6 @@
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                // duplicate code note
                 backupDirectory = selectedPalette + $"_CL00.BAK"; // check for backup
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
             }
@@ -36,8 +36,17 @@
             {
                 fileDirectory = paletteDirectory + selected + ".PAL";
                 backupDirectory = fileDirectory + ".BAK";
-                palette = File.ReadAllBytes(fileDirectory); // store the selected palette
-                selectedPalette = selected;
+                if (trim) // these also use embedded palettes
+                {
+                    byte[] loaded = File.ReadAllBytes(fileDirectory);
+                    palette = new byte[768];
+                    Array.Copy(loaded, 0, palette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                }
+                else
+                {
+                    palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+                    selectedPalette = selected;
+                }
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -51,23 +60,27 @@
         {
             for (int i = 0; i < palette.Length / 3; i++)
             {
-                int x = (i % 16) * 16;
-                int y = (i / 16) * 16;
-                x += 32;
-                y += 32;
-                int r = Math.Min(palette[i * 3] * 4, 255);
-                int g = Math.Min(palette[i * 3 + 1] * 4, 255);
-                int b = Math.Min(palette[i * 3 + 2] * 4, 255);
-                Color color = Color.FromArgb(r, g, b);
-                using Brush brush = new SolidBrush(color);
-                e.Graphics.FillRectangle(brush, x, y, 16, 16);
+                int x = (i % 16) * 16 + 32;
+                int y = (i / 16) * 16 + 32;
+
+                Color color = Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
+                using Brush b = new SolidBrush(color);
+                e.Graphics.FillRectangle(b, x, y, 16, 16);
                 e.Graphics.DrawRectangle(Pens.Black, x, y, 16, 16);
+
+                if (trim && i < 32)
+                {
+                    using Pen crossPen = new Pen(Color.Red, 2);
+                    e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
+                    e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
+                }
             }
         }
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
             int index = ((e.Y - 32) / 16) * 16 + ((e.X - 32) / 16);
+            if(trim && index <= 31) { return; } // ignore trimmed colours
             if (index < palette.Length / 3)
             {
                 using ColorDialog dlg = new();
@@ -112,7 +125,14 @@
             }
             else // backup .PAL files
             {
-                File.WriteAllBytes(fileDirectory, palette);
+                if(trim)
+                {
+                    // TODO : trim the first 96 bytes when saving
+                }
+                else
+                {
+                    File.WriteAllBytes(fileDirectory, palette);
+                }
             }
             button1.Enabled = false; // disable save button
             MessageBox.Show("Palette saved successfully.");
@@ -154,7 +174,19 @@
                 palette = TileRenderer.Convert16BitPaletteToRGB(
                     TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
             }
-            else { palette = File.ReadAllBytes(fileDirectory); }
+            else
+            {
+                if (trim)
+                {
+                    byte[] loaded = File.ReadAllBytes(fileDirectory);
+                    palette = new byte[768];
+                    Array.Copy(loaded, 0, palette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                }
+                else
+                {
+                    palette = File.ReadAllBytes(fileDirectory);
+                }
+            }
             Invalidate();
             RenderImage();
             button3.Enabled = false; // disable undo button
@@ -194,6 +226,7 @@
                 string path = "";
                 if (usePAL) // if using a .PAL file
                 {
+                    // TODO : check trimmed here as well
                     path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
                 }
                 else // embedded palette

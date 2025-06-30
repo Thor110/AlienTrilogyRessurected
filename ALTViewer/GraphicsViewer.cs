@@ -31,6 +31,7 @@ namespace ALTViewer
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT" }; // excluded palettes
+        private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -211,6 +212,7 @@ namespace ALTViewer
             else if (compressed) // load palette from level file or enemies
             {
                 refresh = false; // reset refresh to false before any possible returns
+                trimmed = false; // set trimmed to false for these files
                 binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the B16 file variant
                 byte[] fullFile = File.ReadAllBytes(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
@@ -250,12 +252,18 @@ namespace ALTViewer
                 currentPalette = new byte[768];
                 if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
                 {
+                    trimmed = true; // set trimmed to true for these files
                     Array.Copy(loaded, 0, currentPalette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
                 }
                 else
                 {
+                    trimmed = false; // set trimmed to false for these files
                     Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
                 }
+            }
+            else
+            {
+                trimmed = false; // set trimmed to false for these files
             }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             comboBox1.Enabled = true; // enable section selection combo box
@@ -469,7 +477,7 @@ namespace ALTViewer
         {
             refresh = true;
             string choice = palfile ? lastSelectedPalette : lastSelectedFilePath; // use the last selected file path for embedded palettes or use the last selected palette
-            newForm(new PaletteEditor(choice, palfile, currentSections, compressed));
+            newForm(new PaletteEditor(choice, palfile, currentSections, compressed, trimmed));
         }
         // create new form method
         private void newForm(Form form)
