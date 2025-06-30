@@ -305,6 +305,7 @@ namespace ALTViewer
         {
             int previouslyselected = 0;
             if (listBox1.SelectedIndex != -1) { previouslyselected = listBox1.SelectedIndex; } // store previously selected index
+            // TODO : when compressed images are working, remove this code and use the commented code below
             RadioButton selected = radioButton1.Checked ? radioButton1 :
                        radioButton2.Checked ? radioButton2 :
                        radioButton3.Checked ? radioButton3 :
@@ -314,27 +315,24 @@ namespace ALTViewer
             //radioButton2.Checked = true;
             //Export();
             exporting = true;
-            radioButton3.Checked = true; // set radio button to GFX
+            radioButton3.Checked = true;
             Export();
             radioButton4.Checked = true;
             Export();
+            selected.Checked = true;
+            // TODO : when compressed images are working, remove this code and use the commented code below
             // TODO : use this code to export all radio buttons at once, when compressed images are working
             /*RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
-            RadioButton selected = radioButton1.Checked ? radioButton1 :
-                       radioButton2.Checked ? radioButton2 :
-                       radioButton3.Checked ? radioButton3 :
-                       radioButton4;
+            RadioButton selected = radioButton1.Checked ? radioButton1 : radioButton2.Checked ? radioButton2 : radioButton3.Checked ? radioButton3 : radioButton4;
             foreach (var button in buttons)
             {
                 button.Checked = true;
                 Export();
             }
-            buttons[selectedIndex].Checked = true;
-            */
+            buttons[selectedIndex].Checked = true;*/
             // TODO : integrate this commented code when compressed images are working
             exporting = false;
-            selected.Checked = true;
             listBox1.SelectedIndex = previouslyselected; // restore previously selected index
             MessageBox.Show($"All images saved to:\n{outputPath}");
             MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working.");
