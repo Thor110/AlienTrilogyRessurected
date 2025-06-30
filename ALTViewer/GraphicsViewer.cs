@@ -27,6 +27,7 @@ namespace ALTViewer
         private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
+        private bool exporting; // set to true when exporting everything
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
@@ -234,7 +235,7 @@ namespace ALTViewer
                     catch { decompressedData = section.Data; } // Fallback: Use raw data
                     //File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData); // Optional: Write decompressed data for inspection
                     counter++;
-                    decompressedF0Sections.Add(new BndSection{ Name = section.Name, Data = decompressedData }); // Store for UI
+                    decompressedF0Sections.Add(new BndSection { Name = section.Name, Data = decompressedData }); // Store for UI
                 }
                 lastSelectedFilePath = binbnd;
                 currentSections = decompressedF0Sections;
@@ -299,6 +300,45 @@ namespace ALTViewer
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
         }
+        // export everything button click
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int previouslyselected = 0;
+            if (listBox1.SelectedIndex != -1) { previouslyselected = listBox1.SelectedIndex; } // store previously selected index
+            RadioButton selected = radioButton1.Checked ? radioButton1 :
+                       radioButton2.Checked ? radioButton2 :
+                       radioButton3.Checked ? radioButton3 :
+                       radioButton4;
+            //radioButton1.Checked = true;
+            //Export();
+            //radioButton2.Checked = true;
+            //Export();
+            exporting = true;
+            radioButton3.Checked = true; // set radio button to GFX
+            Export();
+            radioButton4.Checked = true;
+            Export();
+            // use this code to export all radio buttons at once, when compressed images are working
+            /*RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
+            foreach (var button in buttons)
+            {
+                button.Checked = true;
+                Export();
+            }*/
+            //
+            exporting = false;
+            selected.Checked = true;
+            listBox1.SelectedIndex = previouslyselected; // restore previously selected index
+            MessageBox.Show($"All images saved to:\n{outputPath}");
+            void Export()
+            {
+                for (int i = 0; i < listBox1.Items.Count; i++)
+                {
+                    listBox1.SelectedIndex = i; // select each item in the list box
+                    button3_Click(null!, null!); // call the export all button click event
+                }
+            }
+        }
         // export all button
         private void button3_Click(object sender, EventArgs e)
         {
@@ -312,7 +352,10 @@ namespace ALTViewer
                     }
                     ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
-                MessageBox.Show($"Images saved to:\n{outputPath}");
+                if(!exporting)
+                {
+                    MessageBox.Show($"Images saved to:\n{outputPath}");
+                }
             }
             catch (Exception ex) { MessageBox.Show("Error saving images:\n" + ex.Message); }
         }
@@ -327,6 +370,7 @@ namespace ALTViewer
                 textBox1.Text = outputPath; // update text box with selected path
                 button2.Enabled = true; // enable extract button
                 button3.Enabled = true; // enable extract all button
+                button1.Enabled = true; // enable export all button
             }
         }
         // render the image when a section is selected
@@ -336,14 +380,14 @@ namespace ALTViewer
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
-                if(compressed)
+                if (compressed)
                 {
                     //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     int w = 32; // BAMBI
                     int h = 77;
                     //int w = 84; // SHOTGUN
                     //int h = 77;
-                    if(currentPalette == null) // TODO : remove this testing check when compressed image loading is working
+                    if (currentPalette == null) // TODO : remove this testing check when compressed image loading is working
                     {
                         MessageBox.Show("Palette is null");
                         return;

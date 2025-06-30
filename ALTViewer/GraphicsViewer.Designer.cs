@@ -48,6 +48,7 @@
             checkBox2 = new CheckBox();
             button7 = new Button();
             label2 = new Label();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -265,11 +266,23 @@
             label2.TabIndex = 19;
             label2.Text = "Note : Only palette files actually used by the game are loaded.";
             // 
+            // button1
+            // 
+            button1.Enabled = false;
+            button1.Location = new Point(668, 412);
+            button1.Name = "button1";
+            button1.Size = new Size(120, 23);
+            button1.TabIndex = 20;
+            button1.Text = "Export Everything";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(label2);
             Controls.Add(button7);
             Controls.Add(checkBox2);
@@ -320,5 +333,6 @@
         private CheckBox checkBox2;
         private Button button7;
         private Label label2;
+        private Button button1;
     }
 }
