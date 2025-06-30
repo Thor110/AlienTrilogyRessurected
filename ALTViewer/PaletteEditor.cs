@@ -176,8 +176,7 @@
         {
             if (!usePAL)
             {
-                palette = TileRenderer.Convert16BitPaletteToRGB(
-                    TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
             }
             else
             {
@@ -200,7 +199,15 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            backupDirectory = selectedPalette + $"_CL0{comboBox1.SelectedIndex}.BAK";
+            if (!usePAL)
+            {
+                if(!compressed)
+                {
+                    backupDirectory = selectedPalette + $"_CL0{comboBox1.SelectedIndex}.BAK";
+                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                    Invalidate();
+                }
+            }
             RenderImage();
         }
         private void RenderImage()
@@ -230,7 +237,6 @@
             {
                 byte[] saving = palette;
                 string path = "";
-                //string filename = "";
                 if (usePAL) // if using a .PAL file
                 {
                     if(trim)

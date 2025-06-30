@@ -260,7 +260,7 @@ namespace ALTViewer
                 else
                 {
                     trimmed = false; // set trimmed to false for these files
-                    Array.Copy(loaded, currentPalette, Math.Min(loaded.Length, 768));
+                    currentPalette = File.ReadAllBytes(pal);
                 }
             }
             else
