@@ -296,8 +296,6 @@ namespace ALTViewer
         {
             var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            MessageBox.Show("Section : " + section.Data.Length.ToString());
-            MessageBox.Show("Palette : " + currentPalette!.Length.ToString());
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
         }
