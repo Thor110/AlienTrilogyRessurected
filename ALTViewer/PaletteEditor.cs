@@ -82,7 +82,7 @@
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
             int index = ((e.Y - 32) / 16) * 16 + ((e.X - 32) / 16);
-            if(trim && index <= 31) { return; } // ignore trimmed colours
+            if(trim && index < 32) { return; } // ignore trimmed colours
             if (index < palette.Length / 3)
             {
                 using ColorDialog dlg = new();
