@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -23,7 +21,7 @@ namespace ALTViewer
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                backupDirectory = selectedPalette + $"_C000.BAK"; // check for backup
+                backupDirectory = selectedPalette + "_C000.BAK"; // check for backup
                 palette = File.ReadAllBytes(fileDirectory);
                 palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
             }
@@ -31,7 +29,7 @@ namespace ALTViewer
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                backupDirectory = selectedPalette + $"_CL00.BAK"; // check for backup
+                backupDirectory = selectedPalette + "_CL00.BAK"; // check for backup
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
             }
             else
@@ -113,6 +111,7 @@ namespace ALTViewer
             {
                 if (!compressed)
                 {
+                    // TODO : check all embedded palette lengths to ensure this works
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
                 }
                 else

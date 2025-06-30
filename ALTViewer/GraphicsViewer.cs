@@ -266,6 +266,14 @@ namespace ALTViewer
             }
             else
             {
+                // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
+                /*if(binbnd.Contains("PANEL"))
+                {
+                    currentPalette = new byte[768];
+                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
+                    MessageBox.Show(currentPalette.Length.ToString());
+                    Array.Copy(currentPalette, 0, currentPalette, 96, 672);
+                }*/
                 trimmed = false; // set trimmed to false for these files
             }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
