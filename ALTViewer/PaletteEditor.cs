@@ -17,6 +17,10 @@
             usePAL = palfile; // store boolean for latre use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
+            if(selected.Contains("PANEL"))
+            {
+                MessageBox.Show("Editing these palettes is not properly implented yet.");
+            }
             if (compressed)
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
@@ -261,7 +265,20 @@
                 openFileDialog.Multiselect = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    palette = File.ReadAllBytes(openFileDialog.FileName);
+                    byte[] loaded = File.ReadAllBytes(openFileDialog.FileName);
+                    if (palette.Length == 672) // BONESHIP, COLONY & PRISHOLD
+                    {
+                        palette = new byte[768];
+                        trim = true; // set trimmed to true for these files
+                        Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
+                        MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
+                    }
+                    else if(palette.Length != 768)
+                    {
+                        MessageBox.Show("Palettes smaller than 768 bytes not supported.");
+                        return;
+                    }
+                    palette = loaded;
                     button3.Enabled = true; // enable undo button
                     button1.Enabled = true; // enable save button
                     Invalidate();

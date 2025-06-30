@@ -49,6 +49,7 @@
             label2 = new Label();
             button1 = new Button();
             label3 = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -276,11 +277,21 @@
             label3.Text = "Note : Palette selection is disabled when the files have embedded palettes.";
             label3.Visible = false;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(334, 366);
+            label4.Name = "label4";
+            label4.Size = new Size(434, 15);
+            label4.TabIndex = 22;
+            label4.Text = "Note : Palettes should be 768 bytes, or 672 for BONESHIP, COLONY or PRISHOLD.";
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(button1);
             Controls.Add(label2);
@@ -333,5 +344,6 @@
         private Label label2;
         private Button button1;
         private Label label3;
+        private Label label4;
     }
 }

@@ -164,6 +164,7 @@ namespace ALTViewer
         {
             label2.Visible = true; // show palette note 1
             label3.Visible = true; // show palette note 2
+            label4.Visible = true; // show palette note 3
             pictureBox1.Image = null; // clear previous image
             if (radioButton1.Checked)
             {
@@ -252,12 +253,12 @@ namespace ALTViewer
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (palfile)  // read .PAL file if not reading from embedded palettes
             {
-                byte[] loaded = File.ReadAllBytes(pal);
-                currentPalette = new byte[768];
                 if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
                 {
+                    byte[] loaded = File.ReadAllBytes(pal);
+                    currentPalette = new byte[768];
                     trimmed = true; // set trimmed to true for these files
-                    Array.Copy(loaded, 0, currentPalette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                    Array.Copy(loaded, 0, currentPalette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
                 else
                 {
@@ -268,14 +269,30 @@ namespace ALTViewer
             else
             {
                 // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
-                /*if(binbnd.Contains("PANEL"))
+                if(binbnd.Contains("PANEL"))
                 {
+                    // Identical outcome
+                    byte[] loaded = new byte[768];
+                    Array.Copy(currentPalette!, 0, loaded, 96, 672); // 96 padded bytes at the beginning for these palettes
+                    currentPalette = loaded;
+                    /* // Previous method
                     currentPalette = new byte[768];
                     currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
                     MessageBox.Show(currentPalette.Length.ToString());
                     Array.Copy(currentPalette, 0, currentPalette, 96, 672);
-                }*/
-                trimmed = false; // set trimmed to false for these files
+                    */ // Identical outcome
+                    /*currentPalette = TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12);
+                    MessageBox.Show(currentPalette.Length.ToString()); // 224 // 288 missing
+                    byte[] loaded = new byte[512];
+                    Array.Copy(currentPalette!, 0, loaded, 288, 224); // 96 padded bytes at the beginning for these palettes
+                    currentPalette = loaded;
+                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(currentPalette);
+                    trimmed = true;*/
+                }
+                else
+                {
+                    trimmed = false; // set trimmed to false for these files
+                }
             }
             currentSections = TileRenderer.ParseBndFormSections(bndBytes); // Parse all sections (TP00, TP01, etc.)
             comboBox1.Enabled = true; // enable section selection combo box
