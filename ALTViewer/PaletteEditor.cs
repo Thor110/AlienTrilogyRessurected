@@ -45,8 +45,8 @@
                 else
                 {
                     palette = File.ReadAllBytes(fileDirectory); // store the selected palette
-                    selectedPalette = selected;
                 }
+                selectedPalette = selected;
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -60,13 +60,15 @@
         {
             for (int i = 0; i < palette.Length / 3; i++)
             {
-                int x = (i % 16) * 16 + 32;
+                int x = (i % 16) * 16 + 32; // + 32 for the initial offset
                 int y = (i / 16) * 16 + 32;
 
-                Color color = Color.FromArgb(palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]);
-                using Brush b = new SolidBrush(color);
-                e.Graphics.FillRectangle(b, x, y, 16, 16);
-                e.Graphics.DrawRectangle(Pens.Black, x, y, 16, 16);
+                int r = Math.Min(palette[i * 3] * 4, 255);
+                int g = Math.Min(palette[i * 3 + 1] * 4, 255);
+                int b = Math.Min(palette[i * 3 + 2] * 4, 255);
+                Color color = Color.FromArgb(r, g, b);
+                using Brush brush = new SolidBrush(color);
+                e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
                 if (trim && i < 32)
                 {
@@ -128,6 +130,11 @@
                 if(trim)
                 {
                     // TODO : trim the first 96 bytes when saving
+                    byte[] saving = palette;
+                    Array.Copy(palette, 96, saving, 0, 672);
+                    Array.Resize(ref saving, 672); // resize to 672 bytes
+                    File.WriteAllBytes(fileDirectory, saving);
+                    MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                 }
                 else
                 {
@@ -223,17 +230,24 @@
             fbd.Description = "Select output folder to save the .PAL file.";
             if (fbd.ShowDialog() == DialogResult.OK)
             {
+                byte[] saving = palette;
                 string path = "";
+                //string filename = "";
                 if (usePAL) // if using a .PAL file
                 {
-                    // TODO : check trimmed here as well
+                    if(trim)
+                    {
+                        saving = new byte[672]; // resize to 672 bytes
+                        Array.Copy(palette, 96, saving, 0, 672);
+                        MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
+                    }
                     path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
                 }
                 else // embedded palette
                 {
                     path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL0{comboBox1.SelectedIndex}.PAL");
                 }
-                File.WriteAllBytes(path, palette);
+                File.WriteAllBytes(path, saving);
                 MessageBox.Show($"Palette saved to : {path}");
             }
         }
