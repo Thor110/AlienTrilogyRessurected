@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ALTViewer
 {

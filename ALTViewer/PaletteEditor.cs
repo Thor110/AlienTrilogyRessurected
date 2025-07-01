@@ -114,7 +114,6 @@
             {
                 if (!compressed) // embedded palettes [512]
                 {
-                    // TODO : check all embedded palette lengths to ensure this works
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
                 else // compressed palettes [512]
