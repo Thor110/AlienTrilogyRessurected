@@ -142,7 +142,7 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected, ".PAL")); // detect palette for the selected item
+            string chosen = Path.GetFileNameWithoutExtension(DetectPalette(selected + ".PAL")); // detect palette for the selected item
             string palettePath = Path.Combine(paletteDirectory, chosen + ".PAL"); // actual palette path
             string filePath = "";
             foreach (string ext in new[] { ".BND", ".B16", ".16" })
@@ -156,11 +156,11 @@ namespace ALTViewer
             RenderImage(filePath, palettePath, chosen);
         }
         // detect palette and hard coded palette lookups
-        private string DetectPalette(string filename, string extension)
+        private string DetectPalette(string filename)
         {
-            string palette = Path.Combine(paletteDirectory, filename + extension);
+            string palette = Path.Combine(paletteDirectory, filename);
             if (!File.Exists(palette)) { return ""; }
-            else { return Path.Combine(paletteDirectory, filename + ".PAL"); }
+            else { return palette; }
         }
         // render the selected image
         private void RenderImage(string binbnd, string pal, string select)
