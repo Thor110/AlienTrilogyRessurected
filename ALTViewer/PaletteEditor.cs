@@ -202,7 +202,7 @@
             if (!usePAL && !compressed)
             {
                 int index = comboBox1.SelectedIndex;
-                backupDirectory = selectedPalette + $"_CL0{index}.BAK";
+                backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
             }
