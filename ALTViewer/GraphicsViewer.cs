@@ -88,12 +88,12 @@ namespace ALTViewer
             if (radioButton1.Checked) // remove known unusable files
             {
                 var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                var toRemove = new List<string>(); // Items to remove
                 foreach (string item in listBox1.Items) // Count occurrences
                 {
                     if (!counts.ContainsKey(item)) { counts[item] = 0; }
                     counts[item]++;
                 }
-                var toRemove = new List<string>(); // Items to remove
                 foreach (var file in removal) { if (listBox1.Items.Contains(file)) { toRemove.Add(file); } } // Add always-remove items
                 foreach (var file in duplicate) // Add duplicate-only items
                 {
@@ -101,7 +101,6 @@ namespace ALTViewer
                 }
                 foreach (var file in toRemove) { listBox1.Items.Remove(file); } // Remove items
             }
-            else if (radioButton2.Checked) { listBox1.Items.Remove("SPRCLUT"); }
         }
         // discover files in directory
         private string[] DiscoverFiles(string path, string type1 = ".BND", string type2 = ".B16", string type3 = ".16")
@@ -125,14 +124,13 @@ namespace ALTViewer
             checkBox1.Enabled = true; // enable backup checkbox
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
-            else if (radioButton2.Checked) { palfile = false; GetFile(enemyDirectory); }
+            else if (radioButton2.Checked) { GetFile(enemyDirectory); }
             else if (radioButton3.Checked)
             {
                 foreach (string level in levels) // determine level folder based on selected item
                 {
                     if (File.Exists(Path.Combine(level, listBox1.SelectedItem!.ToString()! + ".B16")))
                     {
-                        palfile = false;
                         GetFile(level);
                         return; // exit after finding the first matching level
                     }
