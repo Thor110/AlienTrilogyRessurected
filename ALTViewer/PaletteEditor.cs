@@ -21,25 +21,26 @@
             {
                 MessageBox.Show("Viewing and editing these palettes is not properly implemented yet. ( PANEL3GF & PANELGFX )");
             }
-            if (compressed)
+            if (!palfile)
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                backupDirectory = selectedPalette + "_C000.BAK"; // check for backup
-                palette = File.ReadAllBytes(fileDirectory);
-                palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
-            }
-            else if (!palfile)
-            {
-                fileDirectory = selected; // set selected filepath instead of palette path
-                selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                backupDirectory = selectedPalette + "_CL00.BAK"; // check for backup
-                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
+                if (!compressed)
+                {
+                    backupDirectory = selectedPalette + "_CL00.BAK"; // set backup directory
+                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
+                }
+                else
+                {
+                    backupDirectory = selectedPalette + "_C000.BAK"; // set backup directory
+                    palette = File.ReadAllBytes(fileDirectory);
+                    palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
+                }
             }
             else
             {
-                fileDirectory = paletteDirectory + selected + ".PAL";
-                backupDirectory = fileDirectory + ".BAK";
+                fileDirectory = paletteDirectory + selected + ".PAL"; // set selected palette filepath
+                backupDirectory = fileDirectory + ".BAK"; // set backup directory
                 if (trim) // these also use embedded palettes
                 {
                     byte[] loaded = File.ReadAllBytes(fileDirectory);
@@ -50,7 +51,7 @@
                 {
                     palette = File.ReadAllBytes(fileDirectory); // store the selected palette
                 }
-                selectedPalette = selected;
+                selectedPalette = selected; // set selected palette filename
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
