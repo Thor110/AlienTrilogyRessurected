@@ -146,7 +146,7 @@
             // 
             // button2
             // 
-            button2.AccessibleDescription = "Export the selected file to the output directory in PNG format.";
+            button2.AccessibleDescription = "Export the selected frame to the output directory in PNG format.";
             button2.Enabled = false;
             button2.Location = new Point(407, 308);
             button2.Name = "button2";
@@ -158,7 +158,7 @@
             // 
             // button3
             // 
-            button3.AccessibleDescription = "Export all listed files to the output directory in PNG format.";
+            button3.AccessibleDescription = "Export all frames to the output directory in PNG format.";
             button3.Enabled = false;
             button3.Location = new Point(588, 308);
             button3.Name = "button3";
@@ -261,7 +261,7 @@
             // 
             // button1
             // 
-            button1.AccessibleDescription = "Export everything at once.";
+            button1.AccessibleDescription = "Export everything at once  to the output directory in PNG format.";
             button1.Enabled = false;
             button1.Location = new Point(668, 412);
             button1.Name = "button1";
