@@ -295,7 +295,7 @@ namespace ALTViewer
             string palettePath = Path.Combine(paletteDirectory, selected + ".PAL"); // TODO : fix palette detection in these odd places
             RenderImage(lastSelectedFilePath, palettePath, selected); // use the selected palette to render the image
         }
-        // export selected button
+        // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
             var section = currentSections[comboBox1.SelectedIndex];
@@ -358,7 +358,7 @@ namespace ALTViewer
                 }
             }
         }
-        // export all button
+        // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
             try
