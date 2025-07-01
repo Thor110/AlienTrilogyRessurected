@@ -8,7 +8,6 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 
 # To Do List
 
-- OPTGFX.B16 textures 10-13 do not render for some reason.
 - Palettes aren't right for the following two files?
 	- PANEL3GF.BND
 	- PANELGFX.BND
