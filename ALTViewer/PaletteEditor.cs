@@ -7,8 +7,8 @@
         public string fileDirectory = "";
         public string selectedPalette = ""; // either the name of the .PAL file or the name and location of the source file for the embedded palette
         private byte[] palette = null!;
-        private bool compressed = false;
-        private bool usePAL = false;
+        private bool compressed;
+        private bool usePAL;
         private bool trim;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
@@ -16,7 +16,7 @@
             InitializeComponent();
             usePAL = palfile; // store boolean for latre use
             compressed = compression; // is the file compressed or not
-            trim = trimmed; // is the file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
+            trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             if(selected.Contains("PANEL"))
             {
                 MessageBox.Show("Viewing and editing these palettes is not properly implemented yet. ( PANEL3GF & PANELGFX )");
@@ -41,6 +41,7 @@
             }
             else
             {
+                selectedPalette = selected; // set selected palette filename
                 fileDirectory = paletteDirectory + selected + ".PAL"; // set selected palette filepath
                 backupDirectory = fileDirectory + ".BAK"; // set backup directory
                 palette = File.ReadAllBytes(fileDirectory); // store the selected palette
@@ -50,7 +51,6 @@
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
-                selectedPalette = selected; // set selected palette filename
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
