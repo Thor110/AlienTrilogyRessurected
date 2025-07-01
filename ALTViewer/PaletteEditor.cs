@@ -25,31 +25,30 @@
             {
                 fileDirectory = selected; // set selected filepath instead of palette path
                 selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
+                string extension = "";
                 if (!compressed)
                 {
-                    backupDirectory = selectedPalette + "_CL00.BAK"; // set backup directory
+                    extension = "_CL00.BAK"; // backup extension
                     palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(selected, "CL00", 12));
                 }
                 else
                 {
-                    backupDirectory = selectedPalette + "_C000.BAK"; // set backup directory
+                    extension = "_C000.BAK"; // backup extension
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
                 }
+                backupDirectory = selectedPalette + extension; // set backup directory
             }
             else
             {
                 fileDirectory = paletteDirectory + selected + ".PAL"; // set selected palette filepath
                 backupDirectory = fileDirectory + ".BAK"; // set backup directory
-                if (!trim) // these also use embedded palettes
+                palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+                if (trim) // trimmed palettes [672]
                 {
-                    palette = File.ReadAllBytes(fileDirectory); // store the selected palette
-                }
-                else
-                {
-                    byte[] loaded = File.ReadAllBytes(fileDirectory);
+                    byte[] loaded = palette;
                     palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
                 selectedPalette = selected; // set selected palette filename
             }
@@ -127,17 +126,14 @@
             }
             else // backup .PAL files
             {
-                if(!trim) // regular palettes [768]
+                byte[] saving = palette; // palette store
+                if (trim) // regular palettes [768]
                 {
-                    File.WriteAllBytes(fileDirectory, palette);
-                }
-                else // trimmed palettes [672]
-                {
-                    byte[] saving = new byte[672]; // resize to 672 bytes
+                    saving = new byte[672]; // resize to 672 bytes
                     Array.Copy(palette, 96, saving, 0, 672);
-                    File.WriteAllBytes(fileDirectory, saving);
                     MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                 }
+                File.WriteAllBytes(fileDirectory, saving);
             }
             button1.Enabled = false; // disable save button
             MessageBox.Show("Palette saved successfully.");
@@ -197,13 +193,10 @@
             }
             else
             {
-                if (!trim) // regular palettes [768]
+                palette = File.ReadAllBytes(fileDirectory); // regular palettes [768]
+                if (trim) // trimmed palettes [672]
                 {
-                    palette = File.ReadAllBytes(fileDirectory);
-                }
-                else // trimmed palettes [672]
-                {
-                    byte[] loaded = File.ReadAllBytes(fileDirectory);
+                    byte[] loaded = palette;
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
