@@ -422,7 +422,7 @@ namespace ALTViewer
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
                     }
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h); // TODO : remove transparency boolean?
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
