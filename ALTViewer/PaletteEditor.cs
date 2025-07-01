@@ -41,15 +41,15 @@
             {
                 fileDirectory = paletteDirectory + selected + ".PAL"; // set selected palette filepath
                 backupDirectory = fileDirectory + ".BAK"; // set backup directory
-                if (trim) // these also use embedded palettes
+                if (!trim) // these also use embedded palettes
+                {
+                    palette = File.ReadAllBytes(fileDirectory); // store the selected palette
+                }
+                else
                 {
                     byte[] loaded = File.ReadAllBytes(fileDirectory);
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
-                }
-                else
-                {
-                    palette = File.ReadAllBytes(fileDirectory); // store the selected palette
                 }
                 selectedPalette = selected; // set selected palette filename
             }
@@ -127,16 +127,16 @@
             }
             else // backup .PAL files
             {
-                if(trim) // trimmed palettes [672]
+                if(!trim) // regular palettes [768]
+                {
+                    File.WriteAllBytes(fileDirectory, palette);
+                }
+                else // trimmed palettes [672]
                 {
                     byte[] saving = new byte[672]; // resize to 672 bytes
                     Array.Copy(palette, 96, saving, 0, 672);
                     File.WriteAllBytes(fileDirectory, saving);
                     MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
-                }
-                else // regular palettes [768]
-                {
-                    File.WriteAllBytes(fileDirectory, palette);
                 }
             }
             button1.Enabled = false; // disable save button
@@ -161,8 +161,17 @@
             }
             else // regular & trimmed palettes [768 & 672]
             {
-                File.Move(backupDirectory, fileDirectory, true);
-                palette = File.ReadAllBytes(fileDirectory);
+                byte[] loaded = File.ReadAllBytes(fileDirectory);
+                if (!trim) // regular palettes [768]
+                {
+                    File.Move(backupDirectory, fileDirectory, true);
+                    palette = loaded;
+                }
+                else // trimmed palettes [672]
+                {
+                    palette = new byte[768];
+                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
+                }
             }
             File.Delete(backupDirectory);
             button2.Enabled = false; // restore backup button
@@ -188,15 +197,15 @@
             }
             else
             {
-                if (trim) // trimmed palettes [672]
+                if (!trim) // regular palettes [768]
+                {
+                    palette = File.ReadAllBytes(fileDirectory);
+                }
+                else // trimmed palettes [672]
                 {
                     byte[] loaded = File.ReadAllBytes(fileDirectory);
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                }
-                else // regular palettes [768]
-                {
-                    palette = File.ReadAllBytes(fileDirectory);
                 }
             }
             Invalidate();
@@ -219,7 +228,12 @@
         private void RenderImage()
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            if (compressed)
+            if (!compressed)
+            {
+                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
+            }
+            else
             {
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 int w = 32; // BAMBI
@@ -227,11 +241,6 @@
                 //int w = 84; // SHOTGUN
                 //int h = 77;
                 pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
-            }
-            else
-            {
-                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
             }
         }
         // export palette file button click
