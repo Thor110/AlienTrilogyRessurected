@@ -314,8 +314,8 @@ namespace ALTViewer
         // export everything button click
         private void button1_Click(object sender, EventArgs e)
         {
-            int previouslyselected = 0;
-            if (listBox1.SelectedIndex != -1) { previouslyselected = listBox1.SelectedIndex; } // store previously selected index
+            int previouslySelected = 0;
+            if (listBox1.SelectedIndex != -1) { previouslySelected = listBox1.SelectedIndex; } // store previously selected index
             // TODO : when compressed images are working, remove this code and use the commented code below
             RadioButton selected = radioButton1.Checked ? radioButton1 :
                        radioButton2.Checked ? radioButton2 :
@@ -347,7 +347,7 @@ namespace ALTViewer
             buttons[selectedIndex].Checked = true;*/
             // TODO : integrate this commented code when compressed images are working
             exporting = false;
-            listBox1.SelectedIndex = previouslyselected; // restore previously selected index
+            listBox1.SelectedIndex = previouslySelected; // restore previously selected index
             MessageBox.Show($"All images saved to:\n{outputPath}");
             MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working."); // TODO : remove this later
             void Export() // TODO : remove this later ( inlined )
