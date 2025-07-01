@@ -176,7 +176,15 @@
         {
             if (!usePAL)
             {
-                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
+                if (!compressed)
+                {
+                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
+                }
+                else
+                {
+                    palette = File.ReadAllBytes(fileDirectory);
+                    palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
+                }
             }
             else
             {
@@ -244,6 +252,10 @@
                         MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                     }
                     path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
+                }
+                else if(compressed)
+                {
+                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + "_C000.PAL");
                 }
                 else // embedded palette
                 {
