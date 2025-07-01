@@ -143,17 +143,18 @@
         {
             if (!usePAL)
             {
+                palette = File.ReadAllBytes(backupDirectory);
                 if (!compressed) // embedded palettes [512]
                 {
-                    palette = File.ReadAllBytes(backupDirectory);
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
                 else // compressed palettes [512]
                 {
                     var replacements = new List<Tuple<long, byte[]>>();
-                    replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, File.ReadAllBytes(backupDirectory)));
+                    replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, palette));
                     BinaryUtility.ReplaceBytes(replacements, fileDirectory);
                 }
+                File.Delete(backupDirectory);
             }
             else // regular & trimmed palettes [768 & 672]
             {
@@ -167,9 +168,9 @@
                 {
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
+                    File.Delete(backupDirectory);
                 }
             }
-            File.Delete(backupDirectory);
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button
             Invalidate();
