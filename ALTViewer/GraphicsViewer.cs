@@ -41,7 +41,7 @@ namespace ALTViewer
             foreach (string palFile in palFiles)
             {
                 string name = Path.GetFileNameWithoutExtension(palFile);
-                if (!excluded.Any(e => name.Contains(e)))
+                if (!excluded.Any(e => name.Contains(e))) // exclude unused palettes
                 {
                     listBox2.Items.Add(name);
                 }
@@ -53,28 +53,28 @@ namespace ALTViewer
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            ListFiles(gfxDirectory);
+            ListFiles(gfxDirectory); // .BND and .B16 files exist in the GFX folder which are used
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             listBox2.Enabled = false;
-            ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are compressed
+            ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are all compressed .B16 files
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             listBox2.Enabled = false;
-            foreach (string level in levels) { ListFiles(level, ".NOPE"); }
+            foreach (string level in levels) { ListFiles(level); } // levels are all .B16 files
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
             listBox2.Enabled = true;
-            ListFiles(languageDirectory, ".NOPE", ".NOPE"); // .NOPE ignores the four .BIN files in the LANGUAGE folder which are not image data
+            ListFiles(languageDirectory, ".NOPE", ".16"); // .NOPE ignores the unused .BND files in the LANGUAGE folder
         }
         // list files in directory
         public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16")
@@ -103,9 +103,9 @@ namespace ALTViewer
             }
         }
         // discover files in directory
-        private string[] DiscoverFiles(string path, string type1 = ".BND", string type2 = ".B16", string type3 = ".16")
+        private string[] DiscoverFiles(string path, string type1 = ".BND", string type2 = ".B16")
         {
-            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(type1) || file.EndsWith(type2) || file.EndsWith(type3)).ToArray();
+            return Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Where(file => file.EndsWith(type1) || file.EndsWith(type2)).ToArray();
         }
         // display selected file
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
