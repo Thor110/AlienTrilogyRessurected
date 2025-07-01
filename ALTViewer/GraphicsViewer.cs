@@ -339,15 +339,19 @@ namespace ALTViewer
             foreach (var button in buttons)
             {
                 button.Checked = true;
-                Export();
+                for (int i = 0; i < listBox1.Items.Count; i++)
+                {
+                    listBox1.SelectedIndex = i; // select each item in the list box
+                    button3_Click(null!, null!); // call the export all button click event
+                }
             }
             buttons[selectedIndex].Checked = true;*/
             // TODO : integrate this commented code when compressed images are working
             exporting = false;
             listBox1.SelectedIndex = previouslyselected; // restore previously selected index
             MessageBox.Show($"All images saved to:\n{outputPath}");
-            MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working.");
-            void Export()
+            MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working."); // TODO : remove this later
+            void Export() // TODO : remove this later ( inlined )
             {
                 for (int i = 0; i < listBox1.Items.Count; i++)
                 {
