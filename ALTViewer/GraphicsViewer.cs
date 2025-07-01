@@ -271,7 +271,7 @@ namespace ALTViewer
                 // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
                 if(binbnd.Contains("PANEL"))
                 {
-                    MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
+                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
                 }
                 else
                 {
