@@ -105,20 +105,19 @@
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            // TODO : backup logic needs to be improved, currently it only works for embedded palettes and .PAL files ( I think )
-            if (!File.Exists(backupDirectory) && checkBox1.Checked) // make a backup of the original file
+            if (!File.Exists(backupDirectory) && checkBox1.Checked) // make a backup of the original file if one doesn't already exist
             {
                 File.Copy(fileDirectory, backupDirectory);
                 button2.Enabled = true; // enable restore backup button
             }
             if (!usePAL) // backup embedded palettes
             {
-                if (!compressed)
+                if (!compressed) // embedded palettes [512]
                 {
                     // TODO : check all embedded palette lengths to ensure this works
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
-                else
+                else // compressed palettes [512]
                 {
                     var replacements = new List<Tuple<long, byte[]>>();
                     replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, TileRenderer.ConvertRGBTripletsToEmbeddedPalette(palette)));
@@ -127,14 +126,14 @@
             }
             else // backup .PAL files
             {
-                if(trim)
+                if(trim) // trimmed palettes [672]
                 {
                     byte[] saving = new byte[672]; // resize to 672 bytes
                     Array.Copy(palette, 96, saving, 0, 672);
                     File.WriteAllBytes(fileDirectory, saving);
                     MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                 }
-                else
+                else // regular palettes [768]
                 {
                     File.WriteAllBytes(fileDirectory, palette);
                 }
@@ -147,19 +146,19 @@
         {
             if (!usePAL)
             {
-                if (!compressed)
+                if (!compressed) // embedded palettes [512]
                 {
                     palette = File.ReadAllBytes(backupDirectory);
                     TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
-                else
+                else // compressed palettes [512]
                 {
                     var replacements = new List<Tuple<long, byte[]>>();
                     replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, File.ReadAllBytes(backupDirectory)));
                     BinaryUtility.ReplaceBytes(replacements, fileDirectory);
                 }
             }
-            else
+            else // regular & trimmed palettes [768 & 672]
             {
                 File.Move(backupDirectory, fileDirectory, true);
                 palette = File.ReadAllBytes(fileDirectory);
@@ -176,11 +175,11 @@
         {
             if (!usePAL)
             {
-                if (!compressed)
+                if (!compressed) // embedded palettes [512]
                 {
                     palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
                 }
-                else
+                else // compressed palettes [512]
                 {
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
@@ -188,13 +187,13 @@
             }
             else
             {
-                if (trim)
+                if (trim) // trimmed palettes [672]
                 {
                     byte[] loaded = File.ReadAllBytes(fileDirectory);
                     palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, Math.Min(loaded.Length, 672)); // 96 padded bytes at the beginning for these palettes
+                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
-                else
+                else // regular palettes [768]
                 {
                     palette = File.ReadAllBytes(fileDirectory);
                 }
@@ -207,7 +206,7 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!usePAL && !compressed)
+            if (!usePAL && !compressed) // only embedded palettes need to switch here
             {
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
@@ -243,23 +242,26 @@
             {
                 byte[] saving = palette;
                 string path = "";
-                if (usePAL) // if using a .PAL file
+                if (!usePAL)
                 {
-                    if(trim)
+                    if (!compressed) // embedded palettes [512]
+                    {
+                        path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL{comboBox1.SelectedIndex:D2}.PAL");
+                    }
+                    else // compressed palettes [512]
+                    {
+                        path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + "_C000.PAL");
+                    }
+                }
+                else // regular palettes [768]
+                {
+                    if (trim) // trimmed palettes [672]
                     {
                         saving = new byte[672]; // resize to 672 bytes
                         Array.Copy(palette, 96, saving, 0, 672);
                         MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                     }
                     path = Path.Combine(fbd.SelectedPath, selectedPalette + ".PAL");
-                }
-                else if(compressed)
-                {
-                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + "_C000.PAL");
-                }
-                else // embedded palette
-                {
-                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL{comboBox1.SelectedIndex:D2}.PAL");
                 }
                 File.WriteAllBytes(path, saving);
                 MessageBox.Show($"Palette saved to : {path}");
