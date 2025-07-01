@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ALTViewer
 {
@@ -271,48 +272,7 @@ namespace ALTViewer
                 // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
                 if(binbnd.Contains("PANEL"))
                 {
-                    // Nothing ...
-                    //byte[] loadedA = TileRenderer.ExtractEmbeddedPalette(Path.Combine(gfxDirectory, "PANEL3GF.BND"), "CL00", 12); // 224
-                    //byte[] loadedB = TileRenderer.ExtractEmbeddedPalette(Path.Combine(gfxDirectory, "PANELGFX.BND"), "CL00", 12); // 288
-                    //byte[] loaded = new byte[512];
-                    //MessageBox.Show(loadedA.Length.ToString());
-                    //Array.Copy(loadedA, 0, loaded, 0, 224);
-                    //MessageBox.Show(loadedB.Length.ToString());
-                    //Array.Copy(loadedB, 0, loaded, 224, 288);
-                    //MessageBox.Show("C");
-                    //currentPalette = loaded;
-                    //MessageBox.Show("D");
-                    //currentPalette = TileRenderer.Convert16BitPaletteToRGB(currentPalette);
-                    //MessageBox.Show("E");
-                    // Nothing ...
-                    // Identical outcome
-                    /*currentPalette = TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12);
-                    MessageBox.Show(currentPalette.Length.ToString()); // 224
-                    byte[] loaded = new byte[768];
-                    Array.Copy(currentPalette!, 0, loaded, 544, 224); // 96 padded bytes at the beginning for these palettes
-                    currentPalette = loaded;
-                    MessageBox.Show(currentPalette.Length.ToString()); // 768
-                    currentPalette = TileRenderer.ConvertRGBTripletsToEmbeddedPalette(currentPalette);
-                    MessageBox.Show(currentPalette.Length.ToString());*/
-                    //ConvertRGBTripletsToEmbeddedPalette
-                    // Identical outcome
-                    // Identical outcome
-                    //byte[] loaded = new byte[768];
-                    //Array.Copy(currentPalette!, 0, loaded, 468, 300); // 96 padded bytes at the beginning for these palettes
-                    //currentPalette = loaded;
-                    /* // Previous method
-                    currentPalette = new byte[768];
-                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
-                    MessageBox.Show(currentPalette.Length.ToString());
-                    Array.Copy(currentPalette, 0, currentPalette, 96, 672);
-                    */ // Identical outcome
-                    /*currentPalette = TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12);
-                    MessageBox.Show(currentPalette.Length.ToString()); // 224 // 288 missing
-                    byte[] loaded = new byte[512];
-                    Array.Copy(currentPalette!, 0, loaded, 288, 224); // 96 padded bytes at the beginning for these palettes
-                    currentPalette = loaded;
-                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(currentPalette);
-                    trimmed = true;*/
+                    MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
                 }
                 else
                 {
