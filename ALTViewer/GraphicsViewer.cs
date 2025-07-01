@@ -411,7 +411,7 @@ namespace ALTViewer
                         MessageBox.Show("Palette is null");
                         return;
                     }
-                    File.WriteAllBytes("debug_dump_palette.bin", currentPalette!);
+                    //File.WriteAllBytes("debug_dump_palette.bin", currentPalette!);
                     pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette!, w, h);
                 }
                 else

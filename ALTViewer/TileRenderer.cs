@@ -48,6 +48,7 @@ namespace ALTViewer
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            bool once = false; // Flag to show if we have a valid palette
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -64,7 +65,11 @@ namespace ALTViewer
                     }
                     else // Fallback color for invalid palette index
                     {
-                        MessageBox.Show("FALLBACK COLOUR ERROR");
+                        if(!once)
+                        {
+                            MessageBox.Show("FALLBACK COLOUR ERROR");
+                            once = true; // Show this only once
+                        }
                         //if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
                         //else { bmp.SetPixel(x, y, Color.Transparent); }
                     }
@@ -75,8 +80,7 @@ namespace ALTViewer
         // used for embedded palettes 6-bit rgb 0-63
         public static byte[] Convert16BitPaletteToRGB(byte[] rawPalette)
         {
-            if (rawPalette == null || rawPalette.Length < 2)
-                throw new ArgumentException("Palette data is missing or too short.");
+            if (rawPalette == null || rawPalette.Length < 2) { throw new ArgumentException("Palette data is missing or too short."); }
 
             int colorCount = rawPalette.Length / 2;
             byte[] rgbPalette = new byte[256 * 3];
