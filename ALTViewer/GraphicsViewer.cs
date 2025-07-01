@@ -365,7 +365,7 @@ namespace ALTViewer
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
-                    if (!compressed && !palfile)
+                    if (!compressed && !palfile) // update embedded palette for each frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{i:D2}", 12));
                     }
