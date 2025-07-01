@@ -368,7 +368,7 @@ namespace ALTViewer
                 {
                     if (!compressed && !palfile)
                     {
-                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{i}", 12));
+                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{i:D2}", 12));
                     }
                     ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
@@ -420,7 +420,7 @@ namespace ALTViewer
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
                     }
                     var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h); // TODO : remove transparency boolean?

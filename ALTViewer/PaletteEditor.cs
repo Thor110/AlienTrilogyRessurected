@@ -116,7 +116,7 @@
                 if (!compressed)
                 {
                     // TODO : check all embedded palette lengths to ensure this works
-                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
                 else
                 {
@@ -150,7 +150,7 @@
                 if (!compressed)
                 {
                     palette = File.ReadAllBytes(backupDirectory);
-                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", palette, 12);
+                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                 }
                 else
                 {
@@ -176,7 +176,7 @@
         {
             if (!usePAL)
             {
-                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{comboBox1.SelectedIndex.ToString()}", 12));
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
             }
             else
             {
@@ -203,7 +203,7 @@
             {
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL0{index}.BAK";
-                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL0{index}", 12));
+                palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
             }
             RenderImage();
@@ -247,7 +247,7 @@
                 }
                 else // embedded palette
                 {
-                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL0{comboBox1.SelectedIndex}.PAL");
+                    path = Path.Combine(fbd.SelectedPath, Path.GetFileNameWithoutExtension(fileDirectory) + $"_CL{comboBox1.SelectedIndex:D2}.PAL");
                 }
                 File.WriteAllBytes(path, saving);
                 MessageBox.Show($"Palette saved to : {path}");
