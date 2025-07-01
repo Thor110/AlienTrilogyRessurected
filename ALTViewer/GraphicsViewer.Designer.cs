@@ -100,7 +100,7 @@
             // 
             // radioButton3
             // 
-            radioButton3.AccessibleDescription = "Show files from the level folders.";
+            radioButton3.AccessibleDescription = "Show files from the SECT## folders.";
             radioButton3.AutoSize = true;
             radioButton3.Location = new Point(216, 71);
             radioButton3.Name = "radioButton3";
@@ -190,6 +190,7 @@
             // 
             // comboBox1
             // 
+            comboBox1.AccessibleDescription = "Changes the selected frame of the texture.";
             comboBox1.Enabled = false;
             comboBox1.FormattingEnabled = true;
             comboBox1.Location = new Point(488, 308);
@@ -201,6 +202,7 @@
             // button5
             // 
             button5.AccessibleDescription = "Replace selected texture file with a .PNG file of your choosing.";
+            button5.Enabled = false;
             button5.Location = new Point(407, 337);
             button5.Name = "button5";
             button5.Size = new Size(75, 23);
@@ -227,6 +229,7 @@
             checkBox1.AutoSize = true;
             checkBox1.Checked = true;
             checkBox1.CheckState = CheckState.Checked;
+            checkBox1.Enabled = false;
             checkBox1.Location = new Point(495, 341);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(86, 19);
@@ -236,7 +239,7 @@
             // 
             // button7
             // 
-            button7.AccessibleDescription = "This modifies the file to use the selected palette.";
+            button7.AccessibleDescription = "Opens the palette editor window.";
             button7.Location = new Point(210, 412);
             button7.Name = "button7";
             button7.Size = new Size(120, 23);
@@ -258,6 +261,7 @@
             // 
             // button1
             // 
+            button1.AccessibleDescription = "Export everything at once.";
             button1.Enabled = false;
             button1.Location = new Point(668, 412);
             button1.Name = "button1";
@@ -285,6 +289,7 @@
             label4.Size = new Size(434, 15);
             label4.TabIndex = 22;
             label4.Text = "Note : Palettes should be 768 bytes, or 672 for BONESHIP, COLONY or PRISHOLD.";
+            label4.Visible = false;
             // 
             // GraphicsViewer
             // 

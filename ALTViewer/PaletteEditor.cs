@@ -19,7 +19,7 @@
             trim = trimmed; // is the file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             if(selected.Contains("PANEL"))
             {
-                MessageBox.Show("Editing these palettes is not properly implented yet.");
+                MessageBox.Show("Viewing and editing these palettes is not properly implented yet. ( PANEL3GF & PANELGFX )");
             }
             if (compressed)
             {

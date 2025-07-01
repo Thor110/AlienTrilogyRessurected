@@ -115,9 +115,14 @@ namespace ALTViewer
             if (selected == lastSelectedFile && !refresh) { return; } // do not reselect same file
             lastSelectedFile = selected; // store last selected file
             // show palette controls
-            label1.Visible = true; // show label
+            label1.Visible = true; // show palette selection label
+            label2.Visible = true; // show palette note 1
+            label3.Visible = true; // show palette note 2
+            label4.Visible = true; // show palette note 3
             listBox2.Visible = true; // show palette list
             button7.Visible = true; // show palette editor button
+            button5.Enabled = true; // enable replace texture button
+            checkBox1.Enabled = true; // enable backup checkbox
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { palfile = false; GetFile(enemyDirectory); }
@@ -162,9 +167,6 @@ namespace ALTViewer
         // render the selected image
         private void RenderImage(string binbnd, string pal, string select)
         {
-            label2.Visible = true; // show palette note 1
-            label3.Visible = true; // show palette note 2
-            label4.Visible = true; // show palette note 3
             pictureBox1.Image = null; // clear previous image
             if (radioButton1.Checked)
             {
@@ -420,7 +422,7 @@ namespace ALTViewer
         private void button4_Click(object sender, EventArgs e)
         {
             using var fbd = new FolderBrowserDialog();
-            fbd.Description = "Select output folder to save the WAV file.";
+            fbd.Description = "Select output folder to save exported files.";
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 outputPath = fbd.SelectedPath;
