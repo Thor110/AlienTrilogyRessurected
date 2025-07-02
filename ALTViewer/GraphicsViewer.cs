@@ -405,7 +405,6 @@ namespace ALTViewer
         // render the image when a section is selected
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // TODO : ExtractEmbeddedPalette runs twice because this is called to render
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
