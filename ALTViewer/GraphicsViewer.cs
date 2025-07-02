@@ -610,22 +610,22 @@ namespace ALTViewer
                             case 7: w = 48; h = 62; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("QUEEN")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("QUEEN")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 11
-                            case 1: w = 32; h = 77; break; // UNKNOWN 11
-                            case 2: w = 32; h = 77; break; // UNKNOWN 11
-                            case 3: w = 32; h = 77; break; // UNKNOWN 11
-                            case 4: w = 32; h = 77; break; // UNKNOWN 11
-                            case 5: w = 32; h = 77; break; // UNKNOWN 11
-                            case 6: w = 32; h = 77; break; // UNKNOWN 11
-                            case 7: w = 32; h = 77; break; // UNKNOWN 11
-                            case 8: w = 32; h = 77; break; // UNKNOWN 11
-                            case 9: w = 32; h = 77; break; // UNKNOWN 11
-                            case 10: w = 32; h = 77; break; // UNKNOWN 11
-                            case 11: w = 32; h = 77; break; // UNKNOWN 11
+                            case 0: w = 148; h = 166; break;
+                            case 1: w = 124; h = 178; break;
+                            case 2: w = 132; h = 154; break;
+                            case 3: w = 148; h = 202; break;
+                            case 4: w = 208; h = 189; break;
+                            case 5: w = 128; h = 176; break;
+                            case 6: w = 168; h = 183; break;
+                            case 7: w = 148; h = 146; break;
+                            case 8: w = 136; h = 182; break;
+                            case 9: w = 152; h = 182; break;
+                            case 10: w = 128; h = 173; break;
+                            case 11: w = 140; h = 187; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("SOLDIER")) // INCOMPLETE
