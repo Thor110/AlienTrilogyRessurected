@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
@@ -270,7 +271,7 @@ namespace ALTViewer
             else
             {
                 // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
-                if(binbnd.Contains("PANEL"))
+                if (binbnd.Contains("PANEL"))
                 {
                     //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
                 }
@@ -381,7 +382,7 @@ namespace ALTViewer
                     }
                     ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
-                if(!exporting)
+                if (!exporting)
                 {
                     MessageBox.Show($"Images saved to:\n{outputPath}");
                 }
@@ -411,6 +412,12 @@ namespace ALTViewer
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); TODO : update for compressed files
                 if (compressed)
                 {
+                    //MessageBox.Show(lastSelectedFilePath);
+                    //PrintExtraFrameCounts(lastSelectedFilePath);
+                    // TODO : extra frames
+                    comboBox2.Visible = true;
+                    label5.Visible = true;
+                    // TODO : extra frames
                     if (lastSelectedFile.Contains("FLAME"))
                     {
                         switch (comboBox1.SelectedIndex)
@@ -458,7 +465,7 @@ namespace ALTViewer
                     }
                     else if (lastSelectedFile.Contains("BAMBI"))
                     {
-                        switch(comboBox1.SelectedIndex)
+                        switch (comboBox1.SelectedIndex)
                         {
                             case 0: w = 32; h = 59; break;
                             case 4: w = 32; h = 69; break;
@@ -627,7 +634,7 @@ namespace ALTViewer
                             case 11: w = 140; h = 187; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("SOLDIER")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("SOLDIER")) // INCOMPLETE [GET HEIGHT VALUES]
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -641,7 +648,7 @@ namespace ALTViewer
                             case 7: w = 68; h = 130; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE [GET HEIGHT VALUES]
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -667,7 +674,7 @@ namespace ALTViewer
                             case 19: w = 64; h = 130; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("WAR") && !lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("WAR") && !lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE [GET HEIGHT VALUES]
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -694,10 +701,16 @@ namespace ALTViewer
                             case 4: w = 136; h = 41; break;
                         }
                     }
+                    // TODO : extra frames
+                    //ListFrames();
+                    // TODO : extra frames
+                    File.WriteAllBytes("TEST.DAT", section.Data);
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
                 else
                 {
+                    comboBox2.Visible = false;
+                    label5.Visible = false;
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
@@ -710,6 +723,58 @@ namespace ALTViewer
                 pictureBox1.Height = h;
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
+        }
+        // sub frame combo box index changed
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RenderSubFrame();
+        }
+        private void RenderSubFrame()
+        {
+            if (comboBox2.SelectedIndex == -1) { return; } // no selection // TODO : handle this better
+            var section = currentSections[comboBox1.SelectedIndex];
+            int frameIndex = comboBox2.SelectedIndex;
+            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+            if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
+            byte[] frameData = frames[frameIndex];
+            try
+            {
+                //(w, h) = TileRenderer.AutoDetectDimensions(frameData); // TODO : update for compressed files
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, currentPalette!, w, h);
+                pictureBox1.Width = w;
+                pictureBox1.Height = h;
+            }
+            catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
+        }
+        private void ListFrames()
+        {
+            comboBox2.Items.Clear(); // Clear any previous entries
+            if (comboBox1.SelectedIndex == -1) return;
+
+            var section = currentSections[comboBox1.SelectedIndex];
+            var frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+
+            for (int i = 0; i < frames.Count; i++)
+            {
+                comboBox2.Items.Add($"Frame {i}");
+            }
+
+            if (comboBox2.Items.Count > 0)
+            {
+                comboBox2.SelectedIndex = 0;
+            }
+        }
+        public static void PrintExtraFrameCounts(string b16File)
+        {
+            byte[] fullFile = File.ReadAllBytes(b16File);
+            List<BndSection> sections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = sections.Where(s => s.Name.StartsWith("F0")).ToList();
+
+            foreach (var section in f0Sections)
+            {
+                var frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+                MessageBox.Show($"[{Path.GetFileName(b16File)}] Section {section.Name} has {frames.Count} frame(s)");
+            }
         }
         // replace button click event
         private void button5_Click(object sender, EventArgs e)

@@ -50,6 +50,8 @@
             button1 = new Button();
             label3 = new Label();
             label4 = new Label();
+            comboBox2 = new ComboBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -291,11 +293,33 @@
             label4.Text = "Note : Palettes should be 768 bytes, or 672 for BONESHIP, COLONY or PRISHOLD.";
             label4.Visible = false;
             // 
+            // comboBox2
+            // 
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(669, 67);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(94, 23);
+            comboBox2.TabIndex = 23;
+            comboBox2.Visible = false;
+            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(668, 46);
+            label5.Name = "label5";
+            label5.Size = new Size(68, 15);
+            label5.TabIndex = 24;
+            label5.Text = "Sub-frames";
+            label5.Visible = false;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label5);
+            Controls.Add(comboBox2);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(button1);
@@ -350,5 +374,7 @@
         private Button button1;
         private Label label3;
         private Label label4;
+        private ComboBox comboBox2;
+        private Label label5;
     }
 }

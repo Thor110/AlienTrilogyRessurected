@@ -116,7 +116,7 @@ namespace ALTViewer
             }
             return buffer;
         }
-        // Rebuild a BND file from sections and INFO data
+        // Rebuild a BND file from sections and INFO data [UNUSED]
         public static byte[] RebuildBndForm(List<BndSection> sections, byte[] infoData)
         {
             using var ms = new MemoryStream();
@@ -206,7 +206,89 @@ namespace ALTViewer
             }
             return output.ToArray();
         }
-        // Extract F0## sections from a byte array, optionally decompressing them
+        public static List<byte[]> DecompressAllFramesInSection(byte[] data)
+        {
+            var frames = new List<byte[]>();
+            int offset = 0;
+
+            while (offset < data.Length)
+            {
+                try
+                {
+                    var (frame, bytesConsumed) = DecompressSingleFrame(data, offset);
+                    if (frame.Length < 8) break; // heuristic: too small = likely invalid
+                    frames.Add(frame);
+                    offset += bytesConsumed;
+
+                    // Skip trailing 0s (used as padding)
+                    while (offset < data.Length && data[offset] == 0) offset++;
+                }
+                catch
+                {
+                    break;
+                }
+            }
+
+            return frames;
+        }
+        public static (byte[] frame, int bytesConsumed) DecompressSingleFrame(byte[] input, int startOffset)
+        {
+            List<byte> output = new();
+            int i = 0, ptr = startOffset;
+
+            while (true)
+            {
+                while (true)
+                {
+                    i >>= 1;
+                    if ((i & 0xFF00) == 0)
+                    {
+                        if (ptr >= input.Length) return (output.ToArray(), ptr - startOffset);
+                        i = 0xFF00 | input[ptr++];
+                    }
+                    if ((i & 1) == 1) break;
+                    if (ptr >= input.Length) return (output.ToArray(), ptr - startOffset);
+                    output.Add(input[ptr++]);
+                }
+
+                if (ptr >= input.Length) return (output.ToArray(), ptr - startOffset);
+
+                int offs, size;
+                if (input[ptr] >= 96)
+                {
+                    offs = input[ptr++] - 256;
+                    size = 3;
+                }
+                else
+                {
+                    size = (input[ptr] & 0xF0) >> 4;
+                    offs = (input[ptr] & 0x0F) << 8;
+                    if (++ptr >= input.Length) return (output.ToArray(), ptr - startOffset);
+                    offs |= input[ptr++];
+                    if (offs == 0) break; // Terminator
+                    offs = -offs;
+                    if (size == 5)
+                    {
+                        if (ptr >= input.Length) return (output.ToArray(), ptr - startOffset);
+                        size = input[ptr++] + 9;
+                    }
+                    else
+                    {
+                        size += 4;
+                    }
+                }
+
+                for (int j = 0; j < size - 1; j++)
+                {
+                    int src = output.Count + offs;
+                    if (src < 0 || src >= output.Count) break;
+                    output.Add(output[src]);
+                }
+            }
+
+            return (output.ToArray(), ptr - startOffset);
+        }
+        // Extract F0## sections from a byte array, optionally decompressing them [UNUSED]
         public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
         {
             if (decompress) { data = DecompressSpriteSection(data); }
