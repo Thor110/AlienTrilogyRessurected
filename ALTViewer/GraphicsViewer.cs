@@ -632,67 +632,67 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 7
-                            case 1: w = 32; h = 77; break; // UNKNOWN 7
-                            case 2: w = 32; h = 77; break; // UNKNOWN 7
-                            case 3: w = 32; h = 77; break; // UNKNOWN 7
-                            case 4: w = 32; h = 77; break; // UNKNOWN 7
-                            case 5: w = 32; h = 77; break; // UNKNOWN 7
-                            case 6: w = 32; h = 77; break; // UNKNOWN 7
-                            case 7: w = 32; h = 77; break; // UNKNOWN 7
+                            case 0: w = 30; h = 130; break; // UNKNOWN 7 // 30-
+                            case 1: w = 30; h = 130; break; // UNKNOWN 7
+                            case 2: w = 30; h = 130; break; // UNKNOWN 7
+                            case 3: w = 30; h = 130; break; // UNKNOWN 7
+                            case 4: w = 30; h = 130; break; // UNKNOWN 7
+                            case 5: w = 30; h = 130; break; // UNKNOWN 7
+                            case 6: w = 30; h = 130; break; // UNKNOWN 7
+                            case 7: w = 30; h = 130; break; // UNKNOWN 7
                         }
                     }
                     else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 19
-                            case 1: w = 32; h = 77; break; // UNKNOWN 19
-                            case 2: w = 32; h = 77; break; // UNKNOWN 19
-                            case 3: w = 32; h = 77; break; // UNKNOWN 19
-                            case 4: w = 32; h = 77; break; // UNKNOWN 19
-                            case 5: w = 32; h = 77; break; // UNKNOWN 19
-                            case 6: w = 32; h = 77; break; // UNKNOWN 19
-                            case 7: w = 32; h = 77; break; // UNKNOWN 19
-                            case 8: w = 32; h = 77; break; // UNKNOWN 19
-                            case 9: w = 32; h = 77; break; // UNKNOWN 19
-                            case 10: w = 32; h = 77; break; // UNKNOWN 19
-                            case 11: w = 32; h = 77; break; // UNKNOWN 19
-                            case 12: w = 32; h = 77; break; // UNKNOWN 19
-                            case 13: w = 32; h = 77; break; // UNKNOWN 19
-                            case 14: w = 32; h = 77; break; // UNKNOWN 19
-                            case 15: w = 32; h = 77; break; // UNKNOWN 19
-                            case 16: w = 32; h = 77; break; // UNKNOWN 19
-                            case 17: w = 32; h = 77; break; // UNKNOWN 19
-                            case 18: w = 32; h = 77; break; // UNKNOWN 19
-                            case 19: w = 32; h = 77; break; // UNKNOWN 19
+                            case 0: w = 38; h = 130; break; // UNKNOWN 19 //38-
+                            case 1: w = 38; h = 130; break; // UNKNOWN 19
+                            case 2: w = 38; h = 130; break; // UNKNOWN 19
+                            case 3: w = 38; h = 130; break; // UNKNOWN 19
+                            case 4: w = 38; h = 130; break; // UNKNOWN 19
+                            case 5: w = 38; h = 130; break; // UNKNOWN 19
+                            case 6: w = 38; h = 130; break; // UNKNOWN 19
+                            case 7: w = 38; h = 130; break; // UNKNOWN 19
+                            case 8: w = 38; h = 130; break; // UNKNOWN 19
+                            case 9: w = 38; h = 130; break; // UNKNOWN 19
+                            case 10: w = 38; h = 130; break; // UNKNOWN 19
+                            case 11: w = 38; h = 130; break; // UNKNOWN 19
+                            case 12: w = 38; h = 130; break; // UNKNOWN 19
+                            case 13: w = 38; h = 130; break; // UNKNOWN 19
+                            case 14: w = 38; h = 130; break; // UNKNOWN 19
+                            case 15: w = 38; h = 130; break; // UNKNOWN 19
+                            case 16: w = 38; h = 130; break; // UNKNOWN 19
+                            case 17: w = 38; h = 130; break; // UNKNOWN 19
+                            case 18: w = 38; h = 130; break; // UNKNOWN 19
+                            case 19: w = 38; h = 130; break; // UNKNOWN 19
                         }
                     }
                     else if (lastSelectedFile.Contains("WAR")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 9
-                            case 1: w = 32; h = 77; break; // UNKNOWN 9
-                            case 2: w = 32; h = 77; break; // UNKNOWN 9
-                            case 3: w = 32; h = 77; break; // UNKNOWN 9
-                            case 4: w = 32; h = 77; break; // UNKNOWN 9
-                            case 5: w = 32; h = 77; break; // UNKNOWN 9
-                            case 6: w = 32; h = 77; break; // UNKNOWN 9
-                            case 7: w = 32; h = 77; break; // UNKNOWN 9
-                            case 8: w = 32; h = 77; break; // UNKNOWN 9
-                            case 9: w = 32; h = 77; break; // UNKNOWN 9
+                            case 0: w = 130; h = 130; break; // UNKNOWN 9 // -130
+                            case 1: w = 130; h = 130; break; // UNKNOWN 9
+                            case 2: w = 130; h = 130; break; // UNKNOWN 9
+                            case 3: w = 130; h = 130; break; // UNKNOWN 9
+                            case 4: w = 130; h = 130; break; // UNKNOWN 9
+                            case 5: w = 130; h = 130; break; // UNKNOWN 9
+                            case 6: w = 130; h = 130; break; // UNKNOWN 9
+                            case 7: w = 130; h = 130; break; // UNKNOWN 9
+                            case 8: w = 130; h = 130; break; // UNKNOWN 9
+                            case 9: w = 130; h = 130; break; // UNKNOWN 9
                         }
                     }
                     else if (lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 4
-                            case 1: w = 32; h = 77; break; // UNKNOWN 4
-                            case 2: w = 32; h = 77; break; // UNKNOWN 4
-                            case 3: w = 32; h = 77; break; // UNKNOWN 4
-                            case 4: w = 32; h = 77; break; // UNKNOWN 4
+                            case 0: w = 130; h = 130; break; // UNKNOWN 4 // -130
+                            case 1: w = 130; h = 130; break; // UNKNOWN 4
+                            case 2: w = 130; h = 130; break; // UNKNOWN 4
+                            case 3: w = 130; h = 130; break; // UNKNOWN 4
+                            case 4: w = 130; h = 130; break; // UNKNOWN 4
                         }
                     }
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
