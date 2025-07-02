@@ -28,9 +28,23 @@
             {
                 switch (SelectedIndex)
                 {
-                    case 0:
-                    case 1: w = 40; h = 65; break;
-                    case 2: w = 76; h = 83; break;
+                    case 0: w = 40; h = 65; break;
+                    case 1:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 40; h = 65; break; // CORRECT
+                            case 1: w = 40; h = 65; break;
+                            case 2: w = 40; h = 65; break;
+                        }
+                        break;
+                    case 2:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 76; h = 83; break; // CORRECT
+                            case 1: w = 76; h = 83; break;
+                            case 2: w = 76; h = 83; break;
+                        }
+                        break;
                 }
             }
             else if (lastSelectedFile.Contains("PULSE"))
@@ -38,9 +52,29 @@
                 switch (SelectedIndex)
                 {
                     case 0: w = 84; h = 65; break;
-                    case 1: w = 72; h = 53; break;
-                    case 2: w = 84; h = 85; break;
-                    case 3: w = 92; h = 74; break;
+                    case 1:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 72; h = 53; break; // CORRECT
+                            case 1: w = 72; h = 53; break;
+                        }
+                        break;
+                    case 2:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 84; h = 85; break; // CORRECT
+                            case 1: w = 84; h = 85; break;
+                            case 2: w = 84; h = 85; break;
+                        }
+                        break;
+                    case 3:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 92; h = 74; break; // CORRECT
+                            case 1: w = 92; h = 74; break;
+                            case 2: w = 92; h = 74; break;
+                        }
+                        break;
                 }
             }
             else if (lastSelectedFile.Contains("SHOTGUN"))
@@ -48,7 +82,16 @@
                 switch (SelectedIndex)
                 {
                     case 0: w = 84; h = 77; break;
-                    case 1: w = 72; h = 101; break;
+                    case 1:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 72; h = 101; break; // CORRECT
+                            case 1: w = 72; h = 101; break;
+                            case 2: w = 72; h = 101; break;
+                            case 3: w = 72; h = 101; break;
+                            case 4: w = 72; h = 101; break;
+                        }
+                        break;
                 }
             }
             else if (lastSelectedFile.Contains("SMART"))
@@ -56,8 +99,21 @@
                 switch (SelectedIndex)
                 {
                     case 0: w = 120; h = 52; break;
-                    case 1: w = 124; h = 108; break;
-                    case 2: w = 128; h = 50; break;
+                    case 1:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 124; h = 108; break; // CORRECT
+                            case 1: w = 124; h = 108; break;
+                        }
+                        break;
+                    case 2:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 128; h = 50; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                        }
+                        break;
                 }
             }
             else if (lastSelectedFile.Contains("BAMBI"))
