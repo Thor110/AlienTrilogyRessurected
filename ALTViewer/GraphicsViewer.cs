@@ -413,6 +413,7 @@ namespace ALTViewer
             {
                 if (compressed)
                 {
+                    lastSelectedSubFrame = -1; // reset last selected sub frame index
                     comboBox2.Visible = true;
                     label5.Visible = true;
                     ListFrames();
@@ -421,7 +422,6 @@ namespace ALTViewer
                 {
                     comboBox2.Visible = false;
                     label5.Visible = false;
-                    lastSelectedSubFrame = -1; // reset last selected sub frame index
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
