@@ -410,18 +410,13 @@ namespace ALTViewer
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
+                //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); TODO : update for compressed files
                 if (compressed)
                 {
-                    //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     w = 32; // BAMBI
                     h = 77;
-                    //int w = 84; // SHOTGUN
-                    //int h = 77;
-                    if (currentPalette == null) // TODO : remove this testing check when compressed image loading is working
-                    {
-                        MessageBox.Show("Palette is null");
-                        return;
-                    }
+                    //w = 84; // SHOTGUN
+                    //h = 77;
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
                 else
@@ -431,7 +426,7 @@ namespace ALTViewer
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
                     }
-                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : remove when compressed file dimensions are detected
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
                 pictureBox1.Width = w;
