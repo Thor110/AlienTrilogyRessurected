@@ -13,12 +13,11 @@
                 switch (SelectedIndex)
                 {
                     case 0: w = 68; h = 70; break;
-                    case 1:
+                    case 1: w = 64; h = 69; break;
                     case 2:
-                        w = 64; h = 69;
                         switch(FrameIndex) // INCOMPLETE
                         {
-                            case 0: w = 64; h = 69; break;
+                            case 0: w = 64; h = 69; break; // CORRECT
                             case 1: w = 64; h = 70; break;
                             case 2: w = 64; h = 71; break;
                         }
