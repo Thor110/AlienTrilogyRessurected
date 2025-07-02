@@ -739,6 +739,7 @@ namespace ALTViewer
             var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
             var section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+            // TODO : detect new width height values
             int frameIndex = comboBox2.SelectedIndex;
             //if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
             byte[] frameData = frames[frameIndex];
