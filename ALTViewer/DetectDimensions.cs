@@ -121,15 +121,15 @@
                 switch (SelectedIndex)
                 {
                     case 0: w = 32; h = 59; break;
-                    case 4: w = 32; h = 69; break;
-                    case 5: w = 32; h = 70; break;
                     case 1: w = 40; h = 64; break;
                     case 2: w = 44; h = 72; break;
+                    case 3: w = 92; h = 67; break;
+                    case 4: w = 32; h = 69; break;
+                    case 5: w = 32; h = 70; break;
+                    case 6: w = 64; h = 69; break;
+                    case 7: w = 64; h = 69; break;
                     case 8: w = 44; h = 67; break;
                     case 9: w = 96; h = 33; break;
-                    case 3: w = 92; h = 67; break;
-                    case 6:
-                    case 7: w = 64; h = 69; break;
                 }
             }
             else if (lastSelectedFile == "BURSTER") // INCOMPLETE
@@ -153,29 +153,29 @@
             {
                 switch (SelectedIndex)
                 {
-                    case 0:
+                    case 0: w = 32; h = 56; break;
                     case 1: w = 32; h = 56; break;
-                    case 5:
-                    case 6: w = 32; h = 60; break;
-                    case 12:
-                    case 13: w = 32; h = 59; break;
-                    case 20:
-                    case 21: w = 32; h = 41; break;
+                    case 2: w = 28; h = 57; break;
                     case 3: w = 40; h = 56; break;
-                    case 9:
-                    case 11:
-                    case 15: w = 40; h = 60; break;
-                    case 17: w = 40; h = 59; break;
-                    case 2:
                     case 4: w = 28; h = 57; break;
-                    case 7:
+                    case 5: w = 32; h = 60; break;
+                    case 6: w = 32; h = 60; break;
+                    case 7: w = 24; h = 60; break;
                     case 8: w = 24; h = 60; break;
-                    case 10:
+                    case 9: w = 40; h = 60; break;
+                    case 10: w = 24; h = 58; break;
+                    case 11: w = 40; h = 60; break;
+                    case 12: w = 32; h = 59; break;
+                    case 13: w = 32; h = 59; break;
                     case 14: w = 24; h = 58; break;
-                    case 18:
-                    case 22: w = 24; h = 42; break;
+                    case 15: w = 40; h = 60; break;
                     case 16: w = 36; h = 59; break;
+                    case 17: w = 40; h = 59; break;
+                    case 18: w = 24; h = 42; break;
                     case 19: w = 36; h = 42; break;
+                    case 20: w = 32; h = 41; break;
+                    case 21: w = 32; h = 41; break;
+                    case 22: w = 24; h = 42; break;
                 }
             }
             else if (lastSelectedFile == "DOG") // INCOMPLETE
@@ -191,7 +191,7 @@
                     case 6: w = 100; h = 82; break;
                     case 7: w = 104; h = 86; break;
                     case 8: w = 60; h = 86; break;
-                    case 9:
+                    case 9: w = 60; h = 92; break;
                     case 10: w = 60; h = 92; break;
                 }
             }
@@ -210,7 +210,7 @@
             {
                 switch (SelectedIndex)
                 {
-                    case 0:
+                    case 0: w = 48; h = 56; break;
                     case 1: w = 48; h = 56; break;
                     case 2: w = 48; h = 63; break;
                     case 3: w = 52; h = 30; break;
