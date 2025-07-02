@@ -231,7 +231,6 @@ namespace ALTViewer
         // extract level palette from a level file C0## sections
         public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
         {
-            // TODO : this runs twice along with FindSectionDataOffset
             byte[] fileBytes = File.ReadAllBytes(filePath);
             long startOffset = FindSectionDataOffset(filePath, clSectionName, skipHeader);
 

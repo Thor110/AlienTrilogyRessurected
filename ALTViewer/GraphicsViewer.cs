@@ -214,7 +214,6 @@ namespace ALTViewer
                 palfile = false; // palette is embedded
                 compressed = false; // reset compressed to false for next detection
                 listBox2.Enabled = false;
-                currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, "CL00", 12));
             }
             else if (compressed) // load palette from level file or enemies
             {
@@ -310,8 +309,8 @@ namespace ALTViewer
             if (compressed)
             {
                 // TODO : work out all the dimensions for compressed images
-                w = 34; // BAMBI
-                h = 80;
+                w = 32; // BAMBI
+                h = 77;
             }
             else
             {
