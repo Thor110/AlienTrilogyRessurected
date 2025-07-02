@@ -563,8 +563,8 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 1
-                            case 1: w = 32; h = 77; break; // UNKNOWN 1
+                            case 0: w = 120; h = 43; break;
+                            case 1: w = 120; h = 45; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("GUARD")) // INCOMPLETE
