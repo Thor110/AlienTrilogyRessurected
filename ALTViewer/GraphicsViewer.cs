@@ -509,6 +509,7 @@ namespace ALTViewer
         // replace texture
         private void ReplaceTexture(string[] filename)
         {
+            // TODO : update for compressed images and sub frames
             int length = filename.Length;
             if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
