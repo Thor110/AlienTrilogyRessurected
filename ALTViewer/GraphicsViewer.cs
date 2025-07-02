@@ -571,14 +571,14 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 50; h = 120; break; // 7
-                            case 1: w = 50; h = 120; break; // 7
-                            case 2: w = 50; h = 120; break; // 7
-                            case 3: w = 50; h = 120; break; // 7
-                            case 4: w = 50; h = 120; break; // 7
-                            case 5: w = 50; h = 120; break; // 7
-                            case 6: w = 50; h = 120; break; // 7
-                            case 7: w = 50; h = 120; break; // 7
+                            case 0: w = 56; h = 120; break;
+                            case 1: w = 44; h = 120; break;
+                            case 2: w = 32; h = 120; break;
+                            case 3: w = 56; h = 120; break;
+                            case 4: w = 56; h = 120; break;
+                            case 5: w = 56; h = 120; break;
+                            case 6: w = 64; h = 120; break;
+                            case 7: w = 56; h = 120; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("HANDLER")) // COMPLETE
@@ -668,7 +668,7 @@ namespace ALTViewer
                             case 19: w = 38; h = 130; break; // UNKNOWN 19
                         }
                     }
-                    else if (lastSelectedFile.Contains("WAR")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("WAR") && !lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -684,15 +684,15 @@ namespace ALTViewer
                             case 9: w = 130; h = 130; break; // UNKNOWN 9
                         }
                     }
-                    else if (lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("WARCEIL")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 130; h = 130; break; // UNKNOWN 4 // -130
-                            case 1: w = 130; h = 130; break; // UNKNOWN 4
-                            case 2: w = 130; h = 130; break; // UNKNOWN 4
-                            case 3: w = 130; h = 130; break; // UNKNOWN 4
-                            case 4: w = 130; h = 130; break; // UNKNOWN 4
+                            case 0: w = 112; h = 81; break;
+                            case 1: w = 128; h = 38; break;
+                            case 2: w = 128; h = 38; break;
+                            case 3: w = 120; h = 38; break;
+                            case 4: w = 136; h = 41; break;
                         }
                     }
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
