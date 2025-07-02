@@ -8,12 +8,12 @@
             // TODO : setup all the extra switch statements
             int w = 0;
             int h = 0;
-            if (lastSelectedFile.Contains("FLAME"))
+            if (lastSelectedFile == "FLAME") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
-                    case 0: w = 68; h = 70; break;
-                    case 1: w = 64; h = 69; break;
+                    case 0: w = 68; h = 70; break; // CORRECT
+                    case 1: w = 64; h = 69; break; // CORRECT
                     case 2:
                         switch(FrameIndex) // INCOMPLETE
                         {
@@ -24,30 +24,30 @@
                         break;
                 }
             }
-            else if (lastSelectedFile.Contains("MM9"))
+            else if (lastSelectedFile == "MM9") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
-                    case 0: w = 40; h = 65; break;
+                    case 0: w = 40; h = 65; break; // CORRECT
                     case 1:
-                        switch (FrameIndex) // INCOMPLETE
+                        switch (FrameIndex) // COMPLETE
                         {
-                            case 0: w = 40; h = 65; break; // CORRECT
-                            case 1: w = 40; h = 65; break;
-                            case 2: w = 40; h = 65; break;
+                            case 0: w = 40; h = 86; break; // CORRECT
+                            case 1: w = 40; h = 68; break; // CORRECT
+                            case 2: w = 40; h = 65; break; // CORRECT
                         }
                         break;
                     case 2:
                         switch (FrameIndex) // INCOMPLETE
                         {
                             case 0: w = 76; h = 83; break; // CORRECT
-                            case 1: w = 76; h = 83; break;
-                            case 2: w = 76; h = 83; break;
+                            case 1: w = 76; h = 83; break; //??
+                            case 2: w = 76; h = 83; break; //??
                         }
                         break;
                 }
             }
-            else if (lastSelectedFile.Contains("PULSE"))
+            else if (lastSelectedFile == "PULSE") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -77,7 +77,7 @@
                         break;
                 }
             }
-            else if (lastSelectedFile.Contains("SHOTGUN"))
+            else if (lastSelectedFile == "SHOTGUN") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -94,7 +94,7 @@
                         break;
                 }
             }
-            else if (lastSelectedFile.Contains("SMART"))
+            else if (lastSelectedFile == "SMART") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -116,7 +116,7 @@
                         break;
                 }
             }
-            else if (lastSelectedFile.Contains("BAMBI"))
+            else if (lastSelectedFile == "BAMBI") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -132,7 +132,7 @@
                     case 7: w = 64; h = 69; break;
                 }
             }
-            else if (lastSelectedFile.Contains("BURSTER"))
+            else if (lastSelectedFile == "BURSTER") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -149,7 +149,7 @@
                     case 10: w = 48; h = 31; break;
                 }
             }
-            else if (lastSelectedFile.Contains("COLONIST"))
+            else if (lastSelectedFile == "COLONIST") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -178,7 +178,7 @@
                     case 19: w = 36; h = 42; break;
                 }
             }
-            else if (lastSelectedFile.Contains("DOG") && !lastSelectedFile.Contains("DOGCEIL"))
+            else if (lastSelectedFile == "DOG") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -195,7 +195,7 @@
                     case 10: w = 60; h = 92; break;
                 }
             }
-            else if (lastSelectedFile.Contains("DOGCEIL"))
+            else if (lastSelectedFile == "DOGCEIL") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -206,7 +206,7 @@
                     case 4: w = 92; h = 77; break;
                 }
             }
-            else if (lastSelectedFile.Contains("EGGS"))
+            else if (lastSelectedFile == "EGGS") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -218,7 +218,7 @@
                     case 5: w = 48; h = 57; break;
                 }
             }
-            else if (lastSelectedFile.Contains("FINGERS"))
+            else if (lastSelectedFile == "FINGERS") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -226,7 +226,7 @@
                     case 1: w = 120; h = 45; break;
                 }
             }
-            else if (lastSelectedFile.Contains("GUARD"))
+            else if (lastSelectedFile == "GUARD") // INCOMPLETE
             {
                 switch (    SelectedIndex)
                 {
@@ -240,7 +240,7 @@
                     case 7: w = 56; h = 114; break;
                 }
             }
-            else if (lastSelectedFile.Contains("HANDLER"))
+            else if (lastSelectedFile == "HANDLER") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -255,7 +255,7 @@
                     case 8: w = 44; h = 100; break;
                 }
             }
-            else if (lastSelectedFile.Contains("HUGGER"))
+            else if (lastSelectedFile == "HUGGER") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -269,7 +269,7 @@
                     case 7: w = 48; h = 62; break;
                 }
             }
-            else if (lastSelectedFile.Contains("QUEEN"))
+            else if (lastSelectedFile == "QUEEN") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -287,7 +287,7 @@
                     case 11: w = 140; h = 187; break;
                 }
             }
-            else if (lastSelectedFile.Contains("SOLDIER")) // INCOMPLETE [GET HEIGHT VALUES]
+            else if (lastSelectedFile == "SOLDIER") // INCOMPLETE [GET HEIGHT VALUES]
             {
                 switch (SelectedIndex)
                 {
@@ -301,7 +301,7 @@
                     case 7: w = 68; h = 130; break;
                 }
             }
-            else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE [GET HEIGHT VALUES]
+            else if (lastSelectedFile == "SYNTH") // INCOMPLETE [GET HEIGHT VALUES]
             {
                 switch (SelectedIndex)
                 {
@@ -327,7 +327,7 @@
                     case 19: w = 64; h = 130; break;
                 }
             }
-            else if (lastSelectedFile.Contains("WAR") && !lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE [GET HEIGHT VALUES]
+            else if (lastSelectedFile == "WAR") // INCOMPLETE [GET HEIGHT VALUES]
             {
                 switch (SelectedIndex)
                 {
@@ -343,7 +343,7 @@
                     case 9: w = 52; h = 130; break;
                 }
             }
-            else if (lastSelectedFile.Contains("WARCEIL"))
+            else if (lastSelectedFile == "WARCEIL") // INCOMPLETE
             {
                 switch (SelectedIndex)
                 {
