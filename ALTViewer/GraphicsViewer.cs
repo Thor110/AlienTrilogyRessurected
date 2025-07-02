@@ -471,7 +471,7 @@ namespace ALTViewer
             // Get section currently selected in comboBox1
             var selectedSectionName = comboBox1.SelectedItem!.ToString();
             var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
-            if (selectedOriginalSection == null)
+            if (selectedOriginalSection == null) // this should never happen
             {
                 MessageBox.Show("Selected section not found in original file.");
                 return;
