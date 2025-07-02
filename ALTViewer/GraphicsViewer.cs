@@ -571,29 +571,29 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // 7
-                            case 1: w = 32; h = 77; break; // 7
-                            case 2: w = 32; h = 77; break; // 7
-                            case 3: w = 32; h = 77; break; // 7
-                            case 4: w = 32; h = 77; break; // 7
-                            case 5: w = 32; h = 77; break; // 7
-                            case 6: w = 32; h = 77; break; // 7
-                            case 7: w = 32; h = 77; break; // 7
+                            case 0: w = 50; h = 120; break; // 7
+                            case 1: w = 50; h = 120; break; // 7
+                            case 2: w = 50; h = 120; break; // 7
+                            case 3: w = 50; h = 120; break; // 7
+                            case 4: w = 50; h = 120; break; // 7
+                            case 5: w = 50; h = 120; break; // 7
+                            case 6: w = 50; h = 120; break; // 7
+                            case 7: w = 50; h = 120; break; // 7
                         }
                     }
-                    else if (lastSelectedFile.Contains("HANDLER")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("HANDLER")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 8
-                            case 1: w = 32; h = 77; break; // UNKNOWN 8
-                            case 2: w = 32; h = 77; break; // UNKNOWN 8
-                            case 3: w = 32; h = 77; break; // UNKNOWN 8
-                            case 4: w = 32; h = 77; break; // UNKNOWN 8
-                            case 5: w = 32; h = 77; break; // UNKNOWN 8
-                            case 6: w = 32; h = 77; break; // UNKNOWN 8
-                            case 7: w = 32; h = 77; break; // UNKNOWN 8
-                            case 8: w = 32; h = 77; break; // UNKNOWN 8
+                            case 0: w = 64; h = 101; break;
+                            case 1: w = 52; h = 101; break;
+                            case 2: w = 48; h = 102; break;
+                            case 3: w = 56; h = 103; break;
+                            case 4: w = 68; h = 102; break;
+                            case 5: w = 56; h = 104; break;
+                            case 6: w = 68; h = 100; break;
+                            case 7: w = 48; h = 100; break;
+                            case 8: w = 44; h = 100; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("HUGGER")) // INCOMPLETE
