@@ -632,14 +632,14 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 30; h = 130; break; // UNKNOWN 7 // 30-
-                            case 1: w = 30; h = 130; break; // UNKNOWN 7
-                            case 2: w = 30; h = 130; break; // UNKNOWN 7
-                            case 3: w = 30; h = 130; break; // UNKNOWN 7
-                            case 4: w = 30; h = 130; break; // UNKNOWN 7
-                            case 5: w = 30; h = 130; break; // UNKNOWN 7
-                            case 6: w = 30; h = 130; break; // UNKNOWN 7
-                            case 7: w = 30; h = 130; break; // UNKNOWN 7
+                            case 0: w = 48; h = 130; break;
+                            case 1: w = 44; h = 130; break;
+                            case 2: w = 48; h = 130; break;
+                            case 3: w = 60; h = 130; break;
+                            case 4: w = 60; h = 130; break;
+                            case 5: w = 60; h = 130; break;
+                            case 6: w = 40; h = 130; break;
+                            case 7: w = 68; h = 130; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE
