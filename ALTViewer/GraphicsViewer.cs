@@ -31,6 +31,8 @@ namespace ALTViewer
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT" }; // excluded palettes
+        public int w = 0; // BAMBI
+        public int h = 0;
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         public GraphicsViewer()
         {
@@ -305,7 +307,16 @@ namespace ALTViewer
         // export file
         private string ExportFile(BndSection section, string sectionName)
         {
-            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+            if (compressed)
+            {
+                // TODO : work out all the dimensions for compressed images
+                w = 34; // BAMBI
+                h = 80;
+            }
+            else
+            {
+                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+            }
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
@@ -402,8 +413,8 @@ namespace ALTViewer
                 if (compressed)
                 {
                     //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                    int w = 32; // BAMBI
-                    int h = 77;
+                    w = 32; // BAMBI
+                    h = 77;
                     //int w = 84; // SHOTGUN
                     //int h = 77;
                     if (currentPalette == null) // TODO : remove this testing check when compressed image loading is working
@@ -411,8 +422,7 @@ namespace ALTViewer
                         MessageBox.Show("Palette is null");
                         return;
                     }
-                    //File.WriteAllBytes("debug_dump_palette.bin", currentPalette!);
-                    pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, currentPalette!, w, h);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
                 else
                 {
@@ -421,9 +431,11 @@ namespace ALTViewer
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
                     }
-                    var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
+                pictureBox1.Width = w;
+                pictureBox1.Height = h;
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
         }
@@ -482,7 +494,7 @@ namespace ALTViewer
         private bool CheckDimensions(Bitmap frameImage)
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : update for compressed files
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;

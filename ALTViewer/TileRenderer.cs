@@ -142,8 +142,8 @@ namespace ALTViewer
             bw.Write(formSizeBytes);
             return ms.ToArray();
         }
-        // Build an indexed bitmap from pixel data and a palette
-        public static Bitmap BuildIndexedBitmap(byte[] pixelData, byte[] palette, int width, int height)
+        // Build an indexed bitmap from pixel data and a palette [NO LONGER USED]
+        /*public static Bitmap BuildIndexedBitmap(byte[] pixelData, byte[] palette, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
             ColorPalette pal = bmp.Palette; // Set the palette
@@ -154,7 +154,7 @@ namespace ALTViewer
             for (int y = 0; y < height; y++) { Marshal.Copy(pixelData, y * width, data.Scan0 + y * stride, width); }
             bmp.UnlockBits(data);
             return bmp;
-        }
+        }*/
         // Decompress a sprite section using a custom compression algorithm
         public static byte[] DecompressSpriteSection(byte[] input)
         {
@@ -327,8 +327,7 @@ namespace ALTViewer
 
             // Set the palette
             ColorPalette pal = bmp.Palette;
-            for (int i = 0; i < palette.Length && i < 256; i++)
-                pal.Entries[i] = palette[i];
+            for (int i = 0; i < palette.Length && i < 256; i++) { pal.Entries[i] = palette[i]; }
             bmp.Palette = pal;
 
             // Lock the bitmap data

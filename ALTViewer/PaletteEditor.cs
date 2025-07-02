@@ -10,6 +10,8 @@
         private bool compressed;
         private bool usePAL;
         private bool trim;
+        private int w = 0; // BAMBI
+        private int h = 0;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
@@ -223,18 +225,17 @@
             var section = currentSections[comboBox1.SelectedIndex];
             if (!compressed)
             {
-                var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
+                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             }
             else
             {
+                w = 32; // BAMBI
+                h = 77;
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                int w = 32; // BAMBI
-                int h = 77;
                 //int w = 84; // SHOTGUN
                 //int h = 77;
-                pictureBox1.Image = TileRenderer.BuildIndexedBitmap(section.Data, palette!, w, h);
             }
+            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
         }
         // export palette file button click
         private void button4_Click(object sender, EventArgs e)
