@@ -233,6 +233,7 @@ namespace ALTViewer
                     byte[] decompressedData;
                     try
                     {
+                        //List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data); // TODO : Decompress all frames in section (if needed)
                         decompressedData = TileRenderer.DecompressSpriteSection(section.Data); // Try decompressing individual F0 section
                         if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); } // Heuristic: If result is tiny, probably not valid
                     }
@@ -702,10 +703,10 @@ namespace ALTViewer
                         }
                     }
                     // TODO : extra frames
-                    //ListFrames();
+                    ListFrames();
                     // TODO : extra frames
-                    File.WriteAllBytes("TEST.DAT", section.Data);
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+                    //File.WriteAllBytes("TEST.DAT", section.Data);
+                    //pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
                 }
                 else
                 {
@@ -729,13 +730,17 @@ namespace ALTViewer
         {
             RenderSubFrame();
         }
+        // render sub-frame
         private void RenderSubFrame()
         {
-            if (comboBox2.SelectedIndex == -1) { return; } // no selection // TODO : handle this better
-            var section = currentSections[comboBox1.SelectedIndex];
-            int frameIndex = comboBox2.SelectedIndex;
+            //if (comboBox2.SelectedIndex == -1) { return; } // no selection // TODO : handle this better
+            byte[] fullFile = File.ReadAllBytes(lastSelectedFilePath);
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            var section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
-            if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
+            int frameIndex = comboBox2.SelectedIndex;
+            //if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
             byte[] frameData = frames[frameIndex];
             try
             {
@@ -746,25 +751,33 @@ namespace ALTViewer
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
         }
+        // list sub frames
         private void ListFrames()
         {
-            comboBox2.Items.Clear(); // Clear any previous entries
-            if (comboBox1.SelectedIndex == -1) return;
+            comboBox2.Items.Clear();
 
-            var section = currentSections[comboBox1.SelectedIndex];
-            var frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+            // Get original B16 file
+            byte[] fullFile = File.ReadAllBytes(lastSelectedFilePath);
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
 
-            for (int i = 0; i < frames.Count; i++)
+            // Get section currently selected in comboBox1
+            var selectedSectionName = comboBox1.SelectedItem!.ToString();
+            var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
+
+            if (selectedOriginalSection == null)
             {
-                comboBox2.Items.Add($"Frame {i}");
+                MessageBox.Show("Selected section not found in original file.");
+                return;
             }
 
-            if (comboBox2.Items.Count > 0)
-            {
-                comboBox2.SelectedIndex = 0;
-            }
+            var frames = TileRenderer.DecompressAllFramesInSection(selectedOriginalSection.Data);
+
+            for (int i = 0; i < frames.Count; i++) { comboBox2.Items.Add($"Frame {i}"); }
+
+            if (comboBox2.Items.Count > 0) { comboBox2.SelectedIndex = 0; }
         }
-        public static void PrintExtraFrameCounts(string b16File)
+        /*public static void PrintExtraFrameCounts(string b16File)
         {
             byte[] fullFile = File.ReadAllBytes(b16File);
             List<BndSection> sections = TileRenderer.ParseBndFormSections(fullFile);
@@ -775,7 +788,7 @@ namespace ALTViewer
                 var frames = TileRenderer.DecompressAllFramesInSection(section.Data);
                 MessageBox.Show($"[{Path.GetFileName(b16File)}] Section {section.Name} has {frames.Count} frame(s)");
             }
-        }
+        }*/
         // replace button click event
         private void button5_Click(object sender, EventArgs e)
         {
