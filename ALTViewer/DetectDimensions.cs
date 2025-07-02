@@ -248,17 +248,111 @@
             {
                 switch (SelectedIndex)
                 {
-                    case 0: w = 40; h = 48; break;
-                    case 1: w = 32; h = 30; break;
-                    case 2: w = 52; h = 61; break;
-                    case 3: w = 36; h = 35; break;
-                    case 4: w = 84; h = 61; break;
-                    case 5: w = 52; h = 40; break;
-                    case 6: w = 60; h = 42; break;
-                    case 7: w = 60; h = 34; break;
-                    case 8: w = 56; h = 39; break;
-                    case 9: w = 56; h = 38; break;
-                    case 10: w = 48; h = 31; break;
+                    case 0:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 40; h = 48; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 1:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 32; h = 30; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                            case 4: w = 128; h = 50; break;
+                            case 5: w = 128; h = 50; break;
+                            case 6: w = 128; h = 50; break;
+                            case 7: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 2:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 52; h = 61; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 3:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 36; h = 35; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 4:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 84; h = 61; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                            case 4: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 5:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 52; h = 40; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                            case 4: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 6:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 60; h = 42; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 7:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 60; h = 34; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 8:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 56; h = 39; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 9:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 56; h = 38; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
+                    case 10:
+                        switch (FrameIndex) // INCOMPLETE
+                        {
+                            case 0: w = 48; h = 31; break; // CORRECT
+                            case 1: w = 128; h = 50; break;
+                            case 2: w = 128; h = 50; break;
+                            case 3: w = 128; h = 50; break;
+                        }
+                        break;
                 }
             }
             else if (lastSelectedFile == "COLONIST") // INCOMPLETE
