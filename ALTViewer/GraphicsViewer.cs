@@ -411,7 +411,6 @@ namespace ALTViewer
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); TODO : update for compressed files
                 if (compressed)
                 {
-                    // WEAPONS COMPLETE
                     if (lastSelectedFile.Contains("FLAME"))
                     {
                         switch (comboBox1.SelectedIndex)
@@ -456,10 +455,10 @@ namespace ALTViewer
                             case 1: w = 124; h = 108; break;
                             case 2: w = 128; h = 50; break;
                         }
-                    } // ENEMIES INCOMPLETE
+                    }
                     else if (lastSelectedFile.Contains("BAMBI"))
                     {
-                        switch(comboBox1.SelectedIndex) // COMPLETE
+                        switch(comboBox1.SelectedIndex)
                         {
                             case 0: w = 32; h = 59; break;
                             case 4: w = 32; h = 69; break;
@@ -475,7 +474,7 @@ namespace ALTViewer
                     }
                     else if (lastSelectedFile.Contains("BURSTER"))
                     {
-                        switch (comboBox1.SelectedIndex) // COMPLETE
+                        switch (comboBox1.SelectedIndex)
                         {
                             case 0: w = 40; h = 48; break;
                             case 1: w = 32; h = 30; break;
@@ -492,7 +491,7 @@ namespace ALTViewer
                     }
                     else if (lastSelectedFile.Contains("COLONIST"))
                     {
-                        switch (comboBox1.SelectedIndex) // COMPLETE
+                        switch (comboBox1.SelectedIndex)
                         {
                             case 0:
                             case 1: w = 32; h = 56; break;
@@ -521,7 +520,7 @@ namespace ALTViewer
                     }
                     else if (lastSelectedFile.Contains("DOG") && !lastSelectedFile.Contains("DOGCEIL"))
                     {
-                        switch (comboBox1.SelectedIndex) // COMPLETE
+                        switch (comboBox1.SelectedIndex)
                         {
                             case 0: w = 88; h = 101; break;
                             case 1: w = 88; h = 52; break;
@@ -536,7 +535,7 @@ namespace ALTViewer
                             case 10: w = 60; h = 92; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("DOGCEIL")) // COMPLETE
+                    else if (lastSelectedFile.Contains("DOGCEIL"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -547,7 +546,7 @@ namespace ALTViewer
                             case 4: w = 92; h = 77; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("EGGS")) // COMPLETE
+                    else if (lastSelectedFile.Contains("EGGS"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -559,7 +558,7 @@ namespace ALTViewer
                             case 5: w = 48; h = 57; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("FINGERS")) // COMPLETE
+                    else if (lastSelectedFile.Contains("FINGERS"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -567,7 +566,7 @@ namespace ALTViewer
                             case 1: w = 120; h = 45; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("GUARD")) // COMPLETE
+                    else if (lastSelectedFile.Contains("GUARD"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -581,7 +580,7 @@ namespace ALTViewer
                             case 7: w = 56; h = 114; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("HANDLER")) // COMPLETE
+                    else if (lastSelectedFile.Contains("HANDLER"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -596,7 +595,7 @@ namespace ALTViewer
                             case 8: w = 44; h = 100; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("HUGGER")) // COMPLETE
+                    else if (lastSelectedFile.Contains("HUGGER"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -610,7 +609,7 @@ namespace ALTViewer
                             case 7: w = 48; h = 62; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("QUEEN")) // COMPLETE
+                    else if (lastSelectedFile.Contains("QUEEN"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
@@ -646,26 +645,26 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 38; h = 130; break; // UNKNOWN 19 //38-
-                            case 1: w = 38; h = 130; break; // UNKNOWN 19
-                            case 2: w = 38; h = 130; break; // UNKNOWN 19
-                            case 3: w = 38; h = 130; break; // UNKNOWN 19
-                            case 4: w = 38; h = 130; break; // UNKNOWN 19
-                            case 5: w = 38; h = 130; break; // UNKNOWN 19
-                            case 6: w = 38; h = 130; break; // UNKNOWN 19
-                            case 7: w = 38; h = 130; break; // UNKNOWN 19
-                            case 8: w = 38; h = 130; break; // UNKNOWN 19
-                            case 9: w = 38; h = 130; break; // UNKNOWN 19
-                            case 10: w = 38; h = 130; break; // UNKNOWN 19
-                            case 11: w = 38; h = 130; break; // UNKNOWN 19
-                            case 12: w = 38; h = 130; break; // UNKNOWN 19
-                            case 13: w = 38; h = 130; break; // UNKNOWN 19
-                            case 14: w = 38; h = 130; break; // UNKNOWN 19
-                            case 15: w = 38; h = 130; break; // UNKNOWN 19
-                            case 16: w = 38; h = 130; break; // UNKNOWN 19
-                            case 17: w = 38; h = 130; break; // UNKNOWN 19
-                            case 18: w = 38; h = 130; break; // UNKNOWN 19
-                            case 19: w = 38; h = 130; break; // UNKNOWN 19
+                            case 0: w = 84; h = 130; break;
+                            case 1: w = 44; h = 130; break;
+                            case 2: w = 72; h = 130; break;
+                            case 3: w = 88; h = 130; break;
+                            case 4: w = 40; h = 130; break;
+                            case 5: w = 72; h = 130; break;
+                            case 6: w = 68; h = 130; break;
+                            case 7: w = 68; h = 130; break;
+                            case 8: w = 64; h = 130; break;
+                            case 9: w = 72; h = 130; break;
+                            case 10: w = 64; h = 130; break;
+                            case 11: w = 64; h = 130; break;
+                            case 12: w = 72; h = 130; break;
+                            case 13: w = 40; h = 130; break;
+                            case 14: w = 100; h = 130; break;
+                            case 15: w = 96; h = 130; break;
+                            case 16: w = 68; h = 130; break;
+                            case 17: w = 84; h = 130; break;
+                            case 18: w = 80; h = 130; break;
+                            case 19: w = 64; h = 130; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("WAR") && !lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
@@ -684,7 +683,7 @@ namespace ALTViewer
                             case 9: w = 52; h = 130; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("WARCEIL")) // COMPLETE
+                    else if (lastSelectedFile.Contains("WARCEIL"))
                     {
                         switch (comboBox1.SelectedIndex)
                         {
