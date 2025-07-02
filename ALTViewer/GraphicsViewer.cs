@@ -567,18 +567,18 @@ namespace ALTViewer
                             case 1: w = 120; h = 45; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("GUARD")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("GUARD")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
                             case 0: w = 56; h = 120; break;
-                            case 1: w = 44; h = 120; break;
-                            case 2: w = 32; h = 120; break;
-                            case 3: w = 56; h = 120; break;
-                            case 4: w = 56; h = 120; break;
-                            case 5: w = 56; h = 120; break;
-                            case 6: w = 64; h = 120; break;
-                            case 7: w = 56; h = 120; break;
+                            case 1: w = 44; h = 113; break;
+                            case 2: w = 32; h = 115; break;
+                            case 3: w = 56; h = 119; break;
+                            case 4: w = 56; h = 115; break;
+                            case 5: w = 56; h = 116; break;
+                            case 6: w = 64; h = 118; break;
+                            case 7: w = 56; h = 114; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("HANDLER")) // COMPLETE
