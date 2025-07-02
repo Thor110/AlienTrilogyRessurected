@@ -672,16 +672,16 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 130; h = 130; break; // UNKNOWN 9 // -130
-                            case 1: w = 130; h = 130; break; // UNKNOWN 9
-                            case 2: w = 130; h = 130; break; // UNKNOWN 9
-                            case 3: w = 130; h = 130; break; // UNKNOWN 9
-                            case 4: w = 130; h = 130; break; // UNKNOWN 9
-                            case 5: w = 130; h = 130; break; // UNKNOWN 9
-                            case 6: w = 130; h = 130; break; // UNKNOWN 9
-                            case 7: w = 130; h = 130; break; // UNKNOWN 9
-                            case 8: w = 130; h = 130; break; // UNKNOWN 9
-                            case 9: w = 130; h = 130; break; // UNKNOWN 9
+                            case 0: w = 76; h = 130; break;
+                            case 1: w = 48; h = 130; break;
+                            case 2: w = 60; h = 130; break;
+                            case 3: w = 56; h = 130; break;
+                            case 4: w = 88; h = 130; break;
+                            case 5: w = 112; h = 130; break;
+                            case 6: w = 76; h = 130; break;
+                            case 7: w = 60; h = 130; break;
+                            case 8: w = 52; h = 130; break;
+                            case 9: w = 52; h = 130; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("WARCEIL")) // COMPLETE
