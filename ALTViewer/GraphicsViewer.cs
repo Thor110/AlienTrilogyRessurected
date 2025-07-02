@@ -442,7 +442,7 @@ namespace ALTViewer
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             RenderSubFrame();
         }
-        // render sub-frame
+        // render sub-frame // TODO : add sub-frames to the palette editor
         private void RenderSubFrame()
         {
             (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex); // TODO : detect new width height values
