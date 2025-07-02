@@ -559,7 +559,7 @@ namespace ALTViewer
                             case 5: w = 48; h = 57; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("FINGERS")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("FINGERS")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
