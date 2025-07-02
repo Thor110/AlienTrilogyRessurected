@@ -596,18 +596,18 @@ namespace ALTViewer
                             case 8: w = 44; h = 100; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("HUGGER")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("HUGGER")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 7
-                            case 1: w = 32; h = 77; break; // UNKNOWN 7
-                            case 2: w = 32; h = 77; break; // UNKNOWN 7
-                            case 3: w = 32; h = 77; break; // UNKNOWN 7
-                            case 4: w = 32; h = 77; break; // UNKNOWN 7
-                            case 5: w = 32; h = 77; break; // UNKNOWN 7
-                            case 6: w = 32; h = 77; break; // UNKNOWN 7
-                            case 7: w = 32; h = 77; break; // UNKNOWN 7
+                            case 0: w = 88; h = 19; break;
+                            case 1: w = 92; h = 30; break;
+                            case 2: w = 124; h = 26; break;
+                            case 3: w = 92; h = 30; break;
+                            case 4: w = 48; h = 37; break;
+                            case 5: w = 64; h = 32; break;
+                            case 6: w = 76; h = 40; break;
+                            case 7: w = 48; h = 62; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("QUEEN")) // INCOMPLETE
