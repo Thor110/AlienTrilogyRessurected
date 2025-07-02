@@ -456,8 +456,7 @@ namespace ALTViewer
                             case 1: w = 124; h = 108; break;
                             case 2: w = 128; h = 50; break;
                         }
-                    }
-                    // ENEMIES INCOMPLETE
+                    } // ENEMIES INCOMPLETE
                     else if (lastSelectedFile.Contains("BAMBI"))
                     {
                         switch(comboBox1.SelectedIndex) // COMPLETE
@@ -520,32 +519,32 @@ namespace ALTViewer
                             case 19: w = 36; h = 42; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("DOG"))
+                    else if (lastSelectedFile.Contains("DOG") && !lastSelectedFile.Contains("DOGCEIL"))
                     {
-                        switch (comboBox1.SelectedIndex) // INCOMPLETE
+                        switch (comboBox1.SelectedIndex) // COMPLETE
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 10
-                            case 1: w = 32; h = 77; break; // UNKNOWN 10
-                            case 2: w = 32; h = 77; break; // UNKNOWN 10
-                            case 3: w = 32; h = 77; break; // UNKNOWN 10
-                            case 4: w = 32; h = 77; break; // UNKNOWN 10
-                            case 5: w = 32; h = 77; break; // UNKNOWN 10
-                            case 6: w = 32; h = 77; break; // UNKNOWN 10
-                            case 7: w = 32; h = 77; break; // UNKNOWN 10
-                            case 8: w = 32; h = 77; break; // UNKNOWN 10
-                            case 9: w = 32; h = 77; break; // UNKNOWN 10
-                            case 10: w = 32; h = 77; break; // UNKNOWN 10
+                            case 0: w = 88; h = 101; break;
+                            case 1: w = 88; h = 52; break;
+                            case 2: w = 84; h = 98; break;
+                            case 3: w = 64; h = 92; break;
+                            case 4: w = 56; h = 78; break;
+                            case 5: w = 80; h = 79; break;
+                            case 6: w = 100; h = 82; break;
+                            case 7: w = 104; h = 86; break;
+                            case 8: w = 60; h = 86; break;
+                            case 9:
+                            case 10: w = 60; h = 92; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("DOGCEIL")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("DOGCEIL")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 4
-                            case 1: w = 32; h = 77; break; // UNKNOWN 4
-                            case 2: w = 32; h = 77; break; // UNKNOWN 4
-                            case 3: w = 32; h = 77; break; // UNKNOWN 4
-                            case 4: w = 32; h = 77; break; // UNKNOWN 4
+                            case 0: w = 120; h = 29; break;
+                            case 1: w = 112; h = 28; break;
+                            case 2: w = 80; h = 113; break;
+                            case 3: w = 120; h = 44; break;
+                            case 4: w = 92; h = 77; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("EGGS")) // INCOMPLETE
