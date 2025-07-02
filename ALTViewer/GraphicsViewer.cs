@@ -411,15 +411,6 @@ namespace ALTViewer
                 //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); TODO : update for compressed files
                 if (compressed)
                 {
-                    //w = 32; // BAMBI[00, 04, 05] COLONIST[00, 01, 05, 06, 12, 13, 20, 21] & GUARD[02]
-                    //h = 77;
-                    //w = 84; // SHOTGUN [FRAME 00]
-                    //h = 77;
-                    //w = 40; // MM9 [FRAME 00 & 01]
-                    //h = 65; // FRAME 02 = 76x83
-                    //w = 92; // PULSE [FRAME 03]
-                    //h = 74;
-                    // TRY : 40 88
                     // WEAPONS COMPLETE
                     if (lastSelectedFile.Contains("FLAME"))
                     {
@@ -533,20 +524,39 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex) // INCOMPLETE
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 10
+                            case 1: w = 32; h = 77; break; // UNKNOWN 10
+                            case 2: w = 32; h = 77; break; // UNKNOWN 10
+                            case 3: w = 32; h = 77; break; // UNKNOWN 10
+                            case 4: w = 32; h = 77; break; // UNKNOWN 10
                             case 5: w = 32; h = 77; break; // UNKNOWN 10
+                            case 6: w = 32; h = 77; break; // UNKNOWN 10
+                            case 7: w = 32; h = 77; break; // UNKNOWN 10
+                            case 8: w = 32; h = 77; break; // UNKNOWN 10
+                            case 9: w = 32; h = 77; break; // UNKNOWN 10
+                            case 10: w = 32; h = 77; break; // UNKNOWN 10
                         }
                     }
                     else if (lastSelectedFile.Contains("DOGCEIL")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 5: w = 32; h = 77; break; // UNKNOWN 4
+                            case 0: w = 32; h = 77; break; // UNKNOWN 4
+                            case 1: w = 32; h = 77; break; // UNKNOWN 4
+                            case 2: w = 32; h = 77; break; // UNKNOWN 4
+                            case 3: w = 32; h = 77; break; // UNKNOWN 4
+                            case 4: w = 32; h = 77; break; // UNKNOWN 4
                         }
                     }
                     else if (lastSelectedFile.Contains("EGGS")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 5
+                            case 1: w = 32; h = 77; break; // UNKNOWN 5
+                            case 2: w = 32; h = 77; break; // UNKNOWN 5
+                            case 3: w = 32; h = 77; break; // UNKNOWN 5
+                            case 4: w = 32; h = 77; break; // UNKNOWN 5
                             case 5: w = 32; h = 77; break; // UNKNOWN 5
                         }
                     }
@@ -554,63 +564,136 @@ namespace ALTViewer
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 5: w = 32; h = 77; break; // UNKNOWN 1
+                            case 0: w = 32; h = 77; break; // UNKNOWN 1
+                            case 1: w = 32; h = 77; break; // UNKNOWN 1
                         }
                     }
                     else if (lastSelectedFile.Contains("GUARD")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // 7
+                            case 1: w = 32; h = 77; break; // 7
                             case 2: w = 32; h = 77; break; // 7
+                            case 3: w = 32; h = 77; break; // 7
+                            case 4: w = 32; h = 77; break; // 7
+                            case 5: w = 32; h = 77; break; // 7
+                            case 6: w = 32; h = 77; break; // 7
+                            case 7: w = 32; h = 77; break; // 7
                         }
                     }
                     else if (lastSelectedFile.Contains("HANDLER")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 8
+                            case 1: w = 32; h = 77; break; // UNKNOWN 8
+                            case 2: w = 32; h = 77; break; // UNKNOWN 8
+                            case 3: w = 32; h = 77; break; // UNKNOWN 8
+                            case 4: w = 32; h = 77; break; // UNKNOWN 8
                             case 5: w = 32; h = 77; break; // UNKNOWN 8
+                            case 6: w = 32; h = 77; break; // UNKNOWN 8
+                            case 7: w = 32; h = 77; break; // UNKNOWN 8
+                            case 8: w = 32; h = 77; break; // UNKNOWN 8
                         }
                     }
                     else if (lastSelectedFile.Contains("HUGGER")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 7
+                            case 1: w = 32; h = 77; break; // UNKNOWN 7
+                            case 2: w = 32; h = 77; break; // UNKNOWN 7
+                            case 3: w = 32; h = 77; break; // UNKNOWN 7
+                            case 4: w = 32; h = 77; break; // UNKNOWN 7
                             case 5: w = 32; h = 77; break; // UNKNOWN 7
+                            case 6: w = 32; h = 77; break; // UNKNOWN 7
+                            case 7: w = 32; h = 77; break; // UNKNOWN 7
                         }
                     }
                     else if (lastSelectedFile.Contains("QUEEN")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 11
+                            case 1: w = 32; h = 77; break; // UNKNOWN 11
+                            case 2: w = 32; h = 77; break; // UNKNOWN 11
+                            case 3: w = 32; h = 77; break; // UNKNOWN 11
+                            case 4: w = 32; h = 77; break; // UNKNOWN 11
                             case 5: w = 32; h = 77; break; // UNKNOWN 11
+                            case 6: w = 32; h = 77; break; // UNKNOWN 11
+                            case 7: w = 32; h = 77; break; // UNKNOWN 11
+                            case 8: w = 32; h = 77; break; // UNKNOWN 11
+                            case 9: w = 32; h = 77; break; // UNKNOWN 11
+                            case 10: w = 32; h = 77; break; // UNKNOWN 11
+                            case 11: w = 32; h = 77; break; // UNKNOWN 11
                         }
                     }
                     else if (lastSelectedFile.Contains("SOLDIER")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 7
+                            case 1: w = 32; h = 77; break; // UNKNOWN 7
+                            case 2: w = 32; h = 77; break; // UNKNOWN 7
+                            case 3: w = 32; h = 77; break; // UNKNOWN 7
+                            case 4: w = 32; h = 77; break; // UNKNOWN 7
                             case 5: w = 32; h = 77; break; // UNKNOWN 7
+                            case 6: w = 32; h = 77; break; // UNKNOWN 7
+                            case 7: w = 32; h = 77; break; // UNKNOWN 7
                         }
                     }
                     else if (lastSelectedFile.Contains("SYNTH")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 19
+                            case 1: w = 32; h = 77; break; // UNKNOWN 19
+                            case 2: w = 32; h = 77; break; // UNKNOWN 19
+                            case 3: w = 32; h = 77; break; // UNKNOWN 19
+                            case 4: w = 32; h = 77; break; // UNKNOWN 19
                             case 5: w = 32; h = 77; break; // UNKNOWN 19
+                            case 6: w = 32; h = 77; break; // UNKNOWN 19
+                            case 7: w = 32; h = 77; break; // UNKNOWN 19
+                            case 8: w = 32; h = 77; break; // UNKNOWN 19
+                            case 9: w = 32; h = 77; break; // UNKNOWN 19
+                            case 10: w = 32; h = 77; break; // UNKNOWN 19
+                            case 11: w = 32; h = 77; break; // UNKNOWN 19
+                            case 12: w = 32; h = 77; break; // UNKNOWN 19
+                            case 13: w = 32; h = 77; break; // UNKNOWN 19
+                            case 14: w = 32; h = 77; break; // UNKNOWN 19
+                            case 15: w = 32; h = 77; break; // UNKNOWN 19
+                            case 16: w = 32; h = 77; break; // UNKNOWN 19
+                            case 17: w = 32; h = 77; break; // UNKNOWN 19
+                            case 18: w = 32; h = 77; break; // UNKNOWN 19
+                            case 19: w = 32; h = 77; break; // UNKNOWN 19
                         }
                     }
                     else if (lastSelectedFile.Contains("WAR")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
+                            case 0: w = 32; h = 77; break; // UNKNOWN 9
+                            case 1: w = 32; h = 77; break; // UNKNOWN 9
+                            case 2: w = 32; h = 77; break; // UNKNOWN 9
+                            case 3: w = 32; h = 77; break; // UNKNOWN 9
+                            case 4: w = 32; h = 77; break; // UNKNOWN 9
                             case 5: w = 32; h = 77; break; // UNKNOWN 9
+                            case 6: w = 32; h = 77; break; // UNKNOWN 9
+                            case 7: w = 32; h = 77; break; // UNKNOWN 9
+                            case 8: w = 32; h = 77; break; // UNKNOWN 9
+                            case 9: w = 32; h = 77; break; // UNKNOWN 9
                         }
                     }
                     else if (lastSelectedFile.Contains("WARCEIL")) // INCOMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 5: w = 32; h = 77; break; // UNKNOWN 4
+                            case 0: w = 32; h = 77; break; // UNKNOWN 4
+                            case 1: w = 32; h = 77; break; // UNKNOWN 4
+                            case 2: w = 32; h = 77; break; // UNKNOWN 4
+                            case 3: w = 32; h = 77; break; // UNKNOWN 4
+                            case 4: w = 32; h = 77; break; // UNKNOWN 4
                         }
                     }
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
