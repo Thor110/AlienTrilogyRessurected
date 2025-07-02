@@ -547,16 +547,16 @@ namespace ALTViewer
                             case 4: w = 92; h = 77; break;
                         }
                     }
-                    else if (lastSelectedFile.Contains("EGGS")) // INCOMPLETE
+                    else if (lastSelectedFile.Contains("EGGS")) // COMPLETE
                     {
                         switch (comboBox1.SelectedIndex)
                         {
-                            case 0: w = 32; h = 77; break; // UNKNOWN 5
-                            case 1: w = 32; h = 77; break; // UNKNOWN 5
-                            case 2: w = 32; h = 77; break; // UNKNOWN 5
-                            case 3: w = 32; h = 77; break; // UNKNOWN 5
-                            case 4: w = 32; h = 77; break; // UNKNOWN 5
-                            case 5: w = 32; h = 77; break; // UNKNOWN 5
+                            case 0:
+                            case 1: w = 48; h = 56; break;
+                            case 2: w = 48; h = 63; break;
+                            case 3: w = 52; h = 30; break;
+                            case 4: w = 48; h = 62; break;
+                            case 5: w = 48; h = 57; break;
                         }
                     }
                     else if (lastSelectedFile.Contains("FINGERS")) // INCOMPLETE
