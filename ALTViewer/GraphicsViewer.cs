@@ -425,7 +425,7 @@ namespace ALTViewer
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex.ToString():D2}", 12));
+                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
                     }
                     (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : remove when compressed file dimensions are detected
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
