@@ -1213,16 +1213,16 @@
                             break;
                     }
                     break;
-                case "SYNTH": // INCOMPLETE [GET HEIGHT VALUES FOR FIRST VALUE WHICH STATES CORRECT]
+                case "SYNTH": // INCOMPLETE
                     switch (SelectedIndex)
                     {
                         case 0:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 84; h = 104; break; // CORRECT
-                                case 1: w = 84; h = 130; break;
-                                case 2: w = 84; h = 130; break;
-                                case 3: w = 84; h = 130; break;
+                                case 1: w = 68; h = 96; break; // CORRECT
+                                case 2: w = 80; h = 104; break; // CORRECT
+                                case 3: w = 100; h = 112; break; // CORRECT
                             }
                             break;
                         case 1:
