@@ -328,24 +328,8 @@ namespace ALTViewer
         {
             int previouslySelected = 0;
             if (listBox1.SelectedIndex != -1) { previouslySelected = listBox1.SelectedIndex; } // store previously selected index
-            // TODO : when compressed images are working, remove this code and use the commented code below
-            RadioButton selected = radioButton1.Checked ? radioButton1 :
-                       radioButton2.Checked ? radioButton2 :
-                       radioButton3.Checked ? radioButton3 :
-                       radioButton4;
-            //radioButton1.Checked = true;
-            //Export();
-            //radioButton2.Checked = true;
-            //Export();
             exporting = true;
-            radioButton3.Checked = true;
-            Export();
-            radioButton4.Checked = true;
-            Export();
-            selected.Checked = true;
-            // TODO : when compressed images are working, remove this code and use the commented code below
-            // TODO : use this code to export all radio buttons at once, when compressed images are working
-            /*RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
+            RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
             foreach (var button in buttons)
             {
@@ -356,20 +340,10 @@ namespace ALTViewer
                     button3_Click(null!, null!); // call the export all button click event
                 }
             }
-            buttons[selectedIndex].Checked = true;*/
-            // TODO : integrate this commented code when compressed images are working
+            buttons[selectedIndex].Checked = true;
             exporting = false;
             listBox1.SelectedIndex = previouslySelected; // restore previously selected index
             MessageBox.Show($"All images saved to:\n{outputPath}");
-            MessageBox.Show("NOTE : Only Levels & Panels are exported via this method for now, until compressed images are working."); // TODO : remove this later
-            void Export() // TODO : remove this later ( inlined )
-            {
-                for (int i = 0; i < listBox1.Items.Count; i++)
-                {
-                    listBox1.SelectedIndex = i; // select each item in the list box
-                    button3_Click(null!, null!); // call the export all button click event
-                }
-            }
         }
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
@@ -384,7 +358,6 @@ namespace ALTViewer
                     }
                     else if (compressed)
                     {
-                        // TODO : export compressed frames
                         for (int f = 0; f < comboBox2.Items.Count; f++)
                         {
                             comboBox2.SelectedIndex = f; // select each sub frame
