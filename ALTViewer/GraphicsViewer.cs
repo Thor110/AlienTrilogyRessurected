@@ -364,7 +364,6 @@ namespace ALTViewer
                         for (int f = 0; f < comboBox2.Items.Count; f++)
                         {
                             comboBox2.SelectedIndex = f; // select each sub frame
-                            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!);
                             ExportFile(null!, comboBox1.Items[i]!.ToString()!);
                         }
                     }
