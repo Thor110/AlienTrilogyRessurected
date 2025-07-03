@@ -75,18 +75,18 @@
                             break;
                     }
                     break;
-                case "SHOTGUN": // INCOMPLETE
+                case "SHOTGUN": // COMPLETE
                     switch (SelectedIndex)
                     {
-                        case 0: w = 84; h = 77; break;
+                        case 0: w = 84; h = 77; break; // CORRECT
                         case 1:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 72; h = 101; break; // CORRECT
-                                case 1: w = 72; h = 101; break;
-                                case 2: w = 72; h = 101; break;
-                                case 3: w = 72; h = 101; break;
-                                case 4: w = 72; h = 101; break;
+                                case 1: w = 76; h = 91; break;  // CORRECT
+                                case 2: w = 72; h = 82; break; // CORRECT
+                                case 3: w = 64; h = 83; break; // CORRECT
+                                case 4: w = 76; h = 88; break; // CORRECT
                             }
                             break;
                     }
@@ -94,7 +94,7 @@
                 case "SMART": // INCOMPLETE
                     switch (SelectedIndex)
                     {
-                        case 0: w = 120; h = 52; break;
+                        case 0: w = 120; h = 52; break; // CORRECT
                         case 1:
                             switch (FrameIndex) // INCOMPLETE
                             {
