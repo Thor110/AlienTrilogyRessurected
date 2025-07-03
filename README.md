@@ -5,13 +5,14 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 - 1 : Install the game from : https://collectionchamber.blogspot.com/2017/05/alien-trilogy.html
 - 2 : Download and install the toolkit from here, place it in the same directory as the "Run.exe" file.
 	- Currently there is no release so you will have to build it yourself until the time I issue a release.
+- 3 : Optional : Use the cleanup script provided in "Notes\repack-disc-comparison\CLEANUPSCRIPT" to delete 83.35MBs of unused files from the game.
 
 # To Do List
 
 - Palettes aren't right for the following two files?
 	- PANEL3GF.BND
 	- PANELGFX.BND
-- Compressed images arent loading due to unknown width and height values.
+- Some compressed images are not loading yet due to unknown width and height values.
 
 # Road Map
 
@@ -21,12 +22,11 @@ The road map for this project.
 	- .RAW audio files can be played and converted to .WAV files.
 	- Waveform preview for selected sound files.
 	- Automatic backup of the original file by default.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 90% Complete )
+- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 95% Complete )
 	- Palette detection implemented.
-	- View and replace textures.
+	- View, export and replace textures and compressed images.
 	- Automatic backup of the original file by default.
-	- Compressed images are not working yet.
-- [✅ 3 : Palette Editor](#palette-editor) ( 90% Complete )
+- [✅ 3 : Palette Editor](#palette-editor) ( 95% Complete )
 	- Palette editor and image preview.
 	- Automatic backup of the original file by default.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
@@ -62,16 +62,22 @@ Listen to, extract, replace or restore audio files from backups.
 
 ## Graphics Viewer
 
-View and extract textures and sprites.
+View, extract and replace textures from the game.
 
 <div align="center">
   <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
 </div>
 
+View, extract and replace animation frames in the game.
+
+<div align="center">
+  <img src="Images/compressedimages.png" alt="Compressed Images">
+</div>
+
 Replace textures. ( Example : Barrel texture used for the Crate )
 
 <div align="center">
-  <img src="Images/texturereplacement.png" alt="Replaced Texture">
+  <img src="Images/texturereplacement.png" alt="Replace Textures">
 </div>
 
 ## Palette Editor
