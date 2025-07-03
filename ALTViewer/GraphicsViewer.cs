@@ -354,13 +354,13 @@ namespace ALTViewer
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
+                    comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
                     if (!compressed && !palfile) // update embedded palette for each frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
                     }
                     else if (compressed)
                     {
-                        comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
                         for (int f = 0; f < comboBox2.Items.Count; f++)
                         {
                             comboBox2.SelectedIndex = f; // select each sub frame
