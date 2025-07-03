@@ -271,8 +271,7 @@ namespace ALTViewer
             }
             else
             {
-                // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
-                if (binbnd.Contains("PANEL"))
+                if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
                 {
                     //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
                 }
@@ -308,15 +307,15 @@ namespace ALTViewer
         // export file
         private string ExportFile(BndSection section, string sectionName)
         {
-            if (compressed)
+            if (!compressed)
             {
-                // TODO : work out all the dimensions for compressed images
-                MessageBox.Show("Replacing compressed images is not supported yet.");
-                return "ERROR";
+                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
             }
             else
             {
-                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                // TODO : work out all the dimensions for compressed images
+                MessageBox.Show("Exporting compressed images is not supported yet.");
+                return "ERROR"; // TEMPORARY
             }
             string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
             TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
@@ -410,14 +409,7 @@ namespace ALTViewer
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
-                if (compressed)
-                {
-                    lastSelectedSubFrame = -1; // reset last selected sub frame index
-                    comboBox2.Visible = true;
-                    label5.Visible = true;
-                    DetectFrames.ListFrames(lastSelectedFilePath, comboBox1, comboBox2);
-                }
-                else
+                if (!compressed)
                 {
                     comboBox2.Visible = false;
                     label5.Visible = false;
@@ -430,6 +422,13 @@ namespace ALTViewer
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+                }
+                else
+                {
+                    lastSelectedSubFrame = -1; // reset last selected sub frame index
+                    comboBox2.Visible = true;
+                    label5.Visible = true;
+                    DetectFrames.ListFrames(lastSelectedFilePath, comboBox1, comboBox2);
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
@@ -497,8 +496,8 @@ namespace ALTViewer
         // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {
-            var section = currentSections[comboBox1.SelectedIndex];
-            var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : update for compressed files
+            //var section = currentSections[comboBox1.SelectedIndex];
+            //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : update for compressed files
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;
