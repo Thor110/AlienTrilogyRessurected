@@ -91,23 +91,23 @@
                             break;
                     }
                     break;
-                case "SMART": // INCOMPLETE
+                case "SMART": // COMPLETE
                     switch (SelectedIndex)
                     {
                         case 0: w = 120; h = 52; break; // CORRECT
                         case 1:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 124; h = 108; break; // CORRECT
-                                case 1: w = 124; h = 108; break;
+                                case 1: w = 128; h = 104; break; // CORRECT
                             }
                             break;
                         case 2:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 128; h = 50; break; // CORRECT
-                                case 1: w = 128; h = 50; break;
-                                case 2: w = 128; h = 50; break;
+                                case 1: w = 124; h = 80; break; // CORRECT
+                                case 2: w = 116; h = 112; break; // CORRECT
                             }
                             break;
                     }
