@@ -54,29 +54,29 @@ namespace ALTViewer
         // graphics GFX
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton(true);
+            ListBoxes(true);
             ListFiles(gfxDirectory); // .BND and .B16 files exist in the GFX folder which are used
         }
         // enemies NME
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton(false);
+            ListBoxes(false);
             ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are all compressed .B16 files
         }
         // levels SECT##
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton(false);
+            ListBoxes(false);
             foreach (string level in levels) { ListFiles(level); } // levels are all .B16 files
         }
         // panels LANGUAGE
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton(true);
+            ListBoxes(true);
             ListFiles(languageDirectory, ".NOPE", ".16"); // .NOPE ignores the unused .BND files in the LANGUAGE folder
         }
         // clear listBox1 then enable or disable the palette list box based on the selected radio button
-        private void RadioButton(bool enabled)
+        private void ListBoxes(bool enabled)
         {
             listBox1.Items.Clear();
             listBox2.Enabled = enabled;
@@ -195,7 +195,7 @@ namespace ALTViewer
                     binbnd = binbnd.Replace(".BND", ".B16"); // but these are B16 files
                     palfile = false;
                     listBox2.Enabled = false;
-                    compressed = false; // reset compressed to false for next detection
+                    compressed = false;
                 }
             }
             else if (radioButton2.Checked)
