@@ -428,6 +428,7 @@ namespace ALTViewer
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!); // render the sub frame
+            button8_Click(sender, e); // TODO : remove this after width values are determined and logged
         }
         // replace button click event
         private void button5_Click(object sender, EventArgs e)
@@ -553,6 +554,28 @@ namespace ALTViewer
                 listBox1_SelectedIndexChanged(null!, null!); // Re-run selected palette loading logic and re-render image
             };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
+        }
+        // testing functions for numeric up down controls used to help determine the frame sizes
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            ReRender();
+        }
+        private void ReRender()
+        {
+            int width = (int)numericUpDown1.Value; // get width from numeric up down control
+            int height = (int)numericUpDown2.Value; // get height from numeric up down control
+            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, height);
+            pictureBox1.Width = width; // set picture box width
+            pictureBox1.Height = height; // set picture box height
+        }
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            ReRender();
+        }
+        private void button8_Click(object sender, EventArgs e)
+        {
+            numericUpDown1.Value = pictureBox1.Width;
+            numericUpDown2.Value = pictureBox1.Height;
         }
     }
 }
