@@ -24,7 +24,7 @@
                         break;
                 }
             }
-            else if (lastSelectedFile == "MM9") // INCOMPLETE
+            else if (lastSelectedFile == "MM9") // COMPLETE
             {
                 switch (SelectedIndex)
                 {
@@ -38,11 +38,11 @@
                         }
                         break;
                     case 2:
-                        switch (FrameIndex) // INCOMPLETE
+                        switch (FrameIndex) // COMPLETE
                         {
                             case 0: w = 76; h = 83; break; // CORRECT
-                            case 1: w = 76; h = 83; break; //??
-                            case 2: w = 76; h = 83; break; //??
+                            case 1: w = 104; h = 106; break; // CORRECT
+                            case 2: w = 84; h = 75; break; // CORRECT
                         }
                         break;
                 }
