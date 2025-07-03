@@ -9,17 +9,17 @@
             int h = 0;
             switch(lastSelectedFile) // TODO : setup all the extra switch statements
             {
-                case "FLAME": // INCOMPLETE
+                case "FLAME": // COMPLETE
                     switch (SelectedIndex)
                     {
                         case 0: w = 68; h = 70; break; // CORRECT
                         case 1: w = 64; h = 69; break; // CORRECT
                         case 2:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 64; h = 69; break; // CORRECT
-                                case 1: w = 64; h = 70; break;
-                                case 2: w = 64; h = 71; break;
+                                case 1: w = 72; h = 84; break; // CORRECT
+                                case 2: w = 92; h = 99; break; // CORRECT
                             }
                             break;
                     }
@@ -49,28 +49,28 @@
                 case "PULSE": // INCOMPLETE
                     switch (SelectedIndex)
                     {
-                        case 0: w = 84; h = 65; break;
+                        case 0: w = 84; h = 65; break; // CORRECT
                         case 1:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 72; h = 53; break; // CORRECT
-                                case 1: w = 72; h = 53; break;
+                                case 1: w = 80; h = 61; break; // CORRECT
                             }
                             break;
                         case 2:
                             switch (FrameIndex) // INCOMPLETE
                             {
                                 case 0: w = 84; h = 85; break; // CORRECT
-                                case 1: w = 84; h = 85; break;
-                                case 2: w = 84; h = 85; break;
+                                case 1: w = 84; h = 89; break; // CORRECT
+                                case 2: w = 101; h = 200; break; //38-160??//85-101
                             }
                             break;
                         case 3:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 92; h = 74; break; // CORRECT
-                                case 1: w = 92; h = 74; break;
-                                case 2: w = 92; h = 74; break;
+                                case 1: w = 128; h = 74; break; // CORRECT
+                                case 2: w = 124; h = 74; break; // CORRECT
                             }
                             break;
                     }
