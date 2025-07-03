@@ -53,8 +53,8 @@
             comboBox2 = new ComboBox();
             label5 = new Label();
             numericUpDown1 = new NumericUpDown();
+            button9 = new Button();
             numericUpDown2 = new NumericUpDown();
-            button8 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
@@ -328,6 +328,16 @@
             numericUpDown1.TabIndex = 25;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
+            // button9
+            // 
+            button9.Location = new Point(688, 154);
+            button9.Name = "button9";
+            button9.Size = new Size(75, 23);
+            button9.TabIndex = 28;
+            button9.Text = "Detect";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
             // numericUpDown2
             // 
             numericUpDown2.Location = new Point(688, 125);
@@ -338,22 +348,12 @@
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
             numericUpDown2.ValueChanged += numericUpDown2_ValueChanged;
             // 
-            // button8
-            // 
-            button8.Location = new Point(688, 154);
-            button8.Name = "button8";
-            button8.Size = new Size(75, 23);
-            button8.TabIndex = 27;
-            button8.Text = "Detect";
-            button8.UseVisualStyleBackColor = true;
-            button8.Click += button8_Click;
-            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(button8);
+            Controls.Add(button9);
             Controls.Add(numericUpDown2);
             Controls.Add(numericUpDown1);
             Controls.Add(label5);
@@ -417,7 +417,7 @@
         private ComboBox comboBox2;
         private Label label5;
         private NumericUpDown numericUpDown1;
+        private Button button9;
         private NumericUpDown numericUpDown2;
-        private Button button8;
     }
 }
