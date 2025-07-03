@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
