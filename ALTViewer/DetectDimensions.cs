@@ -179,61 +179,61 @@
                         case 5:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 32; h = 70; break; // CORRECT
-                                case 1: w = 32; h = 70; break;
-                                case 2: w = 32; h = 70; break;
+                                case 0: w = 32; h = 70; break; // CORRECT WIDTHS
+                                case 1: w = 44; h = 70; break;
+                                case 2: w = 40; h = 70; break;
                                 case 3: w = 32; h = 70; break;
                                 case 4: w = 32; h = 70; break;
-                                case 5: w = 32; h = 70; break;
-                                case 6: w = 32; h = 70; break;
+                                case 5: w = 40; h = 70; break;
+                                case 6: w = 40; h = 70; break;
                                 case 7: w = 32; h = 70; break;
                             }
                             break;
                         case 6:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 64; h = 69; break; // CORRECT
-                                case 1: w = 64; h = 69; break;
+                                case 0: w = 64; h = 69; break; // CORRECT WIDTHS
+                                case 1: w = 68; h = 69; break;
                                 case 2: w = 64; h = 69; break;
-                                case 3: w = 64; h = 69; break;
-                                case 4: w = 64; h = 69; break;
-                                case 5: w = 64; h = 69; break;
-                                case 6: w = 64; h = 69; break;
-                                case 7: w = 64; h = 69; break;
+                                case 3: w = 92; h = 69; break;
+                                case 4: w = 72; h = 69; break;
+                                case 5: w = 56; h = 69; break;
+                                case 6: w = 60; h = 69; break;
+                                case 7: w = 88; h = 69; break;
                             }
                             break;
                         case 7:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 64; h = 69; break; // CORRECT
-                                case 1: w = 64; h = 69; break;
-                                case 2: w = 64; h = 69; break;
-                                case 3: w = 64; h = 69; break;
-                                case 4: w = 64; h = 69; break;
-                                case 5: w = 64; h = 69; break;
-                                case 6: w = 64; h = 69; break;
-                                case 7: w = 64; h = 69; break;
+                                case 0: w = 64; h = 69; break; // CORRECT WIDTHS
+                                case 1: w = 76; h = 69; break;
+                                case 2: w = 80; h = 69; break;
+                                case 3: w = 68; h = 69; break;
+                                case 4: w = 52; h = 69; break;
+                                case 5: w = 68; h = 69; break;
+                                case 6: w = 84; h = 69; break;
+                                case 7: w = 88; h = 69; break;
                             }
                             break;
                         case 8:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 44; h = 67; break; // CORRECT
-                                case 1: w = 44; h = 67; break;
-                                case 2: w = 44; h = 67; break;
-                                case 3: w = 44; h = 67; break;
-                                case 4: w = 44; h = 67; break;
-                                case 5: w = 44; h = 67; break;
+                                case 0: w = 44; h = 67; break; // CORRECT WIDTHS
+                                case 1: w = 72; h = 67; break;
+                                case 2: w = 84; h = 67; break;
+                                case 3: w = 76; h = 67; break;
+                                case 4: w = 92; h = 67; break;
+                                case 5: w = 116; h = 67; break;
                             }
                             break;
                         case 9:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 96; h = 33; break; // CORRECT
-                                case 1: w = 96; h = 33; break;
-                                case 2: w = 96; h = 33; break;
-                                case 3: w = 96; h = 33; break;
-                                case 4: w = 96; h = 33; break;
+                                case 0: w = 96; h = 33; break; // CORRECT WIDTHS
+                                case 1: w = 56; h = 33; break;
+                                case 2: w = 64; h = 33; break;
+                                case 3: w = 68; h = 33; break;
+                                case 4: w = 96; h = 33; break; // EMPTY FRAME?
                                 case 5: w = 96; h = 33; break;
                             }
                             break;
