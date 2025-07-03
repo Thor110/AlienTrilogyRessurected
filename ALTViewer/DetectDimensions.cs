@@ -116,14 +116,14 @@
                     switch (SelectedIndex)
                     {
                         case 0:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 32; h = 59; break; // CORRECT
                                 case 1: w = 32; h = 59; break; // CORRECT
-                                case 2: w = 32; h = 59; break;
+                                case 2: w = 36; h = 64; break; // CORRECT
                                 case 3: w = 32; h = 74; break; // CORRECT
-                                case 4: w = 32; h = 59; break;
-                                case 5: w = 32; h = 59; break;
+                                case 4: w = 52; h = 79; break; // CORRECT
+                                case 5: w = 36; h = 78; break; // CORRECT
                                 case 6: w = 32; h = 67; break; // CORRECT
                                 case 7: w = 32; h = 71; break; // CORRECT
                             }
