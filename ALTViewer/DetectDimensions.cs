@@ -46,7 +46,7 @@
                             break;
                     }
                     break;
-                case "PULSE": // INCOMPLETE
+                case "PULSE": // COMPLETE
                     switch (SelectedIndex)
                     {
                         case 0: w = 84; h = 65; break; // CORRECT
@@ -58,11 +58,11 @@
                             }
                             break;
                         case 2:
-                            switch (FrameIndex) // INCOMPLETE
+                            switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 84; h = 85; break; // CORRECT
                                 case 1: w = 84; h = 89; break; // CORRECT
-                                case 2: w = 101; h = 200; break; //38-160??//85-101
+                                case 2: w = 88; h = 88; break; // CORRECT
                             }
                             break;
                         case 3:
