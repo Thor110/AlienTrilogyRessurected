@@ -169,6 +169,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PaletteEditor";
             Text = "PaletteEditor";
+            FormClosing += PaletteEditor_FormClosing;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -13,11 +13,12 @@
         private int w = 0;
         private int h = 0;
         private int lastSelectedSubFrame = -1;
+        private bool changesMade;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
             InitializeComponent();
-            usePAL = palfile; // store boolean for latre use
+            usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             if (selected.Contains("PANEL"))
@@ -105,6 +106,7 @@
                     RenderImage();
                     button3.Enabled = true; // enable undo button
                     button1.Enabled = true; // enable save button
+                    changesMade = true;
                 }
             }
         }
@@ -178,6 +180,7 @@
             }
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button
+            changesMade = false;
             Invalidate();
             RenderImage();
             MessageBox.Show("Palette restored from backup.");
@@ -211,6 +214,7 @@
             RenderImage();
             button3.Enabled = false; // disable undo button
             button1.Enabled = false; // disable save button
+            changesMade = false;
         }
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -223,7 +227,7 @@
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
             }
-            else
+            else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListFrames(fileDirectory, comboBox1, comboBox2);
@@ -319,5 +323,10 @@
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette);
         }
+
+        private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }
+        // check for unsaved changes
+        public void UnsavedChanges(FormClosingEventArgs e, string reason, Button button)
+        { if (changesMade) { Utilities.UnsavedChanges(reason, () => button.PerformClick(), e); } }
     }
 }
