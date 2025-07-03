@@ -24,6 +24,7 @@ namespace ALTViewer
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
+        private byte[]? currentFrame;
         private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
@@ -302,25 +303,24 @@ namespace ALTViewer
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
-            var section = currentSections[comboBox1.SelectedIndex];
             try { MessageBox.Show($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
         // export file
         private string ExportFile(BndSection section, string sectionName)
         {
+            string filepath = "";
             if (!compressed)
             {
-                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
+                TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             }
             else
             {
-                // TODO : work out all the dimensions for compressed images
-                MessageBox.Show("Exporting compressed images is not supported yet.");
-                return "ERROR"; // TEMPORARY
+                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}.png");
+                (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                TileRenderer.Save8bppPng(filepath, currentFrame!, TileRenderer.ConvertPalette(currentPalette!), w, h);
             }
-            string filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
-            TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
         }
         // export everything button click
@@ -382,6 +382,15 @@ namespace ALTViewer
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{i:D2}", 12));
                     }
+                    else if (compressed)
+                    {
+                        // TODO : export compressed frames
+                        for (int f = 0; f < comboBox2.Items.Count; f++)
+                        {
+                            comboBox2.SelectedIndex = f; // select each sub frame
+                            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!);
+                        }
+                    }
                     ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
                 if (!exporting)
@@ -440,7 +449,7 @@ namespace ALTViewer
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!); // render the sub frame
+            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!); // render the sub frame
         }
         // replace button click event
         private void button5_Click(object sender, EventArgs e)

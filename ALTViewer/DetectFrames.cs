@@ -2,7 +2,7 @@
 {
     internal class DetectFrames
     {
-        public static void RenderSubFrame(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2, PictureBox pictureBox1, byte[] palette)
+        public static byte[] RenderSubFrame(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2, PictureBox pictureBox1, byte[] palette)
         {
             int w = 0, h = 0;
             (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
@@ -14,13 +14,13 @@
             var section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
             int frameIndex = comboBox2.SelectedIndex;
-            //if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
             byte[] frameData = frames[frameIndex];
             try
             {
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h);
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
+            return frameData;
         }
         // list sub frames
         public static void ListFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)
