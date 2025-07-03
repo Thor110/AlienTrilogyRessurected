@@ -358,13 +358,18 @@ namespace ALTViewer
                     }
                     else if (compressed)
                     {
+                        comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
                         for (int f = 0; f < comboBox2.Items.Count; f++)
                         {
                             comboBox2.SelectedIndex = f; // select each sub frame
                             currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!);
+                            ExportFile(null!, comboBox1.Items[i]!.ToString()!);
                         }
                     }
-                    ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
+                    else
+                    {
+                        ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
+                    }
                 }
                 if (!exporting)
                 {
