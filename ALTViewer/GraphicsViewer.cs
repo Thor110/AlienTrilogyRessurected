@@ -40,7 +40,7 @@ namespace ALTViewer
         {
             InitializeComponent();
             ToolTip tooltip = new ToolTip();
-            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox), typeof(NumericUpDown) });
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
             foreach (string palFile in palFiles)
             {
