@@ -1,4 +1,4 @@
-﻿namespace WoWViewer
+﻿namespace ALTViewer
 {
     public static class Utilities
     {
