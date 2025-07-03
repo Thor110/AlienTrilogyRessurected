@@ -343,10 +343,10 @@
             numericUpDown2.Location = new Point(688, 125);
             numericUpDown2.Maximum = new decimal(new int[] { 200, 0, 0, 0 });
             numericUpDown2.Name = "numericUpDown2";
+            numericUpDown2.ReadOnly = true;
             numericUpDown2.Size = new Size(75, 23);
             numericUpDown2.TabIndex = 26;
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
-            numericUpDown2.ValueChanged += numericUpDown2_ValueChanged;
             // 
             // GraphicsViewer
             // 

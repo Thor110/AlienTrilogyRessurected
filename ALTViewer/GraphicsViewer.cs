@@ -564,7 +564,6 @@ namespace ALTViewer
             pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h);
             pictureBox1.Width = width; // set picture box width
         }
-        private void numericUpDown2_ValueChanged(object sender, EventArgs e) { ReRender(); }
         private void DetectAfterRender()
         {
             numericUpDown1.Value = pictureBox1.Width;

@@ -267,7 +267,7 @@
                         case 2:
                             switch (FrameIndex) // INCOMPLETE
                             {
-                                case 0: w = 52; h = 61; break; // CORRECT
+                                case 0: w = 72; h = 56; break; // CORRECT
                                 case 1: w = 52; h = 61; break;
                                 case 2: w = 52; h = 61; break;
                                 case 3: w = 52; h = 61; break;
