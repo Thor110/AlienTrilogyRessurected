@@ -314,6 +314,8 @@ namespace ALTViewer
                 // TODO : work out all the dimensions for compressed images
                 w = 32; // BAMBI
                 h = 77;
+                MessageBox.Show("Replacing compressed images is not supported yet.");
+                return "ERROR";
             }
             else
             {
@@ -510,6 +512,7 @@ namespace ALTViewer
         private void ReplaceTexture(string[] filename)
         {
             // TODO : update for compressed images and sub frames
+            if (compressed) { MessageBox.Show("Replacing compressed images is not supported yet."); return; }
             int length = filename.Length;
             if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
