@@ -315,16 +315,13 @@ namespace ALTViewer
             {
                 filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
                 saving = section.Data; // use section data for non-compressed files
-                //TileRenderer.Save8bppPng(filepath, section.Data, TileRenderer.ConvertPalette(currentPalette!), w, h);
             }
             else
             {
                 filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}.png");
                 saving = currentFrame!; // use current frame data for compressed files
                 (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
-                //TileRenderer.Save8bppPng(filepath, currentFrame!, TileRenderer.ConvertPalette(currentPalette!), w, h);
             }
-            //MessageBox.Show(filepath);
             TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!), w, h);
             return filepath;
         }
@@ -360,7 +357,6 @@ namespace ALTViewer
                     if (!compressed && !palfile) // update embedded palette for each frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
-                        ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                     }
                     else if (compressed)
                     {
@@ -372,7 +368,7 @@ namespace ALTViewer
                             ExportFile(null!, comboBox1.Items[i]!.ToString()!);
                         }
                     }
-                    else if (palfile)
+                    if (palfile || !compressed && !palfile) // export embedded palette images and external palette images
                     {
                         ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                     }
