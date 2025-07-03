@@ -37,6 +37,8 @@
             button4 = new Button();
             button5 = new Button();
             checkBox1 = new CheckBox();
+            comboBox2 = new ComboBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -124,16 +126,38 @@
             checkBox1.CheckState = CheckState.Checked;
             checkBox1.Location = new Point(220, 327);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(149, 19);
+            checkBox1.Size = new Size(104, 19);
             checkBox1.TabIndex = 7;
-            checkBox1.Text = "Backup Original Palette";
+            checkBox1.Text = "Backup Palette";
             checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // comboBox2
+            // 
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(443, 325);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(121, 23);
+            comboBox2.TabIndex = 8;
+            comboBox2.Visible = false;
+            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(369, 328);
+            label1.Name = "label1";
+            label1.Size = new Size(68, 15);
+            label1.TabIndex = 9;
+            label1.Text = "Sub-frames";
+            label1.Visible = false;
             // 
             // PaletteEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 441);
+            Controls.Add(label1);
+            Controls.Add(comboBox2);
             Controls.Add(checkBox1);
             Controls.Add(button5);
             Controls.Add(button4);
@@ -160,5 +184,7 @@
         private Button button4;
         private Button button5;
         private CheckBox checkBox1;
+        private ComboBox comboBox2;
+        private Label label1;
     }
 }

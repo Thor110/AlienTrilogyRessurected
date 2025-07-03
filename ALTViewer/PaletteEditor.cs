@@ -10,7 +10,7 @@
         private bool compressed;
         private bool usePAL;
         private bool trim;
-        private int w = 0; // BAMBI
+        private int w = 0;
         private int h = 0;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
@@ -19,9 +19,10 @@
             usePAL = palfile; // store boolean for latre use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
-            if(selected.Contains("PANEL"))
+            if (selected.Contains("PANEL"))
             {
                 MessageBox.Show("Viewing and editing these palettes is not properly implemented yet. ( PANEL3GF & PANELGFX )");
+                pictureBox1.Height = 128; // set picture box height for PANEL3GF & PANELGFX
             }
             if (!palfile)
             {
@@ -35,6 +36,11 @@
                 }
                 else
                 {
+                    label1.Visible = true;
+                    comboBox2.Visible = true;
+                    // TODO : detect sub-frames for compressed images
+                    //(w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(selected), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                    // TODO : setup picture box size for compressed images
                     extension = "_C000.BAK"; // backup extension
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
@@ -86,7 +92,7 @@
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
             int index = ((e.Y - 32) / 16) * 16 + ((e.X - 32) / 16);
-            if(trim && index < 32) { return; } // ignore trimmed colours
+            if (trim && index < 32) { return; } // ignore trimmed colours
             if (index < palette.Length / 3)
             {
                 using ColorDialog dlg = new();
@@ -291,7 +297,7 @@
                         Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                         MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                     }
-                    else if(loaded.Length != 768)
+                    else if (loaded.Length != 768)
                     {
                         MessageBox.Show("Palettes smaller than 768 bytes not supported.");
                         return;
@@ -306,6 +312,11 @@
                     RenderImage();
                 }
             }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
