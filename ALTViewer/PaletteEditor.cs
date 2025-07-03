@@ -323,7 +323,7 @@
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette);
         }
-
+        // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }
         // check for unsaved changes
         public void UnsavedChanges(FormClosingEventArgs e, string reason, Button button)
