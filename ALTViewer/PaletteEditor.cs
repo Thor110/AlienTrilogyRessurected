@@ -1,4 +1,7 @@
-﻿namespace ALTViewer
+﻿using System.Formats.Tar;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -12,6 +15,7 @@
         private bool trim;
         private int w = 0;
         private int h = 0;
+        private int lastSelectedSubFrame = -1;
         private List<BndSection> currentSections = new();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
@@ -39,7 +43,11 @@
                     label1.Visible = true;
                     comboBox2.Visible = true;
                     // TODO : detect sub-frames for compressed images
-                    //(w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(selected), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                    (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(selected), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                    pictureBox1.Width = w;
+                    pictureBox1.Height = h;
+                    
+                    //RenderSubFrame(); // render sub-frame for compressed images
                     // TODO : setup picture box size for compressed images
                     extension = "_C000.BAK"; // backup extension
                     palette = File.ReadAllBytes(fileDirectory);
@@ -217,6 +225,7 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // TODO : Add last selected check
             if (!usePAL && !compressed) // only embedded palettes need to switch here
             {
                 int index = comboBox1.SelectedIndex;
@@ -224,24 +233,26 @@
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
             }
+            else
+            {
+                lastSelectedSubFrame = -1; // reset last selected sub frame index
+                ListFrames();
+            }
             RenderImage();
         }
         private void RenderImage()
         {
+            MessageBox.Show("CHECK");
             var section = currentSections[comboBox1.SelectedIndex];
             if (!compressed)
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
             }
             else
             {
-                w = 32; // BAMBI
-                h = 77;
-                //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                //int w = 84; // SHOTGUN
-                //int h = 77;
+                RenderSubFrame(); // render sub-frame for compressed images
             }
-            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
         }
         // export palette file button click
         private void button4_Click(object sender, EventArgs e)
@@ -313,10 +324,52 @@
                 }
             }
         }
-
+         // TODO : deal with duplicate code in PaletteEditor and GraphicsViewer
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
+            lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
+            RenderSubFrame();
+        }
+        // render sub-frame
+        private void RenderSubFrame()
+        {
+            (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+            pictureBox1.Width = w;
+            pictureBox1.Height = h;
+            byte[] fullFile = File.ReadAllBytes(fileDirectory);
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            var section = f0Sections[comboBox1.SelectedIndex];
+            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+            int frameIndex = comboBox2.SelectedIndex;
+            //if (frameIndex >= frames.Count) { MessageBox.Show("Invalid frame index selected."); return; }
+            byte[] frameData = frames[frameIndex];
+            try
+            {
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h);
+            }
+            catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
+        }
+        // list sub frames
+        private void ListFrames()
+        {
+            comboBox2.Items.Clear();
+            // Get original B16 file
+            byte[] fullFile = File.ReadAllBytes(fileDirectory);
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            // Get section currently selected in comboBox1
+            var selectedSectionName = comboBox1.SelectedItem!.ToString();
+            var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
+            if (selectedOriginalSection == null) // this should never happen
+            {
+                MessageBox.Show("Selected section not found in original file.");
+                return;
+            }
+            var frames = TileRenderer.DecompressAllFramesInSection(selectedOriginalSection.Data);
+            for (int i = 0; i < frames.Count; i++) { comboBox2.Items.Add($"Frame {i}"); }
+            if (comboBox2.Items.Count > 0) { comboBox2.SelectedIndex = 0; }
         }
     }
 }
