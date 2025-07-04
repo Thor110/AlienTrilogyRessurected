@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using static System.ComponentModel.Design.ObjectSelectorEditor;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -150,16 +152,25 @@
         {
             if (!usePAL)
             {
-                palette = File.ReadAllBytes(backupDirectory);
+                File.Move(backupDirectory, fileDirectory, true);
+                //palette = File.ReadAllBytes(backupDirectory);
                 if (!compressed) // embedded palettes [512]
                 {
-                    TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
+                    // TODO : Fix restore backup for embedded palettes
+                    //TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
+                    palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, "CL00", 12));
                 }
                 else // compressed palettes [512]
                 {
-                    var replacements = new List<Tuple<long, byte[]>>();
-                    replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, palette));
-                    BinaryUtility.ReplaceBytes(replacements, fileDirectory);
+                    // TODO : Fix restore backup for compressed palettes
+                    //palette = File.ReadAllBytes(fileDirectory);
+                    //byte[] bytes = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
+                    //var replacements = new List<Tuple<long, byte[]>>();
+                    //byte[] bytes = TileRenderer.ConvertRGBTripletsToEmbeddedPalette(palette);
+                    //replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, bytes));
+                    //BinaryUtility.ReplaceBytes(replacements, fileDirectory);
+                    palette = File.ReadAllBytes(fileDirectory);
+                    palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
                 }
                 File.Delete(backupDirectory);
             }
@@ -174,9 +185,16 @@
                 else // trimmed palettes [672]
                 {
                     palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
+                    if(fileDirectory.Contains("LOGOSGFX"))
+                    {
+                        Array.Copy(loaded, 0, palette, 0, 576); // LOGOSGFX Edge Case
+                    }
+                    else
+                    {
+                        Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
+                    }
                     File.Delete(backupDirectory);
-                }
+                } // Handle : LOGOSGFX [576]
             }
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button

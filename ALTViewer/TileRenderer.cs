@@ -380,8 +380,8 @@ namespace ALTViewer
         // Convert an RGB triplet palette (768 bytes) to an embedded 16-bit palette (512 bytes)
         public static byte[] ConvertRGBTripletsToEmbeddedPalette(byte[] rgbPalette768)
         {
-            if (rgbPalette768.Length != 768)
-                throw new ArgumentException("Expected a 768-byte palette (256 RGB triplets).");
+            //if (rgbPalette768.Length != 768)
+            //    throw new ArgumentException("Expected a 768-byte palette (256 RGB triplets).");
 
             byte[] embeddedPalette = new byte[512]; // 256 entries × 2 bytes each
 

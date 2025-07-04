@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
@@ -454,7 +455,11 @@ namespace ALTViewer
         private void ReplaceTexture(string[] filename)
         {
             // TODO : update for compressed images and sub frames
-            if (compressed) { MessageBox.Show("Replacing compressed images is not supported yet."); return; }
+            if (compressed)
+            {
+                MessageBox.Show("Replacing compressed images is not supported yet.");
+                return;
+            }
             int length = filename.Length;
             if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
             else if (length == currentSections.Count) // replace all frames
@@ -476,7 +481,7 @@ namespace ALTViewer
                 byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
                 currentSections[frame].Data = indexedData;
                 var section = currentSections[frame];
-                string sectionName = $"TP0{frame}";
+                string sectionName = $"TP{frame:D2}";
                 long dataOffset = TileRenderer.FindSectionDataOffset(selectedFile, sectionName, 8); // TODO : update for compressed files
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
@@ -493,8 +498,14 @@ namespace ALTViewer
         // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {
-            //var section = currentSections[comboBox1.SelectedIndex];
-            //var (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : update for compressed files
+            if(palfile || !palfile)
+            {
+                (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data);
+            }
+            else if(compressed)
+            {
+                (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+            }
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;
