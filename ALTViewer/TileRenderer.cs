@@ -352,6 +352,84 @@ namespace ALTViewer
 
             return (output.ToArray(), ptr - startOffset);
         }
+        public static List<(byte[] frame, int length)> ExtractCompressedFrames(byte[] data)
+        {
+            var frames = new List<(byte[], int)>();
+            int offset = 0;
+
+            while (offset < data.Length)
+            {
+                int start = offset;
+                int i = 0;
+                List<byte> frameBytes = new();
+                int control = 0, bitsUsed = 0;
+
+                while (true)
+                {
+                    // Refill control byte if needed
+                    if (bitsUsed == 0)
+                    {
+                        if (offset >= data.Length) break;
+                        control = data[offset++];
+                        bitsUsed = 8;
+                        frameBytes.Add((byte)control); // control byte is part of the frame
+                    }
+
+                    bool isReference = (control & 1) != 0;
+                    control >>= 1;
+                    bitsUsed--;
+
+                    if (!isReference)
+                    {
+                        if (offset >= data.Length) break;
+                        frameBytes.Add(data[offset++]);
+                    }
+                    else
+                    {
+                        if (offset >= data.Length) break;
+                        byte first = data[offset++];
+                        frameBytes.Add(first);
+
+                        int length = 0;
+
+                        if (first >= 96)
+                        {
+                            // 1-byte offset only
+                            if (offset >= data.Length) break;
+                            byte next = data[offset++];
+                            frameBytes.Add(next);
+                        }
+                        else
+                        {
+                            if (offset + 1 >= data.Length) break;
+                            byte second = data[offset++];
+                            frameBytes.Add(second);
+
+                            int offs = ((first & 0x0F) << 8) | second;
+                            if (offs == 0)
+                            {
+                                break; // End of frame
+                            }
+
+                            if (((first & 0xF0) >> 4) == 5)
+                            {
+                                if (offset >= data.Length) break;
+                                byte extra = data[offset++];
+                                frameBytes.Add(extra);
+                            }
+                        }
+                    }
+                }
+
+                int frameLen = offset - start;
+                frames.Add((frameBytes.ToArray(), frameBytes.Count));
+
+                // Skip trailing zero padding (between frames)
+                while (offset < data.Length && data[offset] == 0) offset++;
+            }
+
+            return frames;
+        }
         // Extract F0## sections from a byte array, optionally decompressing them [UNUSED]
         /*public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
         {

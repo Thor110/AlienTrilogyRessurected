@@ -44,21 +44,32 @@ namespace ALTViewer
             // find offset of selected frame insead of decompressing
             int index = comboBox1.SelectedIndex;
             var section = f0Sections[index];
-            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
-            // get the original frame
-            byte[] frameData = frames[comboBox2.SelectedIndex];
             // compress the new frame image to match the original frame data
             long offset = TileRenderer.FindBndFormSectionOffset(fullFile, index); // get the offset of the selected frame
+            // extract the compressed frames from the section data to compare against the newly compressed frame
+            var compressedFrames = TileRenderer.ExtractCompressedFrames(section.Data);
+            byte[] oldCompressed = compressedFrames[comboBox2.SelectedIndex].frame;
+            int relativeOffset = 0;
+            // calculate the offset of the selected frame in the section data
+            for (int i = 0; i < comboBox2.SelectedIndex; i++) { relativeOffset += compressedFrames[i].length; }
+            // update the offset to point to the correct location in the section data
+            offset += relativeOffset + 9; // calculate the offset of the selected frame in the section data, 8 for header, 1 for padding byte
+            // compress the new frame image to match the original frame data
             byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
-            if (bytes.Length != frameData.Length) // compare new frame byte array length to the original
+            //File.WriteAllBytes("new.bin", bytes); // for manual comparison
+            //File.WriteAllBytes("old.bin", oldCompressed); // for manual comparison
+            //MessageBox.Show($"{offset}"); // now correct
+            if (bytes.Length != oldCompressed.Length) // compare new frame byte array length to the original
             {
-                MessageBox.Show($"Compressed data length does not match the original compressed frame length.\n\nOriginal : {frameData.Length}\n\nNew : {bytes.Length}");
+                MessageBox.Show($"Compressed data length does not match the original compressed frame length.\n\nOriginal : {oldCompressed.Length}\n\nNew : {bytes.Length}");
                 return;
             }
+            return; // return here while testing
             // write the new frame data to the section of the file
             var replacements = new List<Tuple<long, byte[]>>();
             replacements.Add(new Tuple<long, byte[]>(offset, bytes));
             BinaryUtility.ReplaceBytes(replacements, fileDirectory);
+            MessageBox.Show("Animation frame replaced successfully.");
         }
         // list sub frames
         public static void ListFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)

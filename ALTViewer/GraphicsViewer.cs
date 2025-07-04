@@ -237,12 +237,10 @@ namespace ALTViewer
                     byte[] decompressedData;
                     try
                     {
-                        //List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data); // TODO : Decompress all frames in section (if needed)
                         decompressedData = TileRenderer.DecompressSpriteSection(section.Data); // Try decompressing individual F0 section
                         if (decompressedData.Length < 64) { throw new Exception("Data too small, likely not compressed"); } // Heuristic: If result is tiny, probably not valid
                     }
                     catch { decompressedData = section.Data; } // Fallback: Use raw data
-                    //File.WriteAllBytes($"sprite_decompressed_F0_{counter:D2}.bin", decompressedData); // Optional: Write decompressed data for inspection
                     counter++;
                     decompressedF0Sections.Add(new BndSection { Name = section.Name, Data = decompressedData }); // Store for UI
                 }
@@ -465,7 +463,6 @@ namespace ALTViewer
                     return;
                 }
                 DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
-                MessageBox.Show("Animation frame replaced successfully.");
                 //MessageBox.Show("Replacing compressed images is not supported yet.");
                 //return;
             }
