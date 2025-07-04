@@ -436,7 +436,7 @@ namespace ALTViewer
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!); // render the sub frame
-            //DetectAfterRender(); // TODO : remove this after width values are determined and logged
+            //DetectAfterRender(); // TODO : Keep this for future use
         }
         // replace button click event
         private void button5_Click(object sender, EventArgs e)

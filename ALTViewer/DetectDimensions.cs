@@ -558,9 +558,9 @@
                                 case 0: w = 56; h = 56; break; // CORRECT
                                 case 1: w = 52; h = 56; break; // CORRECT
                                 case 2: w = 52; h = 56; break; // CORRECT
-                                case 3: w = 52; h = 64; break; // CORRECT
-                                case 4: w = 80; h = 60; break; // CORRECT
-                                case 5: w = 96; h = 60; break; // CORRECT
+                                case 3: w = 80; h = 60; break; // CORRECT
+                                case 4: w = 96; h = 60; break; // CORRECT
+                                case 5: w = 108; h = 56; break; // CORRECT
                                 case 6: w = 104; h = 60; break; // CORRECT
                                 case 7: w = 88; h = 80; break; // CORRECT
                             }
@@ -577,7 +577,7 @@
                             switch (FrameIndex) // COMPLETE
                             {
                                 case 0: w = 60; h = 88; break; // CORRECT
-                                case 1: w = 54; h = 84; break; // CORRECT
+                                case 1: w = 64; h = 84; break; // CORRECT
                                 case 2: w = 72; h = 80; break; // CORRECT
                                 case 3: w = 68; h = 96; break; // CORRECT
                                 case 4: w = 56; h = 116; break; // CORRECT
