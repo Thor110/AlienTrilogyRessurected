@@ -1,6 +1,4 @@
-﻿using static System.ComponentModel.Design.ObjectSelectorEditor;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -118,6 +116,7 @@ namespace ALTViewer
             if (!File.Exists(backupDirectory) && checkBox1.Checked) // make a backup of the original file if one doesn't already exist
             {
                 File.Copy(fileDirectory, backupDirectory);
+                //File.WriteAllBytes(backupDirectory, palette); // TODO : Backup just the palette, not the entire file.
                 button2.Enabled = true; // enable restore backup button
             }
             if (!usePAL) // backup embedded palettes

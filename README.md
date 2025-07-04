@@ -68,7 +68,7 @@ View, extract and replace textures from the game.
   <img src="Images/graphicsviewer.png" alt="Graphics Viewer">
 </div>
 
-View, extract and replace animation frames in the game.
+View, extract and replace animation frames in the game. ( Note : Replacing animation frames is not supported yet )
 
 <div align="center">
   <img src="Images/compressedimages.png" alt="Compressed Images">
