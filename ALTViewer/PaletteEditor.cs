@@ -173,7 +173,7 @@
                 }
                 File.Delete(backupDirectory);
             }
-            else // regular & trimmed palettes [768 & 672]
+            else // regular & trimmed palettes [768 & 672] + LOGOSGFX [576]
             {
                 byte[] loaded = File.ReadAllBytes(fileDirectory);
                 if (!trim) // regular palettes [768]
@@ -181,19 +181,19 @@
                     File.Move(backupDirectory, fileDirectory, true);
                     palette = loaded;
                 }
-                else // trimmed palettes [672]
+                else
                 {
                     palette = new byte[768];
-                    if(fileDirectory.Contains("LOGOSGFX"))
+                    if(fileDirectory.Contains("LOGOSGFX")) // [576]
                     {
                         Array.Copy(loaded, 0, palette, 0, 576); // LOGOSGFX Edge Case
                     }
-                    else
+                    else // trimmed palettes [672]
                     {
                         Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                     }
                     File.Delete(backupDirectory);
-                } // Handle : LOGOSGFX [576]
+                }
             }
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button
