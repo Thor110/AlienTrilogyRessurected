@@ -455,19 +455,30 @@ namespace ALTViewer
         private void ReplaceTexture(string[] filename)
         {
             // TODO : update for compressed images and sub frames
+            // TODO : backup original file when replacing textures
+            int length = filename.Length;
             if (compressed)
             {
-                MessageBox.Show("Replacing compressed images is not supported yet.");
-                return;
+                if(length !=1)
+                {
+                    MessageBox.Show("Please select only one image to replace a sub frame.");
+                    return;
+                }
+                DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
+                MessageBox.Show("Animation frame replaced successfully.");
+                //MessageBox.Show("Replacing compressed images is not supported yet.");
+                //return;
             }
-            int length = filename.Length;
-            if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
-            else if (length == currentSections.Count) // replace all frames
+            else
             {
-                for (int i = 0; i < length; i++) { ReplaceFrame(i, "All texture frames replaced successfully.", false); }
-                // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
+                if (length == 1) { ReplaceFrame(comboBox1.SelectedIndex, "Texture frame replaced successfully.", true); } // replace single frame
+                else if (length == currentSections.Count) // replace all frames
+                {
+                    for (int i = 0; i < length; i++) { ReplaceFrame(i, "All texture frames replaced successfully.", false); }
+                    // CONSIDER : building a list of frames to replace : MICRO OPTIMISATION
+                }
+                else { MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames."); return; }
             }
-            else { MessageBox.Show($"Please select exactly {currentSections.Count} images to replace all frames."); return; }
             void ReplaceFrame(int frame, string message, bool single)
             {
                 int framestore = frame; // frame is the frame to be replaced
@@ -494,7 +505,7 @@ namespace ALTViewer
             button6.Enabled = true; // enable restore backup button
         }
         // check if the image is indexed 8bpp
-        private bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
+        public static bool IsIndexed8bpp(PixelFormat format) { return format == PixelFormat.Format8bppIndexed; }
         // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {

@@ -32,6 +32,70 @@ namespace ALTViewer
             }
             return sections;
         }
+        public static long FindBndFormSectionOffset(byte[] bnd, int index)
+        {
+            using var br = new BinaryReader(new MemoryStream(bnd));
+
+            string formTag = Encoding.ASCII.GetString(br.ReadBytes(4)); // "FORM"
+            if (formTag != "FORM") { throw new Exception("Invalid BND file: missing FORM header."); }
+
+            int formSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
+            string platform = Encoding.ASCII.GetString(br.ReadBytes(4)); // e.g. "PSXT"
+
+            while (br.BaseStream.Position + 8 <= br.BaseStream.Length)
+            {
+                long chunkStart = br.BaseStream.Position; // this is what you want to return
+
+                string chunkName = Encoding.ASCII.GetString(br.ReadBytes(4));
+                int chunkSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
+
+                if (chunkName == $"F0{index:D2}")
+                {
+                    return chunkStart;
+                }
+
+                br.BaseStream.Seek(chunkSize, SeekOrigin.Current);
+                if ((chunkSize % 2) != 0) { br.BaseStream.Seek(1, SeekOrigin.Current); } // IFF padding
+            }
+
+            throw new Exception($"Section F0{index:D2} not found.");
+        }
+        public static byte[] CompressFrameToPicFormat(byte[] input)
+        {
+            var output = new List<byte>();
+            int controlBits = 0;
+            int controlMask = 0x80;
+            List<byte> buffer = new();
+
+            foreach (byte b in input)
+            {
+                controlBits >>= 1;
+                if ((controlMask & 1) == 1)
+                {
+                    output.Add((byte)(0xFF & controlBits));
+                    output.AddRange(buffer);
+                    controlBits = 0;
+                    controlMask = 0x80;
+                    buffer.Clear();
+                }
+
+                buffer.Add(b);
+                controlMask >>= 1;
+            }
+
+            // Write final control byte and data
+            if (buffer.Count > 0)
+            {
+                output.Add((byte)(0xFF & (controlBits >> 1))); // Final control byte
+                output.AddRange(buffer);
+            }
+
+            // Write 00 00 to indicate end of stream
+            output.Add(0x00);
+            output.Add(0x00);
+
+            return output.ToArray();
+        }
         // Auto-detect dimensions based on the total pixel count in the image data
         public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
         {
@@ -289,7 +353,7 @@ namespace ALTViewer
             return (output.ToArray(), ptr - startOffset);
         }
         // Extract F0## sections from a byte array, optionally decompressing them [UNUSED]
-        public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
+        /*public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
         {
             if (decompress) { data = DecompressSpriteSection(data); }
             List<byte[]> f0Sections = new();
@@ -309,7 +373,7 @@ namespace ALTViewer
                 else { offset++; }
             }
             return f0Sections;
-        }
+        }*/
         // extract level palette from a level file C0## sections
         public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
         {

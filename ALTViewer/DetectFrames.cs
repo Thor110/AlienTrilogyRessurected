@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System.Windows.Forms;
+
+namespace ALTViewer
 {
     internal class DetectFrames
     {
@@ -13,14 +15,50 @@
             var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
             var section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
-            int frameIndex = comboBox2.SelectedIndex;
-            byte[] frameData = frames[frameIndex];
+            byte[] frameData = frames[comboBox2.SelectedIndex];
             try
             {
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h);
             }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
             return frameData;
+        }
+        public static void ReplaceSubFrame(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2, PictureBox pictureBox1, string newFrame)
+        {
+            int w = 0, h = 0;
+            (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+            byte[] fullFile = File.ReadAllBytes(fileDirectory); // file to replace a frame in
+            Bitmap frameImage; // file to import a frame from
+            try { frameImage = new Bitmap(newFrame); } // safety first...
+            catch (Exception ex) { MessageBox.Show("Failed to load image:\n" + ex.Message); return; }
+            if (!GraphicsViewer.IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
+            if (new Size(w, h) != frameImage.Size) // compare dimensions
+            {
+                MessageBox.Show($"Imported frame dimensions do not match expected dimensions of {w}x{h} pixels. Please check the image file.");
+                return;
+            }
+            // get original frame section and data
+            // find section based on comboBox1 selection
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
+            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            // find offset of selected frame insead of decompressing
+            int index = comboBox1.SelectedIndex;
+            var section = f0Sections[index];
+            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
+            // get the original frame
+            byte[] frameData = frames[comboBox2.SelectedIndex];
+            // compress the new frame image to match the original frame data
+            long offset = TileRenderer.FindBndFormSectionOffset(fullFile, index); // get the offset of the selected frame
+            byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
+            if (bytes.Length != frameData.Length) // compare new frame byte array length to the original
+            {
+                MessageBox.Show($"Compressed data length does not match the original compressed frame length.\n\nOriginal : {frameData.Length}\n\nNew : {bytes.Length}");
+                return;
+            }
+            // write the new frame data to the section of the file
+            var replacements = new List<Tuple<long, byte[]>>();
+            replacements.Add(new Tuple<long, byte[]>(offset, bytes));
+            BinaryUtility.ReplaceBytes(replacements, fileDirectory);
         }
         // list sub frames
         public static void ListFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)
