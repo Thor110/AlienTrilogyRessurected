@@ -22,11 +22,11 @@ The road map for this project.
 	- .RAW audio files can be played, replaced and converted to and from .WAV files.
 	- Waveform preview for selected sound files.
 	- Automatic backup of the original file by default.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 95% Complete )
+- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
 	- Palette detection implemented.
-	- View, export and replace textures and compressed images.
+	- View, export and replace textures, replacing compressed images is not supported yet. ( .B16 files, weapons and enemies. )
 	- Automatic backup of the original file by default.
-- [✅ 3 : Palette Editor](#palette-editor) ( 95% Complete )
+- [✅ 3 : Palette Editor](#palette-editor) ( 100% Complete )
 	- Palette editor and image preview.
 	- View, export, import and edit palettes for all types of images. ( Embedded, External & Compressed )
 	- Automatic backup of the original file by default.
