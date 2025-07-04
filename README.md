@@ -12,14 +12,14 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 - Palettes aren't right for the following two files?
 	- PANEL3GF.BND
 	- PANELGFX.BND
-- Some compressed images are not loading yet due to unknown width and height values.
+- Compressed images can not be replaced yet, until I implement a recompression algorithm.
 
 # Road Map
 
 The road map for this project.
 
 - [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
-	- .RAW audio files can be played and converted to .WAV files.
+	- .RAW audio files can be played, replaced and converted to and from .WAV files.
 	- Waveform preview for selected sound files.
 	- Automatic backup of the original file by default.
 - [✅ 2 : Graphics Viewer](#graphics-viewer) ( 95% Complete )
@@ -28,6 +28,7 @@ The road map for this project.
 	- Automatic backup of the original file by default.
 - [✅ 3 : Palette Editor](#palette-editor) ( 95% Complete )
 	- Palette editor and image preview.
+	- View, export, import and edit palettes for all types of images. ( Embedded, External & Compressed )
 	- Automatic backup of the original file by default.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.

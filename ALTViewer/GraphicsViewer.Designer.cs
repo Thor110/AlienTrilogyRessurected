@@ -326,6 +326,7 @@
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(75, 23);
             numericUpDown1.TabIndex = 25;
+            numericUpDown1.Visible = false;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // button9
@@ -336,6 +337,7 @@
             button9.TabIndex = 28;
             button9.Text = "Detect";
             button9.UseVisualStyleBackColor = true;
+            button9.Visible = false;
             button9.Click += button9_Click;
             // 
             // numericUpDown2
@@ -347,6 +349,7 @@
             numericUpDown2.Size = new Size(75, 23);
             numericUpDown2.TabIndex = 26;
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
+            numericUpDown2.Visible = false;
             // 
             // GraphicsViewer
             // 
