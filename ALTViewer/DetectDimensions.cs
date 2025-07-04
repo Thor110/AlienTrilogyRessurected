@@ -354,7 +354,7 @@
                     {
                         case 0: // CORRECT
                         case 1: w = 32; h = 56; break; // CORRECT
-                        case 2: w = 28; h = 80; break; // CORRECT
+                        case 2: w = 28; h = 60; break; // CORRECT
                         case 3: w = 40; h = 56; break; // CORRECT
                         case 4: w = 28; h = 60; break; // CORRECT
                         case 5: // CORRECT
@@ -555,8 +555,8 @@
                         case 1:
                             switch (FrameIndex) // COMPLETE
                             {
-                                case 0: w = 112; h = 28; break; // CORRECT
-                                case 1: w = 56; h = 56; break; // CORRECT
+                                case 0: w = 56; h = 56; break; // CORRECT
+                                case 1: w = 52; h = 56; break; // CORRECT
                                 case 2: w = 52; h = 56; break; // CORRECT
                                 case 3: w = 52; h = 64; break; // CORRECT
                                 case 4: w = 80; h = 60; break; // CORRECT
@@ -913,6 +913,7 @@
                                 case 0: // CORRECT
                                 case 1: w = 124; h = 28; break; // CORRECT
                                 case 2: w = 112; h = 32; break; // CORRECT
+                                case 3: w = 120; h = 32; break; // CORRECT
                             }
                             break;
                         case 3:
@@ -991,7 +992,7 @@
                                 case 1: w = 128; h = 172; break; // CORRECT
                                 case 2: w = 128; h = 168; break; // CORRECT
                                 case 3: w = 128; h = 164; break; // CORRECT
-                                case 4: w = 132; h = 178; break; // CORRECT
+                                case 4: w = 132; h = 168; break; // CORRECT
                             }
                             break;
                         case 2:
@@ -1070,7 +1071,7 @@
                                 case 2: w = 160; h = 120; break; // CORRECT
                                 case 3: w = 236; h = 100; break; // CORRECT
                                 case 4: w = 248; h = 80; break; // CORRECT
-                                case 5: w = 257; h = 76; break; // CORRECT
+                                case 5: w = 256; h = 76; break; // CORRECT
                             }
                             break;
                         case 8:
@@ -1334,8 +1335,8 @@
                                 case 1: // CORRECT
                                 case 2: // CORRECT
                                 case 6: w = 60; h = 124; break; // CORRECT
-                                case 3: w = 68; h = 124; break; // CORRECT
-                                case 5: // CORRECT
+                                case 3: // CORRECT
+                                case 5: w = 68; h = 124; break; // CORRECT
                                 case 4: w = 76; h = 124; break; // CORRECT
                             }
                             break;
