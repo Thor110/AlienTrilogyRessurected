@@ -266,9 +266,15 @@ namespace ALTViewer
                     trimmed = true; // set trimmed to true for these files
                     Array.Copy(loaded, 0, currentPalette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
-                else
+                else if (binbnd.Contains("LOGOSGFX"))
                 {
+                    byte[] loaded = File.ReadAllBytes(pal);
+                    currentPalette = new byte[768];
                     trimmed = false; // set trimmed to false for these files
+                    Array.Copy(loaded, 0, currentPalette, 0, 576);
+                }
+                else // LEGAL.PAL
+                {
                     currentPalette = File.ReadAllBytes(pal);
                 }
             }
