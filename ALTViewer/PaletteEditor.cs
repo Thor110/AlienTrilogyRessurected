@@ -149,9 +149,10 @@
         // restore backup button clicked
         private void button2_Click(object sender, EventArgs e)
         {
+            File.Move(backupDirectory, fileDirectory, true);
             if (!usePAL)
             {
-                File.Move(backupDirectory, fileDirectory, true);
+                //File.Move(backupDirectory, fileDirectory, true);
                 //palette = File.ReadAllBytes(backupDirectory);
                 if (!compressed) // embedded palettes [512]
                 {
@@ -171,11 +172,25 @@
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
                 }
-                File.Delete(backupDirectory);
+                //File.Delete(backupDirectory);
             }
             else // regular & trimmed palettes [768 & 672] + LOGOSGFX [576]
             {
+                //File.Move(backupDirectory, fileDirectory, true);
+                //File.Delete(backupDirectory);
+                //palette = File.ReadAllBytes(fileDirectory);
                 byte[] loaded = File.ReadAllBytes(fileDirectory);
+                if (palette.Length == 672)
+                {
+                    palette = new byte[768];
+                    Array.Copy(loaded, 0, palette, 96, 672);
+                }
+                else
+                {
+                    palette = loaded;
+                }
+                // TODO : If I add byte precision instructions
+                /*byte[] loaded = File.ReadAllBytes(fileDirectory);
                 if (!trim) // regular palettes [768]
                 {
                     File.Move(backupDirectory, fileDirectory, true);
@@ -193,8 +208,9 @@
                         Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                     }
                     File.Delete(backupDirectory);
-                }
+                }*/
             }
+            File.Delete(backupDirectory);
             button2.Enabled = false; // restore backup button
             button1.Enabled = false; // disable save button
             changesMade = false;
