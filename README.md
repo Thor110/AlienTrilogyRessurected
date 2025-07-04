@@ -89,7 +89,7 @@ Preview, edit, save, import and export palettes while previewing the image it be
   <img src="Images/paletteeditor.png" alt="Palette Editor">
 </div>
 
-This image shos a compressed file palette that has been replaced.
+This image shows a compressed file palette that has been replaced.
 
 <div align="center">
   <img src="Images/compressedpalettereplacement.png" alt="Compressed File Palette Replacement">
