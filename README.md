@@ -42,6 +42,7 @@ Discord : https://discord.gg/Mk2YUuPmdU
 ## Documentation
 
 Special thanks to Bobblen147 who created this repository : https://github.com/Bobblen147/atril_geom_extract
+
 They also pointed me to the file format documentation, the links to which are also in their repository on the great preserver archive.org which will save me endless amounts of time manually decoding the filetypes.
 
 ## Alien Trilogy Viewer
@@ -85,7 +86,19 @@ Replace textures. ( Example : Barrel texture used for the Crate )
 Preview, edit, save, import and export palettes while previewing the image it belongs to.
 
 <div align="center">
-  <img src="Images/paletteeditor.png" alt="Graphics Viewer">
+  <img src="Images/paletteeditor.png" alt="Palette Editor">
+</div>
+
+This image shos a compressed file palette that has been replaced.
+
+<div align="center">
+  <img src="Images/compressedpalettereplacement.png" alt="Compressed File Palette Replacement">
+</div>
+
+This image shows an embedded palette that has been replaced.
+
+<div align="center">
+  <img src="Images/embeddedpalettereplacement.png" alt="Embedded Palette Replacement">
 </div>
 
 ## Text Editor
@@ -101,5 +114,5 @@ Edit text in the game, intended for localisation efforts.
 Preview and edit levels. (WIP)
 
 <div align="center">
-  <img src="Images/levelviewer.png" alt="Text Editor">
+  <img src="Images/levelviewer.png" alt="Map Editor">
 </div>
