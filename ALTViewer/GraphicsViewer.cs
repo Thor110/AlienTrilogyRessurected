@@ -459,7 +459,7 @@ namespace ALTViewer
             {
                 if(length !=1)
                 {
-                    MessageBox.Show("Please select only one image to replace a sub frame.");
+                    MessageBox.Show("Please select only one image when replacing a sub frame.");
                     return;
                 }
                 DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
