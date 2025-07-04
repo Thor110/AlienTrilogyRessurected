@@ -43,7 +43,9 @@ Discord : https://discord.gg/Mk2YUuPmdU
 
 Special thanks to Bobblen147 who created this repository : https://github.com/Bobblen147/atril_geom_extract
 
-They also pointed me to the file format documentation, the links to which are also in their repository on the great preserver archive.org which will save me endless amounts of time manually decoding the filetypes.
+They also pointed me to the file format documentation and the source code from Lex Safanov, the links to which are also in their repository on the great preserver archive.org which will save me endless amounts of time manually decoding the filetypes.
+
+Also a big thanks to Lex Safanov for posting their source code for decompression of .B16 files, I used this as reference when reimplementing it for this project.
 
 ## Alien Trilogy Viewer
 
