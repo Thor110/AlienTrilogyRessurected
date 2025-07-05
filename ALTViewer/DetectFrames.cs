@@ -50,10 +50,12 @@
             int relativeOffset = 0;
             // calculate the offset of the selected frame in the section data
             for (int i = 0; i < comboBox2.SelectedIndex; i++) { relativeOffset += compressedFrames[i].length; }
-            // update the offset to point to the correct location in the section data
-            offset += relativeOffset + 9; // calculate the offset of the selected frame in the section data, 8 for header, 1 for padding byte
             // compress the new frame image to match the original frame data
             byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
+            // detect padding inbetween each frame and adjust offset accordingly
+            int padding = (8 - ((int)offset + relativeOffset + bytes.Length % 8)) % 8;
+            // update the offset to point to the correct location in the section data
+            offset += relativeOffset + 8 + padding; // calculate the offset of the selected frame in the section data, 8 for header, 1 for padding byte
             //File.WriteAllBytes("new.bin", bytes); // for manual comparison
             //File.WriteAllBytes("old.bin", oldCompressed); // for manual comparison
             //MessageBox.Show($"{offset}"); // now correct
