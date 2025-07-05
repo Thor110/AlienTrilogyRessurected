@@ -8,7 +8,7 @@ public static class BinaryUtility
     /// </summary>
     public static void ReplaceBndFrameWith8ByteAlignment(string filePath, long offset, int lengthToReplace, byte[] newData)
     {
-        int padding = (8 - (newData.Length % 8)) % 8;
+        int padding = (8 + ((int)offset + newData.Length % 8)) % 8;
         byte[] paddedNewData = new byte[newData.Length + padding];
         Array.Copy(newData, paddedNewData, newData.Length);
         ReplaceBytesWithResize(new List<(long, int, byte[])> { (offset, lengthToReplace, paddedNewData) }, filePath);

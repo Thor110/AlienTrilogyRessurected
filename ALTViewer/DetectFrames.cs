@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System.Windows.Forms;
+
+namespace ALTViewer
 {
     internal class DetectFrames
     {
@@ -49,13 +51,17 @@
             byte[] oldCompressed = compressedFrames[comboBox2.SelectedIndex].frame;
             int relativeOffset = 0;
             // calculate the offset of the selected frame in the section data
-            for (int i = 0; i < comboBox2.SelectedIndex; i++) { relativeOffset += compressedFrames[i].length; }
+            // detect padding inbetween each frame and adjust offset accordingly
+            for (int i = 0; i < comboBox2.SelectedIndex; i++)
+            {
+                int length = compressedFrames[i].length;
+                int additional = (8 - (length % 8)) % 8;
+                relativeOffset += additional + length;
+            }
+            // add 8 for current section F0## header
+            offset += relativeOffset + 8;
             // compress the new frame image to match the original frame data
             byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
-            // detect padding inbetween each frame and adjust offset accordingly
-            int padding = (8 + ((int)offset + relativeOffset % 8)) % 8;
-            // update the offset to point to the correct location in the section data
-            offset += relativeOffset + padding; // calculate the offset of the selected frame in the section data, 8 for header, 1 for padding byte
             // TODO : get compression working
             if (bytes.Length != oldCompressed.Length) // compare new frame byte array length to the original
             {
