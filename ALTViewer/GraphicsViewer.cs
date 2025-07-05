@@ -128,8 +128,11 @@ namespace ALTViewer
             listBox2.Visible = true; // show palette list
             button7.Visible = true; // show palette editor button
             button5.Enabled = true; // enable replace texture button
-            button2.Enabled = true;
-            button3.Enabled = true;
+            if(outputPath != "") // so I don't have to check if an item is selected or not
+            {
+                button2.Enabled = true;
+                button3.Enabled = true;
+            }
             checkBox1.Enabled = true; // enable backup checkbox
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
@@ -395,8 +398,8 @@ namespace ALTViewer
             {
                 outputPath = fbd.SelectedPath;
                 textBox1.Text = outputPath; // update text box with selected path
-                //button2.Enabled = true; // enable extract button
-                //button3.Enabled = true; // enable extract all button
+                button2.Enabled = true; // enable extract button
+                button3.Enabled = true; // enable extract all button
                 button1.Enabled = true; // enable export all button
             }
         }
