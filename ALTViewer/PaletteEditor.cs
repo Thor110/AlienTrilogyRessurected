@@ -1,7 +1,4 @@
-﻿using System.Formats.Tar;
-using static ALTViewer.Utilities;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -143,7 +140,7 @@ namespace ALTViewer
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
                     e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
                 }
-                if (!usedColors.Contains(color)) // visual display for unused colours
+                else if (!usedColors.Contains(color)) // visual display for unused colours
                 {
                     e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
                 }
@@ -167,24 +164,38 @@ namespace ALTViewer
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
         {
-            int index = ((e.Y - 32) / 16) * 16 + ((e.X - 32) / 16);
+            int offset = 32;
+            int cellSize = 16;
+            int cols = 16;
+            int totalColors = palette.Length / 3;
+
+            // Calculate column and row
+            int col = (e.X - offset) / cellSize;
+            int row = (e.Y - offset) / cellSize;
+
+            // Ignore clicks outside the palette grid area:
+            if (col < 0 || col >= cols || row < 0) { return; }
+
+            int index = row * cols + col;
+
+            if (index >= totalColors) { return; }
+
             if (trim && index < 32) { return; } // ignore trimmed colours
-            if (index < palette.Length / 3)
+            using ColorDialog dlg = new();
+            // Show scaled color in the dialog
+            dlg.Color = ScaleColour(index);
+            usedColors.Remove(dlg.Color);
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
-                using ColorDialog dlg = new();
-                // Show scaled color in the dialog
-                dlg.Color = ScaleColour(index);
-                if (dlg.ShowDialog() == DialogResult.OK)
-                {
-                    palette[index * 3] = (byte)(dlg.Color.R / 4);
-                    palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
-                    palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
-                    Invalidate();
-                    RenderImage();
-                    button3.Enabled = true; // enable undo button
-                    button1.Enabled = true; // enable save button
-                    changesMade = true;
-                }
+                palette[index * 3] = (byte)(dlg.Color.R / 4);
+                palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
+                palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
+                usedColors.Add(Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4)); // add the new color to the used colors set
+                Invalidate();
+                RenderImage();
+                button3.Enabled = true; // enable undo button
+                button1.Enabled = true; // enable save button
+                changesMade = true;
             }
         }
         // save palette button clicked
