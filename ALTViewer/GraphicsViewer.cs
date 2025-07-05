@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using static System.Collections.Specialized.BitVector32;
 
 namespace ALTViewer
 {
@@ -22,6 +21,7 @@ namespace ALTViewer
         private string lastSelectedPalette = "";
         private string lastSelectedFilePath = "";
         private int lastSelectedSubFrame = -1;
+        private int lastSelectedSection = -1;
         private string outputPath = "";
         private List<BndSection> currentSections = new();
         private byte[]? currentPalette;
@@ -128,6 +128,8 @@ namespace ALTViewer
             listBox2.Visible = true; // show palette list
             button7.Visible = true; // show palette editor button
             button5.Enabled = true; // enable replace texture button
+            button2.Enabled = true;
+            button3.Enabled = true;
             checkBox1.Enabled = true; // enable backup checkbox
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
@@ -173,6 +175,7 @@ namespace ALTViewer
         private void RenderImage(string binbnd, string pal, string select)
         {
             pictureBox1.Image = null; // clear previous image
+            lastSelectedSection = -1;
             if (radioButton1.Checked)
             {
                 foreach (string weapon in weapons) // check if the selected file is a weapon
@@ -308,7 +311,6 @@ namespace ALTViewer
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a file to export first."); return; }
             try { MessageBox.Show($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
@@ -334,11 +336,10 @@ namespace ALTViewer
         // export everything button click
         private void button1_Click(object sender, EventArgs e)
         {
-            int previouslySelected = 0;
-            if (listBox1.SelectedIndex != -1) { previouslySelected = listBox1.SelectedIndex; } // store previously selected index
-            exporting = true;
+            int previouslySelected = listBox1.SelectedIndex; // store previously selected index
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
+            exporting = true;
             foreach (var button in buttons)
             {
                 button.Checked = true;
@@ -356,9 +357,6 @@ namespace ALTViewer
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a file to export first."); return; }
-            int previouslySelected = comboBox2.SelectedIndex; // store previously selected index
-            MessageBox.Show(previouslySelected.ToString());
             try
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
@@ -383,8 +381,6 @@ namespace ALTViewer
                 }
                 if (!exporting)
                 {
-                    MessageBox.Show(previouslySelected.ToString());
-                    comboBox2.SelectedIndex = previouslySelected;
                     MessageBox.Show($"Images saved to:\n{outputPath}");
                 }
             }
@@ -399,14 +395,16 @@ namespace ALTViewer
             {
                 outputPath = fbd.SelectedPath;
                 textBox1.Text = outputPath; // update text box with selected path
-                button2.Enabled = true; // enable extract button
-                button3.Enabled = true; // enable extract all button
+                //button2.Enabled = true; // enable extract button
+                //button3.Enabled = true; // enable extract all button
                 button1.Enabled = true; // enable export all button
             }
         }
         // render the image when a section is selected
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
+            lastSelectedSection = comboBox1.SelectedIndex;
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
