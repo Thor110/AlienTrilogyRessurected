@@ -39,6 +39,8 @@
             checkBox1 = new CheckBox();
             comboBox2 = new ComboBox();
             label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -151,11 +153,31 @@
             label1.Text = "Sub-frames";
             label1.Visible = false;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(268, 386);
+            label2.Name = "label2";
+            label2.Size = new Size(295, 15);
+            label2.TabIndex = 10;
+            label2.Text = "Note : Timmed colours have a red cross through them.";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(268, 415);
+            label3.Name = "label3";
+            label3.Size = new Size(296, 15);
+            label3.TabIndex = 11;
+            label3.Text = "Note : Unused colours have a red stroke through them.";
+            // 
             // PaletteEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 441);
+            Controls.Add(label3);
+            Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(comboBox2);
             Controls.Add(checkBox1);
@@ -187,5 +209,7 @@
         private CheckBox checkBox1;
         private ComboBox comboBox2;
         private Label label1;
+        private Label label2;
+        private Label label3;
     }
 }

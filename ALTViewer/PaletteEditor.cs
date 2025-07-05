@@ -66,6 +66,7 @@
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
+                else { label2.Visible = false; } // hide note on trimmed colours
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
@@ -77,6 +78,8 @@
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
+            HashSet<Color> usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
+            Pen crossPen = new Pen(Color.Red, 2);
             for (int i = 0; i < palette.Length / 3; i++)
             {
                 int x = (i % 16) * 16 + 32; // + 32 for the initial offset
@@ -88,11 +91,28 @@
 
                 if (trim && i < 32)
                 {
-                    using Pen crossPen = new Pen(Color.Red, 2);
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
                     e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
                 }
+                if (!usedColors.Contains(color)) // visual display for unused colours
+                {
+                    e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
+                }
             }
+        }
+        // get used colors from the image
+        private HashSet<Color> GetUsedColors(Bitmap bmp)
+        {
+            HashSet<Color> usedColors = new HashSet<Color>();
+            for (int y = 0; y < bmp.Height; y++)
+            {
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    Color color = bmp.GetPixel(x, y);
+                    usedColors.Add(color);
+                }
+            }
+            return usedColors;
         }
         private Color ScaleColour(int index) { return Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4); }
         // palette section mouse click event
@@ -266,13 +286,13 @@
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
-                Invalidate();
             }
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListFrames(fileDirectory, comboBox1, comboBox2);
             }
+            Invalidate();
             RenderImage();
         }
         private void RenderImage()
