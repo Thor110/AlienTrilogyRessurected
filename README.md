@@ -2,7 +2,7 @@
 
 This project aims to create a modding toolkit and possibly more for Alien Trilogy.
 
-- 1 : Install the game from : https://collectionchamber.blogspot.com/2017/05/alien-trilogy.html
+- 1 : Install the game from : https://collectionchamber.blogspot.com/2017/05/alien-trilogy.html or from an original media source.
 - 2 : Download and install the toolkit from here, place it in the game directory. ( Alongside "Run.exe" or "TRILOGY.EXE" )
 - 3 : Optional : Use the cleanup script and files provided in "Notes\repack-disc-comparison\CLEANUPSCRIPT" to delete 83.35MBs of unused files from the game. ( documentation and details on these files and more can be found in "Notes\repack-disc-comparison\readme.txt" )
 
