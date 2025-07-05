@@ -28,6 +28,7 @@ The road map for this project.
 - [✅ 3 : Palette Editor](#palette-editor) ( 100% Complete )
 	- Palette editor and image preview.
 	- View, export, import and edit palettes for all types of images. ( Embedded, External & Compressed )
+	- Visual feedback showing unused colours across all sections and frames, except for embedded palettes where each section has its own colour palette.
 	- Automatic backup of the original file by default.
 - [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
