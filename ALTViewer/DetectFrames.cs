@@ -56,9 +56,8 @@ namespace ALTViewer
             offset += relativeOffset + 9; // calculate the offset of the selected frame in the section data, 8 for header, 1 for padding byte
             // compress the new frame image to match the original frame data
             byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
-            File.WriteAllBytes("new.bin", bytes); // for manual comparison
-            File.WriteAllBytes("old.bin", oldCompressed); // for manual comparison
-            BinaryUtility.ReplaceBytesWithResize(new List<(long, int, byte[])> { (0x10, oldCompressed.Length, bytes) }, "old.bin");
+            //File.WriteAllBytes("new.bin", bytes); // for manual comparison
+            //File.WriteAllBytes("old.bin", oldCompressed); // for manual comparison
             //MessageBox.Show($"{offset}"); // now correct
             if (bytes.Length != oldCompressed.Length) // compare new frame byte array length to the original
             {
@@ -67,7 +66,7 @@ namespace ALTViewer
             }
             return; // return here while testing
             // write the new frame data to the section of the file
-            BinaryUtility.ReplaceBytesWithResize(new List<(long, int, byte[])> { (offset, oldCompressed.Length, bytes) }, fileDirectory);
+            BinaryUtility.ReplaceBndFrameWith8ByteAlignment(fileDirectory, offset, oldCompressed.Length, bytes); // replace the frame data in the file
             MessageBox.Show("Animation frame replaced successfully.");
         }
         // list sub frames
