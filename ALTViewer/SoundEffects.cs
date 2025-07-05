@@ -8,9 +8,20 @@ namespace ALTViewer
     {
         private SoundPlayer soundPlayer = null!;
         private string outputPath = "";
+        public string gameDirectory = ""; // default directories
         public SoundEffects()
         {
             InitializeComponent();
+            if (File.Exists("Run.exe"))
+            {
+                gameDirectory = "HDD\\TRILOGY\\CD\\SFX\\";
+            }
+            else if (File.Exists("TRILOGY.EXE"))
+            {
+                gameDirectory = "CD";
+                button5.Visible = false;
+                label2.Visible = false;
+            }
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             DetectAudioFiles(); // Automatically detect audio files on form load
@@ -20,19 +31,19 @@ namespace ALTViewer
         {
             try
             {
-                string[] audioFiles = Directory.GetFiles("HDD\\TRILOGY\\CD\\SFX", "*.RAW");
+                string[] audioFiles = Directory.GetFiles($"{gameDirectory}", "*.RAW");
                 if (audioFiles.Length == 0) { MessageBox.Show("No audio files found in the specified directory."); return; }
                 listBox1.Items.Clear();
                 foreach (string file in audioFiles) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(file)); }
             }
             catch (Exception ex) { MessageBox.Show("Error detecting audio files: " + ex.Message); }
         }
-        private bool FileExists(string fileName) { return File.Exists($"HDD\\TRILOGY\\CD\\SFX\\{fileName}.RAW"); }
+        private bool FileExists(string fileName) { return File.Exists($"{gameDirectory}{fileName}.RAW"); }
         // list box selection changed event
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
-            string selectedFile = $"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW";
+            string selectedFile = $"{gameDirectory}{listBox1.SelectedItem}.RAW";
             byte[] audioData = File.ReadAllBytes(selectedFile); // load selected audio file
             pictureBox1.Image = DrawWaveform(audioData, 538, 128); // redraw waveform and update labels
             button6.Enabled = true; // enable replace button
@@ -43,7 +54,7 @@ namespace ALTViewer
         private void PlayRawSound()
         {
             if (!FileExists(listBox1.SelectedItem!.ToString()!)) { MessageBox.Show("Selected audio file does not exist."); button2.Enabled = false; return; } // safety first
-            byte[] rawData = File.ReadAllBytes($"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW");
+            byte[] rawData = File.ReadAllBytes($"{gameDirectory}{listBox1.SelectedItem}.RAW");
             byte[] wavHeader = CreateWavHeader(rawData.Length);
             using var ms = new MemoryStream();
             ms.Write(wavHeader, 0, wavHeader.Length);
@@ -143,7 +154,7 @@ namespace ALTViewer
         // export to file method
         private void ExtractToFile(string outputPath, string chosenFile)
         {
-            byte[] rawData = File.ReadAllBytes($"HDD\\TRILOGY\\CD\\SFX\\{chosenFile}.RAW");
+            byte[] rawData = File.ReadAllBytes($"{gameDirectory}{chosenFile}.RAW");
             using var fs = new FileStream(Path.Combine(outputPath, $"{chosenFile}.WAV"), FileMode.Create);
             byte[] wavHeader = CreateWavHeader(rawData.Length);
             fs.Write(wavHeader, 0, wavHeader.Length);
@@ -225,7 +236,7 @@ namespace ALTViewer
                     {
                         if (chunkSize > int.MaxValue) { MessageBox.Show("Audio data chunk is too large to handle."); return; } // limit would really be uint
                         string item = listBox1.SelectedItem!.ToString()!;
-                        string original = $"HDD\\TRILOGY\\CD\\SFX\\{item}.RAW";
+                        string original = $"{gameDirectory}{item}.RAW";
                         string backup = original + ".BAK";
                         if (checkBox1.Checked && !File.Exists(backup)) { File.Copy(original, backup); } // create backup if it doesn't exist
                         byte[] audioData = br.ReadBytes(chunkSize);
@@ -244,7 +255,7 @@ namespace ALTViewer
         // restore backup button click
         private void button7_Click(object sender, EventArgs e)
         {
-            string selectedFile = $"HDD\\TRILOGY\\CD\\SFX\\{listBox1.SelectedItem}.RAW";
+            string selectedFile = $"{gameDirectory}{listBox1.SelectedItem}.RAW";
             File.Copy($"{selectedFile}.BAK", selectedFile, true);
             File.Delete($"{selectedFile}.BAK");
             button7.Enabled = false;

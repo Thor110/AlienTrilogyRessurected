@@ -7,7 +7,7 @@ namespace ALTViewer
         public bool setup;
         // instead of hard coding language names, dynamically read them from the executable at the relevant offsets
         // this way it supports user changes
-        public static string languageDirectory = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
+        public string languageDirectory = "";
         public List<string> languages = new List<string> { "English", "Français", "Italiano", "Español" };
         public List<string> missions = new List<string>
         {
@@ -32,6 +32,14 @@ namespace ALTViewer
         public TextEditor()
         {
             InitializeComponent();
+            if (File.Exists("Run.exe"))
+            {
+                languageDirectory = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
+            }
+            else if (File.Exists("TRILOGY.EXE"))
+            {
+                languageDirectory = "CD\\LANGUAGE\\";
+            }
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

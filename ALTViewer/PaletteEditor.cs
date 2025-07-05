@@ -2,7 +2,7 @@
 {
     public partial class PaletteEditor : Form
     {
-        public static string paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
+        public static string paletteDirectory = "";
         public string backupDirectory = "";
         public string fileDirectory = "";
         public string selectedPalette = ""; // either the name of the .PAL file or the name and location of the source file for the embedded palette
@@ -18,6 +18,14 @@
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
             InitializeComponent();
+            if (File.Exists("Run.exe"))
+            {
+                paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
+            }
+            else if (File.Exists("TRILOGY.EXE"))
+            {
+                paletteDirectory = "CD\\PALS\\";
+            }
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)

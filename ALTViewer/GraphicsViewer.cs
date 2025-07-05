@@ -4,19 +4,19 @@ namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
-        public static string gameDirectory = "HDD\\TRILOGY\\CD"; // default directories
-        public static string gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
-        public static string paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
-        public static string enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
-        public static string languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
-        public static string levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
-        public static string levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
-        public static string levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
-        public static string levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
-        public static string levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
-        public static string levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
-        public static string levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
-        public static string[] levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
+        public string gameDirectory = ""; // default directories
+        public string gfxDirectory = ""; // BND / B16 / BIN
+        public string paletteDirectory = ""; // TNT / DPQ / PAL
+        public string enemyDirectory = ""; // BND / B16
+        public string languageDirectory = ""; // BND / 16
+        public string levelPath1 = ""; // BIN / B16
+        public string levelPath2 = ""; // BIN / B16
+        public string levelPath3 = ""; // BIN / B16
+        public string levelPath4 = ""; // BIN / B16
+        public string levelPath5 = ""; // BIN / B16
+        public string levelPath6 = ""; // BIN / B16
+        public string levelPath7 = ""; // BIN / B16
+        public string[] levels = null!;
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
         private string lastSelectedFilePath = "";
@@ -40,6 +40,7 @@ namespace ALTViewer
         public GraphicsViewer()
         {
             InitializeComponent();
+            SetupDirectories();
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox), typeof(NumericUpDown) });
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
@@ -52,6 +53,40 @@ namespace ALTViewer
                 }
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
+        }
+        public void SetupDirectories()
+        {
+            if(File.Exists("Run.exe"))
+            {
+                gameDirectory = "HDD\\TRILOGY\\CD"; // default directories
+                gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
+                paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
+                enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
+                languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
+                levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
+                levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
+                levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
+                levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
+                levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
+                levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
+                levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
+            }
+            else if (File.Exists("TRILOGY.EXE"))
+            {
+                gameDirectory = "CD"; // default directories
+                gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
+                paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
+                enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
+                languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
+                levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
+                levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
+                levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
+                levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
+                levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
+                levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
+                levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
+            }
+            levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         }
         // graphics GFX
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

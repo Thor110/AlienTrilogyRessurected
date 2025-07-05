@@ -2,15 +2,15 @@
 {
     public partial class MapEditor : Form
     {
-        public static string gameDirectory = "HDD\\TRILOGY\\CD";
-        public static string levelPath1 = Path.Combine(gameDirectory, "SECT11");
-        public static string levelPath2 = Path.Combine(gameDirectory, "SECT12");
-        public static string levelPath3 = Path.Combine(gameDirectory, "SECT21");
-        public static string levelPath4 = Path.Combine(gameDirectory, "SECT22");
-        public static string levelPath5 = Path.Combine(gameDirectory, "SECT31");
-        public static string levelPath6 = Path.Combine(gameDirectory, "SECT32");
-        public static string levelPath7 = Path.Combine(gameDirectory, "SECT90");
-        public static string[] levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
+        public string gameDirectory = "";
+        public string levelPath1 = "";
+        public string levelPath2 = "";
+        public string levelPath3 = "";
+        public string levelPath4 = "";
+        public string levelPath5 = "";
+        public string levelPath6 = "";
+        public string levelPath7 = "";
+        public string[] levels = null!;
         public List<string> missions = new List<string>
         {
             "1.1.1 Entrance", "1.1.2 Outer Complex", "1.1.3 Ammunition Dump 1", "1.2.2 Recreation Rooms", "1.3.1 Medical Laboratory",
@@ -29,6 +29,22 @@
         public MapEditor()
         {
             InitializeComponent();
+            if (File.Exists("Run.exe"))
+            {
+                gameDirectory = "HDD\\TRILOGY\\CD";
+            }
+            else if (File.Exists("TRILOGY.EXE"))
+            {
+                gameDirectory = "CD";
+            }
+            levelPath1 = Path.Combine(gameDirectory, "SECT11");
+            levelPath2 = Path.Combine(gameDirectory, "SECT12");
+            levelPath3 = Path.Combine(gameDirectory, "SECT21");
+            levelPath4 = Path.Combine(gameDirectory, "SECT22");
+            levelPath5 = Path.Combine(gameDirectory, "SECT31");
+            levelPath6 = Path.Combine(gameDirectory, "SECT32");
+            levelPath7 = Path.Combine(gameDirectory, "SECT90");
+            levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
             //ToolTip tooltip = new ToolTip(); // no tooltips added yet
             //ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             ListLevels();

@@ -2,7 +2,15 @@ namespace ALTViewer
 {
     public partial class ALTViewer : Form
     {
-        public ALTViewer() { InitializeComponent(); }
+        public ALTViewer()
+        {
+            InitializeComponent();
+            if (!File.Exists("Run.exe") && !File.Exists("TRILOGY.EXE"))
+            {
+                MessageBox.Show("Game directory not found. Please ensure you are running this application from the correct game directory.");
+                return;
+            }
+        }
         // create new form method
         private void newForm(Form form)
         {
