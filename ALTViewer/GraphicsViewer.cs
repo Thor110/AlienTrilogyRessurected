@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using static ALTViewer.Utilities;
 
 namespace ALTViewer
 {

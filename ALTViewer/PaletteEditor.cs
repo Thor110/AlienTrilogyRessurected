@@ -1,4 +1,7 @@
-﻿namespace ALTViewer
+﻿using System.Formats.Tar;
+using static ALTViewer.Utilities;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -72,10 +75,21 @@
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
+        }
+        private void PaletteEditor_Shown(object sender, EventArgs e)
+        {
+            // Force layout and painting to complete
+            this.Refresh();           // Forces repaint immediately
+            Application.DoEvents();   // Processes pending paint messages
+            // Now run your code after form and controls fully painted
+            DetectUnusedColors();
+        }
+        private void DetectUnusedColors()
+        {
             // build a list of unused colours from all sections and frames
-            if(!compressed)
+            if (!compressed)
             {
-                if(palfile)
+                if (usePAL)
                 {
                     for (int i = 0; i < comboBox1.Items.Count; i++)
                     {
@@ -91,11 +105,13 @@
                     comboBox1.SelectedIndex = i; // set the selected index to the current section
                     for (int f = 0; f < comboBox2.Items.Count; f++)
                     {
-                        comboBox1.SelectedIndex = f; // set the selected index to the current section
+                        comboBox2.SelectedIndex = f; // set the selected index to the current section
                         TestImageColours();
                     }
                 }
             }
+            label4.Visible = false; // hide detecting unused colours label
+            pictureBox2.Visible = false; // hide the loading background picture box
             comboBox1.SelectedIndex = 0; // reset to first frame
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
@@ -108,7 +124,7 @@
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
-            if(!compressed && !usePAL)
+            if (!compressed && !usePAL)
             {
                 usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
             }
