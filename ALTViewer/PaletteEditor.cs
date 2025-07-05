@@ -75,10 +75,8 @@
         }
         private void PaletteEditor_Shown(object sender, EventArgs e)
         {
-            // Force layout and painting to complete
             this.Refresh();           // Forces repaint immediately
             Application.DoEvents();   // Processes pending paint messages
-            // Now run your code after form and controls fully painted
             DetectUnusedColors();
         }
         private void DetectUnusedColors()
