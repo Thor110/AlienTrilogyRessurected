@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     internal class DetectFrames
     {
