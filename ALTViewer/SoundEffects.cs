@@ -18,7 +18,7 @@ namespace ALTViewer
             }
             else if (File.Exists("TRILOGY.EXE"))
             {
-                gameDirectory = "CD";
+                gameDirectory = "CD\\SFX\\";
                 button5.Visible = false;
                 label2.Visible = false;
             }

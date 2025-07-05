@@ -14,7 +14,11 @@ namespace ALTViewer
             // see https://aka.ms/applicationconfiguration.
             Process[] processes = Process.GetProcessesByName("ALTViewer");
             if (processes.Length > 1) { return; }
-            if (!File.Exists("Run.exe")) { MessageBox.Show("This toolkit is only designed to work with the repacked version of the game for now!"); return; }
+            if (!File.Exists("Run.exe") && !File.Exists("TRILOGY.EXE"))
+            {
+                MessageBox.Show("Game directory not found. Please ensure you are running this application from the correct game directory.");
+                return;
+            }
             ApplicationConfiguration.Initialize();
             Application.Run(new ALTViewer());
         }
