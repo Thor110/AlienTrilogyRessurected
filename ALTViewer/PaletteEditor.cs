@@ -336,7 +336,7 @@
                     }
                     else if (loaded.Length != 768)
                     {
-                        MessageBox.Show("Palettes smaller than 768 bytes not supported.");
+                        MessageBox.Show("Palettes smaller than 768 or 672 bytes not supported.");
                         return;
                     }
                     else

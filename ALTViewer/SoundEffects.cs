@@ -63,8 +63,8 @@ namespace ALTViewer
             int byteRate = sampleRate * channels * bitsPerSample / 8;
             short blockAlign = (short)(channels * bitsPerSample / 8);
             int chunkSize = 36 + dataSize;
-            using (MemoryStream ms = new MemoryStream(44))
-            using (BinaryWriter bw = new BinaryWriter(ms))
+            using (var ms = new MemoryStream(44))
+            using (var bw = new BinaryWriter(ms))
             {
                 bw.Write(Encoding.ASCII.GetBytes("RIFF"));
                 bw.Write(chunkSize);
@@ -152,7 +152,7 @@ namespace ALTViewer
         // select output path button click
         private void button3_Click(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            using (var fbd = new FolderBrowserDialog())
             {
                 fbd.Description = "Select output folder to save the WAV file.";
                 if (fbd.ShowDialog() == DialogResult.OK)
@@ -189,7 +189,7 @@ namespace ALTViewer
         // replace sound button click
         private void button6_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "WAV Files (*.wav)|*.wav|All Files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
@@ -200,7 +200,7 @@ namespace ALTViewer
         }
         private void ReplaceWAV(string filepath)
         {
-            using (BinaryReader br = new BinaryReader(File.OpenRead(filepath)))
+            using (var br = new BinaryReader(File.OpenRead(filepath)))
             {
                 string riff = Encoding.ASCII.GetString(br.ReadBytes(4)); // Read the RIFF header
                 if (riff != "RIFF") { MessageBox.Show("File is not a valid WAV file."); return; }

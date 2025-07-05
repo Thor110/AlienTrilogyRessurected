@@ -21,7 +21,7 @@ public static class BinaryUtility
         // Sort edits by offset to apply them sequentially
         edits = edits.OrderBy(e => e.Offset).ToList();
         byte[] original = File.ReadAllBytes(filePath);
-        List<byte> result = new List<byte>();
+        var result = new List<byte>();
         long currentPos = 0;
         long shift = 0;
         foreach (var edit in edits)

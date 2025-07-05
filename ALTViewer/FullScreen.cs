@@ -11,7 +11,7 @@ namespace ALTViewer
         {
             TargetForm = targetForm;
             TargetForm.KeyPreview = true;
-            TargetForm.KeyDown += TargetForm_KeyDown;
+            TargetForm.KeyDown += TargetForm_KeyDown!;
         }
 
         private void TargetForm_KeyDown(object sender, KeyEventArgs e)

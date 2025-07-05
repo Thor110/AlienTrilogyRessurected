@@ -549,7 +549,7 @@ namespace ALTViewer
         // Save an 8bpp indexed image as a PNG file with a specified palette
         public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height)
         {
-            using Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+            using var bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
 
             // Set the palette
             ColorPalette pal = bmp.Palette;

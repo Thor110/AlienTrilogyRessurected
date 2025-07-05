@@ -33,7 +33,7 @@ namespace ALTViewer
         public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
-        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT" }; // excluded palettes
+        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
         public int w = 0; // WIDTH
         public int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
@@ -308,6 +308,7 @@ namespace ALTViewer
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a file to export first."); return; }
             try { MessageBox.Show($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}"); }
             catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
         }
@@ -355,6 +356,9 @@ namespace ALTViewer
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a file to export first."); return; }
+            int previouslySelected = comboBox2.SelectedIndex; // store previously selected index
+            MessageBox.Show(previouslySelected.ToString());
             try
             {
                 for (int i = 0; i < comboBox1.Items.Count; i++)
@@ -379,6 +383,8 @@ namespace ALTViewer
                 }
                 if (!exporting)
                 {
+                    MessageBox.Show(previouslySelected.ToString());
+                    comboBox2.SelectedIndex = previouslySelected;
                     MessageBox.Show($"Images saved to:\n{outputPath}");
                 }
             }
