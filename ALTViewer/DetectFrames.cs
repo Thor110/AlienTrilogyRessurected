@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     internal class DetectFrames
     {
@@ -12,8 +10,8 @@ namespace ALTViewer
             pictureBox1.Height = h;
             byte[] fullFile = File.ReadAllBytes(fileDirectory);
             List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
-            var section = f0Sections[comboBox1.SelectedIndex];
+            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            BndSection section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
             byte[] frameData = frames[comboBox2.SelectedIndex];
             try
@@ -40,14 +38,14 @@ namespace ALTViewer
             // get original frame section and data
             // find section based on comboBox1 selection
             List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
             // find offset of selected frame insead of decompressing
             int index = comboBox1.SelectedIndex;
-            var section = f0Sections[index];
+            BndSection section = f0Sections[index];
             // compress the new frame image to match the original frame data
             long offset = TileRenderer.FindBndFormSectionOffset(fullFile, index); // get the offset of the selected frame
             // extract the compressed frames from the section data to compare against the newly compressed frame
-            var compressedFrames = TileRenderer.ExtractCompressedFrames(section.Data);
+            List<(byte[] frame, int length)> compressedFrames = TileRenderer.ExtractCompressedFrames(section.Data);
             byte[] oldCompressed = compressedFrames[comboBox2.SelectedIndex].frame;
             int relativeOffset = 0;
             // calculate the offset of the selected frame in the section data
@@ -80,16 +78,16 @@ namespace ALTViewer
             // Get original B16 file
             byte[] fullFile = File.ReadAllBytes(fileDirectory);
             List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-            var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
             // Get section currently selected in comboBox1
-            var selectedSectionName = comboBox1.SelectedItem!.ToString();
-            var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
+            string selectedSectionName = comboBox1.SelectedItem!.ToString()!;
+            BndSection selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
             if (selectedOriginalSection == null) // this should never happen
             {
                 MessageBox.Show("Selected section not found in original file.");
                 return;
             }
-            var frames = TileRenderer.DecompressAllFramesInSection(selectedOriginalSection.Data);
+            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(selectedOriginalSection.Data);
             for (int i = 0; i < frames.Count; i++) { comboBox2.Items.Add($"Frame {i}"); }
             if (comboBox2.Items.Count > 0) { comboBox2.SelectedIndex = 0; }
         }
