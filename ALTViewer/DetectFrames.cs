@@ -59,8 +59,7 @@
             // add 8 for current section F0## header
             offset += relativeOffset + 8;
             // compress the new frame image to match the original frame data
-            byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // compress frame
-            // TODO : get compression working
+            byte[] bytes = TileRenderer.CompressFrameToPicFormat(TileRenderer.Extract8bppData(frameImage)); // TODO : get compression working
             if (bytes.Length != oldCompressed.Length) // compare new frame byte array length to the original
             {
                 MessageBox.Show($"Compressed data length does not match the original compressed frame length.\n\nOriginal : {oldCompressed.Length}\n\nNew : {bytes.Length}");
@@ -81,7 +80,7 @@
             List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
             // Get section currently selected in comboBox1
             string selectedSectionName = comboBox1.SelectedItem!.ToString()!;
-            BndSection selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
+            var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == selectedSectionName);
             if (selectedOriginalSection == null) // this should never happen
             {
                 MessageBox.Show("Selected section not found in original file.");
@@ -91,18 +90,5 @@
             for (int i = 0; i < frames.Count; i++) { comboBox2.Items.Add($"Frame {i}"); }
             if (comboBox2.Items.Count > 0) { comboBox2.SelectedIndex = 0; }
         }
-        // test method to report frame counts
-        /*public static void PrintExtraFrameCounts(string b16File)
-        {
-            byte[] fullFile = File.ReadAllBytes(b16File);
-            List<BndSection> sections = TileRenderer.ParseBndFormSections(fullFile);
-            var f0Sections = sections.Where(s => s.Name.StartsWith("F0")).ToList();
-
-            foreach (var section in f0Sections)
-            {
-                var frames = TileRenderer.DecompressAllFramesInSection(section.Data);
-                MessageBox.Show($"[{Path.GetFileName(b16File)}] Section {section.Name} has {frames.Count} frame(s)");
-            }
-        }*/
     }
 }

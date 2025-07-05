@@ -5,9 +5,8 @@
         // Auto-detect dimensions based on the total pixel count in the image data
         public static (int w, int h) AutoDetectDimensions(string lastSelectedFile, int SelectedIndex, int FrameIndex)
         {
-            int w = 0;
-            int h = 0;
-            switch(lastSelectedFile) // TODO : setup all the extra switch statements
+            int w = 0, h = 0;
+            switch (lastSelectedFile)
             {
                 case "FLAME": // COMPLETE
                     switch (SelectedIndex)

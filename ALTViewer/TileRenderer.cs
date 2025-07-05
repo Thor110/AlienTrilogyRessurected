@@ -99,13 +99,9 @@ namespace ALTViewer
         // Auto-detect dimensions based on the total pixel count in the image data
         public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
         {
-            int totalPixels = imageData.Length;
             var knownResolutions = new List<(int Width, int Height)> { (256, 256), (256, 128) };
-            foreach (var res in knownResolutions) { if (res.Width * res.Height == totalPixels) { return res; } }
-            // Try square fallback // probably not necessary now or when the enemies and guns are worked out. // TODO : remove this
-            int dim = (int)Math.Sqrt(totalPixels);
-            if (dim * dim == totalPixels) { return (dim, dim); }
-            throw new Exception($"Unable to auto-detect dimensions for {totalPixels} bytes.");
+            foreach (var res in knownResolutions) { if (res.Width * res.Height == imageData.Length) { return res; } }
+            throw new Exception($"Unable to auto-detect dimensions for the selected image.");
         }
         // Render a raw 8bpp image with a palette
         public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
