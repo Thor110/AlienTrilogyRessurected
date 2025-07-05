@@ -73,15 +73,16 @@
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
         }
+        // form load event forces redraw of the form to display loading message
         private void PaletteEditor_Shown(object sender, EventArgs e)
         {
             this.Refresh();           // Forces repaint immediately
             Application.DoEvents();   // Processes pending paint messages
             DetectUnusedColors();
         }
+        // build a list of unused colours from all sections and frames
         private void DetectUnusedColors()
         {
-            // build a list of unused colours from all sections and frames
             if (!compressed)
             {
                 if (usePAL)
@@ -111,6 +112,7 @@
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
         }
+        // test image colours for the current section and frame
         private void TestImageColours()
         {
             HashSet<Color> testColors = GetUsedColors((Bitmap)pictureBox1.Image); // check current section and frame
@@ -158,6 +160,7 @@
             }
             return usedColors;
         }
+        // scale colour from the palette to display in the color dialog
         private Color ScaleColour(int index) { return Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4); }
         // palette section mouse click event
         private void PaletteEditorForm_MouseClick(object sender, MouseEventArgs e)
@@ -353,6 +356,7 @@
             Invalidate();
             RenderImage();
         }
+        // render image based on the selected section and frame
         private void RenderImage()
         {
             var section = currentSections[comboBox1.SelectedIndex];
@@ -436,6 +440,7 @@
                 }
             }
         }
+        // sub frame selection changed event
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
