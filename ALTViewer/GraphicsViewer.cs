@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using static ALTViewer.Utilities;
 
 namespace ALTViewer
 {
@@ -54,6 +53,7 @@ namespace ALTViewer
                 }
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
+            listBox1.SelectedIndex = 0; // Select the first item in the list box
         }
         public void SetupDirectories()
         {
@@ -300,19 +300,19 @@ namespace ALTViewer
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (palfile)  // read .PAL file if not reading from embedded palettes
             {
-                if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
-                {
-                    byte[] loaded = File.ReadAllBytes(pal);
-                    currentPalette = new byte[768];
-                    trimmed = true; // set trimmed to true for these files
-                    Array.Copy(loaded, 0, currentPalette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                }
-                else if (binbnd.Contains("LOGOSGFX"))
+                if (binbnd.Contains("LOGOSGFX") || pal.Contains("LOGOSGFX"))
                 {
                     byte[] loaded = File.ReadAllBytes(pal);
                     currentPalette = new byte[768];
                     trimmed = false; // set trimmed to false for these files
                     Array.Copy(loaded, 0, currentPalette, 0, 576);
+                }
+                else if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
+                {
+                    byte[] loaded = File.ReadAllBytes(pal);
+                    currentPalette = new byte[768];
+                    trimmed = true; // set trimmed to true for these files
+                    Array.Copy(loaded, 0, currentPalette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
                 else // LEGAL.PAL
                 {

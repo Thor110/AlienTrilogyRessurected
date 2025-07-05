@@ -32,6 +32,7 @@ namespace ALTViewer
             }
             return sections;
         }
+        // Find the offset of a specific section in a BND file by its index
         public static long FindBndFormSectionOffset(byte[] bnd, int index)
         {
             using var br = new BinaryReader(new MemoryStream(bnd));
@@ -60,6 +61,7 @@ namespace ALTViewer
 
             throw new Exception($"Section F0{index:D2} not found.");
         }
+        // Compress a frame to the PIC format used in BND files
         public static byte[] CompressFrameToPicFormat(byte[] input)
         {
             var output = new List<byte>();
@@ -202,19 +204,6 @@ namespace ALTViewer
             bw.Write(formSizeBytes);
             return ms.ToArray();
         }
-        // Build an indexed bitmap from pixel data and a palette [NO LONGER USED]
-        /*public static Bitmap BuildIndexedBitmap(byte[] pixelData, byte[] palette, int width, int height)
-        {
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-            ColorPalette pal = bmp.Palette; // Set the palette
-            for (int i = 0; i < palette.Length / 3 && i < 256; i++) { pal.Entries[i] = Color.FromArgb(255, palette[i * 3], palette[i * 3 + 1], palette[i * 3 + 2]); }
-            bmp.Palette = pal;
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed); // Lock and copy the pixel data
-            int stride = data.Stride;
-            for (int y = 0; y < height; y++) { Marshal.Copy(pixelData, y * width, data.Scan0 + y * stride, width); }
-            bmp.UnlockBits(data);
-            return bmp;
-        }*/
         // Decompress a sprite section using a custom compression algorithm
         public static byte[] DecompressSpriteSection(byte[] input)
         {
@@ -266,6 +255,7 @@ namespace ALTViewer
             }
             return output.ToArray();
         }
+        // Decompress all frames in a section, returning a list of byte arrays for each frame
         public static List<byte[]> DecompressAllFramesInSection(byte[] data)
         {
             var frames = new List<byte[]>();
@@ -291,6 +281,7 @@ namespace ALTViewer
 
             return frames;
         }
+        // Decompress a single frame from the input byte array starting at the specified offset
         public static (byte[] frame, int bytesConsumed) DecompressSingleFrame(byte[] input, int startOffset)
         {
             List<byte> output = new();
@@ -348,6 +339,7 @@ namespace ALTViewer
 
             return (output.ToArray(), ptr - startOffset);
         }
+        // used for extracting compressed frames in order to compare against newly compressed frames for their dimensions
         public static List<(byte[] frame, int length)> ExtractCompressedFrames(byte[] data)
         {
             var frames = new List<(byte[] frame, int length)>();
@@ -428,29 +420,6 @@ namespace ALTViewer
 
             return frames;
         }
-
-        // Extract F0## sections from a byte array, optionally decompressing them [UNUSED]
-        /*public static List<byte[]> ExtractF0Sections(byte[] data, bool decompress)
-        {
-            if (decompress) { data = DecompressSpriteSection(data); }
-            List<byte[]> f0Sections = new();
-            int offset = 0;
-            while (offset < data.Length - 8)
-            {
-                // Check for F0## marker (e.g. F000, F001...)
-                if (data[offset] == 'F' && (data[offset + 1] & 0xF0) == 0x30)
-                {
-                    int sectionLength = BitConverter.ToInt32(data, offset + 4);
-                    if (sectionLength <= 0 || offset + 8 + sectionLength > data.Length) { break; } // malformed or truncated
-                    byte[] section = new byte[4 + 4 + sectionLength]; // header + length + body
-                    Array.Copy(data, offset, section, 0, section.Length);
-                    f0Sections.Add(section);
-                    offset += section.Length; // move to next section
-                }
-                else { offset++; }
-            }
-            return f0Sections;
-        }*/
         // extract level palette from a level file C0## sections
         public static byte[] ExtractEmbeddedPalette(string filePath, string clSectionName, int skipHeader)
         {
