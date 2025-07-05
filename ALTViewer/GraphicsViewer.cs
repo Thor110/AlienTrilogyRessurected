@@ -316,6 +316,7 @@ namespace ALTViewer
                 }
                 else // LEGAL.PAL
                 {
+                    trimmed = false; // set trimmed to false for these files
                     currentPalette = File.ReadAllBytes(pal);
                 }
             }
