@@ -15,6 +15,7 @@
         private int lastSelectedSubFrame = -1;
         private bool changesMade;
         private List<BndSection> currentSections = new();
+        private HashSet<Color> usedColors = new HashSet<Color>();
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
             InitializeComponent();
@@ -70,15 +71,47 @@
             }
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-            comboBox1.SelectedIndex = 0; // trigger rendering
+            if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
+            // build a list of unused colours from all sections and frames
+            if(!compressed)
+            {
+                if(palfile)
+                {
+                    for (int i = 0; i < comboBox1.Items.Count; i++)
+                    {
+                        comboBox1.SelectedIndex = i; // set the selected index to the current section
+                        TestImageColours();
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < comboBox1.Items.Count; i++)
+                {
+                    comboBox1.SelectedIndex = i; // set the selected index to the current section
+                    for (int f = 0; f < comboBox2.Items.Count; f++)
+                    {
+                        comboBox1.SelectedIndex = f; // set the selected index to the current section
+                        TestImageColours();
+                    }
+                }
+            }
+            comboBox1.SelectedIndex = 0; // reset to first frame
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
-            if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
+        }
+        private void TestImageColours()
+        {
+            HashSet<Color> testColors = GetUsedColors((Bitmap)pictureBox1.Image); // check current section and frame
+            usedColors.UnionWith(testColors); // add the used colors to the set
         }
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
-            HashSet<Color> usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
+            if(!compressed && !usePAL)
+            {
+                usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
+            }
             Pen crossPen = new Pen(Color.Red, 2);
             for (int i = 0; i < palette.Length / 3; i++)
             {
