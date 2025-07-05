@@ -464,7 +464,7 @@ namespace ALTViewer
                 }
                 DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
                 //MessageBox.Show("Replacing compressed images is not supported yet.");
-                //return;
+                return;
             }
             else
             {

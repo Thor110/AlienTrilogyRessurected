@@ -4,9 +4,56 @@
 public static class BinaryUtility
 {
     /// <summary>
+    /// The ReplaceBndFrameWith8ByteAlignment method replaces a section of a BND file with new data, ensuring that the new data is aligned to 8-byte boundaries.
+    /// </summary>
+    public static void ReplaceBndFrameWith8ByteAlignment(string filePath, long offset, int lengthToReplace, byte[] newData)
+    {
+        int padding = (8 - (newData.Length % 8)) % 8;
+        byte[] paddedNewData = new byte[newData.Length + padding];
+        Array.Copy(newData, paddedNewData, newData.Length);
+        ReplaceBytesWithResize(new List<(long, int, byte[])> { (offset, lengthToReplace, paddedNewData) }, filePath);
+    }
+    /// <summary>
+    /// The ReplaceBytesWithResize method opens the relevant file to replace bytes in, then replaces a given amount of bytes and inserts the rest, extending the file length.
+    /// </summary>
+    public static void ReplaceBytesWithResize(List<(long Offset, int LengthToReplace, byte[] NewData)> edits, string filePath)
+    {
+        // Sort edits by offset to apply them sequentially
+        edits = edits.OrderBy(e => e.Offset).ToList();
+        byte[] original = File.ReadAllBytes(filePath);
+        List<byte> result = new List<byte>();
+        long currentPos = 0;
+        long shift = 0;
+        foreach (var edit in edits)
+        {
+            long adjustedOffset = edit.Offset + shift;
+            // Copy unchanged data before this edit
+            if (adjustedOffset > currentPos)
+            {
+                int length = (int)(adjustedOffset - currentPos);
+                result.AddRange(original.Skip((int)currentPos).Take(length));
+                currentPos += length;
+            }
+            // Skip the original data to be replaced
+            currentPos += edit.LengthToReplace;
+            // Insert new data
+            result.AddRange(edit.NewData);
+            // Update shift amount for later edits
+            shift += edit.NewData.Length - edit.LengthToReplace;
+        }
+        // Append any remaining data after the last edit
+        if (currentPos < original.Length)
+        {
+            result.AddRange(original.Skip((int)currentPos));
+        }
+        // Write back to file
+        File.WriteAllBytes(filePath, result.ToArray());
+    }
+    /// <summary>
     /// The ReplaceByte method opens the relevant file to replace a byte in.
     /// </summary>
-    /// <param name="patches">The byte to replace and the address at which to replace it.</param>
+    /// <param name="offset">The address at which to replace a byte.</param>
+    /// <param name="value">The byte to write as a replacement.</param>
     /// <param name="filename">The BinaryWriter Object.</param>
     public static void ReplaceByte(long offset, byte value, string filename)
     {
