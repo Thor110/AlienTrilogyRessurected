@@ -327,12 +327,12 @@ namespace ALTViewer
         // export everything button click
         private void button1_Click(object sender, EventArgs e)
         {
-            exporting = true;
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
             lastSelectedFrame = comboBox1.SelectedIndex;     // set previously selected index
             lastSelectedSub = comboBox2.SelectedIndex;       // set previously selected index
+            exporting = true;
             foreach (var button in buttons)
             {
                 button.Checked = true;                      // select each radio button
@@ -342,12 +342,12 @@ namespace ALTViewer
                     button3_Click(null!, null!);            // call the export all button click event
                 }
             }
+            exporting = false;
             buttons[selectedIndex].Checked = true;
             listBox1.SelectedIndex = previouslySelected;    // restore previously selected index
             comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
             comboBox2.SelectedIndex = lastSelectedSub;      // restore previously selected index
             ShowMessage($"All images saved to:\n{outputPath}");
-            exporting = false;
         }
         // show message on successful export operation
         private void ShowMessage(string messageSuccess)
