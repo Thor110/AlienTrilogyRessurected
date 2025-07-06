@@ -14,10 +14,7 @@
             BndSection section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
             byte[] frameData = frames[comboBox2.SelectedIndex];
-            try
-            {
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h);
-            }
+            try { pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h); }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
             return frameData;
         }

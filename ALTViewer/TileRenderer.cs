@@ -110,7 +110,6 @@ namespace ALTViewer
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            bool once = false; // Flag to show if we have a valid palette
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -123,17 +122,7 @@ namespace ALTViewer
                         int r = palette[colorIndex * 3] * 4;
                         int g = palette[colorIndex * 3 + 1] * 4;
                         int b = palette[colorIndex * 3 + 2] * 4;
-                        bmp.SetPixel(x, y, Color.FromArgb(r, g, b)); // Clamp values to 255 just in case
-                    }
-                    else // Fallback color for invalid palette index
-                    {
-                        if(!once)
-                        {
-                            MessageBox.Show("FALLBACK COLOUR ERROR");
-                            once = true; // Show this only once
-                        }
-                        //if (!transparency) { bmp.SetPixel(x, y, Color.Black); }
-                        //else { bmp.SetPixel(x, y, Color.Transparent); }
+                        bmp.SetPixel(x, y, Color.FromArgb(r, g, b));
                     }
                 }
             }

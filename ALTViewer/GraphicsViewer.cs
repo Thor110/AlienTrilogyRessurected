@@ -37,6 +37,8 @@ namespace ALTViewer
         public int w = 0; // WIDTH
         public int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
+        private bool saved; // is a file successfully saved or not
+        private string exception = ""; // exception message for debugging purposes
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -57,71 +59,34 @@ namespace ALTViewer
         }
         public void SetupDirectories()
         {
-            if(File.Exists("Run.exe"))
-            {
-                gameDirectory = "HDD\\TRILOGY\\CD"; // default directories
-                gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
-                paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
-                enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
-                languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
-                levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
-                levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
-                levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
-                levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
-                levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
-                levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
-                levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
-            }
-            else if (File.Exists("TRILOGY.EXE"))
-            {
-                gameDirectory = "CD"; // default directories
-                gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
-                paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
-                enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
-                languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
-                levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
-                levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
-                levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
-                levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
-                levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
-                levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
-                levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
-            }
+            if(File.Exists("Run.exe")) { gameDirectory = "HDD\\TRILOGY\\CD"; }
+            else if (File.Exists("TRILOGY.EXE")) { gameDirectory = "CD"; }
+            gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
+            paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
+            enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
+            languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
+            levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
+            levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
+            levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
+            levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
+            levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
+            levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
+            levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         }
-        // graphics GFX
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-            ListBoxes(true);
-            ListFiles(gfxDirectory); // .BND and .B16 files exist in the GFX folder which are used
-        }
-        // enemies NME
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            ListBoxes(false);
-            ListFiles(enemyDirectory, ".B16", ".NOPE"); // enemies are all compressed .B16 files
-        }
-        // levels SECT##
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-            ListBoxes(false);
-            foreach (string level in levels) { ListFiles(level); } // levels are all .B16 files
-        }
-        // panels LANGUAGE
-        private void radioButton4_CheckedChanged(object sender, EventArgs e)
-        {
-            ListBoxes(true);
-            ListFiles(languageDirectory, ".NOPE", ".16"); // .NOPE ignores the unused .BND files in the LANGUAGE folder
-        }
-        // clear listBox1 then enable or disable the palette list box based on the selected radio button
-        private void ListBoxes(bool enabled)
-        {
-            listBox1.Items.Clear();
-            listBox2.Enabled = enabled;
-        }
+        // graphics GFX // .BND and .B16 files exist in the GFX folder which are used
+        private void radioButton1_CheckedChanged(object sender, EventArgs e) { ListFiles(gfxDirectory, ".BND", ".B16", true); }
+        // enemies NME // enemies are all compressed .B16 files
+        private void radioButton2_CheckedChanged(object sender, EventArgs e) { ListFiles(enemyDirectory, ".B16", ".NOPE"); }
+        // levels SECT## // level graphics are all .B16 files
+        private void radioButton3_CheckedChanged(object sender, EventArgs e) { foreach (string level in levels) { ListFiles(level); } }
+        // panels LANGUAGE // .NOPE ignores the unused .BND files in the LANGUAGE folder
+        private void radioButton4_CheckedChanged(object sender, EventArgs e) { ListFiles(languageDirectory, ".NOPE", ".16"); }
         // list files in directory
-        public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16")
+        public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16", bool enabled = false)
         {
+            listBox1.Items.Clear(); // clear listBox1
+            listBox2.Enabled = enabled; // enable or disable the palette list box based on the selected radio button
             string[] files = DiscoverFiles(path, type1, type2);
             foreach (string file in files)
             {
@@ -198,7 +163,7 @@ namespace ALTViewer
                 string candidate = Path.Combine(path, selected + ext);
                 if (File.Exists(candidate)) { filePath = candidate; break; }
             }
-            if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; }
+            if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; } // check if a backup exists
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
             RenderImage(filePath, palettePath, chosen);
@@ -300,7 +265,7 @@ namespace ALTViewer
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (palfile)  // read .PAL file if not reading from embedded palettes
             {
-                if (binbnd.Contains("LOGOSGFX") || pal.Contains("LOGOSGFX"))
+                if (pal.Contains("LOGOSGFX"))
                 {
                     byte[] loaded = File.ReadAllBytes(pal);
                     currentPalette = new byte[768];
@@ -324,9 +289,9 @@ namespace ALTViewer
             {
                 if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
                 {
-                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )");
+                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message shown in palette editor
                 }
-                else
+                else // PANEL has a trimmed and or padded embedded palette
                 {
                     trimmed = false; // set trimmed to false for these files
                 }
@@ -351,8 +316,7 @@ namespace ALTViewer
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
-            try { MessageBox.Show($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}"); }
-            catch (Exception ex) { MessageBox.Show("Error saving image:\n" + ex.Message); }
+            ShowMessage($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}");
         }
         // export file
         private string ExportFile(BndSection section, string sectionName)
@@ -370,7 +334,17 @@ namespace ALTViewer
                 saving = currentFrame!; // use current frame data for compressed files
                 (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
-            TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!), w, h);
+            try
+            {
+                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!), w, h);
+                saved = true;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error saving image:\n" + ex.Message);
+                exception = ex.Message;
+                saved = false;
+            }
             return filepath;
         }
         // export everything button click
@@ -392,39 +366,37 @@ namespace ALTViewer
             buttons[selectedIndex].Checked = true;
             exporting = false;
             listBox1.SelectedIndex = previouslySelected; // restore previously selected index
-            MessageBox.Show($"All images saved to:\n{outputPath}");
+            ShowMessage($"All images saved to:\n{outputPath}");
+        }
+        private void ShowMessage(string messageSuccess, string messageFail = "Failed to export : ")
+        {
+            if (saved) { MessageBox.Show(messageSuccess); }
+            else { MessageBox.Show(messageFail + exception); }
         }
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
-            try
+            for (int i = 0; i < comboBox1.Items.Count; i++)
             {
-                for (int i = 0; i < comboBox1.Items.Count; i++)
+                comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
+                if (!compressed && !palfile) // update embedded palette for each frame
                 {
-                    comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
-                    if (!compressed && !palfile) // update embedded palette for each frame
+                    currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
+                }
+                else if (compressed)
+                {
+                    for (int f = 0; f < comboBox2.Items.Count; f++)
                     {
-                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
-                    }
-                    else if (compressed)
-                    {
-                        for (int f = 0; f < comboBox2.Items.Count; f++)
-                        {
-                            comboBox2.SelectedIndex = f; // select each sub frame
-                            ExportFile(null!, comboBox1.Items[i]!.ToString()!);
-                        }
-                    }
-                    if (palfile || !compressed && !palfile) // export embedded palette images and external palette images
-                    {
-                        ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
+                        comboBox2.SelectedIndex = f; // select each sub frame
+                        ExportFile(null!, comboBox1.Items[i]!.ToString()!);
                     }
                 }
-                if (!exporting)
+                if (palfile || !compressed && !palfile) // export embedded palette images and external palette images
                 {
-                    MessageBox.Show($"Images saved to:\n{outputPath}");
+                    ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
             }
-            catch (Exception ex) { MessageBox.Show("Error saving images:\n" + ex.Message); }
+            if (!exporting) { ShowMessage($"Images saved to:\n{outputPath}"); }
         }
         // select output path
         private void button4_Click(object sender, EventArgs e)
@@ -446,7 +418,7 @@ namespace ALTViewer
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
             var section = currentSections[comboBox1.SelectedIndex];
-            try
+            try // TODO : remove try catch block here maybe
             {
                 if (!compressed)
                 {
@@ -506,8 +478,8 @@ namespace ALTViewer
                     MessageBox.Show("Please select only one image when replacing a sub frame.");
                     return;
                 }
-                DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
-                //MessageBox.Show("Replacing compressed images is not supported yet.");
+                //DetectFrames.ReplaceSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, filename[0]); // replace sub frame
+                MessageBox.Show("Replacing compressed images is not supported yet.");
                 return;
             }
             else
@@ -550,14 +522,11 @@ namespace ALTViewer
         // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {
-            if(palfile || !palfile)
-            {
-                (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data);
-            }
-            else if(compressed)
+            if (compressed)
             {
                 (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
+            else { (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data); }
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;
