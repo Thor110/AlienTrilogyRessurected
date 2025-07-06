@@ -23,6 +23,9 @@
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
+            fileDirectory = selected; // set selected palette filepath
+            selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
+            string extension = "";
             if (selected.Contains("PANEL"))
             {
                 MessageBox.Show("Viewing and editing these palettes is not properly implemented yet. ( PANEL3GF & PANELGFX )");
@@ -30,9 +33,6 @@
             }
             if (!palfile)
             {
-                fileDirectory = selected; // set selected filepath instead of palette path
-                selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
-                string extension = "";
                 if (!compressed)
                 {
                     extension = "_CL00.BAK"; // backup extension
@@ -46,13 +46,10 @@
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
                 }
-                backupDirectory = selectedPalette + extension; // set backup directory
             }
             else
             {
-                selectedPalette = selected; // set selected palette filename
-                fileDirectory = paletteDirectory + selected + ".PAL"; // set selected palette filepath
-                backupDirectory = fileDirectory + ".BAK"; // set backup directory
+                extension = ".PAL.BAK";
                 palette = File.ReadAllBytes(fileDirectory); // store the selected palette
                 if (trim) // trimmed palettes [672]
                 {
@@ -62,6 +59,7 @@
                 }
                 else { label2.Visible = false; } // hide note on trimmed colours
             }
+            backupDirectory = selectedPalette + extension; // set backup directory
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
@@ -102,6 +100,7 @@
             label4.Visible = false; // hide detecting unused colours label
             pictureBox2.Visible = false; // hide the loading background picture box
             comboBox1.SelectedIndex = 0; // reset to first frame
+            Invalidate();
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
         }
@@ -114,10 +113,6 @@
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
-            if (!compressed && !usePAL)
-            {
-                usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
-            }
             Pen crossPen = new Pen(Color.Red, 2);
             for (int i = 0; i < palette.Length / 3; i++)
             {
@@ -195,10 +190,10 @@
         // save palette button clicked
         private void button1_Click(object sender, EventArgs e)
         {
+            string message = "Palette saved successfully.";
             if (!File.Exists(backupDirectory) && checkBox1.Checked) // make a backup of the original file if one doesn't already exist
             {
                 File.Copy(fileDirectory, backupDirectory);
-                //File.WriteAllBytes(backupDirectory, palette); // TODO : Backup just the palette, not the entire file.
                 button2.Enabled = true; // enable restore backup button
             }
             if (!usePAL) // backup embedded palettes
@@ -221,12 +216,12 @@
                 {
                     saving = new byte[672]; // resize to 672 bytes
                     Array.Copy(palette, 96, saving, 0, 672);
-                    MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
+                    message = message + "\nNote : First 32 unused colors were trimmed from this palette.";
                 }
                 File.WriteAllBytes(fileDirectory, saving);
             }
             button1.Enabled = false; // disable save button
-            MessageBox.Show("Palette saved successfully.");
+            MessageBox.Show(message);
         }
         // restore backup button clicked
         private void button2_Click(object sender, EventArgs e)
@@ -234,35 +229,20 @@
             File.Move(backupDirectory, fileDirectory, true);
             if (!usePAL)
             {
-                //File.Move(backupDirectory, fileDirectory, true);
-                //palette = File.ReadAllBytes(backupDirectory);
                 if (!compressed) // embedded palettes [512]
                 {
-                    // TODO : Fix restore backup for embedded palettes
-                    //TileRenderer.OverwriteEmbeddedPalette(fileDirectory, $"CL{comboBox1.SelectedIndex.ToString():D2}", palette, 12);
                     palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, "CL00", 12));
                 }
                 else // compressed palettes [512]
                 {
-                    // TODO : Fix restore backup for compressed palettes
-                    //palette = File.ReadAllBytes(fileDirectory);
-                    //byte[] bytes = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
-                    //var replacements = new List<Tuple<long, byte[]>>();
-                    //byte[] bytes = TileRenderer.ConvertRGBTripletsToEmbeddedPalette(palette);
-                    //replacements.Add(new Tuple<long, byte[]>(File.ReadAllBytes(fileDirectory).Length - 512, bytes));
-                    //BinaryUtility.ReplaceBytes(replacements, fileDirectory);
                     palette = File.ReadAllBytes(fileDirectory);
                     palette = TileRenderer.Convert16BitPaletteToRGB(palette.Skip(palette.Length - 512).Take(512).ToArray());
                 }
-                //File.Delete(backupDirectory);
             }
             else // regular & trimmed palettes [768 & 672] + LOGOSGFX [576]
             {
-                //File.Move(backupDirectory, fileDirectory, true);
-                //File.Delete(backupDirectory);
-                //palette = File.ReadAllBytes(fileDirectory);
                 byte[] loaded = File.ReadAllBytes(fileDirectory);
-                if (palette.Length == 672)
+                if (loaded.Length == 672)
                 {
                     palette = new byte[768];
                     Array.Copy(loaded, 0, palette, 96, 672);
@@ -271,32 +251,13 @@
                 {
                     palette = loaded;
                 }
-                // TODO : If I add byte precision instructions
-                /*byte[] loaded = File.ReadAllBytes(fileDirectory);
-                if (!trim) // regular palettes [768]
-                {
-                    File.Move(backupDirectory, fileDirectory, true);
-                    palette = loaded;
-                }
-                else
-                {
-                    palette = new byte[768];
-                    if(fileDirectory.Contains("LOGOSGFX")) // [576]
-                    {
-                        Array.Copy(loaded, 0, palette, 0, 576); // LOGOSGFX Edge Case
-                    }
-                    else // trimmed palettes [672]
-                    {
-                        Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                    }
-                    File.Delete(backupDirectory);
-                }*/
             }
             File.Delete(backupDirectory);
-            button2.Enabled = false; // restore backup button
+            button3.Enabled = false; // disable undo button
+            button2.Enabled = false; // disable backup button
             button1.Enabled = false; // disable save button
             changesMade = false;
-            Invalidate();
+            DetectUnusedColors();
             RenderImage();
             MessageBox.Show("Palette restored from backup.");
         }
@@ -325,7 +286,7 @@
                     Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                 }
             }
-            Invalidate();
+            DetectUnusedColors();
             RenderImage();
             button3.Enabled = false; // disable undo button
             button1.Enabled = false; // disable save button
@@ -334,19 +295,18 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // TODO : Add last selected check
             if (!usePAL && !compressed) // only embedded palettes need to switch here
             {
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
+                Invalidate();
             }
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListSubFrames(fileDirectory, comboBox1, comboBox2);
             }
-            Invalidate();
             RenderImage();
         }
         // render image based on the selected section and frame
@@ -428,7 +388,7 @@
                     }
                     button3.Enabled = true; // enable undo button
                     button1.Enabled = true; // enable save button
-                    Invalidate();
+                    DetectUnusedColors();
                     RenderImage();
                 }
             }
@@ -439,7 +399,6 @@
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette);
-            Invalidate();
         }
         // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }
