@@ -242,6 +242,7 @@ namespace ALTViewer
             else if (radioButton2.Checked)
             {
                 binbnd = UpdateExtension(binbnd);
+                palfile = false; // palette is embedded
                 compressed = true; // set compressed to true for weapons
             }
             if (radioButton4.Checked || radioButton3.Checked ||
