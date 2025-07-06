@@ -187,12 +187,16 @@ namespace ALTViewer
                 {
                     binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
+                    palfile = false; // reset palfile if not a file that uses external palettes
+                    trimmed = false; // set trimmed to false for these files
                     compressed = true; // set compressed to true for weapons
                 }
                 if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
                 {
                     binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
+                    palfile = false; // reset palfile if not a file that uses external palettes
+                    trimmed = false; // set trimmed to false for these files
                 }
                 else if (palfile && !compressed) // select the detected palette if it exists
                 {
