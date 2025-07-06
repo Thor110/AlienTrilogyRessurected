@@ -348,6 +348,7 @@ namespace ALTViewer
             listBox1.SelectedIndex = previouslySelected; // restore previously selected index
             ShowMessage($"All images saved to:\n{outputPath}");
         }
+        // show message on successful export operation
         private void ShowMessage(string messageSuccess, string messageFail = "Failed to export : ")
         {
             if (saved) { MessageBox.Show(messageSuccess); }
