@@ -30,7 +30,7 @@ namespace ALTViewer
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
         private bool exporting; // set to true when exporting everything
-        private bool saved; // set to true when export successful
+        private bool saved; // set to true when export is successful
         private string exception = "";
         private static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         private static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
