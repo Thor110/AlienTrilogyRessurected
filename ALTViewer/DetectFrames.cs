@@ -68,7 +68,7 @@
             MessageBox.Show("Animation frame replaced successfully.");
         }
         // list sub frames
-        public static void ListFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)
+        public static void ListSubFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)
         {
             comboBox2.Items.Clear();
             // Get original B16 file

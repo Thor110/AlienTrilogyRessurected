@@ -344,7 +344,7 @@
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
-                DetectFrames.ListFrames(fileDirectory, comboBox1, comboBox2);
+                DetectFrames.ListSubFrames(fileDirectory, comboBox1, comboBox2);
             }
             Invalidate();
             RenderImage();

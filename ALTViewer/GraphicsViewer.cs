@@ -420,7 +420,7 @@ namespace ALTViewer
                     lastSelectedSubFrame = -1; // reset last selected sub frame index
                     comboBox2.Visible = true;
                     label5.Visible = true;
-                    DetectFrames.ListFrames(lastSelectedFilePath, comboBox1, comboBox2);
+                    DetectFrames.ListSubFrames(lastSelectedFilePath, comboBox1, comboBox2);
                 }
             }
             catch (Exception ex) { MessageBox.Show("Render failed A: " + ex.Message); }
