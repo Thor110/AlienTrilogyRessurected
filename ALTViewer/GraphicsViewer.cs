@@ -49,10 +49,7 @@ namespace ALTViewer
             foreach (string palFile in palFiles)
             {
                 string name = Path.GetFileNameWithoutExtension(palFile);
-                if (!excluded.Any(e => name.Contains(e))) // exclude unused palettes
-                {
-                    listBox2.Items.Add(name);
-                }
+                if (!excluded.Any(e => name.Contains(e))) { listBox2.Items.Add(name); } // exclude unused palettes
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
             listBox1.SelectedIndex = 0; // Select the first item in the list box
