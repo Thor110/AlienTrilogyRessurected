@@ -4,38 +4,38 @@ namespace ALTViewer
 {
     public partial class GraphicsViewer : Form
     {
-        public string gameDirectory = ""; // default directories
-        public string gfxDirectory = ""; // BND / B16 / BIN
-        public string paletteDirectory = ""; // TNT / DPQ / PAL
-        public string enemyDirectory = ""; // BND / B16
-        public string languageDirectory = ""; // BND / 16
-        public string levelPath1 = ""; // BIN / B16
-        public string levelPath2 = ""; // BIN / B16
-        public string levelPath3 = ""; // BIN / B16
-        public string levelPath4 = ""; // BIN / B16
-        public string levelPath5 = ""; // BIN / B16
-        public string levelPath6 = ""; // BIN / B16
-        public string levelPath7 = ""; // BIN / B16
-        public string[] levels = null!;
+        private string gameDirectory = ""; // default directories
+        private string gfxDirectory = "";
+        private string paletteDirectory = "";
+        private string enemyDirectory = "";
+        private string languageDirectory = "";
+        private string levelPath1 = "";
+        private string levelPath2 = "";
+        private string levelPath3 = "";
+        private string levelPath4 = "";
+        private string levelPath5 = "";
+        private string levelPath6 = "";
+        private string levelPath7 = "";
+        private string[] levels = null!;
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
         private string lastSelectedFilePath = "";
         private int lastSelectedSubFrame = -1;
         private int lastSelectedSection = -1;
         private string outputPath = "";
-        private List<BndSection> currentSections = new();
+        private List<BndSection> currentSections = null!;
         private byte[]? currentPalette;
         private byte[]? currentFrame;
         private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
         private bool exporting; // set to true when exporting everything
-        public static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
-        public static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
-        public static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
-        public static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
-        public int w = 0; // WIDTH
-        public int h = 0; // HEIGHT
+        private static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
+        private static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
+        private static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
+        private static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
+        private int w = 0; // WIDTH
+        private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private bool saved; // is a file successfully saved or not
         private string exception = ""; // exception message for debugging purposes
