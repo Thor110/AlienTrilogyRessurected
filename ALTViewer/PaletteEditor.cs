@@ -173,13 +173,22 @@
             using ColorDialog dlg = new();
             // Show scaled color in the dialog
             dlg.Color = ScaleColour(index);
-            usedColors.Remove(dlg.Color);
+            bool marked = false;
+            if(usedColors.Contains(dlg.Color))
+            {
+                usedColors.Remove(dlg.Color);
+                marked = true; // mark the color as being replaced
+            }
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 palette[index * 3] = (byte)(dlg.Color.R / 4);
                 palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
                 palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
-                usedColors.Add(Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4)); // add the new color to the used colors set
+
+                if (marked) // if marked for replacement
+                {
+                    usedColors.Add(Color.FromArgb(palette[index * 3] * 4, palette[index * 3 + 1] * 4, palette[index * 3 + 2] * 4)); // add the new color to the used colors set
+                }
                 Invalidate();
                 RenderImage();
                 button3.Enabled = true; // enable undo button
