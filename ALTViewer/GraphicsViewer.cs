@@ -351,10 +351,10 @@ namespace ALTViewer
             exporting = false;
         }
         // show message on successful export operation
-        private void ShowMessage(string messageSuccess, string messageFail = "Failed to export : ")
+        private void ShowMessage(string messageSuccess)
         {
             if (saved) { MessageBox.Show(messageSuccess); }
-            else { MessageBox.Show(messageFail + exception); }
+            else { MessageBox.Show("Failed to export : " + exception); }
         }
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
