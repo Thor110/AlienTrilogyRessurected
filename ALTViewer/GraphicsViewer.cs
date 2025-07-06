@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System;
+using System.Drawing.Imaging;
 
 namespace ALTViewer
 {
@@ -30,6 +31,8 @@ namespace ALTViewer
         private bool compressed;
         private bool refresh; // set to true when entering the palette editor
         private bool exporting; // set to true when exporting everything
+        private bool saved; // set to true when export successful
+        private string exception = "";
         private static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         private static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         private static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
@@ -37,8 +40,6 @@ namespace ALTViewer
         private int w = 0; // WIDTH
         private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
-        private bool saved; // is a file successfully saved or not
-        private string exception = ""; // exception message for debugging purposes
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -56,6 +57,7 @@ namespace ALTViewer
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
             listBox1.SelectedIndex = 0; // Select the first item in the list box
+            comboBox1.Enabled = true; // enable section selection combo box
         }
         public void SetupDirectories()
         {
@@ -170,37 +172,35 @@ namespace ALTViewer
             if (!File.Exists(palette)) { return ""; }
             else { return palette; }
         }
+        private string UpdateExtension(string filename)
+        {
+            filename = filename.Replace(".BND", ".B16");
+            palfile = false;
+            return filename;
+        }
         // render the selected image
         private void RenderImage(string binbnd, string palettePath)
         {
             pictureBox1.Image = null; // clear previous image
-            lastSelectedSection = -1;
+            lastSelectedSection = -1; // reset last selected section variable
             palfile = true; // this is not always true so it gets reset if it is not a file using a palette
+            compressed = false; // reset compressed to false for next detection
             if (radioButton1.Checked)
             {
-                foreach (string weapon in weapons) // check if the selected file is a weapon
+                if (weapons.Any(e => lastSelectedFile.Contains(e))) // exclude unused palettes
                 {
-                    if (lastSelectedFile.Contains(weapon))
-                    {
-                        binbnd = binbnd.Replace(".BND", ".B16");
-                        compressed = true; // set compressed to true for weapons
-                        break;
-                    }
-                    else
-                    {
-                        listBox2.Enabled = true;
-                        compressed = false; // reset compressed to false for next detection
-                    }
+                    binbnd = UpdateExtension(binbnd);
+                    listBox2.Enabled = false;
+                    compressed = true; // set compressed to true for weapons
                 }
                 if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
                 {
-                    binbnd = binbnd.Replace(".BND", ".B16"); // but these are B16 files
-                    palfile = false;
+                    binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
-                    compressed = false;
                 }
                 else if (palfile && !compressed) // select the detected palette if it exists
                 {
+                    listBox2.Enabled = true;
                     listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
                     listBox2.SelectedItem = Path.GetFileNameWithoutExtension(palettePath);
                     listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!; // re-add the event handler
@@ -244,8 +244,7 @@ namespace ALTViewer
             }
             else if (radioButton2.Checked)
             {
-                binbnd = binbnd.Replace(".BND", ".B16");
-                palfile = false; // set palfile to false for weapons
+                binbnd = UpdateExtension(binbnd);
                 compressed = true; // set compressed to true for weapons
             }
             if (radioButton4.Checked || radioButton3.Checked ||
@@ -259,7 +258,7 @@ namespace ALTViewer
             if (compressed) // load palette from level file or enemies
             {
                 trimmed = false; // set trimmed to false for these files
-                binbnd = binbnd.Replace(".BND", ".B16"); // Ensure we are working with the B16 file variant
+                binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(bndBytes);
                 var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
@@ -281,7 +280,6 @@ namespace ALTViewer
                 currentSections = decompressedF0Sections;
             }
             else { currentSections = TileRenderer.ParseBndFormSections(bndBytes); }// Parse all sections (TP00, TP01, etc.)
-            comboBox1.Enabled = true; // enable section selection combo box
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             comboBox1.SelectedIndex = 0; // trigger rendering
