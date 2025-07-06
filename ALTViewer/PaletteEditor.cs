@@ -120,17 +120,18 @@
                 int y = (i / 16) * 16 + 32;
 
                 Color color = ScaleColour(i);
+                if (!trim && i == 0) { color = Color.Magenta; } // transparency
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
-                if (trim && i < 32)
+                if (trim && i < 32 || !trim && i == 0)
                 {
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
-                    e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
+                    e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
-                else if (!usedColors.Contains(color)) // visual display for unused colours
+                else if (!usedColors.Contains(color) && i != 0) // visual display for unused colours
                 {
-                    e.Graphics.DrawLine(crossPen, x + 16, y, x, y + 16);
+                    e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
             }
         }
@@ -157,18 +158,17 @@
             int cellSize = 16;
             int cols = 16;
             int totalColors = palette.Length / 3;
-
             // Calculate column and row
             int col = (e.X - offset) / cellSize;
             int row = (e.Y - offset) / cellSize;
-
             // Ignore clicks outside the palette grid area:
             if (col < 0 || col >= cols || row < 0) { return; }
-
+            // Calculate the index of the clicked color in the palette:
             int index = row * cols + col;
-
+            if(index == 0) { MessageBox.Show("This colour is used for transparency."); return; }
+            // Ignore clicks outside the total number of colors:
             if (index >= totalColors) { return; }
-
+            // Check if the clicked color is trimmed (first 32 colours in a trimmed palette)
             if (trim && index < 32) { return; } // ignore trimmed colours
             using ColorDialog dlg = new();
             // Show scaled color in the dialog
