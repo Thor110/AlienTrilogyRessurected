@@ -59,40 +59,34 @@ namespace ALTViewer
         }
         public void SetupDirectories()
         {
-            if(File.Exists("Run.exe")) { gameDirectory = "HDD\\TRILOGY\\CD"; }
-            else if (File.Exists("TRILOGY.EXE")) { gameDirectory = "CD"; }
-            gfxDirectory = Path.Combine(gameDirectory, "GFX"); // BND / B16 / BIN
-            paletteDirectory = Path.Combine(gameDirectory, "PALS"); // TNT / DPQ / PAL
-            enemyDirectory = Path.Combine(gameDirectory, "NME"); // BND / B16
-            languageDirectory = Path.Combine(gameDirectory, "LANGUAGE"); // BND / 16
-            levelPath1 = Path.Combine(gameDirectory, "SECT11"); // BIN / B16
-            levelPath2 = Path.Combine(gameDirectory, "SECT12"); // BIN / B16
-            levelPath3 = Path.Combine(gameDirectory, "SECT21"); // BIN / B16
-            levelPath4 = Path.Combine(gameDirectory, "SECT22"); // BIN / B16
-            levelPath5 = Path.Combine(gameDirectory, "SECT31"); // BIN / B16
-            levelPath6 = Path.Combine(gameDirectory, "SECT32"); // BIN / B16
-            levelPath7 = Path.Combine(gameDirectory, "SECT90"); // BIN / B16
+            gameDirectory = Utilities.CheckDirectory();     // File types used
+            gfxDirectory = gameDirectory + "GFX";           // .BND + .B16
+            paletteDirectory = gameDirectory + "PALS";      // .PAL
+            enemyDirectory = gameDirectory + "NME";         // .B16
+            languageDirectory = gameDirectory + "LANGUAGE"; // .16
+            levelPath1 = gameDirectory + "SECT11";          // .B16
+            levelPath2 = gameDirectory + "SECT12";          // .B16
+            levelPath3 = gameDirectory + "SECT21";          // .B16
+            levelPath4 = gameDirectory + "SECT22";          // .B16
+            levelPath5 = gameDirectory + "SECT31";          // .B16
+            levelPath6 = gameDirectory + "SECT32";          // .B16
+            levelPath7 = gameDirectory + "SECT90";          // .B16
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         }
         // graphics GFX // .BND and .B16 files exist in the GFX folder which are used
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { ListFiles(gfxDirectory, ".BND", ".B16", true); }
+        private void radioButton1_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(gfxDirectory, ".BND", ".B16", true); }
         // enemies NME // enemies are all compressed .B16 files
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { ListFiles(enemyDirectory, ".B16", ".NOPE"); }
+        private void radioButton2_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(enemyDirectory, ".B16", ".NOPE"); }
         // levels SECT## // level graphics are all .B16 files
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { foreach (string level in levels) { ListFiles(level); } }
+        private void radioButton3_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); foreach (string level in levels) { ListFiles(level); } }
         // panels LANGUAGE // .NOPE ignores the unused .BND files in the LANGUAGE folder
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { ListFiles(languageDirectory, ".NOPE", ".16"); }
+        private void radioButton4_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(languageDirectory, ".NOPE", ".16"); }
         // list files in directory
         public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16", bool enabled = false)
         {
-            listBox1.Items.Clear(); // clear listBox1
             listBox2.Enabled = enabled; // enable or disable the palette list box based on the selected radio button
             string[] files = DiscoverFiles(path, type1, type2);
-            foreach (string file in files)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(file);
-                listBox1.Items.Add(fileName);
-            }
+            foreach (string file in files) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(file)); }
             if (radioButton1.Checked) // remove known unusable files
             {
                 var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);

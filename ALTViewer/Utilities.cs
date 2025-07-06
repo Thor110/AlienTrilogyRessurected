@@ -19,5 +19,12 @@
 
             return false;
         }
+        public static string CheckDirectory()
+        {
+            string gameDirectory = "";
+            if (File.Exists("Run.exe")) { gameDirectory = "HDD\\TRILOGY\\CD\\"; }
+            else if (File.Exists("TRILOGY.EXE")) { gameDirectory = "CD\\"; }
+            return gameDirectory;
+        }
     }
 }

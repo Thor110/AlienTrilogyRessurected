@@ -14,7 +14,8 @@ namespace ALTViewer
             // see https://aka.ms/applicationconfiguration.
             Process[] processes = Process.GetProcessesByName("ALTViewer");
             if (processes.Length > 1) { return; }
-            if (!File.Exists("Run.exe") && !File.Exists("TRILOGY.EXE"))
+            string gameDirectory = Utilities.CheckDirectory();
+            if (gameDirectory == "")
             {
                 MessageBox.Show("Game directory not found. Please ensure you are running this application from the correct game directory.");
                 return;

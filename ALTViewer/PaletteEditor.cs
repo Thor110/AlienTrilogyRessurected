@@ -19,14 +19,7 @@
         public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
         {
             InitializeComponent();
-            if (File.Exists("Run.exe"))
-            {
-                paletteDirectory = "HDD\\TRILOGY\\CD\\PALS\\";
-            }
-            else if (File.Exists("TRILOGY.EXE"))
-            {
-                paletteDirectory = "CD\\PALS\\";
-            }
+            paletteDirectory = Utilities.CheckDirectory() + "PALS\\";
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)

@@ -12,13 +12,9 @@ namespace ALTViewer
         public SoundEffects()
         {
             InitializeComponent();
-            if (File.Exists("Run.exe"))
+            gameDirectory = Utilities.CheckDirectory() + "SFX\\";
+            if (File.Exists("TRILOGY.EXE")) // disable music folder button for the original version of the game
             {
-                gameDirectory = "HDD\\TRILOGY\\CD\\SFX\\";
-            }
-            else if (File.Exists("TRILOGY.EXE"))
-            {
-                gameDirectory = "CD\\SFX\\";
                 button5.Visible = false;
                 label2.Visible = false;
             }

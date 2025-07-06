@@ -32,14 +32,7 @@ namespace ALTViewer
         public TextEditor()
         {
             InitializeComponent();
-            if (File.Exists("Run.exe"))
-            {
-                languageDirectory = "HDD\\TRILOGY\\CD\\LANGUAGE\\";
-            }
-            else if (File.Exists("TRILOGY.EXE"))
-            {
-                languageDirectory = "CD\\LANGUAGE\\";
-            }
+            languageDirectory = Utilities.CheckDirectory() + "LANGUAGE\\";
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);

@@ -29,21 +29,14 @@
         public MapEditor()
         {
             InitializeComponent();
-            if (File.Exists("Run.exe"))
-            {
-                gameDirectory = "HDD\\TRILOGY\\CD";
-            }
-            else if (File.Exists("TRILOGY.EXE"))
-            {
-                gameDirectory = "CD";
-            }
-            levelPath1 = Path.Combine(gameDirectory, "SECT11");
-            levelPath2 = Path.Combine(gameDirectory, "SECT12");
-            levelPath3 = Path.Combine(gameDirectory, "SECT21");
-            levelPath4 = Path.Combine(gameDirectory, "SECT22");
-            levelPath5 = Path.Combine(gameDirectory, "SECT31");
-            levelPath6 = Path.Combine(gameDirectory, "SECT32");
-            levelPath7 = Path.Combine(gameDirectory, "SECT90");
+            gameDirectory = Utilities.CheckDirectory();
+            levelPath1 = gameDirectory + "SECT11";
+            levelPath2 = gameDirectory + "SECT12";
+            levelPath3 = gameDirectory + "SECT21";
+            levelPath4 = gameDirectory + "SECT22";
+            levelPath5 = gameDirectory + "SECT31";
+            levelPath6 = gameDirectory + "SECT32";
+            levelPath7 = gameDirectory + "SECT90";
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
             //ToolTip tooltip = new ToolTip(); // no tooltips added yet
             //ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
