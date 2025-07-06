@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -117,7 +118,11 @@ namespace ALTViewer
                     int idx = y * width + x;
                     if (idx >= pixelData.Length) { continue; }
                     byte colorIndex = pixelData[idx];
-                    if (colorIndex < colors)
+                    if (colorIndex == 0) // Set the first color as transparent
+                    {
+                        bmp.SetPixel(x, y, Color.Magenta);
+                    }
+                    else  if (colorIndex < colors)
                     {
                         int r = palette[colorIndex * 3] * 4;
                         int g = palette[colorIndex * 3 + 1] * 4;
@@ -526,13 +531,14 @@ namespace ALTViewer
         // Convert a 768-byte RGB triplet palette to a Color array
         public static Color[] ConvertPalette(byte[] rgbTriplets)
         {
-            var colors = new Color[256];
+            Color[] colors = new Color[256];
             for (int i = 0; i < 256; i++)
                 colors[i] = Color.FromArgb(
                     rgbTriplets[i * 3] * 4,
                     rgbTriplets[i * 3 + 1] * 4,
                     rgbTriplets[i * 3 + 2] * 4
                 );
+            colors[0] = Color.Magenta; // Set the first color as transparent
             return colors;
         }
     }
