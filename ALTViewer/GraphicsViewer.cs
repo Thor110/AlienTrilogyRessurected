@@ -149,9 +149,7 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            // TODO : chosen and palettePath might be able to be one string
             string palettePath = DetectPalette(selected); // actual palette path
-            // TODO : RenderImage might not need chosen / select string
             string filePath = "";
             foreach (string ext in new[] { ".BND", ".B16", ".16" })
             {
@@ -226,6 +224,7 @@ namespace ALTViewer
                     {
                         listBox2.Enabled = false;
                         palfile = false; // reset palfile if not a file that uses external palettes
+                        trimmed = false; // set trimmed to false for these files
                     }
                 }
                 else
@@ -246,7 +245,7 @@ namespace ALTViewer
                 compressed = true; // set compressed to true for weapons
             }
             if (radioButton4.Checked || radioButton3.Checked ||
-                radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // embedded palettes [TODO : Is this necessary?]
+                radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // embedded palettes
             {
                 palfile = false; // palette is embedded
                 compressed = false; // reset compressed to false for next detection
@@ -411,7 +410,7 @@ namespace ALTViewer
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
             var section = currentSections[comboBox1.SelectedIndex];
-            try // TODO : remove try catch block here maybe
+            try
             {
                 if (!compressed)
                 {
@@ -422,7 +421,7 @@ namespace ALTViewer
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
                         TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
                     }
-                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data); // TODO : remove when compressed file dimensions are detected
+                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
@@ -461,7 +460,6 @@ namespace ALTViewer
         // replace texture
         private void ReplaceTexture(string[] filename)
         {
-            // TODO : update for compressed images and sub frames
             // TODO : backup original file when replacing textures
             int length = filename.Length;
             if (compressed)
@@ -499,7 +497,7 @@ namespace ALTViewer
                 currentSections[frame].Data = indexedData;
                 var section = currentSections[frame];
                 string sectionName = $"TP{frame:D2}";
-                long dataOffset = TileRenderer.FindSectionDataOffset(selectedFile, sectionName, 8); // TODO : update for compressed files
+                long dataOffset = TileRenderer.FindSectionDataOffset(selectedFile, sectionName, 8);
                 List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
                 if (frame + 1 == currentSections.Count || single) // account for zero based indexing
@@ -507,7 +505,7 @@ namespace ALTViewer
                     MessageBox.Show(message);
                 }
             }
-            comboBox1_SelectedIndexChanged(null!, null!); // re-render the image
+            RenderImage(lastSelectedFilePath, lastSelectedPalette); // re-render the image with the frame replacement
             button6.Enabled = true; // enable restore backup button
         }
         // check if the image is indexed 8bpp
@@ -547,7 +545,7 @@ namespace ALTViewer
                     "35" or "36" or "37" or "38" or "39" => "SECT32",
                     "90" => "SECT90",
                     _ => throw new Exception("Unknown section selected!")
-                }; // TODO : change switch expression to search every directory for lastSelectedFile instead when level editing is implemented
+                };
                 filetype = ".B16";
             }
             else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = ".16"; }
@@ -559,8 +557,8 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             if (!TryGetTargetPath(out string selectedFile, out string backupFile)) { return; }
-            File.Copy($"{backupFile}", selectedFile, true);
-            File.Delete($"{backupFile}");
+            File.Copy(backupFile, selectedFile, true);
+            File.Delete(backupFile);
             button6.Enabled = false;
             refresh = true;
             listBox1_SelectedIndexChanged(null!, null!); // re-render the image after restoring a backup
