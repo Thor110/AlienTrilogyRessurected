@@ -20,8 +20,10 @@ namespace ALTViewer
         private string lastSelectedFile = "";
         private string lastSelectedPalette = "";
         private string lastSelectedFilePath = "";
-        private int lastSelectedSubFrame = -1;
-        private int lastSelectedSection = -1;
+        private int lastSelectedFrame = -1; // for reselecting the section after export
+        private int lastSelectedSub = -1; // for reselecting the subframe after export
+        private int lastSelectedSubFrame = -1; // to prevent selecting the same subframe and rendering twice
+        private int lastSelectedSection = -1; // to prevent selecting the same section and rendering twice
         private string outputPath = "";
         private List<BndSection> currentSections = null!;
         private byte[]? currentPalette;
@@ -318,7 +320,6 @@ namespace ALTViewer
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Error saving image:\n" + ex.Message);
                 exception = ex.Message;
                 saved = false;
             }
@@ -327,23 +328,27 @@ namespace ALTViewer
         // export everything button click
         private void button1_Click(object sender, EventArgs e)
         {
-            int previouslySelected = listBox1.SelectedIndex; // store previously selected index
+            exporting = true;
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
-            exporting = true;
+            int previouslySelected = listBox1.SelectedIndex; // store previously selected index
+            lastSelectedFrame = comboBox1.SelectedIndex;     // set previously selected index
+            lastSelectedSub = comboBox2.SelectedIndex;       // set previously selected index
             foreach (var button in buttons)
             {
-                button.Checked = true;
+                button.Checked = true;                      // select each radio button
                 for (int i = 0; i < listBox1.Items.Count; i++)
                 {
-                    listBox1.SelectedIndex = i; // select each item in the list box
-                    button3_Click(null!, null!); // call the export all button click event
+                    listBox1.SelectedIndex = i;             // select each item in the list box
+                    button3_Click(null!, null!);            // call the export all button click event
                 }
             }
             buttons[selectedIndex].Checked = true;
-            exporting = false;
-            listBox1.SelectedIndex = previouslySelected; // restore previously selected index
+            listBox1.SelectedIndex = previouslySelected;    // restore previously selected index
+            comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
+            comboBox2.SelectedIndex = lastSelectedSub;      // restore previously selected index
             ShowMessage($"All images saved to:\n{outputPath}");
+            exporting = false;
         }
         // show message on successful export operation
         private void ShowMessage(string messageSuccess, string messageFail = "Failed to export : ")
@@ -354,6 +359,11 @@ namespace ALTViewer
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
+            if (!exporting) // set previously selected indexes on export all frames
+            {
+                lastSelectedFrame = comboBox1.SelectedIndex;
+                lastSelectedSub = comboBox2.SelectedIndex;
+            }
             for (int i = 0; i < comboBox1.Items.Count; i++)
             {
                 comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported
@@ -374,7 +384,12 @@ namespace ALTViewer
                     ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
                 }
             }
-            if (!exporting) { ShowMessage($"Images saved to:\n{outputPath}"); }
+            if (!exporting) // restore previously selected index on export all frames
+            {
+                comboBox1.SelectedIndex = lastSelectedFrame;
+                comboBox2.SelectedIndex = lastSelectedSub;
+                ShowMessage($"Images saved to:\n{outputPath}");
+            }
         }
         // select output path
         private void button4_Click(object sender, EventArgs e)
