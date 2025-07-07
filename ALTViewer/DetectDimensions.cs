@@ -178,52 +178,23 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
-                                values = null!;
-                                break;
                             case 4:
                                 values = null!;
                                 break;
                         }
                         break;
                     case "131":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     //SECT12
                     case "141":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -239,11 +210,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -259,11 +226,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -276,14 +239,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -296,14 +253,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -314,44 +265,10 @@
                         break;
                     //SECT21
                     case "211":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "212":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "213":
                         switch (index)
@@ -360,14 +277,8 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
-                                values = null!;
-                                break;
                             case 4:
                                 values = null!;
                                 break;
@@ -377,135 +288,38 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
+                            case 3:
+                            case 4:
                                 values = null!;
                                 break;
                             case 2:
                                 values = new int[] { 255 };
                                 break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
                         }
                         break;
                     case "231":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "232":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     //SECT22
                     case "242":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "243":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "262":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "263":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -519,14 +333,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -542,11 +350,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -562,11 +366,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -582,11 +382,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -605,8 +401,6 @@
                                 values = new int[] { 0 };
                                 break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -622,11 +416,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -636,40 +426,19 @@
                         }
                         break;
                     case "331":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     //SECT32
                     case "351":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
+                            case 3:
                                 values = null!;
                                 break;
                             case 2:
                                 values = new int[] { 255 };
-                                break;
-                            case 3:
-                                values = null!;
                                 break;
                             case 4:
                                 values = new int[] { 255 };
@@ -680,14 +449,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -700,14 +463,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -717,39 +474,18 @@
                         }
                         break;
                     case "361":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "371":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
+                            case 3:
                                 values = null!;
                                 break;
                             case 2:
                                 values = new int[] { 255 };
-                                break;
-                            case 3:
-                                values = null!;
                                 break;
                             case 4:
                                 values = new int[] { 255 };
@@ -760,14 +496,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -777,24 +507,7 @@
                         }
                         break;
                     case "391":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     //SECT90
                     case "900":
@@ -818,37 +531,14 @@
                         }
                         break;
                     case "901":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "902":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -861,14 +551,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -884,11 +568,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -904,11 +584,7 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!; ;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -918,57 +594,17 @@
                         }
                         break;
                     case "906":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "907":
-                        switch (index)
-                        {
-                            case 0:
-                                values = null!;
-                                break;
-                            case 1:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
+                        values = null!;
                         break;
                     case "908":
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
@@ -981,14 +617,8 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
                             case 1:
-                                values = null!;
-                                break;
                             case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = null!;
                                 break;
