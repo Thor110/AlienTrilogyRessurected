@@ -2,7 +2,6 @@
 {
     public partial class PaletteEditor : Form
     {
-        // TODO : Determine the proper method for defining the transparent colour when displaying the image.
         public static string paletteDirectory = "";
         public string backupDirectory = "";
         public string fileDirectory = "";
