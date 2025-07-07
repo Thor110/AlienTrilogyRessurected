@@ -171,9 +171,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(249, 415);
             label3.Name = "label3";
-            label3.Size = new Size(296, 15);
+            label3.Size = new Size(270, 15);
             label3.TabIndex = 11;
-            label3.Text = "Note : Unused colours have a red stroke through them.";
+            label3.Text = "Note : Unused colours have a slash through them.";
             // 
             // label4
             // 

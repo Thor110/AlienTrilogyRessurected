@@ -124,47 +124,36 @@
             {
                 int x = (i % 16) * 16 + 32; // + 32 for the initial offset
                 int y = (i / 16) * 16 + 32;
-
-                Color color = ScaleColour(i);
-
+                Color color = ScaleColour(i); // scale the colour value
                 // set colour to magenta if it is transparent
                 if (transparentValues != null) { foreach (int value in transparentValues) { if (i == value) { color = Color.Magenta; } } }
-
-                using Brush brush = new SolidBrush(color);
+                using Brush brush = new SolidBrush(color); // setup the brush using the scaled colour value
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
-
-                if (trim && i < 32) // trimmed palettes - first 32 colours
-                {
-                    DrawCross();
-                }
-                // TODO : Redo this entire system...
+                if (trim && i < 32) { DrawCross(); }
                 bool set = false;
                 if (transparentValues != null)
                 {
                     foreach (int value in transparentValues)
                     {
-                        if (i == value) // draw cross for transparent colours
+                        if (i == value)
                         {
                             set = true;
                             DrawPlus();
                         }
                     }
                 }
-                if (!usedColors.Contains(color) && !set || !usedColors.Contains(color) && transparentValues == null) // draw slash for unused colours
-                {
-                    DrawSlash();
-                }
-                void DrawCross()
+                if (!usedColors.Contains(color) && !set || !usedColors.Contains(color) && transparentValues == null) { DrawSlash(); }
+                void DrawCross() // draw cross for trimmed colours
                 {
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
                     e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
-                void DrawSlash()
+                void DrawSlash() // draw slash for unused colours
                 {
                     Color slashPen = ((double)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B) > 128) ? Color.Black : Color.White;
                     e.Graphics.DrawLine(new Pen(slashPen, 2), x + 15, y, x, y + 15); // -1 for alignment
                 }
-                void DrawPlus()
+                void DrawPlus() // draw plus for transparent colours
                 {
                     e.Graphics.DrawLine(plusPen, x + 8, y, x + 8, y + 16); // vertical line
                     e.Graphics.DrawLine(plusPen, x, y + 8, x + 16, y + 8); // horizontal line
