@@ -161,7 +161,8 @@
                 }
                 void DrawSlash()
                 {
-                    e.Graphics.DrawLine(new Pen(Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B), 2), x + 15, y, x, y + 15); // -1 for alignment
+                    Color slashPen = ((double)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B) > 128) ? Color.Black : Color.White;
+                    e.Graphics.DrawLine(new Pen(slashPen, 2), x + 15, y, x, y + 15); // -1 for alignment
                 }
                 void DrawPlus()
                 {
