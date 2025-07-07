@@ -4,24 +4,26 @@
     {
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
-            string[] excluded = { "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PULSE", "SHOTGUN", "SMART",
-                "BAMBI", "BURSTER", "COLONIST", "DOG", "DOGCEIL", "EGGS", "FINGERS", "GUARD", "HANDLER", "HUGGER", "QUEEN", "SOLDIER", "SYNTH", "WAR", "WARCEIL"};
             int[] values = null!;
-            if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }
+            string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PRISHOLD" , "PULSE", "SHOTGUN", "SMART",
+                "BAMBI", "BURSTER", "COLONIST", "DOG", "DOGCEIL", "EGGS", "FINGERS", "GUARD", "HANDLER", "HUGGER", "QUEEN", "SOLDIER", "SYNTH", "WAR", "WARCEIL" };
+            if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }         // GFX && NME
             if (fileDirectory.Contains("EXPLGFX"))
             {
                 if (index == 0) { values = new int[] { 0, 16, 41 }; }
                 if (index == 1) { values = new int[] { 0 }; }
             }
-            if (fileDirectory.Contains("NME")) { if (index == 0) { values = new int[] { 0 }; } }
-            //string directory = "";
+            if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }   // LANGUAGE
             if (fileDirectory.Contains("SECT"))
             {
-                switch (fileDirectory.Substring(fileDirectory.Length - 10, 3)) // ###GFX.B16
+                switch (fileDirectory.Substring(fileDirectory.Length - 10, 3)) // ###GFX.B16        // SECT
                 {
-                    //SECT11
                     case "111":
-                        switch(index)
+                    case "113":
+                    case "114":
+                    case "115":
+                    case "121":
+                        switch (index)
                         {
                             case 0:
                             case 2:
@@ -50,65 +52,8 @@
                                 break;
                         }
                         break;
-                    case "113":
-                        switch (index)
-                        {
-                            case 0:
-                            case 2:
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 3:
-                                values = new int[] { 0 };
-                                break;
-                        }
-                        break;
-                    case "114":
-                        switch (index)
-                        {
-                            case 0:
-                            case 2:
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 3:
-                                values = new int[] { 0 };
-                                break;
-                        }
-                        break;
-                    case "115":
-                        switch (index)
-                        {
-                            case 0:
-                            case 2:
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 3:
-                                values = new int[] { 0 };
-                                break;
-                        }
-                        break;
-                    case "121":
-                        switch (index)
-                        {
-                            case 0:
-                            case 2:
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 3:
-                                values = new int[] { 0 };
-                                break;
-                        }
-                        break;
                     case "122":
+                    case "213":
                         switch (index)
                         {
                             case 0:
@@ -123,10 +68,34 @@
                         }
                         break;
                     case "131":
+                    case "211":
+                    case "212":
+                    case "231":
+                    case "232":
+                    case "242":
+                    case "243":
+                    case "262":
+                    case "331":
+                    case "361":
+                    case "391":
+                    case "901":
+                    case "906":
+                    case "907":
                         values = null!;
                         break;
-                    //SECT12
                     case "141":
+                    case "155":
+                    case "161":
+                    case "162":
+                    case "263":
+                    case "311":
+                    case "352":
+                    case "353":
+                    case "381":
+                    case "902":
+                    case "903":
+                    case "908":
+                    case "909":
                         switch (index)
                         {
                             case 0:
@@ -141,80 +110,20 @@
                         }
                         break;
                     case "154":
+                    case "321":
+                    case "322":
+                    case "323":
+                    case "324":
+                    case "325":
                         switch (index)
                         {
                             case 0:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
                             case 2:
                             case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "155":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "161":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "162":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    //SECT21
-                    case "211":
-                        values = null!;
-                        break;
-                    case "212":
-                        values = null!;
-                        break;
-                    case "213":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
                                 values = null!;
                                 break;
                         }
@@ -233,182 +142,7 @@
                                 break;
                         }
                         break;
-                    case "231":
-                        values = null!;
-                        break;
-                    case "232":
-                        values = null!;
-                        break;
-                    //SECT22
-                    case "242":
-                        values = null!;
-                        break;
-                    case "243":
-                        values = null!;
-                        break;
-                    case "262":
-                        values = null!;
-                        break;
-                    case "263":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    //SECT31
-                    case "311":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "321":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "322":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "323":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "324":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "325":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "331":
-                        values = null!;
-                        break;
-                    //SECT32
                     case "351":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "352":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "353":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "361":
-                        values = null!;
-                        break;
                     case "371":
                         switch (index)
                         {
@@ -418,31 +152,11 @@
                                 values = null!;
                                 break;
                             case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 4:
                                 values = new int[] { 255 };
                                 break;
                         }
                         break;
-                    case "381":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "391":
-                        values = null!;
-                        break;
-                    //SECT90
                     case "900":
                         switch (index)
                         {
@@ -450,66 +164,16 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = null!;
-                                break;
                             case 3:
                                 values = new int[] { 0 };
                                 break;
-                            case 4:
-                                values = null!;
-                                break;
-                        }
-                        break;
-                    case "901":
-                        values = null!;
-                        break;
-                    case "902":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
                             case 2:
-                            case 3:
-                                values = null!;
-                                break;
                             case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "903":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
                                 values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
                     case "904":
-                        switch (index)
-                        {
-                            case 0:
-                                values = new int[] { 255 };
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
                     case "905":
                         switch (index)
                         {
@@ -526,43 +190,8 @@
                                 break;
                         }
                         break;
-                    case "906":
-                        values = null!;
-                        break;
-                    case "907":
-                        values = null!;
-                        break;
-                    case "908":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
-                    case "909":
-                        switch (index)
-                        {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                values = null!;
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
-                                break;
-                        }
-                        break;
                 }
             }
-            if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }
             return values;
         }
         // Auto-detect dimensions based on the total pixel count in the image data
