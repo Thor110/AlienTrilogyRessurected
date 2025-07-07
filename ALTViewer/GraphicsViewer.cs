@@ -148,7 +148,7 @@ namespace ALTViewer
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             string palettePath = DetectPalette(selected); // actual palette path
             string filePath = "";
-            foreach (string ext in new[] { ".BND", ".B16", ".16" })
+            foreach (string ext in new[] { ".16", ".B16", ".BND" }) // check file types in this order so that the cleanup script remains optional
             {
                 string candidate = path + "\\" + selected + ext;
                 if (File.Exists(candidate)) { filePath = candidate; break; }
