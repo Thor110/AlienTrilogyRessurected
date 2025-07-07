@@ -140,42 +140,31 @@ namespace ALTViewer
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
-                if (trim && i < 32 || !trim && !multiple || multiple)
+                if (trim && i < 32)
                 {
-                    bool set = false;
-                    if (multiple && !trim)
+                    DrawCross();
+                }
+                bool set = false;
+                if (multiple && !trim)
+                {
+                    foreach (int value in transparentValues)
                     {
-                        foreach (int value in transparentValues)
+                        if (i == value) // draw cross for transparent colours
                         {
-                            if (i == value) // draw cross for transparent colours
-                            {
-                                set = true;
-                                DrawPlus();
-                            }
-                        }
-                    }
-                    else if (!trim && !multiple)
-                    {
-                        if (i == transparent)
-                        {
+                            transparent = value;
+                            set = true;
                             DrawPlus();
                         }
-                        else if (!usedColors.Contains(color)) // draw slash for unused colours
-                        {
-                            DrawSlash();
-                        }
-                    }
-                    else if (trim)
-                    {
-                        DrawCross();
-                    }
-                    if (!usedColors.Contains(color) && !set) // draw slash for unused colours
-                    {
-                        DrawSlash();
                     }
                 }
-                // NOT WORKING PROPERLY
-                else if (!usedColors.Contains(color) && trim) // draw slash for unused colours
+                else if (!trim && !multiple)
+                {
+                    if (i == transparent) // draw cross for transparent colour
+                    {
+                        DrawPlus();
+                    }
+                }
+                if (!usedColors.Contains(color) && i != transparent && !set) // draw slash for unused colours
                 {
                     DrawSlash();
                 }
