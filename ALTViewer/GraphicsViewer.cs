@@ -334,6 +334,7 @@ namespace ALTViewer
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
             PreviouslySelectedFrames();
             exporting = true;
+            // preventing the picture box from drawing this way leaves an artifact in the list box which is not preferable
             //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
             foreach (var button in buttons)
             {
