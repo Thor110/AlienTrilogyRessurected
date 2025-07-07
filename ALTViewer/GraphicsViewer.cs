@@ -333,7 +333,6 @@ namespace ALTViewer
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
-            originalLocation = pictureBox1.Location;
             PreviouslySelectedFrames();
             exporting = true;
             foreach (var button in buttons)
@@ -357,14 +356,17 @@ namespace ALTViewer
             if (saved) { MessageBox.Show(messageSuccess); }
             else { MessageBox.Show("Failed to export : " + exception); }
         }
+        // restore previously selected frames after export
         private void RestoreSelectedFrames()
         {
             comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
             if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
             pictureBox1.Location = originalLocation;
         }
+        // setup previously selected indexes on export all frames or export everything
         private void PreviouslySelectedFrames()
         {
+            originalLocation = pictureBox1.Location;
             lastSelectedFrame = (comboBox1.SelectedIndex == -1) ? 0 : comboBox1.SelectedIndex;
             if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
             pictureBox1.Location = new Point(-9999, -9999); // move picture box off-screen to prevent it being drawn during export
@@ -372,12 +374,7 @@ namespace ALTViewer
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!exporting) // set previously selected indexes on export all frames
-            {
-                //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
-                originalLocation = pictureBox1.Location;
-                PreviouslySelectedFrames();
-            }
+            if (!exporting) { PreviouslySelectedFrames(); }
             for (int i = 0; i < comboBox1.Items.Count; i++)
             {
                 comboBox1.SelectedIndex = i; // select each section so that each sub frame is detected, selected and exported

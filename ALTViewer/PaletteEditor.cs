@@ -165,7 +165,7 @@
             if (col < 0 || col >= cols || row < 0) { return; }
             // Calculate the index of the clicked color in the palette:
             int index = row * cols + col;
-            if(index == 0) { MessageBox.Show("This colour is used for transparency."); return; }
+            if(index == 0 && !trim) { MessageBox.Show("This colour is used for transparency."); return; }
             // Ignore clicks outside the total number of colors:
             if (index >= totalColors) { return; }
             // Check if the clicked color is trimmed (first 32 colours in a trimmed palette)
@@ -306,13 +306,16 @@
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
+                RenderImage();
+                TestImageColours();
             }
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListSubFrames(fileDirectory, comboBox1, comboBox2);
+                Invalidate();
+                RenderImage();
             }
-            RenderImage();
         }
         // render image based on the selected section and frame
         private void RenderImage()
