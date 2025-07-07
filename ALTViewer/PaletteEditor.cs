@@ -118,8 +118,7 @@
         // draw palette
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
-            Pen crossPen = new Pen(Color.Red, 2);
-            Pen plusPen = new Pen(Color.White, 2);
+            Pen crossPen = new Pen(Color.Red, 2), plusPen = new Pen(Color.White, 2);
             for (int i = 0; i < palette.Length / 3; i++)
             {
                 int x = (i % 16) * 16 + 32; // + 32 for the initial offset
@@ -142,7 +141,7 @@
                         }
                     }
                 }
-                if (!usedColors.Contains(color) && !set || !usedColors.Contains(color) && transparentValues == null) { DrawSlash(); }
+                if (!usedColors.Contains(color) && !set && transparentValues != null || !usedColors.Contains(color) && transparentValues == null) { DrawSlash(); }
                 void DrawCross() // draw cross for trimmed colours
                 {
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
