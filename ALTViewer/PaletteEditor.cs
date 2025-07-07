@@ -149,13 +149,18 @@
                 }
                 void DrawSlash() // draw slash for unused colours
                 {
-                    Color slashPen = ((double)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B) > 128) ? Color.Black : Color.White;
+                    Color slashPen = InvertMeAColour(color); // invert the colour for the slash
+                    //Color slashPen = ((double)(0.299 * color.R + 0.587 * color.G + 0.114 * color.B) > 128) ? Color.Black : Color.White;
                     e.Graphics.DrawLine(new Pen(slashPen, 2), x + 15, y, x, y + 15); // -1 for alignment
                 }
                 void DrawPlus() // draw plus for transparent colours
                 {
                     e.Graphics.DrawLine(plusPen, x + 8, y, x + 8, y + 16); // vertical line
                     e.Graphics.DrawLine(plusPen, x, y + 8, x + 16, y + 8); // horizontal line
+                }
+                Color InvertMeAColour(Color ColourToInvert)
+                {
+                    return Color.FromArgb((byte)~ColourToInvert.R, (byte)~ColourToInvert.G, (byte)~ColourToInvert.B);
                 }
             }
         }
@@ -340,7 +345,6 @@
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
-                Invalidate();
                 RenderImage();
             }
             else if (compressed)
@@ -368,6 +372,7 @@
                 DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
             }
             usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
+            Invalidate();
         }
         // export palette file button click
         private void button4_Click(object sender, EventArgs e)
