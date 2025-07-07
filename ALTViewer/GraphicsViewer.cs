@@ -41,6 +41,7 @@ namespace ALTViewer
         private int w = 0; // WIDTH
         private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
+        private Point originalLocation = new Point();
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -332,10 +333,9 @@ namespace ALTViewer
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
+            originalLocation = pictureBox1.Location;
             PreviouslySelectedFrames();
             exporting = true;
-            // preventing the picture box from drawing this way leaves an artifact in the list box which is not preferable
-            //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
             foreach (var button in buttons)
             {
                 button.Checked = true;                      // select each radio button
@@ -347,10 +347,8 @@ namespace ALTViewer
             }
             buttons[selectedIndex].Checked = true;
             listBox1.SelectedIndex = previouslySelected;    // restore previously selected index
-            comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
-            if(compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+            RestoreSelectedFrames();
             exporting = false;
-            //pictureBox1.Visible = true; // show the picture box again
             ShowMessage($"All images saved to:\n{outputPath}");
         }
         // show message on successful export operation
@@ -359,10 +357,17 @@ namespace ALTViewer
             if (saved) { MessageBox.Show(messageSuccess); }
             else { MessageBox.Show("Failed to export : " + exception); }
         }
+        private void RestoreSelectedFrames()
+        {
+            comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
+            if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+            pictureBox1.Location = originalLocation;
+        }
         private void PreviouslySelectedFrames()
         {
             lastSelectedFrame = (comboBox1.SelectedIndex == -1) ? 0 : comboBox1.SelectedIndex;
             if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
+            pictureBox1.Location = new Point(-9999, -9999); // move picture box off-screen to prevent it being drawn during export
         }
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
@@ -370,6 +375,7 @@ namespace ALTViewer
             if (!exporting) // set previously selected indexes on export all frames
             {
                 //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
+                originalLocation = pictureBox1.Location;
                 PreviouslySelectedFrames();
             }
             for (int i = 0; i < comboBox1.Items.Count; i++)
@@ -394,9 +400,7 @@ namespace ALTViewer
             }
             if (!exporting) // restore previously selected index on export all frames
             {
-                comboBox1.SelectedIndex = lastSelectedFrame;
-                if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
-                //pictureBox1.Visible = true; // show the picture box again
+                RestoreSelectedFrames();
                 ShowMessage($"Images saved to:\n{outputPath}");
             }
         }
