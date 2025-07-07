@@ -1,8 +1,4 @@
-﻿using System.IO;
-using System.Windows.Forms;
-using System.Xml.Linq;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public static class DetectDimensions
     {
@@ -39,7 +35,8 @@ namespace ALTViewer
         }
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
-            string[] excluded = { "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PULSE", "SHOTGUN", "SMART" };
+            string[] excluded = { "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PULSE", "SHOTGUN", "SMART",
+                "BAMBI", "BURSTER", "COLONIST", "DOG", "DOGCEIL", "EGGS", "FINGERS", "GUARD", "HANDLER", "HUGGER", "QUEEN", "SOLDIER", "SYNTH", "WAR", "WARCEIL"};
             int[] values = null!;
             if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }
             if (fileDirectory.Contains("EXPLGFX"))
@@ -98,13 +95,13 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = new int[] { 0 };
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
                                 values = new int[] { 0 };
@@ -118,19 +115,19 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -138,19 +135,19 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -158,19 +155,19 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -178,7 +175,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -231,7 +228,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -239,7 +236,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -251,7 +248,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -259,7 +256,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -271,7 +268,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -291,7 +288,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -311,7 +308,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -360,7 +357,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -386,7 +383,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
                                 values = null!;
@@ -513,7 +510,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -534,7 +531,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -542,7 +539,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -554,7 +551,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -562,7 +559,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -574,7 +571,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -582,7 +579,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -594,7 +591,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -602,10 +599,10 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 2:
                                 values = null!;
@@ -614,7 +611,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -622,7 +619,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -634,7 +631,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -669,13 +666,13 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -695,7 +692,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -715,7 +712,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -749,13 +746,13 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 2:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 3:
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -775,7 +772,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -804,16 +801,16 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 2:
                                 values = null!;
                                 break;
                             case 3:
-                                values = null!;
+                                values = new int[] { 0 };
                                 break;
                             case 4:
                                 values = null!;
@@ -856,7 +853,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -876,7 +873,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -884,7 +881,7 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
@@ -896,7 +893,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -904,19 +901,19 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = null!;
                                 break;
                             case 2:
-                                values = null!;
+                                values = null!; ;
                                 break;
                             case 3:
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -976,7 +973,7 @@ namespace ALTViewer
                                 values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -984,19 +981,19 @@ namespace ALTViewer
                         switch (index)
                         {
                             case 0:
-                                values = new int[] { 255 };
+                                values = null!;
                                 break;
                             case 1:
-                                values = new int[] { 248 };
+                                values = null!;
                                 break;
                             case 2:
                                 values = null!;
                                 break;
                             case 3:
-                                values = new int[] { 255 };
+                                values = null!;
                                 break;
                             case 4:
-                                values = null!;
+                                values = new int[] { 255 };
                                 break;
                         }
                         break;
