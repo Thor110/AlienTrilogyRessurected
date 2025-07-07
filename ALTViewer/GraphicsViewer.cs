@@ -334,6 +334,7 @@ namespace ALTViewer
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
             PreviouslySelectedFrames();
             exporting = true;
+            //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
             foreach (var button in buttons)
             {
                 button.Checked = true;                      // select each radio button
@@ -348,6 +349,7 @@ namespace ALTViewer
             comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
             if(compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
             exporting = false;
+            //pictureBox1.Visible = true; // show the picture box again
             ShowMessage($"All images saved to:\n{outputPath}");
         }
         // show message on successful export operation
@@ -366,6 +368,7 @@ namespace ALTViewer
         {
             if (!exporting) // set previously selected indexes on export all frames
             {
+                //pictureBox1.Visible = false; // hide picture box during export to prevent it being drawn
                 PreviouslySelectedFrames();
             }
             for (int i = 0; i < comboBox1.Items.Count; i++)
@@ -392,6 +395,7 @@ namespace ALTViewer
             {
                 comboBox1.SelectedIndex = lastSelectedFrame;
                 if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+                //pictureBox1.Visible = true; // show the picture box again
                 ShowMessage($"Images saved to:\n{outputPath}");
             }
         }
