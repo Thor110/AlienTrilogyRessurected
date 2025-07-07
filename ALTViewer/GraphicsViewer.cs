@@ -54,7 +54,6 @@ namespace ALTViewer
                 if (!excluded.Any(e => name.Contains(e))) { listBox2.Items.Add(name); } // exclude unused palettes
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
-            listBox1.SelectedIndex = 0; // Select the first item in the list box
             comboBox1.Enabled = true; // enable section selection combo box
         }
         public void SetupDirectories()
@@ -103,6 +102,7 @@ namespace ALTViewer
                 }
                 foreach (var file in toRemove) { listBox1.Items.Remove(file); } // Remove items
             }
+            if (!exporting) { listBox1.SelectedIndex = 0; } // Select the first item in the list box if not exporting
         }
         // discover files in directory
         private string[] DiscoverFiles(string path, string type1 = ".BND", string type2 = ".B16")
@@ -284,7 +284,7 @@ namespace ALTViewer
             else { currentSections = TileRenderer.ParseBndFormSections(bndBytes); }// Parse all sections (TP00, TP01, etc.)
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-            comboBox1.SelectedIndex = 0; // trigger rendering
+            if(!exporting) { comboBox1.SelectedIndex = 0; } // trigger rendering if not exporting
             refresh = false; // reset refresh to false before any possible returns
         }
         // palette changed
@@ -335,8 +335,7 @@ namespace ALTViewer
             RadioButton[] buttons = { radioButton1, radioButton2, radioButton3, radioButton4 };
             int selectedIndex = Array.FindIndex(buttons, b => b.Checked);
             int previouslySelected = listBox1.SelectedIndex; // store previously selected index
-            lastSelectedFrame = comboBox1.SelectedIndex;     // set previously selected index
-            lastSelectedSub = comboBox2.SelectedIndex;       // set previously selected index
+            PreviouslySelectedFrames();
             exporting = true;
             foreach (var button in buttons)
             {
@@ -347,11 +346,11 @@ namespace ALTViewer
                     button3_Click(null!, null!);            // call the export all button click event
                 }
             }
-            exporting = false;
             buttons[selectedIndex].Checked = true;
             listBox1.SelectedIndex = previouslySelected;    // restore previously selected index
             comboBox1.SelectedIndex = lastSelectedFrame;    // restore previously selected index
-            comboBox2.SelectedIndex = lastSelectedSub;      // restore previously selected index
+            if(compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+            exporting = false;
             ShowMessage($"All images saved to:\n{outputPath}");
         }
         // show message on successful export operation
@@ -360,13 +359,17 @@ namespace ALTViewer
             if (saved) { MessageBox.Show(messageSuccess); }
             else { MessageBox.Show("Failed to export : " + exception); }
         }
+        private void PreviouslySelectedFrames()
+        {
+            lastSelectedFrame = (comboBox1.SelectedIndex == -1) ? 0 : comboBox1.SelectedIndex;
+            if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
+        }
         // export all frames button
         private void button3_Click(object sender, EventArgs e)
         {
             if (!exporting) // set previously selected indexes on export all frames
             {
-                lastSelectedFrame = comboBox1.SelectedIndex;
-                lastSelectedSub = comboBox2.SelectedIndex;
+                PreviouslySelectedFrames();
             }
             for (int i = 0; i < comboBox1.Items.Count; i++)
             {
@@ -391,7 +394,7 @@ namespace ALTViewer
             if (!exporting) // restore previously selected index on export all frames
             {
                 comboBox1.SelectedIndex = lastSelectedFrame;
-                comboBox2.SelectedIndex = lastSelectedSub;
+                if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
                 ShowMessage($"Images saved to:\n{outputPath}");
             }
         }
