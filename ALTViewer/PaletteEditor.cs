@@ -1,4 +1,5 @@
-﻿using System.Security.Policy;
+﻿using System;
+using System.Security.Policy;
 
 namespace ALTViewer
 {
@@ -131,18 +132,66 @@ namespace ALTViewer
                 int y = (i / 16) * 16 + 32;
 
                 Color color = ScaleColour(i);
-                if (!trim && i == 0) { color = Color.Magenta; } // transparency
+                // set colour to magenta if it is transparent
+                if (multiple && !trim) { foreach (int value in transparentValues) { if (i == value) { color = Color.Magenta; } } }
+                else if (!trim && !multiple) { if (i == transparent) { color = Color.Magenta; } }
+
+
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
-                if (trim && i < 32 || !trim && i == transparent)
+                if (trim && i < 32 || !trim && !multiple || multiple)
+                {
+                    bool set = false;
+                    if (multiple && !trim)
+                    {
+                        foreach (int value in transparentValues)
+                        {
+                            if (i == value) // draw cross for transparent colours
+                            {
+                                set = true;
+                                DrawPlus();
+                            }
+                        }
+                    }
+                    else if (!trim && !multiple)
+                    {
+                        if (i == transparent)
+                        {
+                            DrawPlus();
+                        }
+                        else if (!usedColors.Contains(color)) // draw slash for unused colours
+                        {
+                            DrawSlash();
+                        }
+                    }
+                    else if (trim)
+                    {
+                        DrawCross();
+                    }
+                    if (!usedColors.Contains(color) && !set) // draw slash for unused colours
+                    {
+                        DrawSlash();
+                    }
+                }
+                // NOT WORKING PROPERLY
+                else if (!usedColors.Contains(color) && trim) // draw slash for unused colours
+                {
+                    DrawSlash();
+                }
+                void DrawCross()
                 {
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
                     e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
-                else if (!usedColors.Contains(color) && i != transparent) // visual display for unused colours
+                void DrawSlash()
                 {
                     e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
+                }
+                void DrawPlus()
+                {
+                    e.Graphics.DrawLine(crossPen, x + 8, y, x + 8, y + 15); // vertical line
+                    e.Graphics.DrawLine(crossPen, x, y + 8, x + 15, y + 8); // horizontal line
                 }
             }
         }
@@ -176,11 +225,19 @@ namespace ALTViewer
             if (col < 0 || col >= cols || row < 0) { return; }
             // Calculate the index of the clicked color in the palette:
             int index = row * cols + col;
-            if(index == 0 && !trim) { MessageBox.Show("This colour is used for transparency."); return; }
+            // Check if the clicked color is transparent:
+            if (multiple && !trim)
+            {
+                foreach (int value in transparentValues)
+                {
+                    if (index == value) { MessageBox.Show("These colours are used for transparency."); return; }
+                }
+            }
+            else if (!trim) { if (index == transparent) { MessageBox.Show("This colour is used for transparency."); return; } }
+            // Check if the clicked color is trimmed (first 32 colours in a trimmed palette)
+            else if (trim && index < 32) { return; } // ignore trimmed colours
             // Ignore clicks outside the total number of colors:
             if (index >= totalColors) { return; }
-            // Check if the clicked color is trimmed (first 32 colours in a trimmed palette)
-            if (trim && index < 32) { return; } // ignore trimmed colours
             using ColorDialog dlg = new();
             // Show scaled color in the dialog
             dlg.Color = ScaleColour(index);
