@@ -119,15 +119,16 @@
         private void PaletteEditorForm_Paint(object sender, PaintEventArgs e)
         {
             Pen crossPen = new Pen(Color.Red, 2);
+            Pen plusPen = new Pen(Color.White, 2);
             for (int i = 0; i < palette.Length / 3; i++)
             {
                 int x = (i % 16) * 16 + 32; // + 32 for the initial offset
                 int y = (i / 16) * 16 + 32;
 
                 Color color = ScaleColour(i);
+
                 // set colour to magenta if it is transparent
                 if (transparentValues != null) { foreach (int value in transparentValues) { if (i == value) { color = Color.Magenta; } } }
-
 
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
@@ -160,12 +161,12 @@
                 }
                 void DrawSlash()
                 {
-                    e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
+                    e.Graphics.DrawLine(new Pen(Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B), 2), x + 15, y, x, y + 15); // -1 for alignment
                 }
                 void DrawPlus()
                 {
-                    e.Graphics.DrawLine(crossPen, x + 8, y, x + 8, y + 15); // vertical line
-                    e.Graphics.DrawLine(crossPen, x, y + 8, x + 15, y + 8); // horizontal line
+                    e.Graphics.DrawLine(plusPen, x + 8, y, x + 8, y + 16); // vertical line
+                    e.Graphics.DrawLine(plusPen, x, y + 8, x + 16, y + 8); // horizontal line
                 }
             }
         }
@@ -223,15 +224,11 @@
                 palette[index * 3 + 1] = (byte)(dlg.Color.G / 4);
                 palette[index * 3 + 2] = (byte)(dlg.Color.B / 4);
                 Color next = ScaleColour(index); // newly selected colour
-                if (previous != dlg.Color)
+                if (previous != next)
                 {
                     usedColors.Remove(previous); // remove the previous color from the used colors set
                     usedColors.Add(next); // add the new color to the used colors set
                 }
-                /*else
-                {
-                    return;
-                }*/
                 Invalidate();
                 RenderImage();
                 button3.Enabled = true; // enable undo button
@@ -356,7 +353,6 @@
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
                 RenderImage();
-                usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
             }
             else if (compressed)
             {
@@ -382,6 +378,7 @@
             {
                 DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
             }
+            usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
         }
         // export palette file button click
         private void button4_Click(object sender, EventArgs e)

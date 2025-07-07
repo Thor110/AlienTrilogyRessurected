@@ -160,7 +160,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(268, 386);
+            label2.Location = new Point(249, 386);
             label2.Name = "label2";
             label2.Size = new Size(295, 15);
             label2.TabIndex = 10;
@@ -169,7 +169,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(268, 415);
+            label3.Location = new Point(249, 415);
             label3.Name = "label3";
             label3.Size = new Size(296, 15);
             label3.TabIndex = 11;
@@ -198,11 +198,11 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(268, 357);
+            label5.Location = new Point(249, 357);
             label5.Name = "label5";
-            label5.Size = new Size(307, 15);
+            label5.Size = new Size(319, 15);
             label5.TabIndex = 14;
-            label5.Text = "Note : Transparent colours have a red plus through them.";
+            label5.Text = "Note : Transparent colours have a white plus through them.";
             // 
             // PaletteEditor
             // 

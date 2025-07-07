@@ -39,7 +39,7 @@ namespace ALTViewer
         }
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
-            string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PRISHOLD", "PULSE", "SHOTGUN", "SMART" };
+            string[] excluded = { "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PULSE", "SHOTGUN", "SMART" };
             int[] values = null!;
             if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }
             if (fileDirectory.Contains("EXPLGFX"))
