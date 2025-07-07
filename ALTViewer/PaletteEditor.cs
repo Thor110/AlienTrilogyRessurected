@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Policy;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -20,22 +17,18 @@ namespace ALTViewer
         private bool changesMade;
         private List<BndSection> currentSections = new();
         private HashSet<Color> usedColors = new HashSet<Color>();
-        public int transparent = 0;
-        public bool multiple; // true if there are multiple transparent values
-        public int[] transparentValues = null!; // transparent values for EXPLGFX
-        public bool none = false; // true if no transparent value is used (e.g. OPTGFX etc.)
-        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed, int transparency, bool multiples, bool noTransparency, int[] values = null!)
+        public int[] transparentValues = null!; // transparent values
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed, int[] values = null!)
         {
             InitializeComponent();
-            transparent = transparency; // set singular transparent value
-            multiple = multiples; // set multiple transparent values
             transparentValues = values; // set transparent values array
-            none = noTransparency; // set no transparency flag
             paletteDirectory = Utilities.CheckDirectory() + "PALS\\";
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             fileDirectory = selected; // set selected palette filepath
+            // TODO : move these to a separate method IE : combobox changed
+            if (!trim) { label2.Visible = false; }          // hide trimmed label
             selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
             string extension = "";
             if (selected.Contains("PANEL"))
@@ -111,7 +104,7 @@ namespace ALTViewer
             }
             label4.Visible = false; // hide detecting unused colours label
             pictureBox2.Visible = false; // hide the loading background picture box
-            comboBox1.SelectedIndex = 0; // reset to first frame
+            comboBox1.SelectedIndex = 0; // reset to first frame on load
             Invalidate();
             Paint += PaletteEditorForm_Paint!;
             MouseClick += PaletteEditorForm_MouseClick!;
@@ -133,38 +126,30 @@ namespace ALTViewer
 
                 Color color = ScaleColour(i);
                 // set colour to magenta if it is transparent
-                if (multiple && !trim) { foreach (int value in transparentValues) { if (i == value) { color = Color.Magenta; } } }
-                else if (!trim && !multiple) { if (i == transparent) { color = Color.Magenta; } }
+                if (transparentValues != null) { foreach (int value in transparentValues) { if (i == value) { color = Color.Magenta; } } }
 
 
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
-                if (trim && i < 32)
+                if (trim && i < 32) // trimmed palettes - first 32 colours
                 {
                     DrawCross();
                 }
+                // TODO : Redo this entire system...
                 bool set = false;
-                if (multiple && !trim)
+                if (transparentValues != null)
                 {
                     foreach (int value in transparentValues)
                     {
                         if (i == value) // draw cross for transparent colours
                         {
-                            transparent = value;
                             set = true;
                             DrawPlus();
                         }
                     }
                 }
-                else if (!trim && !multiple)
-                {
-                    if (i == transparent) // draw cross for transparent colour
-                    {
-                        DrawPlus();
-                    }
-                }
-                if (!usedColors.Contains(color) && i != transparent && !set) // draw slash for unused colours
+                if (!usedColors.Contains(color) && !set || !usedColors.Contains(color) && transparentValues == null) // draw slash for unused colours
                 {
                     DrawSlash();
                 }
@@ -215,14 +200,15 @@ namespace ALTViewer
             // Calculate the index of the clicked color in the palette:
             int index = row * cols + col;
             // Check if the clicked color is transparent:
-            if (multiple && !trim)
+            if (transparentValues != null && transparentValues.Length > 1)
             {
                 foreach (int value in transparentValues)
                 {
                     if (index == value) { MessageBox.Show("These colours are used for transparency."); return; }
                 }
             }
-            else if (!trim) { if (index == transparent) { MessageBox.Show("This colour is used for transparency."); return; } }
+            else if (transparentValues != null && transparentValues.Length == 1 && transparentValues[0] == index)
+            { MessageBox.Show("This colour is used for transparency."); return; }
             // Check if the clicked color is trimmed (first 32 colours in a trimmed palette)
             else if (trim && index < 32) { return; } // ignore trimmed colours
             // Ignore clicks outside the total number of colors:
@@ -239,9 +225,13 @@ namespace ALTViewer
                 Color next = ScaleColour(index); // newly selected colour
                 if (previous != dlg.Color)
                 {
-                    usedColors.Remove(previous); // add the new color to the used colors set
+                    usedColors.Remove(previous); // remove the previous color from the used colors set
                     usedColors.Add(next); // add the new color to the used colors set
                 }
+                /*else
+                {
+                    return;
+                }*/
                 Invalidate();
                 RenderImage();
                 button3.Enabled = true; // enable undo button
@@ -357,7 +347,8 @@ namespace ALTViewer
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            multiple = DetectDimensions.TransparencyEdgeCases(fileDirectory, comboBox1.SelectedIndex);
+            transparentValues = DetectDimensions.TransparencyValues(fileDirectory, comboBox1.SelectedIndex);
+            if (transparentValues == null) { label5.Visible = false; }  // hide transparency label
             if (!usePAL && !compressed) // only embedded palettes need to switch here
             {
                 int index = comboBox1.SelectedIndex;
@@ -385,11 +376,11 @@ namespace ALTViewer
             if (!compressed)
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparent, multiple, none, transparentValues);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparentValues);
             }
             else
             {
-                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent, multiple, none, transparentValues);
+                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
             }
         }
         // export palette file button click
@@ -467,7 +458,7 @@ namespace ALTViewer
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent, multiple, none, transparentValues);
+            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
         }
         // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }

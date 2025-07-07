@@ -1,4 +1,8 @@
-﻿namespace ALTViewer
+﻿using System.IO;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace ALTViewer
 {
     public static class DetectDimensions
     {
@@ -35,14 +39,970 @@
         }
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
+            string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PRISHOLD", "PULSE", "SHOTGUN", "SMART" };
             int[] values = null!;
+            if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }
             if (fileDirectory.Contains("EXPLGFX"))
             {
-                if (index == 0)
+                if (index == 0) { values = new int[] { 0, 16, 41 }; }
+                if (index == 1) { values = new int[] { 0 }; }
+            }
+            if (fileDirectory.Contains("NME")) { if (index == 0) { values = new int[] { 0 }; } }
+            //string directory = "";
+            if (fileDirectory.Contains("SECT"))
+            {
+                switch (fileDirectory.Substring(fileDirectory.Length - 10, 3))
                 {
-                    values = new int[] { 0, 16, 41 };
+                    //SECT11
+                    case "111":
+                        switch(index)
+                        {
+                            case 0:
+                                values = new int[] { 255 };
+                                break;
+                            case 1:
+                                values = new int[] { 0 };
+                                break;
+                            case 2:
+                                values = new int[] { 255 };
+                                break;
+                            case 3:
+                                values = new int[] { 0 };
+                                break;
+                            case 4:
+                                values = new int[] { 255 };
+                                break;
+                        }
+                        break;
+                    case "112":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = new int[] { 0 };
+                                break;
+                            case 2:
+                                values = new int[] { 255 };
+                                break;
+                            case 3:
+                                values = new int[] { 0 };
+                                break;
+                            case 4:
+                                values = new int[] { 255 };
+                                break;
+                        }
+                        break;
+                    case "113":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = new int[] { 0 };
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = new int[] { 0 };
+                                break;
+                            case 4:
+                                values = new int[] { 255 };
+                                break;
+                        }
+                        break;
+                    case "114":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "115":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "121":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "122":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "131":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT12
+                    case "141":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "154":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "155":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "161":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "162":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT21
+                    case "211":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "212":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "213":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "222":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "231":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "232":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT22
+                    case "242":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "243":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "262":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "263":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT31
+                    case "311":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "321":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "322":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "323":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "324":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "325":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "331":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT32
+                    case "351":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "352":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "353":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "361":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "371":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "381":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "391":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    //SECT90
+                    case "900":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "901":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "902":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "903":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "904":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "905":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "906":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "907":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "908":
+                        switch (index)
+                        {
+                            case 0:
+                                values = null!;
+                                break;
+                            case 1:
+                                values = null!;
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = null!;
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
+                    case "909":
+                        switch (index)
+                        {
+                            case 0:
+                                values = new int[] { 255 };
+                                break;
+                            case 1:
+                                values = new int[] { 248 };
+                                break;
+                            case 2:
+                                values = null!;
+                                break;
+                            case 3:
+                                values = new int[] { 255 };
+                                break;
+                            case 4:
+                                values = null!;
+                                break;
+                        }
+                        break;
                 }
             }
+            if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }
             return values;
         }
         // Auto-detect dimensions based on the total pixel count in the image data

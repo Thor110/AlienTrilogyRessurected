@@ -43,6 +43,7 @@
             label3 = new Label();
             label4 = new Label();
             pictureBox2 = new PictureBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
@@ -194,11 +195,21 @@
             pictureBox2.TabIndex = 13;
             pictureBox2.TabStop = false;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(268, 357);
+            label5.Name = "label5";
+            label5.Size = new Size(307, 15);
+            label5.TabIndex = 14;
+            label5.Text = "Note : Transparent colours have a red plus through them.";
+            // 
             // PaletteEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 441);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -240,5 +251,6 @@
         private Label label3;
         private Label label4;
         private PictureBox pictureBox2;
+        private Label label5;
     }
 }
