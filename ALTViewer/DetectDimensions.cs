@@ -48,26 +48,20 @@
             //string directory = "";
             if (fileDirectory.Contains("SECT"))
             {
-                switch (fileDirectory.Substring(fileDirectory.Length - 10, 3))
+                switch (fileDirectory.Substring(fileDirectory.Length - 10, 3)) // ###GFX.B16
                 {
                     //SECT11
                     case "111":
                         switch(index)
                         {
                             case 0:
+                            case 2:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -78,14 +72,10 @@
                                 values = null!;
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
                                 break;
+                            case 2:
                             case 4:
                                 values = new int[] { 255 };
                                 break;
@@ -95,19 +85,15 @@
                         switch (index)
                         {
                             case 0:
+                            case 2:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
                                 values = new int[] { 0 };
                                 break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -115,19 +101,13 @@
                         switch (index)
                         {
                             case 0:
+                            case 2:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -135,19 +115,13 @@
                         switch (index)
                         {
                             case 0:
+                            case 2:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
@@ -155,19 +129,13 @@
                         switch (index)
                         {
                             case 0:
+                            case 2:
+                            case 4:
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
-                            case 2:
-                                values = new int[] { 255 };
-                                break;
                             case 3:
                                 values = new int[] { 0 };
-                                break;
-                            case 4:
-                                values = new int[] { 255 };
                                 break;
                         }
                         break;
