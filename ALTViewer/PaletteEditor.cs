@@ -27,7 +27,6 @@
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)
             fileDirectory = selected; // set selected palette filepath
-            // TODO : move these to a separate method IE : combobox changed
             if (!trim) { label2.Visible = false; }          // hide trimmed label
             selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
             string extension = "";
