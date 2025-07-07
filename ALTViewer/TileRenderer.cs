@@ -106,7 +106,7 @@ namespace ALTViewer
             throw new Exception($"Unable to auto-detect dimensions for the selected image.");
         }
         // Render a raw 8bpp image with a palette
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int transparent)
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int transparent, bool multiple, bool none, int[] values = null!)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -117,16 +117,27 @@ namespace ALTViewer
                     int idx = y * width + x;
                     if (idx >= pixelData.Length) { continue; }
                     byte colorIndex = pixelData[idx];
-                    if (colorIndex == transparent) // Set the first color as transparent
-                    {
-                        bmp.SetPixel(x, y, Color.Magenta);
-                    }
-                    else  if (colorIndex < colors)
+                    if (colorIndex < colors) // DUPLICATE CODE
                     {
                         int r = palette[colorIndex * 3] * 4;
                         int g = palette[colorIndex * 3 + 1] * 4;
                         int b = palette[colorIndex * 3 + 2] * 4;
                         bmp.SetPixel(x, y, Color.FromArgb(r, g, b));
+                    }
+                    if (multiple && !none) // Set the first color as transparent
+                    {
+                        foreach (int value in values)
+                        {
+                            if (colorIndex == value) // If the color index matches any of the specified values
+                            {
+                                bmp.SetPixel(x, y, Color.Magenta);
+                                continue;
+                            }
+                        }
+                    }
+                    else if (colorIndex == transparent && !none) // Set the first color as transparent
+                    {
+                        bmp.SetPixel(x, y, Color.Magenta);
                     }
                 }
             }
@@ -505,13 +516,24 @@ namespace ALTViewer
             return embeddedPalette;
         }
         // Save an 8bpp indexed image as a PNG file with a specified palette
-        public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height)
+        public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height, int transparent, bool multiple, bool none, int[] values = null!)
         {
             using var bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
 
             // Set the palette
             ColorPalette pal = bmp.Palette;
             for (int i = 0; i < palette.Length && i < 256; i++) { pal.Entries[i] = palette[i]; }
+            if (multiple && !none)
+            {
+                foreach (int value in values)
+                {
+                    pal.Entries[value] = Color.Magenta; // Set specified values as transparent
+                }
+            }
+            else if (!none)
+            {
+                pal.Entries[transparent] = Color.Magenta; // Set the first color as transparent
+            }
             bmp.Palette = pal;
 
             // Lock the bitmap data
@@ -528,7 +550,7 @@ namespace ALTViewer
             bmp.Save(path, ImageFormat.Png);
         }
         // Convert a 768-byte RGB triplet palette to a Color array
-        public static Color[] ConvertPalette(byte[] rgbTriplets, int tranparent)
+        public static Color[] ConvertPalette(byte[] rgbTriplets, int transparent, bool multiple, bool none, int[] values = null!)
         {
             Color[] colors = new Color[256];
             for (int i = 0; i < 256; i++)
@@ -537,7 +559,18 @@ namespace ALTViewer
                     rgbTriplets[i * 3 + 1] * 4,
                     rgbTriplets[i * 3 + 2] * 4
                 );
-            colors[tranparent] = Color.Magenta; // Set the first color as transparent
+
+            if(multiple && !none)
+            {
+                foreach (int value in values)
+                {
+                    colors[value] = Color.Magenta; // Set specified values as transparent
+                }
+            }
+            else if(!none)
+            {
+                colors[transparent] = Color.Magenta; // Set the first color as transparent
+            }
             return colors;
         }
     }

@@ -2,6 +2,49 @@
 {
     public static class DetectDimensions
     {
+        public static bool TransparencyEdgeCases(string fileDirectory, int index)
+        {
+            // weird per frame transparent nonsense
+            bool multiple = false;
+            if (fileDirectory.Contains("EXPLGFX"))
+            {
+                if (index == 1)
+                {
+                    multiple = false;
+                }
+                else
+                {
+                    multiple = true;
+                }
+            }
+            else if (fileDirectory.Contains("OPTGFX"))
+            {
+                multiple = true; // used to return none
+            }
+            return multiple;
+        }
+        public static bool NoTransparency(string fileDirectory, int index)
+        {
+            // weird per frame transparent nonsense
+            bool none = false;
+            if (fileDirectory.Contains("OPTGFX"))
+            {
+                none = true; // used to return none
+            }
+            return none;
+        }
+        public static int[] TransparencyValues(string fileDirectory, int index)
+        {
+            int[] values = null!;
+            if (fileDirectory.Contains("EXPLGFX"))
+            {
+                if (index == 0)
+                {
+                    values = new int[] { 0, 16, 41 };
+                }
+            }
+            return values;
+        }
         // Auto-detect dimensions based on the total pixel count in the image data
         public static (int w, int h) AutoDetectDimensions(string lastSelectedFile, int SelectedIndex, int FrameIndex)
         {

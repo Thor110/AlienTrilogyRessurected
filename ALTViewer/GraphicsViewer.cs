@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System;
+using System.Drawing.Imaging;
 
 namespace ALTViewer
 {
@@ -43,12 +44,18 @@ namespace ALTViewer
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private Point originalLocation = new Point();
         public int transparent = 0;
-        public bool multiple; // true if there are multiple transparent values
+        public bool multiple = false; // true if there are multiple transparent values
         public int[] transparentValues = null!; // transparent values for EXPLGFX and OPTGFX
+        public bool edgecase = true; // true for edge cases like EXPLGFX and OPTGFX where multiple frames have different transparent values
+        public bool none = false; // true if no transparent value is used (e.g. OPTGFX etc.)
         public GraphicsViewer()
         {
             InitializeComponent();
             SetupDirectories();
+            //TESTING OPTGFX
+            //multiple = true; // set multiple to true for SECT files
+            //transparentValues = new int[] { 0, 16, 41 };
+            //TESTING
             ToolTip tooltip = new ToolTip();
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox), typeof(NumericUpDown) });
             string[] palFiles = Directory.GetFiles(paletteDirectory, "*" + ".PAL"); // Load palettes from the palette directory
@@ -80,8 +87,11 @@ namespace ALTViewer
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             transparent = 0;
-            // EXPLGFX has multiple transparent values...... 0, 15 & 41
-            //transparentValues = new int[] { 0, 15, 41 };
+            multiple = false; // set multiple to false for NME files
+            edgecase = true;
+            // EXPLGFX has multiple transparent values...... 0, 16 & 41 for frame 1 and just 0 for frame 2
+            //multiple = true; // set multiple to true for SECT files
+            //transparentValues = new int[] { 0, 16, 41 };
             // OPTGFX has multiple different values per frame....
             listBox1.Items.Clear();
             ListFiles(gfxDirectory, ".BND", ".B16", true);
@@ -91,6 +101,8 @@ namespace ALTViewer
         {
             transparent = 0; // set transparent to 0 for NME files
             multiple = false; // set multiple to false for NME files
+            edgecase = false;
+            none = false; // set none to false for NME files
             listBox1.Items.Clear();
             ListFiles(enemyDirectory, ".B16", ".NOPE");
         }
@@ -100,6 +112,8 @@ namespace ALTViewer
             // transparent colours are variable per level texture selection..........
             transparent = 0; // ranging from 0 - 255...
             multiple = true; // set multiple to true for SECT files
+            edgecase = true;
+            none = false; // set none to false for SECT files
             listBox1.Items.Clear();
             foreach (string level in levels) { ListFiles(level); }
         }
@@ -108,6 +122,8 @@ namespace ALTViewer
         {
             transparent = 16; // set transparent to 16 for LANGUAGE files
             multiple = false; // set multiple to false for LANGUAGE files
+            edgecase = false;
+            none = false; // set none to true for LANGUAGE files
             listBox1.Items.Clear();
             ListFiles(languageDirectory, ".NOPE", ".16");
         }
@@ -344,7 +360,7 @@ namespace ALTViewer
             }
             try
             {
-                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!, transparent), w, h);
+                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!, transparent, multiple, none, transparentValues), w, h, transparent, multiple, none, transparentValues);
                 saved = true;
             }
             catch (Exception ex)
@@ -447,6 +463,24 @@ namespace ALTViewer
         {
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
+
+            if(edgecase)
+            {
+                int index = comboBox1.SelectedIndex;
+                string choice = palfile ? lastSelectedPalette : lastSelectedFilePath;
+                multiple = DetectDimensions.TransparencyEdgeCases(choice, index);
+                if(multiple)
+                {
+                    none = DetectDimensions.NoTransparency(choice, index);
+                    transparentValues = DetectDimensions.TransparencyValues(choice, index);
+                }
+                else
+                {
+                    none = false; // reset none to false if not an edge case
+                    transparentValues = null!; // reset transparent values to null if not an edge case
+                }
+            }
+
             var section = currentSections[comboBox1.SelectedIndex];
             try
             {
@@ -462,7 +496,7 @@ namespace ALTViewer
                     (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparent);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparent, multiple, none, transparentValues);
                 }
                 else
                 {
@@ -479,7 +513,7 @@ namespace ALTViewer
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparent); // render the sub frame
+            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparent, multiple, none, transparentValues); // render the sub frame
             //DetectAfterRender(); // TODO : Keep this for future use
         }
         // replace button click event
@@ -607,7 +641,7 @@ namespace ALTViewer
         {
             refresh = true;
             string choice = palfile ? lastSelectedPalette : lastSelectedFilePath; // use the last selected file path for embedded palettes or use the last selected palette
-            newForm(new PaletteEditor(choice, palfile, currentSections, compressed, trimmed, transparent));
+            newForm(new PaletteEditor(choice, palfile, currentSections, compressed, trimmed, transparent, multiple, none, transparentValues));
         }
         // create new form method
         private void newForm(Form form)
@@ -629,7 +663,7 @@ namespace ALTViewer
         {
             int width = (int)numericUpDown1.Value; // get width from numeric up down control
             (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
-            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h, transparent);
+            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h, transparent, multiple, none, transparentValues);
             pictureBox1.Width = width; // set picture box width
         }
         private void DetectAfterRender() // TEST Code commented out

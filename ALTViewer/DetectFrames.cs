@@ -1,8 +1,10 @@
-﻿namespace ALTViewer
+﻿using System.Security.Policy;
+
+namespace ALTViewer
 {
     internal class DetectFrames
     {
-        public static byte[] RenderSubFrame(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2, PictureBox pictureBox1, byte[] palette, int transparent)
+        public static byte[] RenderSubFrame(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2, PictureBox pictureBox1, byte[] palette, int transparent, bool multiple, bool none, int[] values = null!)
         {
             int w = 0, h = 0;
             (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
@@ -14,7 +16,7 @@
             BndSection section = f0Sections[comboBox1.SelectedIndex];
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(section.Data);
             byte[] frameData = frames[comboBox2.SelectedIndex];
-            try { pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h, transparent); }
+            try { pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h, transparent, multiple, none, values); }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
             return frameData;
         }

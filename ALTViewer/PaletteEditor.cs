@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System.Security.Policy;
+
+namespace ALTViewer
 {
     public partial class PaletteEditor : Form
     {
@@ -18,10 +20,16 @@
         private List<BndSection> currentSections = new();
         private HashSet<Color> usedColors = new HashSet<Color>();
         public int transparent = 0;
-        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed, int transparency)
+        public bool multiple; // true if there are multiple transparent values
+        public int[] transparentValues = null!; // transparent values for EXPLGFX
+        public bool none = false; // true if no transparent value is used (e.g. OPTGFX etc.)
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed, int transparency, bool multiples, bool noTransparency, int[] values = null!)
         {
             InitializeComponent();
-            transparent = transparency;
+            transparent = transparency; // set singular transparent value
+            multiple = multiples; // set multiple transparent values
+            transparentValues = values; // set transparent values array
+            none = noTransparency; // set no transparency flag
             paletteDirectory = Utilities.CheckDirectory() + "PALS\\";
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
@@ -303,6 +311,7 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            multiple = DetectDimensions.TransparencyEdgeCases(fileDirectory, comboBox1.SelectedIndex);
             if (!usePAL && !compressed) // only embedded palettes need to switch here
             {
                 int index = comboBox1.SelectedIndex;
@@ -330,11 +339,11 @@
             if (!compressed)
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparent);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparent, multiple, none, transparentValues);
             }
             else
             {
-                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent);
+                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent, multiple, none, transparentValues);
             }
         }
         // export palette file button click
@@ -412,7 +421,7 @@
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent);
+            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent, multiple, none, transparentValues);
         }
         // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }
