@@ -115,20 +115,17 @@ namespace ALTViewer
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedFile && !refresh) { return; } // do not reselect same file
             lastSelectedFile = selected; // store last selected file
-            // show palette controls
-            label1.Visible = true; // show palette selection label
-            label2.Visible = true; // show palette note 1
-            label3.Visible = true; // show palette note 2
-            label4.Visible = true; // show palette note 3
-            listBox2.Visible = true; // show palette list
-            button7.Visible = true; // show palette editor button
-            button5.Enabled = true; // enable replace texture button
-            if(outputPath != "") // so I don't have to check if an item is selected or not
+            if(!exporting) // show controls if not exporting
             {
-                button2.Enabled = true;
-                button3.Enabled = true;
+                label1.Visible = true; // show palette selection label
+                label2.Visible = true; // show palette note 1
+                label3.Visible = true; // show palette note 2
+                label4.Visible = true; // show palette note 3
+                listBox2.Visible = true; // show palette list
+                button7.Visible = true; // show palette editor button
+                button5.Enabled = true; // enable replace texture button
+                checkBox1.Enabled = true; // enable backup checkbox
             }
-            checkBox1.Enabled = true; // enable backup checkbox
             // determine which directory to use based on selected radio button
             if (radioButton1.Checked) { GetFile(gfxDirectory); }
             else if (radioButton2.Checked) { GetFile(enemyDirectory); }
