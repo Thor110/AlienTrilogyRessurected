@@ -160,8 +160,6 @@
                         switch (index)
                         {
                             case 0:
-                                values = new int[] { 255 };
-                                break;
                             case 1:
                             case 2:
                             case 3:
@@ -335,8 +333,6 @@
                                 values = new int[] { 255 };
                                 break;
                             case 1:
-                                values = new int[] { 0 };
-                                break;
                             case 2:
                             case 3:
                                 values = null!;
