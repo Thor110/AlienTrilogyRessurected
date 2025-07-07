@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -107,7 +106,7 @@ namespace ALTViewer
             throw new Exception($"Unable to auto-detect dimensions for the selected image.");
         }
         // Render a raw 8bpp image with a palette
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height)
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int transparent)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -118,7 +117,7 @@ namespace ALTViewer
                     int idx = y * width + x;
                     if (idx >= pixelData.Length) { continue; }
                     byte colorIndex = pixelData[idx];
-                    if (colorIndex == 0) // Set the first color as transparent
+                    if (colorIndex == transparent) // Set the first color as transparent
                     {
                         bmp.SetPixel(x, y, Color.Magenta);
                     }
@@ -529,7 +528,7 @@ namespace ALTViewer
             bmp.Save(path, ImageFormat.Png);
         }
         // Convert a 768-byte RGB triplet palette to a Color array
-        public static Color[] ConvertPalette(byte[] rgbTriplets)
+        public static Color[] ConvertPalette(byte[] rgbTriplets, int tranparent)
         {
             Color[] colors = new Color[256];
             for (int i = 0; i < 256; i++)
@@ -538,7 +537,7 @@ namespace ALTViewer
                     rgbTriplets[i * 3 + 1] * 4,
                     rgbTriplets[i * 3 + 2] * 4
                 );
-            colors[0] = Color.Magenta; // Set the first color as transparent
+            colors[tranparent] = Color.Magenta; // Set the first color as transparent
             return colors;
         }
     }

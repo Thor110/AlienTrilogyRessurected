@@ -2,6 +2,7 @@
 {
     public partial class PaletteEditor : Form
     {
+        // TODO : Determine the proper method for defining the transparent colour when displaying the image.
         public static string paletteDirectory = "";
         public string backupDirectory = "";
         public string fileDirectory = "";
@@ -16,9 +17,11 @@
         private bool changesMade;
         private List<BndSection> currentSections = new();
         private HashSet<Color> usedColors = new HashSet<Color>();
-        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed)
+        public int transparent = 0;
+        public PaletteEditor(string selected, bool palfile, List<BndSection> loadedSections, bool compression, bool trimmed, int transparency)
         {
             InitializeComponent();
+            transparent = transparency;
             paletteDirectory = Utilities.CheckDirectory() + "PALS\\";
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
@@ -124,12 +127,12 @@
                 using Brush brush = new SolidBrush(color);
                 e.Graphics.FillRectangle(brush, x, y, 16, 16);
 
-                if (trim && i < 32 || !trim && i == 0)
+                if (trim && i < 32 || !trim && i == transparent)
                 {
                     e.Graphics.DrawLine(crossPen, x, y, x + 16, y + 16);
                     e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
-                else if (!usedColors.Contains(color) && i != 0) // visual display for unused colours
+                else if (!usedColors.Contains(color) && i != transparent) // visual display for unused colours
                 {
                     e.Graphics.DrawLine(crossPen, x + 15, y, x, y + 15); // -1 for alignment
                 }
@@ -307,13 +310,16 @@
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
                 Invalidate();
                 RenderImage();
-                TestImageColours();
+                usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
             }
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListSubFrames(fileDirectory, comboBox1, comboBox2);
-                Invalidate();
+                RenderImage();
+            }
+            else
+            {
                 RenderImage();
             }
         }
@@ -324,11 +330,11 @@
             if (!compressed)
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
-                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h);
+                pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparent);
             }
             else
             {
-                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette);
+                DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent);
             }
         }
         // export palette file button click
@@ -406,7 +412,7 @@
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette);
+            DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparent);
         }
         // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }

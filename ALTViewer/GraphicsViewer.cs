@@ -42,6 +42,9 @@ namespace ALTViewer
         private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private Point originalLocation = new Point();
+        public int transparent = 0;
+        public bool multiple; // true if there are multiple transparent values
+        public int[] transparentValues = null!; // transparent values for EXPLGFX and OPTGFX
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -74,13 +77,40 @@ namespace ALTViewer
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
         }
         // graphics GFX // .BND and .B16 files exist in the GFX folder which are used
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(gfxDirectory, ".BND", ".B16", true); }
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            transparent = 0;
+            // EXPLGFX has multiple transparent values...... 0, 15 & 41
+            //transparentValues = new int[] { 0, 15, 41 };
+            // OPTGFX has multiple different values per frame....
+            listBox1.Items.Clear();
+            ListFiles(gfxDirectory, ".BND", ".B16", true);
+        }
         // enemies NME // enemies are all compressed .B16 files
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(enemyDirectory, ".B16", ".NOPE"); }
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            transparent = 0; // set transparent to 0 for NME files
+            multiple = false; // set multiple to false for NME files
+            listBox1.Items.Clear();
+            ListFiles(enemyDirectory, ".B16", ".NOPE");
+        }
         // levels SECT## // level graphics are all .B16 files
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); foreach (string level in levels) { ListFiles(level); } }
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            // transparent colours are variable per level texture selection..........
+            transparent = 0; // ranging from 0 - 255...
+            multiple = true; // set multiple to true for SECT files
+            listBox1.Items.Clear();
+            foreach (string level in levels) { ListFiles(level); }
+        }
         // panels LANGUAGE // .NOPE ignores the unused .BND files in the LANGUAGE folder
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { listBox1.Items.Clear(); ListFiles(languageDirectory, ".NOPE", ".16"); }
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            transparent = 16; // set transparent to 16 for LANGUAGE files
+            multiple = false; // set multiple to false for LANGUAGE files
+            listBox1.Items.Clear();
+            ListFiles(languageDirectory, ".NOPE", ".16");
+        }
         // list files in directory
         public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16", bool enabled = false)
         {
@@ -116,7 +146,7 @@ namespace ALTViewer
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedFile && !refresh) { return; } // do not reselect same file
             lastSelectedFile = selected; // store last selected file
-            if(!exporting) // show controls if not exporting
+            if (!exporting) // show controls if not exporting
             {
                 label1.Visible = true; // show palette selection label
                 label2.Visible = true; // show palette note 1
@@ -147,6 +177,7 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
+            //MessageBox.Show(selected);
             string palettePath = DetectPalette(selected); // actual palette path
             string filePath = "";
             foreach (string ext in new[] { ".16", ".B16", ".BND" }) // check file types in this order so that the cleanup script remains optional
@@ -156,7 +187,7 @@ namespace ALTViewer
             }
             if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; } // check if a backup exists
             else { button6.Enabled = false; }
-            if (string.IsNullOrEmpty(filePath)) { MessageBox.Show("No usable graphics file found for: " + selected); return; }
+            if (string.IsNullOrEmpty(filePath)) { return; } // hacky workaround for race condition when selecting a file before the list is populated which should not be possible
             RenderImage(filePath, palettePath);
         }
         // detect palette and hard coded palette lookups
@@ -179,6 +210,7 @@ namespace ALTViewer
             lastSelectedSection = -1; // reset last selected section variable
             palfile = true; // this is not always true so it gets reset if it is not a file using a palette
             compressed = false; // reset compressed to false for next detection
+            trimmed = false; // set trimmed to false for these files
             if (radioButton1.Checked)
             {
                 if (weapons.Any(e => lastSelectedFile.Contains(e))) // exclude unused palettes
@@ -186,7 +218,6 @@ namespace ALTViewer
                     binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
                     palfile = false; // reset palfile if not a file that uses external palettes
-                    trimmed = false; // set trimmed to false for these files
                     compressed = true; // set compressed to true for weapons
                 }
                 if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
@@ -194,7 +225,6 @@ namespace ALTViewer
                     binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
                     palfile = false; // reset palfile if not a file that uses external palettes
-                    trimmed = false; // set trimmed to false for these files
                 }
                 else if (palfile && !compressed) // select the detected palette if it exists
                 {
@@ -207,7 +237,6 @@ namespace ALTViewer
                     {
                         byte[] loaded = File.ReadAllBytes(palettePath);
                         currentPalette = new byte[768];
-                        trimmed = false; // set trimmed to false for these files
                         Array.Copy(loaded, 0, currentPalette, 0, 576);
                     }
                     else if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
@@ -219,14 +248,12 @@ namespace ALTViewer
                     }
                     else if (palettePath.Contains("LEGAL"))
                     {
-                        trimmed = false; // set trimmed to false for these files
                         currentPalette = File.ReadAllBytes(palettePath);
                     }
                     else
                     {
                         listBox2.Enabled = false;
                         palfile = false; // reset palfile if not a file that uses external palettes
-                        trimmed = false; // set trimmed to false for these files
                     }
                 }
                 else
@@ -237,7 +264,7 @@ namespace ALTViewer
                     }
                     else // PANEL has a trimmed and or padded embedded palette
                     {
-                        trimmed = false; // set trimmed to false for these files
+                        //trimmed = false; // set trimmed to false for these files
                     }
                 }
             }
@@ -257,7 +284,7 @@ namespace ALTViewer
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (compressed) // load palette from level file or enemies
             {
-                trimmed = false; // set trimmed to false for these files
+                //trimmed = false; // set trimmed to false for these files
                 binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 List<BndSection> allSections = TileRenderer.ParseBndFormSections(bndBytes);
@@ -317,7 +344,7 @@ namespace ALTViewer
             }
             try
             {
-                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!), w, h);
+                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!, transparent), w, h);
                 saved = true;
             }
             catch (Exception ex)
@@ -435,7 +462,7 @@ namespace ALTViewer
                     (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparent);
                 }
                 else
                 {
@@ -452,7 +479,7 @@ namespace ALTViewer
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!); // render the sub frame
+            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparent); // render the sub frame
             //DetectAfterRender(); // TODO : Keep this for future use
         }
         // replace button click event
@@ -580,7 +607,7 @@ namespace ALTViewer
         {
             refresh = true;
             string choice = palfile ? lastSelectedPalette : lastSelectedFilePath; // use the last selected file path for embedded palettes or use the last selected palette
-            newForm(new PaletteEditor(choice, palfile, currentSections, compressed, trimmed));
+            newForm(new PaletteEditor(choice, palfile, currentSections, compressed, trimmed, transparent));
         }
         // create new form method
         private void newForm(Form form)
@@ -602,7 +629,7 @@ namespace ALTViewer
         {
             int width = (int)numericUpDown1.Value; // get width from numeric up down control
             (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
-            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h);
+            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h, transparent);
             pictureBox1.Width = width; // set picture box width
         }
         private void DetectAfterRender() // TEST Code commented out
