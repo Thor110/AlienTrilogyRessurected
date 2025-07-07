@@ -2,37 +2,6 @@
 {
     public static class DetectDimensions
     {
-        public static bool TransparencyEdgeCases(string fileDirectory, int index)
-        {
-            // weird per frame transparent nonsense
-            bool multiple = false;
-            if (fileDirectory.Contains("EXPLGFX"))
-            {
-                if (index == 1)
-                {
-                    multiple = false;
-                }
-                else
-                {
-                    multiple = true;
-                }
-            }
-            else if (fileDirectory.Contains("OPTGFX"))
-            {
-                multiple = true; // used to return none
-            }
-            return multiple;
-        }
-        public static bool NoTransparency(string fileDirectory, int index)
-        {
-            // weird per frame transparent nonsense
-            bool none = false;
-            if (fileDirectory.Contains("OPTGFX"))
-            {
-                none = true; // used to return none
-            }
-            return none;
-        }
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
             string[] excluded = { "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PULSE", "SHOTGUN", "SMART",
