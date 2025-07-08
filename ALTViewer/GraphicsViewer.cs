@@ -214,59 +214,21 @@ namespace ALTViewer
             lastSelectedSection = -1; // reset last selected section variable
             if (radioButton1.Checked)
             {
-                if (weapons.Any(e => lastSelectedFile.Contains(e))) // exclude unused palettes
-                {
-                    binbnd = UpdateExtension(binbnd);
-                    listBox2.Enabled = false;
-                    palfile = false; // reset palfile if not a file that uses external palettes
-                    compressed = true; // set compressed to true for weapons
-                    trimmed = false; // reset trimmed to false
-                }
-                else if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
-                {
-                    binbnd = UpdateExtension(binbnd);
-                    listBox2.Enabled = false;
-                    palfile = false; // reset palfile if not a file that uses external palettes
-                    compressed = false; // reset compressed to false for next detection
-                    trimmed = false; // reset trimmed to false
-                }
-                else if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
+                if (weapons.Any(e => lastSelectedFile.Contains(e))) { UpdateChecks(true, true); }
+                else if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) { UpdateChecks(true, false); }
+                // TODO : figure out PANEL3GF and PANELGFX palette issues
+                /*else if (binbnd.Contains("PANEL")) // currently falls through to else while commented out until the specifics are known
                 {
                     //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message also shown in palette editor
-                }
-                else if (palettePath.Contains("LOGOSGFX"))
-                {
-                    LoadPalette(palettePath, false, 0, 576, false);
-                }
-                else if (palettePath.Contains("PRISHOLD") || palettePath.Contains("COLONY") || palettePath.Contains("BONESHIP")) // these also use embedded palettes
-                {
-                    LoadPalette(palettePath, true, 96, 672, false);
-                }
-                else if (palettePath.Contains("LEGAL"))
-                {
-                    LoadPalette(palettePath, false, 0, 0, true);
-                }
-                else
-                {
-                    listBox2.Enabled = false;
-                    palfile = false; // reset palfile if not a file that uses external palettes
-                    compressed = false; // reset compressed to false for next detection
-                    trimmed = false; // reset trimmed to false
-                }
+                    UpdateChecks(false, false);
+                }*/
+                else if (binbnd.Contains("LOGOSGFX")) { LoadPalette(palettePath, false, 0, 576, false); }
+                else if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) { LoadPalette(palettePath, true, 96, 672, false); }
+                else if (binbnd.Contains("LEGAL")) { LoadPalette(palettePath, false, 0, 0, true); }
+                else { UpdateChecks(false, false); }
             }
-            else if (radioButton2.Checked)
-            {
-                binbnd = UpdateExtension(binbnd);
-                palfile = false; // palette is embedded
-                compressed = true; // set compressed to true for weapons
-                trimmed = false; // reset trimmed to false
-            }
-            else if (radioButton3.Checked || radioButton4.Checked ) // embedded palettes
-            {
-                palfile = false; // palette is embedded
-                compressed = false; // reset compressed to false for next detection
-                trimmed = false; // reset trimmed to false
-            }
+            else if (radioButton2.Checked) { UpdateChecks(true, true); }
+            else if (radioButton3.Checked || radioButton4.Checked ) { UpdateChecks(false, false); }
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (compressed) // load palette from level file or enemies
@@ -300,6 +262,14 @@ namespace ALTViewer
             {
                 comboBox1.SelectedIndex = 0;
                 refresh = false; // reset refresh to false before any possible returns
+            }
+            void UpdateChecks(bool update, bool compression)
+            {
+                if (update) { binbnd = UpdateExtension(binbnd); }
+                listBox2.Enabled = false;
+                palfile = false; // reset palfile if not a file that uses external palettes
+                compressed = compression; // set compressed to true for weapons
+                trimmed = false; // reset trimmed to false
             }
         }
         // palette changed
