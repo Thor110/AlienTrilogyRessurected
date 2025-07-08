@@ -8,10 +8,21 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 
 # To Do List
 
+Graphics Viewer
+
 - Palettes aren't right for the following two files?
 	- PANEL3GF.BND
 	- PANELGFX.BND
 - Compressed images can not be replaced yet, until I implement a recompression algorithm.
+
+Text Editor
+
+- UI text viewing .BIN files plaintext/
+- Editing and saving functionality.
+
+Map Editor
+
+- Currently only lists all the .MAP files, nothing more.
 
 # Road Map
 
@@ -23,6 +34,7 @@ The road map for this project.
 	- Automatic backup of the original file by default.
 - [✅ 2 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
 	- Palette detection implemented.
+	- Toggle palette export or transparency for viewing and exporting.
 	- View, export and replace textures, replacing compressed images is not supported yet. ( .B16 files, weapons and enemies. )
 	- Automatic backup of the original file by default.
 - [✅ 3 : Palette Editor](#palette-editor) ( 100% Complete )

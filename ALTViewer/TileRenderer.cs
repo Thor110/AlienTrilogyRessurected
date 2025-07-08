@@ -106,7 +106,7 @@ namespace ALTViewer
             throw new Exception($"Unable to auto-detect dimensions for the selected image.");
         }
         // Render a raw 8bpp image with a palette
-        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int[] values = null!)
+        public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int[] values = null!, bool bitsPerPixel = false)
         {
             int colors = palette.Length / 3;
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
@@ -130,7 +130,14 @@ namespace ALTViewer
                         {
                             if (colorIndex == value) // If the color index matches any of the specified values
                             {
-                                bmp.SetPixel(x, y, Color.Magenta);
+                                if(bitsPerPixel)
+                                {
+                                    bmp.SetPixel(x, y, Color.Transparent);
+                                }
+                                else
+                                {
+                                    bmp.SetPixel(x, y, Color.Magenta);
+                                }
                                 continue;
                             }
                         }
@@ -515,7 +522,7 @@ namespace ALTViewer
         public static void Save8bppPng(string path, byte[] indexedData, Color[] palette, int width, int height, int[] values = null!)
         {
             using var bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
-
+            
             // Set the palette
             ColorPalette pal = bmp.Palette;
             for (int i = 0; i < palette.Length && i < 256; i++) { pal.Entries[i] = palette[i]; }
@@ -523,7 +530,7 @@ namespace ALTViewer
             {
                 foreach (int value in values)
                 {
-                    pal.Entries[value] = Color.Magenta; // Set specified values as transparent
+                    pal.Entries[value] = Color.Magenta; // Set specified values as magenta transparency placeholder or 8bpp images
                 }
             }
             bmp.Palette = pal;
@@ -556,7 +563,7 @@ namespace ALTViewer
             {
                 foreach (int value in values)
                 {
-                    colors[value] = Color.Magenta; // Set specified values as transparent
+                    colors[value] = Color.Magenta; // Set specified values as magenta transparency placeholder or 8bpp images
                 }
             }
             return colors;

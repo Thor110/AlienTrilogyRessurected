@@ -43,6 +43,7 @@ namespace ALTViewer
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private Point originalLocation = new Point();
         public int[] transparentValues = new int[] { 0 }; // transparent value ranges
+        public bool bitsPerPixel = false; // true if 32bpp transparency is enabled
         public GraphicsViewer()
         {
             InitializeComponent();
@@ -297,7 +298,7 @@ namespace ALTViewer
             else { currentSections = TileRenderer.ParseBndFormSections(bndBytes); }// Parse all sections (TP00, TP01, etc.)
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-            if(!exporting) { comboBox1.SelectedIndex = 0; } // trigger rendering if not exporting
+            if (!exporting) { comboBox1.SelectedIndex = 0; } // trigger rendering if not exporting
             refresh = false; // reset refresh to false before any possible returns
         }
         // palette changed
@@ -312,27 +313,51 @@ namespace ALTViewer
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
         {
-            ShowMessage($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!)}");
+            ShowMessage($"Image saved to:\n{ExportFile(currentSections[comboBox1.SelectedIndex], comboBox1.SelectedItem!.ToString()!, true)}");
         }
         // export file
-        private string ExportFile(BndSection section, string sectionName)
+        private string ExportFile(BndSection section, string sectionName, bool single)
         {
             string filepath = "";
             byte[] saving = null!;
             if (!compressed)
             {
-                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}.png");
+                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}");
                 saving = section.Data; // use section data for non-compressed files
             }
             else
             {
-                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}.png");
+                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}");
                 saving = currentFrame!; // use current frame data for compressed files
                 (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
             try
             {
-                TileRenderer.Save8bppPng(filepath, saving, TileRenderer.ConvertPalette(currentPalette!, transparentValues), w, h, transparentValues);
+                if(bitsPerPixel)
+                {
+                    pictureBox1.Image.Save(filepath + ".png", ImageFormat.Png); // save as PNG with 32bpp transparency
+                }
+                else
+                {
+                    TileRenderer.Save8bppPng(filepath + ".png", saving, TileRenderer.ConvertPalette(currentPalette!, transparentValues), w, h, transparentValues);
+                }
+                if (checkBox3.Checked) // export palettes
+                {
+                    filepath = Path.Combine(outputPath, $"{lastSelectedFile}");
+                    if (!palfile && !compressed) // embedded palettes
+                    {
+                        filepath = filepath + $"_CL{comboBox1.SelectedIndex:D2}.PAL";
+                        File.WriteAllBytes(filepath, currentPalette!);
+                    }
+                    else
+                    {
+                        if (comboBox1.SelectedIndex == comboBox1.Items.Count - 1 || single) // -1 to account for zero based indexing
+                        {
+                            filepath = filepath + ".PAL"; // external and compressed palettes
+                            File.WriteAllBytes(filepath, currentPalette!);
+                        }
+                    }
+                }
                 saved = true;
             }
             catch (Exception ex)
@@ -402,12 +427,12 @@ namespace ALTViewer
                     for (int f = 0; f < comboBox2.Items.Count; f++)
                     {
                         comboBox2.SelectedIndex = f; // select each sub frame
-                        ExportFile(null!, comboBox1.Items[i]!.ToString()!);
+                        ExportFile(null!, comboBox1.Items[i]!.ToString()!, false);
                     }
                 }
                 if (palfile || !compressed && !palfile) // export embedded palette images and external palette images
                 {
-                    ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!);
+                    ExportFile(currentSections[i], comboBox1.Items[i]!.ToString()!, false);
                 }
             }
             if (!exporting) // restore previously selected index on export all frames
@@ -455,7 +480,7 @@ namespace ALTViewer
                     (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparentValues);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparentValues, bitsPerPixel);
                 }
                 else
                 {
@@ -472,7 +497,7 @@ namespace ALTViewer
         {
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
-            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparentValues); // render the sub frame
+            currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparentValues, bitsPerPixel); // render the sub frame
             //DetectAfterRender(); // TODO : Keep this for future use
         }
         // replace button click event
@@ -495,7 +520,7 @@ namespace ALTViewer
             int length = filename.Length;
             if (compressed)
             {
-                if(length !=1)
+                if (length != 1)
                 {
                     MessageBox.Show("Please select only one image when replacing a sub frame.");
                     return;
@@ -632,15 +657,21 @@ namespace ALTViewer
         }
         private void button9_Click(object sender, EventArgs e)
         {
-            for(int i = 0; i < 300; i++)
+            for (int i = 0; i < 300; i++)
             {
-                if(pictureBox1.Width * i == currentFrame!.Length)
+                if (pictureBox1.Width * i == currentFrame!.Length)
                 {
                     numericUpDown2.Value = i;
                     pictureBox1.Height = i;
                     break;
                 }
             }
+        }
+        // checkBox1_CheckedChanged event handler for transparency checkbox
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            bitsPerPixel = checkBox2.Checked; // toggle bits per pixel transparency
+            RenderImage(lastSelectedFilePath, lastSelectedPalette); // re-render the image with the updated transparency setting
         }
     }
 }

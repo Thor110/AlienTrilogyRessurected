@@ -55,6 +55,8 @@
             numericUpDown1 = new NumericUpDown();
             button9 = new Button();
             numericUpDown2 = new NumericUpDown();
+            checkBox2 = new CheckBox();
+            checkBox3 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
@@ -351,11 +353,36 @@
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
             numericUpDown2.Visible = false;
             // 
+            // checkBox2
+            // 
+            checkBox2.AccessibleDescription = "If this is checked images will be saved as a 32bpp image with transparency, otherwise they will be 8bpp which is required for the game.";
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(669, 310);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(87, 19);
+            checkBox2.TabIndex = 29;
+            checkBox2.Text = "Transparent";
+            checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
+            // 
+            // checkBox3
+            // 
+            checkBox3.AccessibleDescription = "If this is checked, .PAL palette files will be exported alongside the exported files.";
+            checkBox3.AutoSize = true;
+            checkBox3.Location = new Point(668, 340);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new Size(104, 19);
+            checkBox3.TabIndex = 30;
+            checkBox3.Text = "Export Palettes";
+            checkBox3.UseVisualStyleBackColor = true;
+            // 
             // GraphicsViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBox3);
+            Controls.Add(checkBox2);
             Controls.Add(button9);
             Controls.Add(numericUpDown2);
             Controls.Add(numericUpDown1);
@@ -422,5 +449,7 @@
         private NumericUpDown numericUpDown1;
         private Button button9;
         private NumericUpDown numericUpDown2;
+        private CheckBox checkBox2;
+        private CheckBox checkBox3;
     }
 }
