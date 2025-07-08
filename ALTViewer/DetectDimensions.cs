@@ -4,16 +4,16 @@
     {
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
-            int[] values = null!;
+            int[] values = null!; // default to null
             string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "MM9", "PRISHOLD" , "PULSE", "SHOTGUN", "SMART",
                 "BAMBI", "BURSTER", "COLONIST", "DOG", "DOGCEIL", "EGGS", "FINGERS", "GUARD", "HANDLER", "HUGGER", "QUEEN", "SOLDIER", "SYNTH", "WAR", "WARCEIL" };
             if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }         // GFX && NME
-            if (fileDirectory.Contains("EXPLGFX"))
+            else if (fileDirectory.Contains("EXPLGFX"))
             {
                 if (index == 0) { values = new int[] { 0, 16, 41 }; }
                 else if (index == 1) { values = new int[] { 0 }; }
             }
-            if (fileDirectory.Contains("LOGOSGFX"))
+            else if (fileDirectory.Contains("LOGOSGFX"))
             {
                 switch(index)
                 {
@@ -26,8 +26,8 @@
                         return values;
                 }
             }
-            if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }   // LANGUAGE
-            if (fileDirectory.Contains("SECT"))
+            else if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }   // LANGUAGE
+            else if (fileDirectory.Contains("SECT"))
             {
                 switch (fileDirectory.Substring(fileDirectory.Length - 10, 3)) // ###GFX.B16        // SECT
                 {
