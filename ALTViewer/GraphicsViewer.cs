@@ -165,7 +165,6 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            //MessageBox.Show(selected);
             string palettePath = DetectPalette(selected); // actual palette path
             string filePath = "";
             foreach (string ext in new[] { ".16", ".B16", ".BND" }) // check file types in this order so that the cleanup script remains optional
@@ -191,14 +190,29 @@ namespace ALTViewer
             palfile = false;
             return filename;
         }
+        private void LoadPalette(string palettePath, bool trim, int start, int end, bool full)
+        {
+            listBox2.Enabled = true;
+            listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
+            listBox2.SelectedItem = Path.GetFileNameWithoutExtension(palettePath);
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!; // re-add the event handler
+            lastSelectedPalette = palettePath; // store last selected file
+            trimmed = trim; // set trimmed to true for these files
+            if (full) { currentPalette = File.ReadAllBytes(palettePath); }
+            else
+            {
+                byte[] loaded = File.ReadAllBytes(palettePath);
+                currentPalette = new byte[768];
+                Array.Copy(loaded, 0, currentPalette, start, end); // 96 padded bytes at the beginning for these palettes
+            }
+            palfile = true; // this is not always true so it gets reset if it is not a file using a palette
+            compressed = false; // reset compressed to false for next detection
+        }
         // render the selected image
         private void RenderImage(string binbnd, string palettePath)
         {
             pictureBox1.Image = null; // clear previous image
             lastSelectedSection = -1; // reset last selected section variable
-            palfile = true; // this is not always true so it gets reset if it is not a file using a palette
-            compressed = false; // reset compressed to false for next detection
-            trimmed = false; // set trimmed to false for these files
             if (radioButton1.Checked)
             {
                 if (weapons.Any(e => lastSelectedFile.Contains(e))) // exclude unused palettes
@@ -208,52 +222,35 @@ namespace ALTViewer
                     palfile = false; // reset palfile if not a file that uses external palettes
                     compressed = true; // set compressed to true for weapons
                 }
-                if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
+                else if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
                 {
                     binbnd = UpdateExtension(binbnd);
                     listBox2.Enabled = false;
                     palfile = false; // reset palfile if not a file that uses external palettes
+                    compressed = false; // reset compressed to false for next detection
                 }
-                else if (palfile && !compressed) // select the detected palette if it exists
+                else if (palettePath.Contains("LOGOSGFX"))
                 {
-                    listBox2.Enabled = true;
-                    listBox2.SelectedIndexChanged -= listBox2_SelectedIndexChanged!; // event handler removal to prevent rendering the image twice
-                    listBox2.SelectedItem = Path.GetFileNameWithoutExtension(palettePath);
-                    listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged!; // re-add the event handler
-                    lastSelectedPalette = palettePath; // store last selected file
-                    if (palettePath.Contains("LOGOSGFX"))
-                    {
-                        byte[] loaded = File.ReadAllBytes(palettePath);
-                        currentPalette = new byte[768];
-                        Array.Copy(loaded, 0, currentPalette, 0, 576);
-                    }
-                    else if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) // these also use embedded palettes
-                    {
-                        byte[] loaded = File.ReadAllBytes(palettePath);
-                        currentPalette = new byte[768];
-                        trimmed = true; // set trimmed to true for these files
-                        Array.Copy(loaded, 0, currentPalette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                    }
-                    else if (palettePath.Contains("LEGAL"))
-                    {
-                        currentPalette = File.ReadAllBytes(palettePath);
-                    }
-                    else
-                    {
-                        listBox2.Enabled = false;
-                        palfile = false; // reset palfile if not a file that uses external palettes
-                    }
+                    LoadPalette(palettePath, false, 0, 576, false);
                 }
+                else if (palettePath.Contains("PRISHOLD") || palettePath.Contains("COLONY") || palettePath.Contains("BONESHIP")) // these also use embedded palettes
+                {
+                    LoadPalette(palettePath, true, 96, 672, false);
+                }
+                else if (palettePath.Contains("LEGAL"))
+                {
+                    LoadPalette(palettePath, false, 0, 0, true);
+                }
+                /*else if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
+                {
+                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message shown in palette editor
+                }*/
                 else
                 {
-                    if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
-                    {
-                        //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message shown in palette editor
-                    }
-                    else // PANEL has a trimmed and or padded embedded palette
-                    {
-                        //trimmed = false; // set trimmed to false for these files
-                    }
+                    listBox2.Enabled = false;
+                    palfile = false; // reset palfile if not a file that uses external palettes
+                    compressed = false; // reset compressed to false for next detection
+                    trimmed = false; // reset trimmed to false
                 }
             }
             else if (radioButton2.Checked)
@@ -261,12 +258,13 @@ namespace ALTViewer
                 binbnd = UpdateExtension(binbnd);
                 palfile = false; // palette is embedded
                 compressed = true; // set compressed to true for weapons
+                trimmed = false; // reset trimmed to false
             }
-            if (radioButton4.Checked || radioButton3.Checked ||
-                radioButton1.Checked && lastSelectedFile.Contains("GF") && !lastSelectedFile.Contains("LOGO")) // embedded palettes
+            else if (radioButton3.Checked || radioButton4.Checked ) // embedded palettes
             {
                 palfile = false; // palette is embedded
                 compressed = false; // reset compressed to false for next detection
+                trimmed = false; // reset trimmed to false
             }
             lastSelectedFilePath = binbnd;
             byte[] bndBytes = File.ReadAllBytes(binbnd);
@@ -275,8 +273,8 @@ namespace ALTViewer
                 //trimmed = false; // set trimmed to false for these files
                 binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
-                List<BndSection> allSections = TileRenderer.ParseBndFormSections(bndBytes);
-                var f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
+                currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+                var f0Sections = currentSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
                 if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
                 List<BndSection> decompressedF0Sections = new();
                 int counter = 0;
@@ -295,10 +293,14 @@ namespace ALTViewer
                 currentSections = decompressedF0Sections;
             }
             else { currentSections = TileRenderer.ParseBndFormSections(bndBytes); }// Parse all sections (TP00, TP01, etc.)
+            // TODO : only clear and repopulate the combobox on listBox1 selection changed
             comboBox1.Items.Clear(); // Populate ComboBox with section names
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
-            if (!exporting) { comboBox1.SelectedIndex = 0; } // trigger rendering if not exporting
-            refresh = false; // reset refresh to false before any possible returns
+            if (!exporting) // trigger rendering if not exporting
+            {
+                comboBox1.SelectedIndex = 0;
+                refresh = false; // reset refresh to false before any possible returns
+            }
         }
         // palette changed
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -306,8 +308,7 @@ namespace ALTViewer
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
-            string palettePath = paletteDirectory + "\\" + selected + ".PAL";
-            RenderImage(lastSelectedFilePath, palettePath); // use the selected palette to render the image
+            RenderImage(lastSelectedFilePath, paletteDirectory + "\\" + selected + ".PAL"); // use the selected palette to render the image
         }
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
