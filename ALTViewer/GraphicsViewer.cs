@@ -328,7 +328,7 @@ namespace ALTViewer
             {
                 filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}");
                 saving = currentFrame!; // use current frame data for compressed files
-                (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
             try
             {
@@ -566,7 +566,7 @@ namespace ALTViewer
         {
             if (compressed)
             {
-                (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+                (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
             else { (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data); }
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
@@ -642,7 +642,7 @@ namespace ALTViewer
         private void ReRender()
         {
             int width = (int)numericUpDown1.Value; // get width from numeric up down control
-            (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(lastSelectedFilePath), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
+            (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h, transparentValues);
             pictureBox1.Width = width; // set picture box width
         }
