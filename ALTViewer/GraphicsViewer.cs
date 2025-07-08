@@ -460,12 +460,8 @@ namespace ALTViewer
         {
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
-
-            int index = comboBox1.SelectedIndex;
-            string choice = palfile ? lastSelectedPalette : lastSelectedFilePath;
-            transparentValues = DetectDimensions.TransparencyValues(choice, index);
-
-            var section = currentSections[comboBox1.SelectedIndex];
+            transparentValues = DetectDimensions.TransparencyValues(palfile ? lastSelectedPalette : lastSelectedFilePath, lastSelectedSection);
+            var section = currentSections[lastSelectedSection];
             try
             {
                 if (!compressed)
@@ -475,7 +471,7 @@ namespace ALTViewer
                     if (!palfile) // update embedded palette to match selected frame
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{comboBox1.SelectedIndex:D2}", 12));
+                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{lastSelectedSection:D2}", 12));
                     }
                     (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                     pictureBox1.Width = w;

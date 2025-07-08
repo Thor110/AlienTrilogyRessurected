@@ -5,13 +5,26 @@
         public static int[] TransparencyValues(string fileDirectory, int index)
         {
             int[] values = null!;
-            string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "LOGOSGFX", "MM9", "PRISHOLD" , "PULSE", "SHOTGUN", "SMART",
+            string[] excluded = { "BONESHIP", "COLONY", "FLAME", "FONT1GFX", "LEGAL", "MM9", "PRISHOLD" , "PULSE", "SHOTGUN", "SMART",
                 "BAMBI", "BURSTER", "COLONIST", "DOG", "DOGCEIL", "EGGS", "FINGERS", "GUARD", "HANDLER", "HUGGER", "QUEEN", "SOLDIER", "SYNTH", "WAR", "WARCEIL" };
             if (excluded.Any(e => fileDirectory.Contains(e))) { values = new int[] { 0 }; }         // GFX && NME
             if (fileDirectory.Contains("EXPLGFX"))
             {
                 if (index == 0) { values = new int[] { 0, 16, 41 }; }
-                if (index == 1) { values = new int[] { 0 }; }
+                else if (index == 1) { values = new int[] { 0 }; }
+            }
+            if (fileDirectory.Contains("LOGOSGFX"))
+            {
+                switch(index)
+                {
+                    case 0:
+                    case 1:
+                        values = new int[] { 0 };
+                        break;
+                    case 2:
+                    case 3:
+                        return values;
+                }
             }
             if (fileDirectory.Contains("PNL")) { if (index == 0) { values = new int[] { 16 }; } }   // LANGUAGE
             if (fileDirectory.Contains("SECT"))
@@ -40,8 +53,7 @@
                         switch (index)
                         {
                             case 0:
-                                values = null!;
-                                break;
+                                return values;
                             case 1:
                             case 3:
                                 values = new int[] { 0 };
@@ -63,8 +75,7 @@
                             case 2:
                             case 3:
                             case 4:
-                                values = null!;
-                                break;
+                                return values;
                         }
                         break;
                     case "131":
@@ -81,8 +92,7 @@
                     case "901":
                     case "906":
                     case "907":
-                        values = null!;
-                        break;
+                        return values;
                     case "141":
                     case "155":
                     case "161":
@@ -102,8 +112,7 @@
                             case 1:
                             case 2:
                             case 3:
-                                values = null!;
-                                break;
+                                return values;
                             case 4:
                                 values = new int[] { 255 };
                                 break;
@@ -124,8 +133,7 @@
                             case 1:
                             case 2:
                             case 3:
-                                values = null!;
-                                break;
+                                return values;
                         }
                         break;
                     case "222":
@@ -135,8 +143,7 @@
                             case 1:
                             case 3:
                             case 4:
-                                values = null!;
-                                break;
+                                return values;
                             case 2:
                                 values = new int[] { 255 };
                                 break;
@@ -149,8 +156,7 @@
                             case 0:
                             case 1:
                             case 3:
-                                values = null!;
-                                break;
+                                return values;
                             case 2:
                             case 4:
                                 values = new int[] { 255 };
@@ -169,8 +175,7 @@
                                 break;
                             case 2:
                             case 4:
-                                values = null!;
-                                break;
+                                return values;
                         }
                         break;
                     case "904":
@@ -183,8 +188,7 @@
                             case 1:
                             case 2:
                             case 3:
-                                values = null!;
-                                break;
+                                return values;
                             case 4:
                                 values = new int[] { 255 };
                                 break;
