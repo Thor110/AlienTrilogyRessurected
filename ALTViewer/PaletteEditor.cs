@@ -336,7 +336,7 @@
         // frame selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            transparentValues = DetectDimensions.TransparencyValues(fileDirectory, comboBox1.SelectedIndex);
+            transparentValues = DetectDimensions.TransparencyValues(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex);
             if (transparentValues == null) { label5.Visible = false; }  // hide transparency label
             if (!usePAL && !compressed) // only embedded palettes need to switch here
             {

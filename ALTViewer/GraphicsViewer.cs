@@ -176,7 +176,6 @@ namespace ALTViewer
             if (File.Exists(filePath + ".BAK")) { button6.Enabled = true; } // check if a backup exists
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { return; } // hacky workaround for race condition when selecting a file before the list is populated which should not be possible
-            transparentValues = DetectDimensions.TransparencyValues(filePath, comboBox1.SelectedIndex);
             RenderImage(filePath, palettePath);
         }
         // detect palette and hard coded palette lookups
@@ -460,7 +459,7 @@ namespace ALTViewer
         {
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
-            transparentValues = DetectDimensions.TransparencyValues(palfile ? lastSelectedPalette : lastSelectedFilePath, lastSelectedSection);
+            transparentValues = DetectDimensions.TransparencyValues(palfile ? Path.GetFileNameWithoutExtension(lastSelectedPalette) : lastSelectedFile, lastSelectedSection);
             var section = currentSections[lastSelectedSection];
             try
             {
