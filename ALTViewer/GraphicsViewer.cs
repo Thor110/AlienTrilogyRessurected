@@ -221,6 +221,7 @@ namespace ALTViewer
                     listBox2.Enabled = false;
                     palfile = false; // reset palfile if not a file that uses external palettes
                     compressed = true; // set compressed to true for weapons
+                    trimmed = false; // reset trimmed to false
                 }
                 else if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) // these also use embedded palettes
                 {
@@ -228,6 +229,11 @@ namespace ALTViewer
                     listBox2.Enabled = false;
                     palfile = false; // reset palfile if not a file that uses external palettes
                     compressed = false; // reset compressed to false for next detection
+                    trimmed = false; // reset trimmed to false
+                }
+                else if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
+                {
+                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message also shown in palette editor
                 }
                 else if (palettePath.Contains("LOGOSGFX"))
                 {
@@ -241,10 +247,6 @@ namespace ALTViewer
                 {
                     LoadPalette(palettePath, false, 0, 0, true);
                 }
-                /*else if (binbnd.Contains("PANEL")) // TODO : figure out PANEL3GF and PANELGFX palettes and usecase
-                {
-                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message shown in palette editor
-                }*/
                 else
                 {
                     listBox2.Enabled = false;
@@ -270,7 +272,6 @@ namespace ALTViewer
             byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (compressed) // load palette from level file or enemies
             {
-                //trimmed = false; // set trimmed to false for these files
                 binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 currentSections = TileRenderer.ParseBndFormSections(bndBytes);
