@@ -638,8 +638,8 @@ namespace ALTViewer
             };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
-        // testing functions for numeric up down controls used to help determine the frame sizes
 #if DEBUG
+        // testing functions for numeric up down controls used to help determine the frame sizes
         private void numericUpDown1_ValueChanged(object sender, EventArgs e) { ReRender(); }
         private void ReRender()
         {
@@ -669,8 +669,14 @@ namespace ALTViewer
         // checkBox1_CheckedChanged event handler for transparency checkbox
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
+            lastSelectedFrame = (comboBox1.SelectedIndex == -1) ? 0 : comboBox1.SelectedIndex;
+            if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
+            // TODO : cleanup this hack for previously selected frame restoration
             bitsPerPixel = checkBox2.Checked; // toggle bits per pixel transparency
             RenderImage(lastSelectedFilePath, lastSelectedPalette); // re-render the image with the updated transparency setting
+            // TODO : cleanup this hack for previously selected frame restoration
+            comboBox1.SelectedIndex = lastSelectedFrame;
+            if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
         }
     }
 }

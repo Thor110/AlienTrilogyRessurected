@@ -85,7 +85,7 @@
             }
             List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(selectedOriginalSection.Data);
             for (int i = 0; i < frames.Count; i++) { comboBox2.Items.Add($"Frame {i}"); }
-            if (comboBox2.Items.Count > 0) { comboBox2.SelectedIndex = 0; }
+            comboBox2.SelectedIndex = 0;
         }
     }
 }
