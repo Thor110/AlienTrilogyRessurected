@@ -642,6 +642,7 @@ namespace ALTViewer
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
         // testing functions for numeric up down controls used to help determine the frame sizes
+#if DEBUG
         private void numericUpDown1_ValueChanged(object sender, EventArgs e) { ReRender(); }
         private void ReRender()
         {
@@ -667,6 +668,7 @@ namespace ALTViewer
                 }
             }
         }
+#endif
         // checkBox1_CheckedChanged event handler for transparency checkbox
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
