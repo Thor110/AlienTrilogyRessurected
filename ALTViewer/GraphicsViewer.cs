@@ -57,7 +57,6 @@ namespace ALTViewer
                 if (!excluded.Any(e => name.Contains(e))) { listBox2.Items.Add(name); } // exclude unused palettes
             }
             ListFiles(gfxDirectory); // Load graphics files by default on startup
-            comboBox1.Enabled = true; // enable section selection combo box
         }
         public void SetupDirectories()
         {

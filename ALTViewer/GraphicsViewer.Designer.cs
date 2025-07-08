@@ -200,7 +200,6 @@
             // comboBox1
             // 
             comboBox1.AccessibleDescription = "Changes the selected frame of the texture.";
-            comboBox1.Enabled = false;
             comboBox1.FormattingEnabled = true;
             comboBox1.Location = new Point(488, 308);
             comboBox1.Name = "comboBox1";
@@ -322,7 +321,6 @@
             // 
             // numericUpDown1
             // 
-#if DEBUG
             numericUpDown1.Increment = new decimal(new int[] { 2, 0, 0, 0 });
             numericUpDown1.Location = new Point(688, 96);
             numericUpDown1.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
@@ -353,7 +351,6 @@
             numericUpDown2.TabIndex = 26;
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
             numericUpDown2.Visible = false;
-#endif
             // 
             // checkBox2
             // 
