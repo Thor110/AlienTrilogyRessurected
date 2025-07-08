@@ -459,7 +459,7 @@ namespace ALTViewer
         {
             if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
-            transparentValues = DetectDimensions.TransparencyValues(palfile ? Path.GetFileNameWithoutExtension(lastSelectedPalette) : lastSelectedFile, lastSelectedSection);
+            transparentValues = DetectDimensions.TransparencyValues(lastSelectedFile, lastSelectedSection);
             var section = currentSections[lastSelectedSection];
             try
             {
