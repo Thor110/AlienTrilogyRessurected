@@ -73,6 +73,8 @@
             this.Refresh();           // Forces repaint immediately
             Application.DoEvents();   // Processes pending paint messages
             DetectUnusedColors();
+            Paint += PaletteEditorForm_Paint!;
+            MouseClick += PaletteEditorForm_MouseClick!;
         }
         // build a list of unused colours from all sections and frames
         private void DetectUnusedColors()
@@ -103,9 +105,6 @@
             label4.Visible = false; // hide detecting unused colours label
             pictureBox2.Visible = false; // hide the loading background picture box
             comboBox1.SelectedIndex = 0; // reset to first frame on load
-            Invalidate();
-            Paint += PaletteEditorForm_Paint!;
-            MouseClick += PaletteEditorForm_MouseClick!;
         }
         // test image colours for the current section and frame
         private void TestImageColours()
@@ -221,7 +220,6 @@
                     usedColors.Remove(previous); // remove the previous color from the used colors set
                     usedColors.Add(next); // add the new color to the used colors set
                 }
-                Invalidate();
                 RenderImage();
                 button3.Enabled = true; // enable undo button
                 button1.Enabled = true; // enable save button
@@ -282,16 +280,7 @@
             }
             else // regular & trimmed palettes [768 & 672] + LOGOSGFX [576]
             {
-                byte[] loaded = File.ReadAllBytes(fileDirectory);
-                if (loaded.Length == 672)
-                {
-                    palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, 672);
-                }
-                else
-                {
-                    palette = loaded;
-                }
+                LoadPalette(fileDirectory);
             }
             File.Delete(backupDirectory);
             button3.Enabled = false; // disable undo button
@@ -319,13 +308,7 @@
             }
             else
             {
-                palette = File.ReadAllBytes(fileDirectory); // regular palettes [768]
-                if (trim) // trimmed palettes [672]
-                {
-                    byte[] loaded = palette;
-                    palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                }
+                LoadPalette(fileDirectory);
             }
             DetectUnusedColors();
             RenderImage();
@@ -343,18 +326,15 @@
                 int index = comboBox1.SelectedIndex;
                 backupDirectory = selectedPalette + $"_CL{index:D2}.BAK";
                 palette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(fileDirectory, $"CL{index:D2}", 12));
-                RenderImage();
+                // TODO : implement a dialog box to notify the user that changing will not store their changes to embedded palettes
+                changesMade = false; // reset changes made flag
             }
             else if (compressed)
             {
                 lastSelectedSubFrame = -1; // reset last selected sub frame index
                 DetectFrames.ListSubFrames(fileDirectory, comboBox1, comboBox2);
-                RenderImage();
             }
-            else
-            {
-                RenderImage();
-            }
+            RenderImage();
         }
         // render image based on the selected section and frame
         private void RenderImage()
@@ -364,12 +344,15 @@
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparentValues);
+                if (!usePAL)
+                {
+                    usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
+                }
             }
             else
             {
                 DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
             }
-            usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
             Invalidate();
         }
         // export palette file button click
@@ -418,27 +401,37 @@
                 openFileDialog.Multiselect = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    byte[] loaded = File.ReadAllBytes(openFileDialog.FileName);
-                    if (loaded.Length == 672) // BONESHIP, COLONY & PRISHOLD
-                    {
-                        palette = new byte[768];
-                        //trim = true; // set trimmed to true for these files
-                        Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                        MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
-                    }
-                    else if (loaded.Length != 768 && loaded.Length != 576)
-                    {
-                        MessageBox.Show("Palettes smaller than 768, 672 or 576 bytes are not supported.");
-                        return;
-                    }
-                    else
-                    {
-                        palette = loaded;
-                    }
+                    LoadPalette(openFileDialog.FileName); // load the selected palette file
                     button3.Enabled = true; // enable undo button
                     button1.Enabled = true; // enable save button
                     DetectUnusedColors();
                     RenderImage();
+                }
+            }
+        }
+        // load palette from file
+        private void LoadPalette(string palettePath)
+        {
+            byte[] loaded = File.ReadAllBytes(palettePath);
+            if (loaded.Length > 768)
+            {
+                MessageBox.Show("Palettes larger than 768 bytes are not supported.");
+                return;
+            }
+            else if (trim) // BONESHIP, COLONY & PRISHOLD
+            {
+                Load(96, loaded.Length, false);
+                MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
+            }
+            else if (loaded.Length < 768) { Load(0, loaded.Length, false); }
+            else if (loaded.Length == 768) { Load(0, 0, true); }
+            void Load(int start, int end, bool full)
+            {
+                if (full) { palette = loaded; }
+                else
+                {
+                    palette = new byte[768];
+                    Array.Copy(loaded, 0, palette, start, end);
                 }
             }
         }
