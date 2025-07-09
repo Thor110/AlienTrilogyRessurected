@@ -13,11 +13,11 @@ Graphics Viewer
 - Palettes aren't right for the following two files?
 	- PANEL3GF.BND
 	- PANELGFX.BND
-- Compressed images can not be replaced yet, until I implement a recompression algorithm.
+- Compressed images can not be replaced yet, until I implement a recompression algorithm that matches the original exactly.
 
 Text Editor
 
-- UI text viewing .BIN files plaintext/
+- UI text viewing .BIN files plaintext.
 - Editing and saving functionality.
 
 Map Editor
