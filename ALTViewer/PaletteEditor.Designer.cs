@@ -162,9 +162,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(249, 386);
             label2.Name = "label2";
-            label2.Size = new Size(295, 15);
+            label2.Size = new Size(298, 15);
             label2.TabIndex = 10;
-            label2.Text = "Note : Timmed colours have a red cross through them.";
+            label2.Text = "Note : Trimmed colours have a red cross through them.";
             // 
             // label3
             // 
