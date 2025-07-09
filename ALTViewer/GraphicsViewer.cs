@@ -428,7 +428,7 @@ namespace ALTViewer
         // render the image when a section is selected
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == lastSelectedSection) { return; }
+            if (comboBox1.SelectedIndex == lastSelectedSection || comboBox1.SelectedIndex == -1) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
             transparentValues = DetectDimensions.TransparencyValues(lastSelectedFile, lastSelectedSection);
             var section = currentSections[lastSelectedSection];
@@ -639,8 +639,8 @@ namespace ALTViewer
             if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
             bitsPerPixel = checkBox2.Checked; // toggle bits per pixel transparency
             lastSelectedSection = -1; // reset last selected section variable
-            comboBox1_SelectedIndexChanged(null!, null!); // force redraw
-            comboBox1.SelectedIndex = lastSelectedFrame; // TODO : Figure out why isn't this calling comboBox1_SelectedIndexChanged???
+            comboBox1.SelectedIndex = -1; // reset combo box selection to force redraw
+            comboBox1.SelectedIndex = lastSelectedFrame; // force redraw
             if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
         }
     }
