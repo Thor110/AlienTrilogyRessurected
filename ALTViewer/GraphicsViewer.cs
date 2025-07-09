@@ -207,7 +207,7 @@ namespace ALTViewer
             palfile = true; // this is not always true so it gets reset if it is not a file using a palette
             compressed = false; // reset compressed to false for next detection
         }
-        // render the selected image
+        // loads and renders the selected image
         private void RenderImage(string binbnd, string palettePath)
         {
             pictureBox1.Image = null; // clear previous image
@@ -535,10 +535,7 @@ namespace ALTViewer
         // check the image dimensions match the expected size
         private bool CheckDimensions(Bitmap frameImage)
         {
-            if (compressed)
-            {
-                (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
-            }
+            if (compressed) { (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex); }
             else { (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data); }
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
@@ -642,9 +639,9 @@ namespace ALTViewer
             if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
             bitsPerPixel = checkBox2.Checked; // toggle bits per pixel transparency
             lastSelectedSection = -1; // reset last selected section variable
-            comboBox1.SelectedIndex = lastSelectedFrame;
-            if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
             comboBox1_SelectedIndexChanged(null!, null!); // force redraw
+            comboBox1.SelectedIndex = lastSelectedFrame; // TODO : Figure out why isn't this calling comboBox1_SelectedIndexChanged???
+            if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
         }
     }
 }
