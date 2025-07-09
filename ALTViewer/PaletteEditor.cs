@@ -187,10 +187,7 @@
             // Check if the clicked color is transparent:
             if (transparentValues != null && transparentValues.Length > 1)
             {
-                foreach (int value in transparentValues)
-                {
-                    if (index == value) { MessageBox.Show("These colours are used for transparency."); return; }
-                }
+                foreach (int value in transparentValues) { if (index == value) { MessageBox.Show("These colours are used for transparency."); return; } }
             }
             else if (transparentValues != null && transparentValues.Length == 1 && transparentValues[0] == index)
             { MessageBox.Show("This colour is used for transparency."); return; }
