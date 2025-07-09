@@ -278,8 +278,11 @@ namespace ALTViewer
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
-            // TODO : Skip reloading the entire file and go to comboBox1_SelectedIndexChanged instead
-            RenderImage(lastSelectedFilePath, paletteDirectory + "\\" + selected + ".PAL"); // use the selected palette to render the image
+            string palettePath = paletteDirectory + "\\" + selected + ".PAL";
+            if (selected.Contains("LOGOSGFX")) { LoadPalette(palettePath, false, 0, 576, false); }
+            else if (selected.Contains("PRISHOLD") || palettePath.Contains("COLONY") || palettePath.Contains("BONESHIP")) { LoadPalette(palettePath, true, 96, 672, false); }
+            else if (selected.Contains("LEGAL")) { LoadPalette(palettePath, false, 0, 0, true); }
+            checkBox2_CheckedChanged(null!, null!);
         }
         // export selected frame button
         private void button2_Click(object sender, EventArgs e)
