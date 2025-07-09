@@ -222,9 +222,9 @@ namespace ALTViewer
                     //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message also shown in palette editor
                     UpdateChecks(false, false);
                 }*/
-                else if (binbnd.Contains("LOGOSGFX")) { LoadPalette(palettePath, false, 0, 576, false); }
-                else if (binbnd.Contains("PRISHOLD") || binbnd.Contains("COLONY") || binbnd.Contains("BONESHIP")) { LoadPalette(palettePath, true, 96, 672, false); }
-                else if (binbnd.Contains("LEGAL")) { LoadPalette(palettePath, false, 0, 0, true); }
+                else if (palettePath.Contains("LOGOSGFX")) { LoadPalette(palettePath, false, 0, 576, false); }
+                else if (palettePath.Contains("PRISHOLD") || palettePath.Contains("COLONY") || palettePath.Contains("BONESHIP")) { LoadPalette(palettePath, true, 96, 672, false); }
+                else if (palettePath.Contains("LEGAL")) { LoadPalette(palettePath, false, 0, 0, true); }
                 else { UpdateChecks(false, false); }
             }
             else if (radioButton2.Checked) { UpdateChecks(true, true); }
@@ -278,6 +278,7 @@ namespace ALTViewer
             string selected = listBox2.SelectedItem!.ToString()!; // get selected item
             if (selected == lastSelectedPalette) { return; } // do not reselect same file
             lastSelectedPalette = selected; // store last selected file
+            // TODO : Skip reloading the entire file and go to comboBox1_SelectedIndexChanged instead
             RenderImage(lastSelectedFilePath, paletteDirectory + "\\" + selected + ".PAL"); // use the selected palette to render the image
         }
         // export selected frame button
