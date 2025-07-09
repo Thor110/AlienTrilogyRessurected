@@ -148,10 +148,7 @@
                     e.Graphics.DrawLine(plusPen, x + 8, y, x + 8, y + 16); // vertical line
                     e.Graphics.DrawLine(plusPen, x, y + 8, x + 16, y + 8); // horizontal line
                 }
-                Color InvertMeAColour(Color ColourToInvert)
-                {
-                    return Color.FromArgb((byte)~ColourToInvert.R, (byte)~ColourToInvert.G, (byte)~ColourToInvert.B);
-                }
+                Color InvertMeAColour(Color ColourToInvert) { return Color.FromArgb((byte)~ColourToInvert.R, (byte)~ColourToInvert.G, (byte)~ColourToInvert.B); }
             }
         }
         // get used colors from the image
