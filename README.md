@@ -31,6 +31,7 @@ The road map for this project.
 - [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
 	- .RAW audio files can be played, replaced and converted to and from .WAV files.
 	- Waveform preview for selected sound files.
+	- Link to the music directory, only available with the repack.
 	- Automatic backup of the original file by default.
 - [✅ 2 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
 	- Palette detection implemented.
