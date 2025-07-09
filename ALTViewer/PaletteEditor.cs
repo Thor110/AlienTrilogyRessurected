@@ -422,13 +422,13 @@
                     if (loaded.Length == 672) // BONESHIP, COLONY & PRISHOLD
                     {
                         palette = new byte[768];
-                        trim = true; // set trimmed to true for these files
+                        //trim = true; // set trimmed to true for these files
                         Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
                         MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
                     }
-                    else if (loaded.Length != 768)
+                    else if (loaded.Length != 768 && loaded.Length != 576)
                     {
-                        MessageBox.Show("Palettes smaller than 768 or 672 bytes not supported.");
+                        MessageBox.Show("Palettes smaller than 768, 672 or 576 bytes are not supported.");
                         return;
                     }
                     else
