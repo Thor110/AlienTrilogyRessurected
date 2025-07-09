@@ -301,6 +301,7 @@
             // 
             // comboBox2
             // 
+            comboBox2.AccessibleDescription = "Changes the selected sub-frame of the texture.";
             comboBox2.FormattingEnabled = true;
             comboBox2.Location = new Point(669, 67);
             comboBox2.Name = "comboBox2";
