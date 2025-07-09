@@ -527,7 +527,7 @@ namespace ALTViewer
                     MessageBox.Show(message);
                 }
             }
-            RenderImage(lastSelectedFilePath, lastSelectedPalette); // re-render the image with the frame replacement
+            checkBox2_CheckedChanged(null!, null!); // force redraw and retain transparency settings plus selected indexes
             button6.Enabled = true; // enable restore backup button
         }
         // check if the image is indexed 8bpp
@@ -640,12 +640,11 @@ namespace ALTViewer
         {
             lastSelectedFrame = (comboBox1.SelectedIndex == -1) ? 0 : comboBox1.SelectedIndex;
             if (compressed) { lastSelectedSub = comboBox2.SelectedIndex; }
-            // TODO : cleanup this hack for previously selected frame restoration
             bitsPerPixel = checkBox2.Checked; // toggle bits per pixel transparency
-            RenderImage(lastSelectedFilePath, lastSelectedPalette); // re-render the image with the updated transparency setting
-            // TODO : cleanup this hack for previously selected frame restoration
+            lastSelectedSection = -1; // reset last selected section variable
             comboBox1.SelectedIndex = lastSelectedFrame;
             if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+            comboBox1_SelectedIndexChanged(null!, null!); // force redraw
         }
     }
 }
