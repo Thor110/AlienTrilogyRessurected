@@ -53,14 +53,8 @@
             else
             {
                 extension = ".PAL.BAK";
-                palette = File.ReadAllBytes(fileDirectory); // store the selected palette
-                if (trim) // trimmed palettes [672]
-                {
-                    byte[] loaded = palette;
-                    palette = new byte[768];
-                    Array.Copy(loaded, 0, palette, 96, 672); // 96 padded bytes at the beginning for these palettes
-                }
-                else { label2.Visible = false; } // hide note on trimmed colours
+                LoadPalette(fileDirectory);
+                if (!trim) { label2.Visible = false; } // hide note on trimmed colours
             }
             backupDirectory = selectedPalette + extension; // set backup directory
             currentSections = loadedSections;
