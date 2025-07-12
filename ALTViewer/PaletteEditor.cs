@@ -2,7 +2,6 @@
 {
     public partial class PaletteEditor : Form
     {
-        public static string paletteDirectory = "";
         public string backupDirectory = "";
         public string fileDirectory = "";
         public string selectedPalette = ""; // either the name of the .PAL file or the name and location of the source file for the embedded palette
@@ -21,7 +20,6 @@
         {
             InitializeComponent();
             transparentValues = values; // set transparent values array
-            paletteDirectory = Utilities.CheckDirectory() + "PALS\\";
             usePAL = palfile; // store boolean for later use
             compressed = compression; // is the file compressed or not
             trim = trimmed; // is the palette file trimmed or not (e.g. PRISHOLD, COLONY, BONESHIP)

@@ -224,7 +224,9 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(pictureBox2);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "PaletteEditor";
             Text = "PaletteEditor";
             FormClosing += PaletteEditor_FormClosing;

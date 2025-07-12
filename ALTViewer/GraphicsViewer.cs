@@ -16,33 +16,34 @@ namespace ALTViewer
         private string levelPath5 = "";
         private string levelPath6 = "";
         private string levelPath7 = "";
-        private string[] levels = null!;
-        private string lastSelectedFile = "";
-        private string lastSelectedPalette = "";
-        private string lastSelectedFilePath = "";
+        private string[] levels = null!; // level directories
+        private string lastSelectedFile = ""; // last selected file name for rendering and exporting
+        private string lastSelectedPalette = ""; // last selected palette file path for rendering and exporting
+        private string lastSelectedFilePath = ""; // last selected file path for rendering and exporting
         private int lastSelectedFrame = -1; // for reselecting the section after export
         private int lastSelectedSub = -1; // for reselecting the subframe after export
         private int lastSelectedSubFrame = -1; // to prevent selecting the same subframe and rendering twice
         private int lastSelectedSection = -1; // to prevent selecting the same section and rendering twice
-        private string outputPath = "";
-        private List<BndSection> currentSections = null!;
-        private byte[]? currentPalette;
-        private byte[]? currentFrame;
-        private bool palfile = true; // true if .PAL file is used ( no palette file for level files, enemies and weapons )
-        private bool compressed;
-        private bool refresh; // set to true when entering the palette editor
+        private string outputPath = ""; // output path for exported files
+        private List<BndSection> currentSections = null!; // current sections for the selected file
+        private byte[]? currentPalette; // current palette data for the selected file
+        private byte[]? currentFrame; // current frame data for compressed files
+        private bool palfile; // true if .PAL file is used ( BONESHIP, COLONY, LEGAL, LOGOSGFX, PRISHOLD )
+        private bool compressed; // true if the file is compressed (e.g. enemies & weapons )
+        private bool refresh; // set to true when entering the palette editor so that the image is refreshed when returning
         private bool exporting; // set to true when exporting everything
         private bool saved; // set to true when export is successful
-        private string exception = "";
-        private static string[] removal = new string[] { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
-        private static string[] duplicate = new string[] { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
-        private static string[] weapons = new string[] { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
+        private string exception = ""; // exception message for failed exports
+        private static string[] removal = { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
+        private static string[] duplicate = { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
+        private static string[] weapons = { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         private static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
         private int w = 0; // WIDTH
         private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
-        private Point originalLocation = new Point();
-        public int[] transparentValues = new int[] { 0 }; // transparent value ranges
+        private Point originalLocation = new Point(); // used to move the picture box during export as it is not needed during export and can cause flickering
+                                                        // note that setting its visibility instead causes an artifact in the listbox
+        public int[] transparentValues = null!; // transparent value ranges
         public bool bitsPerPixel = false; // true if 32bpp transparency is enabled
         public GraphicsViewer()
         {
