@@ -325,16 +325,16 @@
         private void RenderImage()
         {
             var section = currentSections[comboBox1.SelectedIndex];
-            if (!compressed)
+            if (!compressed) // external
             {
                 (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparentValues);
-                if (!usePAL)
+                if (!usePAL) // embedded
                 {
                     usedColors = GetUsedColors((Bitmap)pictureBox1.Image);
                 }
             }
-            else
+            else // compressed
             {
                 DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
             }
@@ -398,18 +398,19 @@
         private void LoadPalette(string palettePath)
         {
             byte[] loaded = File.ReadAllBytes(palettePath);
-            if (loaded.Length > 768)
+            int length = loaded.Length;
+            if (length > 768)
             {
                 MessageBox.Show("Palettes larger than 768 bytes are not supported.");
                 return;
             }
             else if (trim) // BONESHIP, COLONY & PRISHOLD
             {
-                Load(96, loaded.Length, false);
+                Load(96, length, false);
                 MessageBox.Show("Note: First 32 unused colors were trimmed from this palette.");
             }
-            else if (loaded.Length < 768) { Load(0, loaded.Length, false); }
-            else if (loaded.Length == 768) { Load(0, 0, true); }
+            else if (length < 768) { Load(0, length, false); }
+            else if (length == 768) { Load(0, 768, true); }
             void Load(int start, int end, bool full)
             {
                 if (full) { palette = loaded; }
