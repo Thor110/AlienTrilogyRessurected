@@ -103,8 +103,7 @@ namespace ALTViewer
         public void ListFiles(string path, string type1 = ".BND", string type2 = ".B16", bool enabled = false)
         {
             listBox2.Enabled = enabled; // enable or disable the palette list box based on the selected radio button
-            string[] files = DiscoverFiles(path, type1, type2);
-            foreach (string file in files) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(file)); }
+            foreach (string file in DiscoverFiles(path, type1, type2)) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(file)); }
             if (radioButton1.Checked) // remove known unusable files
             {
                 var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -231,12 +230,11 @@ namespace ALTViewer
             else if (radioButton2.Checked) { UpdateChecks(true, true); }
             else if (radioButton3.Checked || radioButton4.Checked ) { UpdateChecks(false, false); }
             lastSelectedFilePath = binbnd;
-            byte[] bndBytes = File.ReadAllBytes(binbnd);
             if (compressed) // load palette from level file or enemies
             {
                 binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
-                currentSections = TileRenderer.ParseBndFormSections(bndBytes);
+                currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd));
                 var f0Sections = currentSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
                 if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
                 List<BndSection> decompressedF0Sections = new();
@@ -255,10 +253,9 @@ namespace ALTViewer
                 }
                 currentSections = decompressedF0Sections;
             }
-            else { currentSections = TileRenderer.ParseBndFormSections(bndBytes); }// Parse all sections (TP00, TP01, etc.)
-            // TODO : only clear and repopulate the combobox on listBox1 selection changed
-            comboBox1.Items.Clear(); // Populate ComboBox with section names
-            foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
+            else { currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd)); }// Parse all sections (TP00, TP01, etc.)
+            comboBox1.Items.Clear(); // Clear previous items in the ComboBox
+            foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); } // Populate ComboBox with section names
             if (!exporting) // trigger rendering if not exporting
             {
                 comboBox1.SelectedIndex = 0;
@@ -308,14 +305,8 @@ namespace ALTViewer
             }
             try
             {
-                if(bitsPerPixel)
-                {
-                    pictureBox1.Image.Save(filepath + ".png", ImageFormat.Png); // save as PNG with 32bpp transparency
-                }
-                else
-                {
-                    TileRenderer.Save8bppPng(filepath + ".png", saving, TileRenderer.ConvertPalette(currentPalette!, transparentValues), w, h, transparentValues);
-                }
+                if(bitsPerPixel) { pictureBox1.Image.Save(filepath + ".png", ImageFormat.Png); } // save as PNG with 32bpp transparency
+                else { TileRenderer.Save8bppPng(filepath + ".png", saving, TileRenderer.ConvertPalette(currentPalette!, transparentValues), w, h, transparentValues); }
                 if (checkBox3.Checked) // export palettes
                 {
                     filepath = Path.Combine(outputPath, $"{lastSelectedFile}");
@@ -487,8 +478,8 @@ namespace ALTViewer
         // replace texture
         private void ReplaceTexture(string[] filename)
         {
-            // TODO : backup original file when replacing textures
             int length = filename.Length;
+            if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
             if (compressed)
             {
                 if (length != 1)
@@ -519,13 +510,9 @@ namespace ALTViewer
                 catch (Exception ex) { MessageBox.Show("Failed to load image:\n" + ex.Message); return; }
                 if (!IsIndexed8bpp(frameImage.PixelFormat)) { MessageBox.Show("Image must be 8bpp indexed PNG."); return; }
                 else if (!CheckDimensions(frameImage)) { return; }
-                if (TryGetTargetPath(out string selectedFile, out string backupFile) && !File.Exists(backupFile) && checkBox1.Checked) { File.Copy(selectedFile, backupFile); }
                 byte[] indexedData = TileRenderer.Extract8bppData(frameImage);
-                currentSections[frame].Data = indexedData;
-                var section = currentSections[frame];
-                string sectionName = $"TP{frame:D2}";
-                long dataOffset = TileRenderer.FindSectionDataOffset(selectedFile, sectionName, 8);
-                List<Tuple<long, byte[]>> list = new() { Tuple.Create(dataOffset, indexedData) };
+                currentSections[frame].Data = indexedData; // replace currently loaded data with the new indexed data
+                List<Tuple<long, byte[]>> list = new() { Tuple.Create(TileRenderer.FindSectionDataOffset(selectedFile, $"TP{frame:D2}", 8), indexedData) };
                 BinaryUtility.ReplaceBytes(list, selectedFile);
                 if (frame + 1 == currentSections.Count || single) // account for zero based indexing
                 {
