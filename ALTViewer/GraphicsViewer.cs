@@ -32,7 +32,6 @@ namespace ALTViewer
         private bool compressed; // true if the file is compressed (e.g. enemies & weapons )
         private bool refresh; // set to true when entering the palette editor so that the image is refreshed when returning
         private bool exporting; // set to true when exporting everything
-        private bool saved; // set to true when export is successful
         private string exception = ""; // exception message for failed exports
         private static string[] removal = { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
         private static string[] duplicate = { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
@@ -324,12 +323,10 @@ namespace ALTViewer
                         }
                     }
                 }
-                saved = true;
             }
             catch (Exception ex)
             {
                 exception = ex.Message;
-                saved = false;
             }
             return filepath;
         }
@@ -359,7 +356,7 @@ namespace ALTViewer
         // show message on successful export operation
         private void ShowMessage(string messageSuccess)
         {
-            if (saved) { MessageBox.Show(messageSuccess); }
+            if (exception == "") { MessageBox.Show(messageSuccess); }
             else { MessageBox.Show("Failed to export : " + exception); }
         }
         // restore previously selected frames after export
