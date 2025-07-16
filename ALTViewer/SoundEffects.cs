@@ -13,7 +13,7 @@ namespace ALTViewer
         {
             InitializeComponent();
             gameDirectory = Utilities.CheckDirectory() + "SFX\\";
-            if (File.Exists("TRILOGY.EXE")) // disable music folder button for the original version of the game
+            if (gameDirectory == "CD\\") // disable music folder button for the original version of the game
             {
                 button5.Visible = false;
                 label2.Visible = false;
@@ -257,6 +257,11 @@ namespace ALTViewer
             button7.Enabled = false;
             pictureBox1.Image = DrawWaveform(File.ReadAllBytes(selectedFile), 538, 128); // redraw waveform and update labels
             MessageBox.Show("Backup successfully restored!");
+        }
+        // double click to open output path
+        private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); }
         }
     }
 }

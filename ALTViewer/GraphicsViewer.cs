@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace ALTViewer
 {
@@ -41,7 +42,7 @@ namespace ALTViewer
         private int h = 0; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private Point originalLocation = new Point(); // used to move the picture box during export as it is not needed during export and can cause flickering
-                                                        // note that setting its visibility instead causes an artifact in the listbox
+                                                      // note that setting its visibility instead causes an artifact in the listbox
         public int[] transparentValues = null!; // transparent value ranges
         public bool bitsPerPixel = false; // true if 32bpp transparency is enabled
         public GraphicsViewer()
@@ -227,7 +228,7 @@ namespace ALTViewer
                 else { UpdateChecks(false, false); }
             }
             else if (radioButton2.Checked) { UpdateChecks(true, true); }
-            else if (radioButton3.Checked || radioButton4.Checked ) { UpdateChecks(false, false); }
+            else if (radioButton3.Checked || radioButton4.Checked) { UpdateChecks(false, false); }
             lastSelectedFilePath = binbnd;
             if (compressed) // load palette from level file or enemies
             {
@@ -304,7 +305,7 @@ namespace ALTViewer
             }
             try
             {
-                if(bitsPerPixel) { pictureBox1.Image.Save(filepath + ".png", ImageFormat.Png); } // save as PNG with 32bpp transparency
+                if (bitsPerPixel) { pictureBox1.Image.Save(filepath + ".png", ImageFormat.Png); } // save as PNG with 32bpp transparency
                 else { TileRenderer.Save8bppPng(filepath + ".png", saving, TileRenderer.ConvertPalette(currentPalette!, transparentValues), w, h, transparentValues); }
                 if (checkBox3.Checked) // export palettes
                 {
@@ -631,6 +632,11 @@ namespace ALTViewer
             comboBox1.SelectedIndex = -1; // reset combo box selection to force redraw
             comboBox1.SelectedIndex = lastSelectedFrame; // force redraw
             if (compressed) { comboBox2.SelectedIndex = lastSelectedSub; }
+        }
+        // double click to open output path
+        private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); }
         }
     }
 }

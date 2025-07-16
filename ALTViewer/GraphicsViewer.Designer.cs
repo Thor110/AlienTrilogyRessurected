@@ -185,6 +185,7 @@
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(381, 23);
             textBox1.TabIndex = 11;
+            textBox1.MouseDoubleClick += textBox1_MouseDoubleClick;
             // 
             // button4
             // 
