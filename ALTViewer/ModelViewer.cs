@@ -18,7 +18,7 @@ namespace ALTViewer
         }
         private void ListModels()
         {
-            string[] models = { "OBJ3D", "OPTOBJ" }; // known model files
+            string[] models = { "OBJ3D", "OPTOBJ", "PICKMOD" }; // known model files
             foreach (string model in models)
             {
                 if (File.Exists(gfxDirectory + "\\" + model + ".BND"))
@@ -66,6 +66,12 @@ namespace ALTViewer
                     textureDirectory = gfxDirectory + "\\" + "OPTGFX.BND";
                     textureName = "OPTGFX";
                     caseName = "OPTOBJ";
+                    break;
+                case "PICKMOD":
+                    fileDirectory = gfxDirectory + "\\" + "PICKMOD.BND";
+                    textureDirectory = gfxDirectory + "\\" + "PICKGFX.BND";
+                    textureName = "PICKGFX";
+                    caseName = "PICKMOD";
                     break;
             }
             if (!File.Exists(textureDirectory)) // check texture file exists
