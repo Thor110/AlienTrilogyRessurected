@@ -116,9 +116,7 @@ namespace ALTViewer
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             setup = false;
-            //comboBox1.Items.Clear();
             listBox1.Items.Clear();
-            //foreach (string language in languages) { comboBox1.Items.Add(language); }
             foreach (string mission in missions) { listBox1.Items.Add(mission); }
             setup = true;
             label8.Visible = true;
@@ -127,12 +125,13 @@ namespace ALTViewer
             label11.Visible = true;
             label12.Visible = true;
             label13.Visible = true;
+            textBox1.Text = "";
+            richTextBox1.Text = "";
         }
         // UI Text Selected
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             setup = false;
-            //comboBox1.Items.Clear();
             listBox1.Items.Clear();
             // parse BIN files here
             setup = true;
@@ -142,6 +141,8 @@ namespace ALTViewer
             label11.Visible = false;
             label12.Visible = false;
             label13.Visible = false;
+            textBox1.Text = "";
+            richTextBox1.Text = "";
         }
         // restore backup button clicked
         private void button1_Click(object sender, EventArgs e)
