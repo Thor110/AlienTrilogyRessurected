@@ -42,8 +42,8 @@ namespace ALTViewer
             levelPath6 = gameDirectory + "SECT32";
             levelPath7 = gameDirectory + "SECT90";
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
-            //ToolTip tooltip = new ToolTip(); // no tooltips added yet
-            //ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(PictureBox), typeof(Label), typeof(ListBox) });
+            ToolTip tooltip = new ToolTip(); // no tooltips added yet
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(Label), typeof(ListBox) });
             ListLevels();
             fullScreen = new FullScreen(this);
         }

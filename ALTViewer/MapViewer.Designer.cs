@@ -72,6 +72,7 @@
             // 
             // button1
             // 
+            button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button1.Location = new Point(713, 12);
             button1.Name = "button1";
@@ -83,6 +84,7 @@
             // 
             // button2
             // 
+            button2.AccessibleDescription = "Close the level.";
             button2.Location = new Point(632, 12);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
@@ -94,6 +96,7 @@
             // 
             // button3
             // 
+            button3.AccessibleDescription = "Open the selected level.";
             button3.Enabled = false;
             button3.Location = new Point(632, 12);
             button3.Name = "button3";
@@ -105,6 +108,7 @@
             // 
             // textBox1
             // 
+            textBox1.AccessibleDescription = "The output directory.";
             textBox1.Location = new Point(302, 415);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -114,6 +118,7 @@
             // 
             // button4
             // 
+            button4.AccessibleDescription = "Select output directory for the files.";
             button4.Location = new Point(221, 415);
             button4.Name = "button4";
             button4.Size = new Size(75, 23);
@@ -124,6 +129,7 @@
             // 
             // button5
             // 
+            button5.AccessibleDescription = "Export the selected level as OBJ files.";
             button5.Enabled = false;
             button5.Location = new Point(110, 415);
             button5.Name = "button5";
@@ -135,6 +141,7 @@
             // 
             // button6
             // 
+            button6.AccessibleDescription = "Export all levels as OBJ files.";
             button6.Enabled = false;
             button6.Location = new Point(110, 386);
             button6.Name = "button6";

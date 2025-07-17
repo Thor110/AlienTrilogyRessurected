@@ -45,6 +45,7 @@
             // 
             // textBox1
             // 
+            textBox1.AccessibleDescription = "The output directory.";
             textBox1.Location = new Point(365, 12);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
@@ -54,6 +55,7 @@
             // 
             // button1
             // 
+            button1.AccessibleDescription = "Select output directory for the files.";
             button1.Location = new Point(284, 12);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
@@ -64,6 +66,7 @@
             // 
             // button2
             // 
+            button2.AccessibleDescription = "Export the selected item as OBJ files.";
             button2.Enabled = false;
             button2.Location = new Point(138, 12);
             button2.Name = "button2";

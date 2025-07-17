@@ -12,6 +12,8 @@ namespace ALTViewer
             InitializeComponent();
             gameDirectory = Utilities.CheckDirectory();
             gfxDirectory = gameDirectory + "GFX";
+            ToolTip tooltip = new ToolTip(); // no tooltips added yet
+            ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(Label), typeof(ListBox) });
             ListModels();
         }
         private void ListModels()
