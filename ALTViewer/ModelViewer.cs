@@ -57,9 +57,9 @@ namespace ALTViewer
             {
                 case "OBJ3D":
                     fileDirectory = gfxDirectory + "\\" + "OBJ3D.BND";
-                    textureDirectory = gfxDirectory + "\\" + "OPTGFX.BND"; // currently unknown
-                    textureName = "OPTGFX"; // temporary assignment while the texture is unknown
-                    caseName = "OBJ3D";
+                    textureDirectory = gfxDirectory + "\\" + "PICKGFX.BND"; // currently unknown
+                    textureName = "PICKGFX"; // temporary assignment while the texture is unknown
+                    caseName = "OBJ3D"; // possibly PICKGFX.BND with only one BX section?
                     break;
                 case "OPTOBJ":
                     fileDirectory = gfxDirectory + "\\" + "OPTOBJ.BND";

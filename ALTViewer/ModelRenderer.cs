@@ -9,13 +9,16 @@
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
             const float texSize = 256f;
-
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var ms = new MemoryStream(modelSections[m].Data);
                 using var br = new BinaryReader(ms);
-                var uvRects = ParseBxRectangles(uvSections[m].Data);
+                var uvRects = ParseBxRectangles(uvSections[0].Data);
 
+                if (uvSections.Count != 1) // PICKGFX / OBJ3D case
+                {
+                    uvRects = ParseBxRectangles(uvSections[m].Data);
+                }
                 br.ReadBytes(12); // OBJ1 + unknown
 
                 int quadCount = br.ReadInt32();
@@ -55,7 +58,14 @@
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
 
-                File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}_TP{m:D2}.png\n");
+                if (uvSections.Count != 1) // PICKGFX / OBJ3D case
+                {
+                    File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}_TP{m:D2}.png\n");
+                }
+                else
+                {
+                    File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}_TP00.png\n");
+                }
 
                 // Write vertex positions
                 foreach (var v in vertices)
