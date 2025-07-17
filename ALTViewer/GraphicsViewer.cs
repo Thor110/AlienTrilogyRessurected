@@ -551,6 +551,7 @@ namespace ALTViewer
                     "90" => "SECT90",
                     _ => throw new Exception("Unknown section selected!")
                 };
+                MessageBox.Show(directory);
                 filetype = ".B16";
             }
             else if (radioButton4.Checked) { directory = "LANGUAGE"; filetype = ".16"; }

@@ -50,6 +50,7 @@
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(423, 23);
             textBox1.TabIndex = 1;
+            textBox1.MouseDoubleClick += textBox1_MouseDoubleClick;
             // 
             // button1
             // 

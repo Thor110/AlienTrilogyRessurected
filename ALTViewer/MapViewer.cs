@@ -1,6 +1,9 @@
-﻿namespace ALTViewer
+﻿using System.Diagnostics;
+using System.IO;
+
+namespace ALTViewer
 {
-    public partial class MapEditor : Form
+    public partial class MapViewer : Form
     {
         public string gameDirectory = "";
         public string levelPath1 = "";
@@ -11,6 +14,7 @@
         public string levelPath6 = "";
         public string levelPath7 = "";
         public string[] levels = null!;
+        private string outputPath = ""; // output path for exported files
         public List<string> missions = new List<string>
         {
             "1.1.1 Entrance", "1.1.2 Outer Complex", "1.1.3 Ammunition Dump 1", "1.2.2 Recreation Rooms", "1.3.1 Medical Laboratory",
@@ -26,7 +30,7 @@
         };
         private string lastSelectedLevel = "";
         FullScreen fullScreen;
-        public MapEditor()
+        public MapViewer()
         {
             InitializeComponent();
             gameDirectory = Utilities.CheckDirectory();
@@ -43,6 +47,7 @@
             ListLevels();
             fullScreen = new FullScreen(this);
         }
+        // list all levels in the game
         public void ListLevels()
         {
             foreach (string level in levels)
@@ -51,7 +56,7 @@
                 foreach (string levelFile in levelFiles) { listBox1.Items.Add(Path.GetFileNameWithoutExtension(levelFile)); }
             }
         }
-
+        // list box selection changed
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
@@ -69,15 +74,16 @@
             }
             button3.Enabled = true;
         }
-
+        // full screen toggle
         private void button1_Click(object sender, EventArgs e)
         {
             fullScreen.Toggle();
         }
+        // close level button
         private void button2_Click(object sender, EventArgs e)
         {
             listBox1.Visible = true;
-            button2.Enabled = false;
+            button2.Visible = false;
             listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             listBox1.ClearSelected(); // reset listbox
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
@@ -85,11 +91,83 @@
             label2.Text = "File Name : "; // reset file name label
             lastSelectedLevel = ""; // reset last selected level
         }
+        // open level button
         private void button3_Click(object sender, EventArgs e)
         {
             listBox1.Visible = false;
-            button3.Enabled = false;
-            button2.Enabled = true;
+            button3.Visible = false;
+            button2.Visible = true;
+        }
+        // select output path
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using var fbd = new FolderBrowserDialog();
+            fbd.Description = "Select output folder to save exported files.";
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                outputPath = fbd.SelectedPath;
+                textBox1.Text = outputPath; // update text box with selected path
+                button5.Enabled = true; // enable export button
+                button6.Enabled = true; // enable export all button
+            }
+        }
+        // export selected map as OBJ
+        private void button5_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("EXPORT AS OBJ NOT SUPPORTED YET.");
+            return;
+            if (listBox1.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a model to export.");
+                return;
+            }
+            string caseName = listBox1.SelectedItem!.ToString()!;
+            string levelNumber = caseName.Substring(1, 3);
+
+            string fileDirectory = levelNumber.Substring(0, 2) switch
+            {
+                "11" or "12" or "13" => levelPath1,
+                "14" or "15" or "16" => levelPath2,
+                "21" or "22" or "23" => levelPath3,
+                "24" or "26" => levelPath4,
+                "31" or "32" or "33" => levelPath5,
+                "35" or "36" or "37" or "38" or "39" => levelPath6,
+                "90" => levelPath7,
+                _ => throw new Exception("Unknown section selected!")
+            };
+
+            string textureDirectory = fileDirectory + "\\" + $"{levelNumber}GFX.B16";
+
+            if (!File.Exists(textureDirectory))
+            {
+                MessageBox.Show($"Associated graphics file {caseName}.MAP does not exist!");
+                return;
+            }
+
+            string textureName = $"{levelNumber}GFX";
+            fileDirectory = fileDirectory + $"\\{caseName}.MAP";
+
+            List<BndSection> uvSections = uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+            //List<BndSection> modelSections = modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
+            //TODO : make new method for parsing level section data
+            //ModelRenderer.ExportModel(caseName, uvSections, modelSections, textureName, outputPath);
+        }
+        // export all maps as OBJ
+        private void button6_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("EXPORT AS OBJ NOT SUPPORTED YET.");
+            return;
+            // loop through all levels and export each map
+            for (int i = 0; i < listBox1.Items.Count; i++)
+            {
+                listBox1.SelectedIndex = i;
+                button5_Click(null!, null!);
+            }
+        }
+        // double click to open output path
+        private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); }
         }
     }
 }

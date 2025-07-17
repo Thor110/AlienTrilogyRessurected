@@ -1,6 +1,6 @@
 ﻿namespace ALTViewer
 {
-    partial class MapEditor
+    partial class MapViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,13 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapEditor));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapViewer));
             listBox1 = new ListBox();
             label1 = new Label();
             label2 = new Label();
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            textBox1 = new TextBox();
+            button4 = new Button();
+            button5 = new Button();
+            button6 = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -60,7 +64,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(110, 421);
+            label2.Location = new Point(110, 27);
             label2.Name = "label2";
             label2.Size = new Size(69, 15);
             label2.TabIndex = 2;
@@ -79,19 +83,19 @@
             // 
             // button2
             // 
-            button2.Enabled = false;
             button2.Location = new Point(632, 12);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
             button2.Text = "Close Level";
             button2.UseVisualStyleBackColor = true;
+            button2.Visible = false;
             button2.Click += button2_Click;
             // 
             // button3
             // 
             button3.Enabled = false;
-            button3.Location = new Point(110, 30);
+            button3.Location = new Point(632, 12);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
@@ -99,11 +103,56 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
-            // MapEditor
+            // textBox1
+            // 
+            textBox1.Location = new Point(302, 415);
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(486, 23);
+            textBox1.TabIndex = 6;
+            textBox1.MouseDoubleClick += textBox1_MouseDoubleClick;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(221, 415);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 7;
+            button4.Text = "Output";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button5
+            // 
+            button5.Enabled = false;
+            button5.Location = new Point(110, 415);
+            button5.Name = "button5";
+            button5.Size = new Size(105, 23);
+            button5.TabIndex = 8;
+            button5.Text = "Export as OBJ";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // button6
+            // 
+            button6.Enabled = false;
+            button6.Location = new Point(110, 386);
+            button6.Name = "button6";
+            button6.Size = new Size(105, 23);
+            button6.TabIndex = 9;
+            button6.Text = "Export all as OBJ";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button6);
+            Controls.Add(button5);
+            Controls.Add(button4);
+            Controls.Add(textBox1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -111,7 +160,7 @@
             Controls.Add(label1);
             Controls.Add(listBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "MapEditor";
+            Name = "MapViewer";
             Text = "LevelViewer";
             ResumeLayout(false);
             PerformLayout();
@@ -125,5 +174,9 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private TextBox textBox1;
+        private Button button4;
+        private Button button5;
+        private Button button6;
     }
 }

@@ -74,7 +74,7 @@
             button5.Name = "button5";
             button5.Size = new Size(99, 23);
             button5.TabIndex = 5;
-            button5.Text = "Map Editor";
+            button5.Text = "Map Viewer";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
