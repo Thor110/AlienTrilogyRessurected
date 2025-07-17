@@ -13,7 +13,7 @@ namespace ALTViewer
     public static class TileRenderer
     {
         // Parse BND file sections from a byte array
-        public static List<BndSection> ParseBndFormSections(byte[] bnd)
+        public static List<BndSection> ParseBndFormSections(byte[] bnd, string section)
         {
             var sections = new List<BndSection>();
             using var br = new BinaryReader(new MemoryStream(bnd));
@@ -27,7 +27,7 @@ namespace ALTViewer
                 int chunkSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
                 if (br.BaseStream.Position + chunkSize > br.BaseStream.Length) { break; }
                 byte[] chunkData = br.ReadBytes(chunkSize);
-                if (chunkName.StartsWith("TP") || chunkName.StartsWith("F0")) { sections.Add(new BndSection { Name = chunkName, Data = chunkData }); }
+                if (chunkName.StartsWith(section)) { sections.Add(new BndSection { Name = chunkName, Data = chunkData }); }
                 if ((chunkSize % 2) != 0) { br.BaseStream.Seek(1, SeekOrigin.Current); } // IFF padding to 2-byte alignment
             }
             return sections;

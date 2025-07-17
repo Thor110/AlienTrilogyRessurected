@@ -8,9 +8,8 @@
             (w, h) = DetectDimensions.AutoDetectDimensions(Path.GetFileNameWithoutExtension(fileDirectory), comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             pictureBox1.Width = w;
             pictureBox1.Height = h;
-            List<BndSection> allSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory));
-            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
-            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(f0Sections[comboBox1.SelectedIndex].Data);
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "F0");
+            List<byte[]> frames = TileRenderer.DecompressAllFramesInSection(allSections[comboBox1.SelectedIndex].Data);
             byte[] frameData = frames[comboBox2.SelectedIndex];
             try { pictureBox1.Image = TileRenderer.RenderRaw8bppImage(frameData, palette, w, h, values, bitsPerPixel); }
             catch (Exception ex) { MessageBox.Show("Render failed: " + ex.Message); }
@@ -32,11 +31,10 @@
             }
             // get original frame section and data
             // find section based on comboBox1 selection
-            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile);
-            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(fullFile, "F0");
             // find offset of selected frame insead of decompressing
             int index = comboBox1.SelectedIndex;
-            BndSection section = f0Sections[index];
+            BndSection section = allSections[index];
             // compress the new frame image to match the original frame data
             long offset = TileRenderer.FindBndFormSectionOffset(fullFile, index); // get the offset of the selected frame
             // extract the compressed frames from the section data to compare against the newly compressed frame
@@ -69,10 +67,8 @@
         public static void ListSubFrames(string fileDirectory, ComboBox comboBox1, ComboBox comboBox2)
         {
             comboBox2.Items.Clear();
-            List<BndSection> allSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory));
-            List<BndSection> f0Sections = allSections.Where(s => s.Name.StartsWith("F0")).ToList();
-            // Get section currently selected in comboBox1
-            var selectedOriginalSection = f0Sections.FirstOrDefault(s => s.Name == comboBox1.SelectedItem!.ToString());
+            List<BndSection> allSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "F0");
+            var selectedOriginalSection = allSections.FirstOrDefault(s => s.Name == comboBox1.SelectedItem!.ToString());
             if (selectedOriginalSection == null) // this should never happen
             {
                 MessageBox.Show("Selected section not found in original file.");

@@ -234,12 +234,10 @@ namespace ALTViewer
             {
                 binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
-                currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd));
-                var f0Sections = currentSections.Where(s => s.Name.StartsWith("F0")).ToList(); // Get only F0## sections
-                if (f0Sections.Count == 0) { MessageBox.Show("No F0 sections found."); return; }
+                currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd), "F0");
                 List<BndSection> decompressedF0Sections = new();
                 int counter = 0;
-                foreach (var section in f0Sections)
+                foreach (var section in currentSections)
                 {
                     byte[] decompressedData;
                     try
@@ -253,7 +251,7 @@ namespace ALTViewer
                 }
                 currentSections = decompressedF0Sections;
             }
-            else { currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd)); }// Parse all sections (TP00, TP01, etc.)
+            else { currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd), "TP"); }// Parse all sections (TP00, TP01, etc.)
             comboBox1.Items.Clear(); // Clear previous items in the ComboBox
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); } // Populate ComboBox with section names
             if (!exporting) // trigger rendering if not exporting
@@ -425,7 +423,6 @@ namespace ALTViewer
             if (comboBox1.SelectedIndex == lastSelectedSection || comboBox1.SelectedIndex == -1) { return; }
             lastSelectedSection = comboBox1.SelectedIndex;
             transparentValues = DetectDimensions.TransparencyValues(lastSelectedFile, lastSelectedSection);
-            var section = currentSections[lastSelectedSection];
             try
             {
                 if (!compressed)
@@ -434,13 +431,12 @@ namespace ALTViewer
                     label5.Visible = false;
                     if (!palfile) // update embedded palette to match selected frame
                     {
-                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(
-                        TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{lastSelectedSection:D2}", 12));
+                        currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{lastSelectedSection:D2}", 12));
                     }
-                    (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
+                    (w, h) = TileRenderer.AutoDetectDimensions(currentSections[lastSelectedSection].Data);
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
-                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, currentPalette!, w, h, transparentValues, bitsPerPixel);
+                    pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentSections[lastSelectedSection].Data, currentPalette!, w, h, transparentValues, bitsPerPixel);
                 }
                 else
                 {

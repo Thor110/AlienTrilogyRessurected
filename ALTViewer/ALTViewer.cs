@@ -17,8 +17,10 @@ namespace ALTViewer
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
         private void button1_Click(object sender, EventArgs e) { newForm(new TextEditor()); }
+        private void button2_Click(object sender, EventArgs e) { newForm(new ModelViewer()); }
         private void button3_Click(object sender, EventArgs e) { newForm(new GraphicsViewer()); }
         private void button4_Click(object sender, EventArgs e) { newForm(new SoundEffects()); }
-        private void button6_Click(object sender, EventArgs e) { newForm(new MapEditor()); }
+        private void button5_Click(object sender, EventArgs e) { newForm(new MapEditor()); }
+
     }
 }
