@@ -113,14 +113,10 @@ namespace ALTViewer
         // export selected map as OBJ
         private void button5_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a model to export.");
-                return;
-            }
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a model to export."); return; }
+            // determine level number and file directory based on selected item
             string caseName = listBox1.SelectedItem!.ToString()!;
             string levelNumber = caseName.Substring(1, 3);
-
             string fileDirectory = levelNumber.Substring(0, 2) switch
             {
                 "11" or "12" or "13" => levelPath1,
@@ -132,18 +128,16 @@ namespace ALTViewer
                 "90" => levelPath7,
                 _ => throw new Exception("Unknown section selected!")
             };
-
+            // check if the file exists in the determined directory
             string textureDirectory = fileDirectory + "\\" + $"{levelNumber}GFX.B16";
-
             if (!File.Exists(textureDirectory))
             {
                 MessageBox.Show($"Associated graphics file {caseName}.MAP does not exist!");
                 return;
             }
-
-            string textureName = $"{levelNumber}GFX";
+            // determine the file directory for the selected map
             fileDirectory = fileDirectory + $"\\{caseName}.MAP";
-
+            // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
             List<BndSection> modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
             
@@ -153,17 +147,18 @@ namespace ALTViewer
             }*/
 
             //TODO : make new method for parsing level section data
-            ModelRenderer.ExportLevel(caseName, uvSections, modelSections[0].Data, textureName, outputPath);
+            ModelRenderer.ExportLevel(caseName, uvSections, modelSections[0].Data, $"{levelNumber}GFX", outputPath);
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
         {
-            // loop through all levels and export each map
-            for (int i = 0; i < listBox1.Items.Count; i++)
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
                 listBox1.SelectedIndex = i;
                 button5_Click(null!, null!);
             }
+            listBox1.SelectedIndex = previouslySelectedIndex; // restore previously selected index
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
