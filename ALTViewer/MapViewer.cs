@@ -139,15 +139,14 @@ namespace ALTViewer
             fileDirectory = fileDirectory + $"\\{caseName}.MAP";
             // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
-            List<BndSection> modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
-            
-            /*foreach (BndSection section in modelSections)
+            List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
+            // parse extra sections to the level data
+            /*foreach (BndSection section in levelSections)
             {
                 File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
             }*/
-
             //TODO : make new method for parsing level section data
-            ModelRenderer.ExportLevel(caseName, uvSections, modelSections[0].Data, $"{levelNumber}GFX", outputPath);
+            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)

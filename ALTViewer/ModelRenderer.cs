@@ -1,18 +1,59 @@
-﻿namespace ALTViewer
+﻿using System.Numerics;
+
+namespace ALTViewer
 {
     public static class ModelRenderer
     {
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
         {
+            using var br = new BinaryReader(new MemoryStream(levelSection));
+            ushort vertCount = br.ReadUInt16();
+            List<Vector2> vertices = new();
+            for (int i = 0; i < vertCount; i++)
+            {
+                ushort x = br.ReadUInt16();
+                ushort y = br.ReadUInt16();
+                vertices.Add(new Vector2(x, y));
+            }
+            ushort quadCount = br.ReadUInt16();
+            List<(ushort A, ushort B, ushort C, ushort D)> quads = new();
+            for (int i = 0; i < quadCount; i++)
+            {
+                ushort a = br.ReadUInt16();
+                ushort b = br.ReadUInt16();
+                ushort c = br.ReadUInt16();
+                ushort d = br.ReadUInt16();
+                quads.Add((a, b, c, d));
+            }
+            ushort mapLength = br.ReadUInt16();
+            ushort mapWidth = br.ReadUInt16();
+            ushort playerStartX = br.ReadUInt16();
+            ushort playerStartY = br.ReadUInt16();
+            br.ReadBytes(2); // unknown 1
+            ushort monster = br.ReadUInt16();
+            ushort pickups = br.ReadUInt16();
+            ushort boxes = br.ReadUInt16();
+            ushort doors = br.ReadUInt16();
+            br.ReadBytes(2); // unknown 2
+            ushort playerStartAngle = br.ReadUInt16();
+            br.ReadBytes(10); // unknown 3 & 4
 
+            // Count Vertices and Quads
+            // Read Vertices
+            // Read Quads
+            // Read UV rectangles BX00-BX04
+            // List Textures TP00-TP04
+            // Parse other objects in the level section
+
+            // Export to OBJ
+            MessageBox.Show("Exported OBJ with UVs!");
         }
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
             const float texSize = 256f;
             for (int m = 0; m < modelSections.Count; m++)
             {
-                using var ms = new MemoryStream(modelSections[m].Data);
-                using var br = new BinaryReader(ms);
+                using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
                 var uvRects = ParseBxRectangles(uvSections[0].Data);
 
                 if (uvSections.Count != 1) // PICKGFX / OBJ3D case
