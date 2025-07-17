@@ -32,8 +32,6 @@
             textBox1 = new TextBox();
             button1 = new Button();
             button2 = new Button();
-            pictureBox1 = new PictureBox();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // listBox1
@@ -74,27 +72,17 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.Location = new Point(284, 65);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(256, 256);
-            pictureBox1.TabIndex = 5;
-            pictureBox1.TabStop = false;
-            // 
             // ModelViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 518);
-            Controls.Add(pictureBox1);
+            ClientSize = new Size(800, 237);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(textBox1);
             Controls.Add(listBox1);
             Name = "ModelViewer";
             Text = "ModelViewer";
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -105,6 +93,5 @@
         private TextBox textBox1;
         private Button button1;
         private Button button2;
-        private PictureBox pictureBox1;
     }
 }
