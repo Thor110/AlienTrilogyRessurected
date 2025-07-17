@@ -68,7 +68,7 @@
                 // Write vertex positions
                 foreach (var v in vertices)
                 {
-                    sw.WriteLine($"v {v.X / 100.0f:F4} {v.Y / 100.0f:F4} {v.Z / 100.0f:F4}");
+                    sw.WriteLine($"v {v.X:F4} {v.Y:F4} {v.Z:F4}");
                 }
 
                 // Store unique UVs and their indices
@@ -159,10 +159,10 @@
                 byte xOffset = br.ReadByte();
                 byte yOffset = br.ReadByte();
 
-                int x = 256 - xOffset - width; // Correct X calculation from right edge
-                int y = 256 - yOffset - height; // Correct Y calculation from bottom edge
+                int x = xOffset - width - 1; // Correct X calculation from right edge
+                int y = yOffset; // Correct Y calculation from bottom edge
 
-                rectangles.Add((x, y, width + 1, height + 1));
+                rectangles.Add((x, y, width - 1, height - 1));
             }
             return rectangles;
         }
