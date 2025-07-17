@@ -57,15 +57,13 @@
 
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
+                string textureFileName = $"{textureName}_TP00";
 
                 if (uvSections.Count != 1) // PICKGFX / OBJ3D case
                 {
-                    File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}_TP{m:D2}.png\n");
+                    textureFileName = $"{textureName}_TP{m:D2}";
                 }
-                else
-                {
-                    File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}_TP00.png\n");
-                }
+                File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureFileName}.png\n");
 
                 // Write vertex positions
                 foreach (var v in vertices)
