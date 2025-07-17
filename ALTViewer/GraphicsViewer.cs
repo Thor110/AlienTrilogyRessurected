@@ -632,8 +632,6 @@ namespace ALTViewer
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); }
-        }
+        { if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); } }
     }
 }

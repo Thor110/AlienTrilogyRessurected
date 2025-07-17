@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 
 namespace ALTViewer
 {
@@ -114,8 +113,6 @@ namespace ALTViewer
         // export selected map as OBJ
         private void button5_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("EXPORT AS OBJ NOT SUPPORTED YET.");
-            return;
             if (listBox1.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a model to export.");
@@ -147,16 +144,20 @@ namespace ALTViewer
             string textureName = $"{levelNumber}GFX";
             fileDirectory = fileDirectory + $"\\{caseName}.MAP";
 
-            List<BndSection> uvSections = uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
-            //List<BndSection> modelSections = modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
+            List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+            List<BndSection> modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
+            
+            /*foreach (BndSection section in modelSections)
+            {
+                File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
+            }*/
+
             //TODO : make new method for parsing level section data
-            //ModelRenderer.ExportModel(caseName, uvSections, modelSections, textureName, outputPath);
+            ModelRenderer.ExportLevel(caseName, uvSections, modelSections[0].Data, textureName, outputPath);
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("EXPORT AS OBJ NOT SUPPORTED YET.");
-            return;
             // loop through all levels and export each map
             for (int i = 0; i < listBox1.Items.Count; i++)
             {
@@ -166,8 +167,6 @@ namespace ALTViewer
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); }
-        }
+        { if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); } }
     }
 }

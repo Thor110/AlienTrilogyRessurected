@@ -2,6 +2,10 @@
 {
     public static class ModelRenderer
     {
+        public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
+        {
+
+        }
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
             const float texSize = 256f;
