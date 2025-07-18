@@ -38,6 +38,7 @@ namespace ALTViewer
         private static string[] duplicate = { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         private static string[] weapons = { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         private static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
+                                                                                    // PANEL & NEWFONT are used by the game but not required for rendering
         private int w = 256; // WIDTH
         private int h = 256; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)

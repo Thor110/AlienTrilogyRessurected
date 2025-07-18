@@ -295,9 +295,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(334, 366);
             label4.Name = "label4";
-            label4.Size = new Size(451, 15);
+            label4.Size = new Size(229, 15);
             label4.TabIndex = 22;
-            label4.Text = "Note : Palettes should be 768 bytes, 672 or 576 bytes. As per those used by the game.";
+            label4.Text = "Note : Palettes should be 768 bytes or less.";
             label4.Visible = false;
             // 
             // comboBox2
