@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace ALTViewer
+﻿namespace ALTViewer
 {
     public static class ModelRenderer
     {
@@ -8,23 +6,7 @@ namespace ALTViewer
         {
             using var br = new BinaryReader(new MemoryStream(levelSection));
             ushort vertCount = br.ReadUInt16();
-            List<Vector2> vertices = new();
-            for (int i = 0; i < vertCount; i++)
-            {
-                ushort x = br.ReadUInt16();
-                ushort y = br.ReadUInt16();
-                vertices.Add(new Vector2(x, y));
-            }
             ushort quadCount = br.ReadUInt16();
-            List<(ushort A, ushort B, ushort C, ushort D)> quads = new();
-            for (int i = 0; i < quadCount; i++)
-            {
-                ushort a = br.ReadUInt16();
-                ushort b = br.ReadUInt16();
-                ushort c = br.ReadUInt16();
-                ushort d = br.ReadUInt16();
-                quads.Add((a, b, c, d));
-            }
             ushort mapLength = br.ReadUInt16();
             ushort mapWidth = br.ReadUInt16();
             ushort playerStartX = br.ReadUInt16();
@@ -37,10 +19,23 @@ namespace ALTViewer
             br.ReadBytes(2); // unknown 2
             ushort playerStartAngle = br.ReadUInt16();
             br.ReadBytes(10); // unknown 3 & 4
-
             // Count Vertices and Quads
-            // Read Vertices
-            // Read Quads
+            /*List<Vector2> vertices = new();
+            for (int i = 0; i < vertCount; i++)
+            {
+                ushort x = br.ReadUInt16();
+                ushort y = br.ReadUInt16();
+                vertices.Add(new Vector2(x, y));
+            }*/
+            /*List<(ushort A, ushort B, ushort C, ushort D)> quads = new();
+            for (int i = 0; i < quadCount; i++)
+            {
+                ushort a = br.ReadUInt16();
+                ushort b = br.ReadUInt16();
+                ushort c = br.ReadUInt16();
+                ushort d = br.ReadUInt16();
+                quads.Add((a, b, c, d));
+            }*/
             // Read UV rectangles BX00-BX04
             // List Textures TP00-TP04
             // Parse other objects in the level section

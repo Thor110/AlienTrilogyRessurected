@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 
 namespace ALTViewer
 {
@@ -80,11 +81,53 @@ namespace ALTViewer
             // Pickups
             // Boxes
             // Doors
+            // D00? ???? OBJ1 ->
+            // 44 30 30 ?? 00 00 02 94 <-> OBJ1
             // Destructibles??? Might just be boxes
             listBox2.Items.Clear(); // clear sections list box
             listBox2.Visible = true; // show sections list box
-            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
-            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
+
+            List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0");
+            using var br = new BinaryReader(new MemoryStream(levelSections[0].Data));
+            ushort vertCount = br.ReadUInt16();
+            textBox2.Text = vertCount.ToString(); // display vertex count
+            ushort quadCount = br.ReadUInt16();
+            textBox3.Text = quadCount.ToString(); // display quad count
+            ushort mapLength = br.ReadUInt16();
+            textBox4.Text = mapLength.ToString(); // display map length
+            ushort mapWidth = br.ReadUInt16();
+            textBox5.Text = mapWidth.ToString(); // display map width
+            ushort playerStartX = br.ReadUInt16();
+            textBox6.Text = playerStartX.ToString(); // display player start X coordinate
+            ushort playerStartY = br.ReadUInt16();
+            textBox7.Text = playerStartY.ToString(); // display player start Y coordinate
+            br.ReadBytes(2); // unknown 1
+            ushort monsterCount = br.ReadUInt16();
+            textBox8.Text = monsterCount.ToString(); // display monster count
+            ushort pickupCount = br.ReadUInt16();
+            textBox9.Text = pickupCount.ToString(); // display pickup count
+            ushort boxCount = br.ReadUInt16();
+            textBox10.Text = boxCount.ToString(); // display box count
+            ushort doorCount = br.ReadUInt16();
+            textBox11.Text = doorCount.ToString(); // display door count
+            br.ReadBytes(2); // unknown 2
+            ushort playerStartAngle = br.ReadUInt16();
+            textBox12.Text = playerStartAngle.ToString(); // display player start angle
+            br.ReadBytes(10); // unknown 3 & 4
+            // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
+            // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
+            // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
+            // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
+            // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
+            // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
+            // doors formula = value multiplied by 8 - (8 bytes one element)
+
+
+
+
+            //Door Models
+            //currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
+            //foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             button3.Enabled = true;
         }
         // full screen toggle
@@ -155,12 +198,13 @@ namespace ALTViewer
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
             // parse extra sections to the level data
-            /*foreach (BndSection section in levelSections)
+            foreach (BndSection section in levelSections)
             {
                 File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
-            }*/
+            }
+            MessageBox.Show($"Exported {caseName} to {outputPath}!");
             //TODO : make new method for parsing level section data
-            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
+            //ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
