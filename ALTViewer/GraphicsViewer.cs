@@ -165,7 +165,7 @@ namespace ALTViewer
         private void GetFile(string path)
         {
             string selected = listBox1.SelectedItem!.ToString()!; // get selected item
-            string palettePath = DetectPalette(selected); // actual palette path
+            string palettePath = paletteDirectory + "\\" + selected + ".PAL"; // actual palette path
             string filePath = "";
             foreach (string ext in new[] { ".16", ".B16", ".BND" }) // check file types in this order so that the cleanup script remains optional
             {
@@ -176,19 +176,6 @@ namespace ALTViewer
             else { button6.Enabled = false; }
             if (string.IsNullOrEmpty(filePath)) { return; } // hacky workaround for race condition when selecting a file before the list is populated which should not be possible
             RenderImage(filePath, palettePath);
-        }
-        // detect palette and hard coded palette lookups
-        private string DetectPalette(string filename)
-        {
-            string palette = paletteDirectory + "\\" + filename + ".PAL";
-            if (!File.Exists(palette)) { return ""; }
-            else { return palette; }
-        }
-        private string UpdateExtension(string filename)
-        {
-            filename = filename.Replace(".BND", ".B16");
-            palfile = false;
-            return filename;
         }
         private void LoadPalette(string palettePath, bool trim, int start, int end, bool full)
         {
@@ -217,12 +204,6 @@ namespace ALTViewer
             {
                 if (weapons.Any(e => lastSelectedFile.Contains(e))) { UpdateChecks(true, true); }
                 else if (binbnd.Contains("EXPLGFX") || binbnd.Contains("OPTGFX")) { UpdateChecks(true, false); }
-                // TODO : figure out PANEL3GF and PANELGFX palette issues
-                /*else if (binbnd.Contains("PANEL")) // currently falls through to else while commented out until the specifics are known
-                {
-                    //MessageBox.Show("Viewing these files is not properly implemented yet. ( PANEL3GF & PANELGFX )"); // message also shown in palette editor
-                    UpdateChecks(false, false);
-                }*/
                 else if (palettePath.Contains("LOGOSGFX")) { LoadPalette(palettePath, false, 0, 576, false); }
                 else if (palettePath.Contains("PRISHOLD") || palettePath.Contains("COLONY") || palettePath.Contains("BONESHIP")) { LoadPalette(palettePath, true, 96, 672, false); }
                 else if (palettePath.Contains("LEGAL")) { LoadPalette(palettePath, false, 0, 0, true); }
@@ -233,7 +214,6 @@ namespace ALTViewer
             lastSelectedFilePath = binbnd;
             if (compressed) // load palette from level file or enemies
             {
-                binbnd = UpdateExtension(binbnd);
                 currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(binbnd, $"C000", 8));
                 currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd), "F0");
                 List<BndSection> decompressedF0Sections = new();
@@ -264,9 +244,9 @@ namespace ALTViewer
             }
             void UpdateChecks(bool update, bool compression)
             {
-                if (update) { binbnd = UpdateExtension(binbnd); }
-                listBox2.Enabled = false;
+                if (update) { binbnd = binbnd.Replace(".BND", ".B16"); }
                 palfile = false; // reset palfile if not a file that uses external palettes
+                listBox2.Enabled = false;
                 compressed = compression; // set compressed to true for weapons
                 trimmed = false; // reset trimmed to false
             }
