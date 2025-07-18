@@ -75,11 +75,16 @@ namespace ALTViewer
                 }
             }
             // TODO : list all sections in the level file
+            // TODO : add more sections to the list box
+            // Monsters
+            // Pickups
+            // Boxes
+            // Doors
+            // Destructibles??? Might just be boxes
             listBox2.Items.Clear(); // clear sections list box
             listBox2.Visible = true; // show sections list box
             currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
             foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
-            // TODO : add more sections to the list box
             button3.Enabled = true;
         }
         // full screen toggle
