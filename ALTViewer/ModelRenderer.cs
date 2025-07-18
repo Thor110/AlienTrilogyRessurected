@@ -4,6 +4,7 @@
     {
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
         {
+            /*
             using var br = new BinaryReader(new MemoryStream(levelSection));
             ushort vertCount = br.ReadUInt16();
             ushort quadCount = br.ReadUInt16();
@@ -19,6 +20,7 @@
             br.ReadBytes(2); // unknown 2
             ushort playerStartAngle = br.ReadUInt16();
             br.ReadBytes(10); // unknown 3 & 4
+            */
             // Count Vertices and Quads
             /*List<Vector2> vertices = new();
             for (int i = 0; i < vertCount; i++)

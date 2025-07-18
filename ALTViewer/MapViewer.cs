@@ -121,13 +121,11 @@ namespace ALTViewer
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             // doors formula = value multiplied by 8 - (8 bytes one element)
-
-
-
+            
 
             //Door Models
-            //currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
-            //foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
+            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
+            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             button3.Enabled = true;
         }
         // full screen toggle
