@@ -38,8 +38,8 @@ namespace ALTViewer
         private static string[] duplicate = { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         private static string[] weapons = { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         private static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
-        private int w = 0; // WIDTH
-        private int h = 0; // HEIGHT
+        private int w = 256; // WIDTH
+        private int h = 256; // HEIGHT
         private bool trimmed; // trim 96 bytes from the beginning of the palette for some files (e.g. PRISHOLD, COLONY, BONESHIP)
         private Point originalLocation = new Point(); // used to move the picture box during export as it is not needed during export and can cause flickering
                                                       // note that setting its visibility instead causes an artifact in the listbox
@@ -435,7 +435,8 @@ namespace ALTViewer
                     {
                         currentPalette = TileRenderer.Convert16BitPaletteToRGB(TileRenderer.ExtractEmbeddedPalette(lastSelectedFilePath, $"CL{lastSelectedSection:D2}", 12));
                     }
-                    (w, h) = TileRenderer.AutoDetectDimensions(currentSections[lastSelectedSection].Data);
+                    w = 256;
+                    h = 256;
                     pictureBox1.Width = w;
                     pictureBox1.Height = h;
                     pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentSections[lastSelectedSection].Data, currentPalette!, w, h, transparentValues, bitsPerPixel);
@@ -534,7 +535,7 @@ namespace ALTViewer
         private bool CheckDimensions(Bitmap frameImage)
         {
             if (compressed) { (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex); }
-            else { (w, h) = TileRenderer.AutoDetectDimensions(currentSections[comboBox1.SelectedIndex].Data); }
+            else { w = 256; h = 256; }
             if (frameImage.Width == w && frameImage.Height == h) { return true; }
             MessageBox.Show($"Image dimensions do not match the expected size of {w}x{h} pixels.");
             return false;

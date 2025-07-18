@@ -9,8 +9,8 @@
         private bool compressed;
         private bool usePAL;
         private bool trim;
-        private int w = 0;
-        private int h = 0;
+        private int w = 256;
+        private int h = 256;
         private int lastSelectedSubFrame = -1;
         private bool changesMade;
         private List<BndSection> currentSections = new();
@@ -27,11 +27,6 @@
             if (!trim) { label2.Visible = false; } // hide trimmed label
             selectedPalette = Path.GetDirectoryName(fileDirectory) + "\\" + Path.GetFileNameWithoutExtension(fileDirectory);
             string extension = "";
-            if (selected.Contains("PANEL"))
-            {
-                MessageBox.Show("Viewing and editing these palettes is not properly implemented yet. ( PANEL3GF & PANELGFX )");
-                pictureBox1.Height = 128; // set picture box height for PANEL3GF & PANELGFX
-            }
             if (!palfile)
             {
                 if (!compressed)
@@ -328,7 +323,6 @@
             var section = currentSections[comboBox1.SelectedIndex];
             if (!compressed) // external
             {
-                (w, h) = TileRenderer.AutoDetectDimensions(section.Data);
                 pictureBox1.Image = TileRenderer.RenderRaw8bppImage(section.Data, palette!, w, h, transparentValues);
                 if (!usePAL) // embedded
                 {

@@ -98,13 +98,6 @@ namespace ALTViewer
 
             return output.ToArray();
         }
-        // Auto-detect dimensions based on the total pixel count in the image data
-        public static (int Width, int Height) AutoDetectDimensions(byte[] imageData)
-        {
-            var knownResolutions = new List<(int Width, int Height)> { (256, 256), (256, 128) };
-            foreach (var res in knownResolutions) { if (res.Width * res.Height == imageData.Length) { return res; } }
-            throw new Exception($"Unable to auto-detect dimensions for the selected image.");
-        }
         // Render a raw 8bpp image with a palette
         public static Bitmap RenderRaw8bppImage(byte[] pixelData, byte[] palette, int width, int height, int[] values = null!, bool bitsPerPixel = false)
         {
