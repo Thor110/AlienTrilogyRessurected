@@ -29,6 +29,8 @@ namespace ALTViewer
         };
         private string lastSelectedLevel = "";
         FullScreen fullScreen;
+        private List<BndSection> currentSections = null!; // current sections for the selected file
+        private string selectedLevelFile = ""; // selected level file path
         public MapViewer()
         {
             InitializeComponent();
@@ -67,10 +69,17 @@ namespace ALTViewer
             {
                 if (File.Exists(Path.Combine(level, selected + ".MAP")))
                 {
+                    selectedLevelFile = Path.Combine(level, selected + ".MAP"); // set selected level file path
                     label2.Text = "File Name : " + selected + ".MAP";
                     break; // exit after finding the first matching level
                 }
             }
+            // TODO : list all sections in the level file
+            listBox2.Items.Clear(); // clear sections list box
+            listBox2.Visible = true; // show sections list box
+            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
+            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
+            // TODO : add more sections to the list box
             button3.Enabled = true;
         }
         // full screen toggle

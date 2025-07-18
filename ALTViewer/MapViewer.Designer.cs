@@ -39,6 +39,7 @@
             button4 = new Button();
             button5 = new Button();
             button6 = new Button();
+            listBox2 = new ListBox();
             SuspendLayout();
             // 
             // listBox1
@@ -151,11 +152,22 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // listBox2
+            // 
+            listBox2.FormattingEnabled = true;
+            listBox2.ItemHeight = 15;
+            listBox2.Location = new Point(110, 45);
+            listBox2.Name = "listBox2";
+            listBox2.Size = new Size(105, 334);
+            listBox2.TabIndex = 10;
+            listBox2.Visible = false;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(listBox2);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
@@ -185,5 +197,6 @@
         private Button button4;
         private Button button5;
         private Button button6;
+        private ListBox listBox2;
     }
 }
