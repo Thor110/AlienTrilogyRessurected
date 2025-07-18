@@ -254,6 +254,8 @@ namespace ALTViewer
             else { currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(binbnd), "TP"); }// Parse all sections (TP00, TP01, etc.)
             comboBox1.Items.Clear(); // Clear previous items in the ComboBox
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); } // Populate ComboBox with section names
+            if (comboBox1.Items.Count == 1) { comboBox1.Visible = false; } // hide combo box if there is only one section
+            else { comboBox1.Visible = true; }
             if (!exporting) // trigger rendering if not exporting
             {
                 comboBox1.SelectedIndex = 0;
@@ -454,6 +456,16 @@ namespace ALTViewer
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             currentFrame = DetectFrames.RenderSubFrame(lastSelectedFilePath, comboBox1, comboBox2, pictureBox1, currentPalette!, transparentValues, bitsPerPixel); // render the sub frame
+            if (comboBox2.Items.Count == 1)
+            {
+                comboBox2.Visible = false; // hide combo box if there is only one section
+                label5.Visible = false; // hide label if there is only one sub frame
+            }
+            else
+            {
+                comboBox2.Visible = true; // show combo box if there is only one section
+                label5.Visible = true; // show label if there are multiple sub frames
+            }
             //DetectAfterRender(); // TODO : Keep this for future use
         }
         // replace button click event

@@ -57,6 +57,7 @@
             currentSections = loadedSections;
             foreach (var section in currentSections) { comboBox1.Items.Add(section.Name); }
             if (File.Exists(backupDirectory)) { button2.Enabled = true; } // backup exists
+            if(comboBox1.Items.Count == 1) { comboBox1.Visible = false; } // hide combo box if there is only one section
         }
         // form load event forces redraw of the form to display loading message
         private void PaletteEditor_Shown(object sender, EventArgs e)
@@ -427,6 +428,16 @@
             if (comboBox2.SelectedIndex == lastSelectedSubFrame) { return; } // still happens twice on keyboard up / down
             lastSelectedSubFrame = comboBox2.SelectedIndex; // store last selected sub frame index
             DetectFrames.RenderSubFrame(fileDirectory, comboBox1, comboBox2, pictureBox1, palette, transparentValues);
+            if (comboBox2.Items.Count == 1)
+            {
+                comboBox2.Visible = false; // hide combo box if there is only one section
+                label1.Visible = false; // hide label if there is only one sub frame
+            }
+            else
+            {
+                comboBox2.Visible = true; // show combo box if there is only one section
+                label1.Visible = true; // show label if there are multiple sub frames
+            }
         }
         // form closing event
         private void PaletteEditor_FormClosing(object sender, FormClosingEventArgs e) { UnsavedChanges(e, "exiting", button1); }
