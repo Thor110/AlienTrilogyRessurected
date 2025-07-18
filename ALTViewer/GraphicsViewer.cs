@@ -34,7 +34,7 @@ namespace ALTViewer
         private bool refresh; // set to true when entering the palette editor so that the image is refreshed when returning
         private bool exporting; // set to true when exporting everything
         private string exception = ""; // exception message for failed exports
-        private static string[] removal = { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D" }; // unused demo files and models
+        private static string[] removal = { "DEMO111", "DEMO211", "DEMO311", "PICKMOD", "OPTOBJ", "OBJ3D", "PANEL3GF", "PANELGFX" }; // unused demo files and models
         private static string[] duplicate = { "EXPLGFX", "FLAME", "MM9", "OPTGFX", "PULSE", "SHOTGUN", "SMART" }; // remove duplicate entries & check for weapons
         private static string[] weapons = { "FLAME", "MM9", "PULSE", "SHOTGUN", "SMART" }; // check for weapons
         private static string[] excluded = { "LEV", "GUNPALS", "SPRITES", "WSELECT", "PANEL", "NEWFONT", "MBRF_PAL" }; // excluded palettes
