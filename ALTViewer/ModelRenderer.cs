@@ -54,12 +54,9 @@ namespace ALTViewer
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
-                var uvRects = ParseBxRectangles(uvSections[0].Data);
+                var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
+                if (uvSections.Count != 1) { uvRects = ParseBxRectangles(uvSections[m].Data); } // else PICKGFX / OBJ3D case
 
-                if (uvSections.Count != 1) // PICKGFX / OBJ3D case
-                {
-                    uvRects = ParseBxRectangles(uvSections[m].Data);
-                }
                 br.ReadBytes(12); // OBJ1 + unknown
 
                 int quadCount = br.ReadInt32();
@@ -138,10 +135,10 @@ namespace ALTViewer
 
                     var uvs = new (float, float)[]
                     {
-                        (x0, y0), // Top-left
-                        (x1, y0), // Top-right
-                        (x1, y1), // Bottom-right
-                        (x0, y1), // Bottom-left
+                        (x0, y0), // A → top-left
+                        (x0, y1), // B → bottom-left
+                        (x1, y1), // C → bottom-right
+                        (x1, y0), // D → top-right
                     };
 
                     for (int i = 0; i < 4; i++)
@@ -197,13 +194,10 @@ namespace ALTViewer
                 byte height = br.ReadByte();
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();
-                byte xOffset = br.ReadByte();
-                byte yOffset = br.ReadByte();
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
 
-                int x = xOffset - width - 1; // Correct X calculation from right edge
-                int y = yOffset; // Correct Y calculation from bottom edge
-
-                rectangles.Add((x, y, width - 1, height - 1));
+                rectangles.Add((x, y, width, height));
             }
             return rectangles;
         }
