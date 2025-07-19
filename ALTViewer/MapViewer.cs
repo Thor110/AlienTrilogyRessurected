@@ -33,6 +33,18 @@ namespace ALTViewer
         FullScreen fullScreen;
         private List<BndSection> currentSections = null!; // current sections for the selected file
         private string selectedLevelFile = ""; // selected level file path
+        private List<(short Type, short X, short Y, short Z, int health, short drop)> monsters
+            = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
+
+        private List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)> pickups
+            = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
+
+        private List<(short X, short Y, short Type)> boxes
+            = new List<(short X, short Y, short Type)>();
+
+        private List<(short X, short Y, short Time, short Tag, short Rotation, short Index)> doors
+            = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
+
         public MapViewer()
         {
             InitializeComponent();
@@ -142,7 +154,7 @@ namespace ALTViewer
             int cellSize = mapLength * mapWidth * 16;
             br.BaseStream.Seek(cellSize, SeekOrigin.Current); // skip cell size data
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
-            var monsters = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
+            //var monsters = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
             for (int i = 0; i < monsterCount; i++)
             {
                 short type = br.ReadByte();
@@ -155,7 +167,7 @@ namespace ALTViewer
                 monsters.Add((type, x, y, z, health, drop));
             }
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
-            var pickups = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
+            //var pickups = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
             for (int i = 0; i < pickupCount; i++)
             {
                 short x = br.ReadByte();
@@ -169,7 +181,7 @@ namespace ALTViewer
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
-            var boxes = new List<(short X, short Y, short Type)>();
+            //var boxes = new List<(short X, short Y, short Type)>();
             for (int i = 0; i < boxCount; i++)
             {
                 short x = br.ReadByte();
@@ -180,7 +192,7 @@ namespace ALTViewer
                 boxes.Add((x, y, type));
             }
             // doors formula = value multiplied by 8 - (8 bytes one element)
-            var doors = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
+            //var doors = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
             for (int i = 0; i < doorCount; i++)
             {
                 short x = br.ReadByte();
@@ -193,6 +205,12 @@ namespace ALTViewer
                 short index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
+            for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
+            for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
+            for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Box {i}"); }
+            for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
+
+            //MessageBox.Show($"{doors.Count}");
 
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             byte[] remainder = br.ReadBytes((int)remainingBytes);
@@ -293,5 +311,33 @@ namespace ALTViewer
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         { if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); } }
+        // monsters
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox13.Text = $"{monsters[listBox3.SelectedIndex].X}";
+            textBox14.Text = $"{monsters[listBox3.SelectedIndex].Y}";
+            textBox15.Text = $"{monsters[listBox3.SelectedIndex].Z}";
+        }
+        // pickups
+        private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox13.Text = $"{pickups[listBox4.SelectedIndex].X}";
+            textBox14.Text = $"{pickups[listBox4.SelectedIndex].Y}";
+            textBox15.Text = $"{pickups[listBox4.SelectedIndex].Z}";
+        }
+        // boxes
+        private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox13.Text = $"{boxes[listBox5.SelectedIndex].X}";
+            textBox14.Text = $"{boxes[listBox5.SelectedIndex].Y}";
+            textBox15.Text = $"Type : {boxes[listBox5.SelectedIndex].Type}";
+        }
+        // doors
+        private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox13.Text = $"{doors[listBox6.SelectedIndex].X}";
+            textBox14.Text = $"{doors[listBox6.SelectedIndex].Y}";
+            textBox15.Text = $"Rotation : {doors[listBox6.SelectedIndex].Rotation}";
+        }
     }
 }
