@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Numerics;
 
 namespace ALTViewer
@@ -137,58 +138,66 @@ namespace ALTViewer
                 quads.Add((a, b, c, d, texIndex));
             }
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
+            // TODO : Size?
+            int cellSize = mapLength * mapWidth * 16;
+            br.BaseStream.Seek(cellSize, SeekOrigin.Current); // skip cell size data
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             var monsters = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
-            for (int i = 0; i < vertCount; i++)
+            for (int i = 0; i < monsterCount; i++)
             {
-                short type = br.ReadInt16();
-                short x = br.ReadInt16();
-                short y = br.ReadInt16();
-                short z = br.ReadInt16();
-                int health = br.ReadInt32();
-                short drop = br.ReadInt16();
+                short type = br.ReadByte();
+                short x = br.ReadByte();
+                short y = br.ReadByte();
+                short z = br.ReadByte();
+                int health = br.ReadInt16();
+                short drop = br.ReadByte();
                 br.ReadBytes(13);
                 monsters.Add((type, x, y, z, health, drop));
             }
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             var pickups = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
-            for (int i = 0; i < vertCount; i++)
+            for (int i = 0; i < pickupCount; i++)
             {
-                short x = br.ReadInt16();
-                short y = br.ReadInt16();
-                short type = br.ReadInt16();
-                short amount = br.ReadInt16();
-                short multiplier = br.ReadInt16();
-                br.ReadInt16(); // unk1
-                short z = br.ReadInt16();
-                br.ReadInt16(); // unk2
+                short x = br.ReadByte();
+                short y = br.ReadByte();
+                short type = br.ReadByte();
+                short amount = br.ReadByte();
+                short multiplier = br.ReadByte();
+                br.ReadByte(); // unk1
+                short z = br.ReadByte();
+                br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             var boxes = new List<(short X, short Y, short Type)>();
-            for (int i = 0; i < vertCount; i++)
+            for (int i = 0; i < boxCount; i++)
             {
-                short x = br.ReadInt16();
-                short y = br.ReadInt16();
-                short type = br.ReadInt16();
-                short drop = br.ReadInt16();
+                short x = br.ReadByte();
+                short y = br.ReadByte();
+                short type = br.ReadByte();
+                short drop = br.ReadByte();
                 br.ReadBytes(12); // unknown bytes
                 boxes.Add((x, y, type));
             }
             // doors formula = value multiplied by 8 - (8 bytes one element)
             var doors = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
-            for (int i = 0; i < vertCount; i++)
+            for (int i = 0; i < doorCount; i++)
             {
-                short x = br.ReadInt16();
-                short y = br.ReadInt16();
-                br.ReadInt16(); // unk1
-                short time = br.ReadInt16();
-                short tag = br.ReadInt16();
-                br.ReadInt16(); // unk2
-                short rotation = br.ReadInt16();
-                short index = br.ReadInt16();
+                short x = br.ReadByte();
+                short y = br.ReadByte();
+                br.ReadByte(); // unk1
+                short time = br.ReadByte();
+                short tag = br.ReadByte();
+                br.ReadByte(); // unk2
+                short rotation = br.ReadByte();
+                short index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
+
+            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
+            byte[] remainder = br.ReadBytes((int)remainingBytes);
+            File.WriteAllBytes("remainder_dump.bin", remainder);
+
             //Door Models
             currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
             foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
