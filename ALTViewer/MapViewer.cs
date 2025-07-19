@@ -31,18 +31,10 @@ namespace ALTViewer
         FullScreen fullScreen;
         private List<BndSection> currentSections = null!; // current sections for the selected file
         private string selectedLevelFile = ""; // selected level file path
-        private List<(short Type, short X, short Y, short Z, int Health, short Drop)> monsters
-            = new List<(short Type, short X, short Y, short Z, int Health, short Drop)>();
-
-        private List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)> pickups
-            = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
-
-        private List<(short X, short Y, short Type)> boxes
-            = new List<(short X, short Y, short Type)>();
-
-        private List<(short X, short Y, short Time, short Tag, short Rotation, short Index)> doors
-            = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
-
+        private List<(byte Type, byte X, byte Y, byte Z, short Health, byte Drop)> monsters = new();
+        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z)> pickups = new();
+        private List<(byte X, byte Y, byte Type)> boxes = new();
+        private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
         public MapViewer()
         {
             InitializeComponent();
@@ -159,12 +151,12 @@ namespace ALTViewer
             //var monsters = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
             for (int i = 0; i < monsterCount; i++)
             {
-                short type = br.ReadByte();
-                short x = br.ReadByte();
-                short y = br.ReadByte();
-                short z = br.ReadByte();
-                int health = br.ReadInt16();
-                short drop = br.ReadByte();
+                byte type = br.ReadByte();
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
+                byte z = br.ReadByte();
+                short health = br.ReadInt16();
+                byte drop = br.ReadByte();
                 br.ReadBytes(13);
                 monsters.Add((type, x, y, z, health, drop));
             }
@@ -172,13 +164,13 @@ namespace ALTViewer
             //var pickups = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
             for (int i = 0; i < pickupCount; i++)
             {
-                short x = br.ReadByte();
-                short y = br.ReadByte();
-                short type = br.ReadByte();
-                short amount = br.ReadByte();
-                short multiplier = br.ReadByte();
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
+                byte type = br.ReadByte();
+                byte amount = br.ReadByte();
+                byte multiplier = br.ReadByte();
                 br.ReadByte(); // unk1
-                short z = br.ReadByte();
+                byte z = br.ReadByte();
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
@@ -186,10 +178,10 @@ namespace ALTViewer
             //var boxes = new List<(short X, short Y, short Type)>();
             for (int i = 0; i < boxCount; i++)
             {
-                short x = br.ReadByte();
-                short y = br.ReadByte();
-                short type = br.ReadByte();
-                short drop = br.ReadByte();
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
+                byte type = br.ReadByte();
+                byte drop = br.ReadByte();
                 br.ReadBytes(12); // unknown bytes
                 boxes.Add((x, y, type));
             }
@@ -197,14 +189,14 @@ namespace ALTViewer
             //var doors = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
             for (int i = 0; i < doorCount; i++)
             {
-                short x = br.ReadByte();
-                short y = br.ReadByte();
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
                 br.ReadByte(); // unk1
-                short time = br.ReadByte();
-                short tag = br.ReadByte();
+                byte time = br.ReadByte();
+                byte tag = br.ReadByte();
                 br.ReadByte(); // unk2
-                short rotation = br.ReadByte();
-                short index = br.ReadByte();
+                byte rotation = br.ReadByte();
+                byte index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
 
@@ -220,9 +212,11 @@ namespace ALTViewer
 
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             byte[] remainder = br.ReadBytes((int)remainingBytes);
-            File.WriteAllBytes("remainder_dump.bin", remainder);
+            File.WriteAllBytes($"remainder_{selected}.bin", remainder);
+            //
 
-            //Door Models
+            //
+            //Door Models parsed separately
             currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
             foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             button3.Enabled = true;
@@ -321,7 +315,7 @@ namespace ALTViewer
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6 });
-
+            //
             label21.Visible = true;
             label22.Visible = true;
             label23.Visible = true;
@@ -332,8 +326,7 @@ namespace ALTViewer
             label28.Visible = false;
             label29.Visible = false;
             label30.Visible = false;
-
-
+            //
             textBox13.Text = $"{monsters[listBox3.SelectedIndex].X}";
             textBox14.Text = $"{monsters[listBox3.SelectedIndex].Y}";
             textBox15.Text = $"{monsters[listBox3.SelectedIndex].Z}";
@@ -345,7 +338,7 @@ namespace ALTViewer
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6 });
-
+            //
             label21.Visible = true;
             label22.Visible = true;
             label23.Visible = false;
@@ -356,7 +349,7 @@ namespace ALTViewer
             label28.Visible = false;
             label29.Visible = false;
             label30.Visible = false;
-
+            //
             textBox13.Text = $"{pickups[listBox4.SelectedIndex].X}";
             textBox14.Text = $"{pickups[listBox4.SelectedIndex].Y}";
             textBox15.Text = $"{pickups[listBox4.SelectedIndex].Z}";
@@ -368,7 +361,7 @@ namespace ALTViewer
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6 });
-
+            //
             label21.Visible = false;
             label22.Visible = true;
             label23.Visible = false;
@@ -379,11 +372,10 @@ namespace ALTViewer
             label28.Visible = false;
             label29.Visible = false;
             label30.Visible = false;
-
+            //
             textBox13.Text = $"{boxes[listBox5.SelectedIndex].X}";
             textBox14.Text = $"{boxes[listBox5.SelectedIndex].Y}";
             textBox16.Text = $"{boxes[listBox5.SelectedIndex].Type}";
-
             textBox15.Text = "";
             textBox17.Text = "";
             textBox18.Text = "";
@@ -392,7 +384,7 @@ namespace ALTViewer
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5 });
-
+            //
             label21.Visible = false;
             label22.Visible = false;
             label23.Visible = false;
@@ -403,8 +395,7 @@ namespace ALTViewer
             label28.Visible = true;
             label29.Visible = true;
             label30.Visible = true;
-
-
+            //
             textBox13.Text = $"{doors[listBox6.SelectedIndex].X}";
             textBox14.Text = $"{doors[listBox6.SelectedIndex].Y}";
             textBox15.Text = $"{doors[listBox6.SelectedIndex].Time}";
@@ -412,6 +403,7 @@ namespace ALTViewer
             textBox17.Text = $"{doors[listBox6.SelectedIndex].Rotation}";
             textBox18.Text = $"{doors[listBox6.SelectedIndex].Index}";
         }
+        // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
         {
             foreach (var listBox in listBoxes)
@@ -424,7 +416,8 @@ namespace ALTViewer
                 listBox.EndUpdate();
                 listBox.SelectedIndexChanged += GetHandlerFor(listBox);
             }
-        }   
+        }
+        // Get the appropriate event handler for the given list box
         private EventHandler GetHandlerFor(ListBox listBox)
         {
             return listBox switch
