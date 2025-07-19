@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Numerics;
 
 namespace ALTViewer
 {
@@ -33,8 +31,8 @@ namespace ALTViewer
         FullScreen fullScreen;
         private List<BndSection> currentSections = null!; // current sections for the selected file
         private string selectedLevelFile = ""; // selected level file path
-        private List<(short Type, short X, short Y, short Z, int health, short drop)> monsters
-            = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
+        private List<(short Type, short X, short Y, short Z, int Health, short Drop)> monsters
+            = new List<(short Type, short X, short Y, short Z, int Health, short Drop)>();
 
         private List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)> pickups
             = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
@@ -94,6 +92,10 @@ namespace ALTViewer
             // Pickups
             // Boxes
             // Doors
+            monsters.Clear();
+            pickups.Clear();
+            boxes.Clear();
+            doors.Clear();
             // D00? ???? OBJ1 ->
             // 44 30 30 ?? 00 00 02 94 <-> OBJ1
             // Destructibles??? Might just be boxes
@@ -205,12 +207,16 @@ namespace ALTViewer
                 short index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
+
+            listBox3.Items.Clear(); // clear the list box
+            listBox4.Items.Clear(); // clear the list box
+            listBox5.Items.Clear(); // clear the list box
+            listBox6.Items.Clear(); // clear the list box
+
             for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Box {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
-
-            //MessageBox.Show($"{doors.Count}");
 
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             byte[] remainder = br.ReadBytes((int)remainingBytes);
@@ -314,30 +320,121 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6 });
+
+            label21.Visible = true;
+            label22.Visible = true;
+            label23.Visible = true;
+            label24.Visible = true;
+            label25.Visible = false;
+            label26.Visible = false;
+            label27.Visible = false;
+            label28.Visible = false;
+            label29.Visible = false;
+            label30.Visible = false;
+
+
             textBox13.Text = $"{monsters[listBox3.SelectedIndex].X}";
             textBox14.Text = $"{monsters[listBox3.SelectedIndex].Y}";
             textBox15.Text = $"{monsters[listBox3.SelectedIndex].Z}";
+            textBox16.Text = $"{monsters[listBox3.SelectedIndex].Type}";
+            textBox17.Text = $"{monsters[listBox3.SelectedIndex].Health}";
+            textBox18.Text = $"{monsters[listBox3.SelectedIndex].Drop}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6 });
+
+            label21.Visible = true;
+            label22.Visible = true;
+            label23.Visible = false;
+            label24.Visible = false;
+            label25.Visible = true;
+            label26.Visible = true;
+            label27.Visible = false;
+            label28.Visible = false;
+            label29.Visible = false;
+            label30.Visible = false;
+
             textBox13.Text = $"{pickups[listBox4.SelectedIndex].X}";
             textBox14.Text = $"{pickups[listBox4.SelectedIndex].Y}";
             textBox15.Text = $"{pickups[listBox4.SelectedIndex].Z}";
+            textBox16.Text = $"{pickups[listBox4.SelectedIndex].Type}";
+            textBox17.Text = $"{pickups[listBox4.SelectedIndex].Amount}";
+            textBox18.Text = $"{pickups[listBox4.SelectedIndex].Multiplier}";
         }
         // boxes
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6 });
+
+            label21.Visible = false;
+            label22.Visible = true;
+            label23.Visible = false;
+            label24.Visible = false;
+            label25.Visible = false;
+            label26.Visible = false;
+            label27.Visible = false;
+            label28.Visible = false;
+            label29.Visible = false;
+            label30.Visible = false;
+
             textBox13.Text = $"{boxes[listBox5.SelectedIndex].X}";
             textBox14.Text = $"{boxes[listBox5.SelectedIndex].Y}";
-            textBox15.Text = $"Type : {boxes[listBox5.SelectedIndex].Type}";
+            textBox16.Text = $"{boxes[listBox5.SelectedIndex].Type}";
+
+            textBox15.Text = "";
+            textBox17.Text = "";
+            textBox18.Text = "";
         }
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5 });
+
+            label21.Visible = false;
+            label22.Visible = false;
+            label23.Visible = false;
+            label24.Visible = false;
+            label25.Visible = false;
+            label26.Visible = false;
+            label27.Visible = true;
+            label28.Visible = true;
+            label29.Visible = true;
+            label30.Visible = true;
+
+
             textBox13.Text = $"{doors[listBox6.SelectedIndex].X}";
             textBox14.Text = $"{doors[listBox6.SelectedIndex].Y}";
-            textBox15.Text = $"Rotation : {doors[listBox6.SelectedIndex].Rotation}";
+            textBox15.Text = $"{doors[listBox6.SelectedIndex].Time}";
+            textBox16.Text = $"{doors[listBox6.SelectedIndex].Tag}";
+            textBox17.Text = $"{doors[listBox6.SelectedIndex].Rotation}";
+            textBox18.Text = $"{doors[listBox6.SelectedIndex].Index}";
+        }
+        private void RefreshListBoxes(ListBox[] listBoxes)
+        {
+            foreach (var listBox in listBoxes)
+            {
+                listBox.SelectedIndexChanged -= GetHandlerFor(listBox);
+                listBox.BeginUpdate();
+                listBox.ClearSelected();
+                listBox.SelectedIndex = -1;
+                listBox.SelectedItem = null;
+                listBox.EndUpdate();
+                listBox.SelectedIndexChanged += GetHandlerFor(listBox);
+            }
+        }   
+        private EventHandler GetHandlerFor(ListBox listBox)
+        {
+            return listBox switch
+            {
+                ListBox lb when lb == listBox3 => listBox3_SelectedIndexChanged!,
+                ListBox lb when lb == listBox4 => listBox4_SelectedIndexChanged!,
+                ListBox lb when lb == listBox5 => listBox5_SelectedIndexChanged!,
+                ListBox lb when lb == listBox6 => listBox6_SelectedIndexChanged!,
+                _ => throw new ArgumentException("Unknown list box")
+            };
         }
     }
 }
