@@ -59,7 +59,7 @@
                 int quadCount = br.ReadInt32();
                 int vertexCount = br.ReadInt32();
 
-                var quads = new List<(int A, int B, int C, int D, ushort TexIndex)>();
+                var quads = new List<(int A, int B, int C, int D, ushort TexIndex, ushort Flags)>();
                 var vertices = new List<(short X, short Y, short Z)>();
 
                 for (int i = 0; i < quadCount; i++)
@@ -69,9 +69,9 @@
                     int c = br.ReadInt32();
                     int d = br.ReadInt32();
                     ushort texIndex = br.ReadUInt16();
-                    ushort flags = br.ReadUInt16(); // unused for now
+                    ushort flags = br.ReadUInt16();
 
-                    quads.Add((a, b, c, d, texIndex));
+                    quads.Add((a, b, c, d, texIndex, flags));
                 }
 
                 for (int i = 0; i < vertexCount; i++)
@@ -130,13 +130,31 @@
                     float x1 = (rect.X + rect.Width) / texSize;
                     float y1 = (rect.Y + rect.Height) / texSize;
 
-                    var uvs = new (float, float)[]
+                    var baseUvs = new (float, float)[]
                     {
-                        (x0, y0), // A → top-left
-                        (x0, y1), // B → bottom-left
-                        (x1, y1), // C → bottom-right
-                        (x1, y0), // D → top-right
+                        (x0, y1), // A → top-left
+                        (x1, y1), // B → bottom-left
+                        (x1, y0), // C → bottom-right
+                        (x0, y0), // D → top-right
                     };
+
+                    var uvs = baseUvs;
+
+                    switch (q.Flags)
+                    {
+                        case 2:
+                            // Triangle with special order: A → 0, C → 2, D → 3
+                            uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
+                            break;
+                        case 11:
+                            // Flip texture 180
+                            uvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
+                            break;
+                        default:
+                            // Standard quad order
+                            uvs = baseUvs;
+                            break;
+                    }
 
                     for (int i = 0; i < 4; i++)
                     {
@@ -164,7 +182,7 @@
                     var q = quads[i];
                     var uv = faceUvs[i];
 
-                    if (q.D == -1)
+                    if ((uint)q.D == 0xFFFFFFFF)
                     {
                         sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]}");
                     }
@@ -187,14 +205,13 @@
 
             for (int i = 0; i < rectCount; i++)
             {
-                byte width = br.ReadByte();
-                byte height = br.ReadByte();
-                byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
+                byte width = br.ReadByte();
+                byte height = br.ReadByte();
+                br.ReadBytes(2); // unknown bytes
 
-                rectangles.Add((x, y, width, height));
+                rectangles.Add((x, y, width + 1, height + 1));
             }
             return rectangles;
         }
