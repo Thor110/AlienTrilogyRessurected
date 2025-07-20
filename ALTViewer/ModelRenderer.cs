@@ -1,4 +1,6 @@
-﻿namespace ALTViewer
+﻿using System.Diagnostics;
+
+namespace ALTViewer
 {
     public static class ModelRenderer
     {
@@ -55,7 +57,7 @@
             sw.WriteLine($"# OBJ exported from Alien Trilogy {levelName}");
 
             sw.WriteLine($"mtllib {levelName}.mtl");
-
+            
             for (int t = 0; t < 5; t++)
             {
                 mtlWriter.WriteLine($"newmtl Texture{t:D2}");
@@ -70,12 +72,92 @@
             // Store unique UVs and their indices
             var uvDict = new Dictionary<(float, float), int>();
             var uvList = new List<(float, float)>();
-
+            // Ensure at least one dummy UV exists (for fallback cases using index 1)
+            if (uvList.Count == 0)
+            {
+                uvDict[(0f, 0f)] = 1;
+                uvList.Add((0f, 0f));
+            }
             // Map of per-face vertex UV indices
             var faceUvs = new List<int[]>();
 
-            string currentMtl = null;
+            for (int i = 0; i < quads.Count; i++)
+            {
+                var q = quads[i];
+                var uvIndices = new int[4];
 
+                // Resolve texture group + local UV rect index
+                bool found = false;
+                int texGroup = 0;
+                int localIndex = q.TexIndex;
+
+                for (int t = 0; t < 5; t++)
+                {
+                    int count = uvRects[t].Count;
+                    if (localIndex < count)
+                    {
+                        texGroup = t;
+                        found = true;
+                        break;
+                    }
+                    localIndex -= count;
+                }
+
+                if (!found || localIndex >= uvRects[texGroup].Count)
+                {
+                    // Fallback rectangle or skip invalid quad
+                    faceUvs.Add(new int[] { 1, 1, 1, 1 }); // or log + continue
+                    continue;
+                }
+
+                var rect = uvRects[texGroup][localIndex];
+                float x0 = rect.X / texSize;
+                float y0 = rect.Y / texSize;
+                float x1 = (rect.X + rect.Width) / texSize;
+                float y1 = (rect.Y + rect.Height) / texSize;
+
+                var baseUvs = new (float, float)[]
+                {
+                    (x0, y1), // top-left
+                    (x1, y1), // bottom-left
+                    (x1, y0), // bottom-right
+                    (x0, y0), // top-right
+                };
+
+                var uvs = baseUvs;
+
+                switch (q.Flags)
+                {
+                    case 2:
+                        uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
+                        break;
+                    case 11:
+                        uvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
+                        break;
+                }
+
+                for (int j = 0; j < 4; j++)
+                {
+                    if (!uvDict.TryGetValue(uvs[j], out int idx))
+                    {
+                        idx = uvList.Count + 1;
+                        uvDict[uvs[j]] = idx;
+                        uvList.Add(uvs[j]);
+                    }
+                    uvIndices[j] = idx;
+                }
+
+                faceUvs.Add(uvIndices);
+            }
+
+            // Write UVs
+            foreach (var uv in uvList)
+            {
+                sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
+            }
+
+            // Write faces with material switching
+            string currentMtl = null;
             for (int i = 0; i < quads.Count; i++)
             {
                 var q = quads[i];
@@ -101,7 +183,12 @@
                     currentMtl = matName;
                     sw.WriteLine($"usemtl {matName}");
                 }
-
+                // Validate vertex indices
+                if (q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count || (q.D != -1 && q.D >= vertices.Count))
+                {
+                    Debug.WriteLine($"Skipping invalid face at index {i}");
+                    continue;
+                }
                 // Faces
                 if ((uint)q.D == 0xFFFFFFFF)
                 {
@@ -112,8 +199,6 @@
                     sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
                 }
             }
-            // List Textures TP00-TP04 -> keep extraction separate from parsing
-            // Parse other objects in the level section
 
             // Export to OBJ
             MessageBox.Show("Exported OBJ with UVs!");

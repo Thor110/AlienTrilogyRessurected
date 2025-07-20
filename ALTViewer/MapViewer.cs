@@ -294,9 +294,9 @@ namespace ALTViewer
             {
                 File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
             }*/
-            MessageBox.Show($"Exported {caseName} to {outputPath}!");
             //TODO : make new method for parsing level section data
             ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
+            MessageBox.Show($"Exported {caseName} to {outputPath}!");
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
