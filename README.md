@@ -28,26 +28,30 @@ Map Editor
 
 The road map for this project.
 
-- [✅ 1 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
-	- .RAW audio files can be played, replaced and converted to and from .WAV files.
-	- Waveform preview for selected sound files.
-	- Link to the music directory, only available with the repack.
-	- Automatic backup of the original file by default.
-- [✅ 2 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
+- [✅ 1 : Text Editor](#text-editor) ( 50% Complete )
+	- View text from the games missions and user interface.
+	- Editing and saving functions not implemented yet.
+- [✅ 2 : Model Viewer](#model-viewer) ( 95% Complete )
+	- Can extract models from the three known model files.
+	- Does not currently extract the associated textures alongside them.
+- [✅ 3 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
 	- Palette detection implemented.
 	- Toggle palette export or transparency for viewing and exporting.
 	- View, export and replace textures, replacing compressed images is not supported yet. ( .B16 files, weapons and enemies. )
 	- Automatic backup of the original file by default.
-- [✅ 3 : Palette Editor](#palette-editor) ( 100% Complete )
+- [✅ 4 : Palette Editor](#palette-editor) ( 100% Complete )
 	- Palette editor and image preview.
 	- View, export, import and edit palettes for all types of images. ( Embedded, External & Compressed )
 	- Visual feedback showing unused colours across all sections and frames, except for embedded palettes where each section has its own colour palette.
 	- Automatic backup of the original file by default.
-- [✅ 4 : Text Editor](#text-editor) ( 50% Complete )
-	- View text from the games missions and user interface.
-	- Editing and saving functions not implemented yet.
-- [❌ 5 : Map Editor](#map-editor) ( 1% Complete )
+- [✅ 5 : Sound Effects Viewer](#sound-effects-viewer) ( 100% Complete )
+	- .RAW audio files can be played, replaced and converted to and from .WAV files.
+	- Waveform preview for selected sound files.
+	- Link to the music directory, only available with the repack.
+	- Automatic backup of the original file by default.
+- [❌ 6 : Map Editor](#map-editor) ( 5% Complete )
 	- Map files detected and listed.
+	- Basic details parsed and listed.
 
 And possibly more to come.
 
@@ -69,12 +73,26 @@ The main program window.
   <img src="Images/altviewer.png" alt="Alien Trilogy Viewer">
 </div>
 
-## Sound Effects Viewer
+## Text Editor
 
-Listen to, extract, replace or restore audio files from backups.
+Edit text in the game, intended for localisation efforts.
 
 <div align="center">
-  <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
+  <img src="Images/texteditor.png" alt="Text Editor">
+</div>
+
+## Model Viewer
+
+Extract models from the games files.
+
+<div align="center">
+  <img src="Images/modelviewer.png" alt="Model Viewer">
+</div>
+
+A showcase of some of the models from the games files.
+
+<div align="center">
+  <img src="Images/showcase.png" alt="Model Showcase">
 </div>
 
 ## Graphics Viewer
@@ -117,12 +135,12 @@ This image shows an embedded palette that has been replaced.
   <img src="Images/embeddedpalettereplacement.png" alt="Embedded Palette Replacement">
 </div>
 
-## Text Editor
+## Sound Effects Viewer
 
-Edit text in the game, intended for localisation efforts.
+Listen to, extract, replace or restore audio files from backups.
 
 <div align="center">
-  <img src="Images/texteditor.png" alt="Text Editor">
+  <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
 </div>
 
 ## Map Editor
