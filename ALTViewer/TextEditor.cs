@@ -40,7 +40,7 @@ namespace ALTViewer
             foreach (string mission in missions) { listBox1.Items.Add(mission); }
             comboBox1.SelectedIndex = 0; // Default to English
             setup = true;
-            MessageBox.Show("UI Text loading, and saving is not implemented yet.\nFor reference, the text is stored as plaintext in .bin and .txt files.");
+            MessageBox.Show("The text editor is not yet finished, UI text loading and saving is not implemented yet.");
         }
         // language selection
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
