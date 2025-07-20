@@ -201,7 +201,7 @@ namespace ALTViewer
             }
 
             // Export to OBJ
-            MessageBox.Show("Exported OBJ with UVs!");
+            MessageBox.Show($"Exported {levelName} with UVs!");
         }
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {

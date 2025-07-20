@@ -51,7 +51,6 @@ namespace ALTViewer
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(Label), typeof(ListBox) });
             ListLevels();
             fullScreen = new FullScreen(this);
-            MessageBox.Show("The level viewer is not yet finished, extracting data and reading data is not properly implemented yet.");
         }
         // list all levels in the game
         public void ListLevels()
@@ -296,7 +295,6 @@ namespace ALTViewer
             }*/
             //TODO : make new method for parsing level section data
             ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
-            MessageBox.Show($"Exported {caseName} to {outputPath}!");
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
