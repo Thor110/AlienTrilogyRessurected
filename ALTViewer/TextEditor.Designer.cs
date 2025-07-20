@@ -281,8 +281,8 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "TextEditor";
-            Text = "TextEditor";
+            Name = "Text Editor";
+            Text = "Text Editor";
             ResumeLayout(false);
             PerformLayout();
         }

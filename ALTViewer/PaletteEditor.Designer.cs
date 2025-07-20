@@ -227,8 +227,8 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "PaletteEditor";
-            Text = "PaletteEditor";
+            Name = "Palette Editor";
+            Text = "Palette Editor";
             FormClosing += PaletteEditor_FormClosing;
             Shown += PaletteEditor_Shown;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

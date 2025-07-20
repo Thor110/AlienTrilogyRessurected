@@ -711,8 +711,8 @@
             Controls.Add(label1);
             Controls.Add(listBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "MapViewer";
-            Text = "LevelViewer";
+            Name = "Map Viewer";
+            Text = "Map Viewer";
             ResumeLayout(false);
             PerformLayout();
         }

@@ -111,8 +111,8 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "ALTViewer";
-            Text = "ALTViewer";
+            Name = "Alien Trilogy Viewer";
+            Text = "Alien Trilogy Viewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

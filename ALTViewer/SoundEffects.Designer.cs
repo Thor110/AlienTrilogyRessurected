@@ -229,8 +229,8 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "SoundEffects";
-            Text = "SoundEffects";
+            Name = "Sound Effects Viewer";
+            Text = "Sound Effects Viewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
