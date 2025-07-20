@@ -2,44 +2,117 @@
 {
     public static class ModelRenderer
     {
+        public const float texSize = 256f;
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
         {
-            /*
             using var br = new BinaryReader(new MemoryStream(levelSection));
-            ushort vertCount = br.ReadUInt16();
-            ushort quadCount = br.ReadUInt16();
-            ushort mapLength = br.ReadUInt16();
-            ushort mapWidth = br.ReadUInt16();
-            ushort playerStartX = br.ReadUInt16();
-            ushort playerStartY = br.ReadUInt16();
-            br.ReadBytes(2); // unknown 1
-            ushort monster = br.ReadUInt16();
-            ushort pickups = br.ReadUInt16();
-            ushort boxes = br.ReadUInt16();
-            ushort doors = br.ReadUInt16();
-            br.ReadBytes(2); // unknown 2
-            ushort playerStartAngle = br.ReadUInt16();
-            br.ReadBytes(10); // unknown 3 & 4
-            */
-            // Count Vertices and Quads
-            /*List<Vector2> vertices = new();
-            for (int i = 0; i < vertCount; i++)
+            ushort vertCount = br.ReadUInt16();         // Number of vertices
+            ushort quadCount = br.ReadUInt16();         // Number of quads
+            ushort mapLength = br.ReadUInt16();         // Length of the map section
+            ushort mapWidth = br.ReadUInt16();          // Width of the map section
+            ushort playerStartX = br.ReadUInt16();      // Player start X coordinate
+            ushort playerStartY = br.ReadUInt16();      // Player start Y coordinate
+            br.ReadBytes(2);                            // unknown 2 bytes
+            ushort monster = br.ReadUInt16();           // Number of monsters
+            ushort pickups = br.ReadUInt16();           // Number of pickups
+            ushort boxes = br.ReadUInt16();             // Number of boxes
+            ushort doors = br.ReadUInt16();             // Number of doors
+            br.ReadBytes(2);                            // unknown 2 bytes
+            ushort playerStartAngle = br.ReadUInt16();  // Player start angle
+            br.ReadBytes(10);                           // unknown 6 and 4 bytes
+            List<(ushort X, ushort Y, ushort Z)> vertices = new();
+            for (int i = 0; i < vertCount; i++) // Count Vertices
             {
                 ushort x = br.ReadUInt16();
                 ushort y = br.ReadUInt16();
-                vertices.Add(new Vector2(x, y));
-            }*/
-            /*List<(ushort A, ushort B, ushort C, ushort D)> quads = new();
-            for (int i = 0; i < quadCount; i++)
+                ushort z = br.ReadUInt16();
+                br.ReadBytes(2); // unknown bytes
+                vertices.Add((x, y, z));
+            }
+            List<(int A, int B, int C, int D, ushort TexIndex, ushort Flags)> quads = new();
+            for (int i = 0; i < quadCount; i++) // Count Quads
             {
-                ushort a = br.ReadUInt16();
-                ushort b = br.ReadUInt16();
-                ushort c = br.ReadUInt16();
-                ushort d = br.ReadUInt16();
-                quads.Add((a, b, c, d));
-            }*/
+                int a = br.ReadInt32();
+                int b = br.ReadInt32();
+                int c = br.ReadInt32();
+                int d = br.ReadInt32();
+                ushort texIndex = br.ReadUInt16();
+                ushort flags = br.ReadUInt16();
+
+                quads.Add((a, b, c, d, texIndex, flags));
+            }
             // Read UV rectangles BX00-BX04
-            // List Textures TP00-TP04
+            var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
+            for (int i = 0; i < 5; i++)
+            {
+                uvRects[i] = ParseBxRectangles(uvSections[i].Data);
+            }
+            string objPath = outputPath + $"\\{levelName}.obj";
+            using var sw = new StreamWriter(objPath);
+
+            using var mtlWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}.mtl"));
+
+            sw.WriteLine($"# OBJ exported from Alien Trilogy {levelName}");
+
+            sw.WriteLine($"mtllib {levelName}.mtl");
+
+            for (int t = 0; t < 5; t++)
+            {
+                mtlWriter.WriteLine($"newmtl Texture{t:D2}");
+                mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
+            }
+            // Write vertex positions
+            foreach (var v in vertices)
+            {
+                sw.WriteLine($"v {v.X:F4} {v.Y:F4} {v.Z:F4}");
+            }
+
+            // Store unique UVs and their indices
+            var uvDict = new Dictionary<(float, float), int>();
+            var uvList = new List<(float, float)>();
+
+            // Map of per-face vertex UV indices
+            var faceUvs = new List<int[]>();
+
+            string currentMtl = null;
+
+            for (int i = 0; i < quads.Count; i++)
+            {
+                var q = quads[i];
+                var uv = faceUvs[i];
+
+                // Resolve which BX section this texIndex belongs to
+                int texGroup = 0;
+                int localIndex = q.TexIndex;
+                for (int t = 0; t < 5; t++)
+                {
+                    int count = uvRects[t].Count;
+                    if (localIndex < count)
+                    {
+                        texGroup = t;
+                        break;
+                    }
+                    localIndex -= count;
+                }
+
+                string matName = $"Texture{texGroup:D2}";
+                if (matName != currentMtl)
+                {
+                    currentMtl = matName;
+                    sw.WriteLine($"usemtl {matName}");
+                }
+
+                // Faces
+                if ((uint)q.D == 0xFFFFFFFF)
+                {
+                    sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]}");
+                }
+                else
+                {
+                    sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                }
+            }
+            // List Textures TP00-TP04 -> keep extraction separate from parsing
             // Parse other objects in the level section
 
             // Export to OBJ
@@ -47,7 +120,6 @@
         }
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
-            const float texSize = 256f;
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
