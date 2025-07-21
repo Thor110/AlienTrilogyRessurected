@@ -31,7 +31,9 @@ namespace ALTViewer
         FullScreen fullScreen;
         private List<BndSection> currentSections = null!; // current sections for the selected file
         private string selectedLevelFile = ""; // selected level file path
-        private List<(byte Type, byte X, byte Y, byte Z, short Health, byte Drop)> monsters = new();
+        private List<(short X, short Y, short Z)> vertices = new();
+        private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
+        private List<(byte Type, byte X, byte Y, byte Z, short Health, byte Drop, short Speed)> monsters = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z)> pickups = new();
         private List<(byte X, byte Y, byte Type)> boxes = new();
         private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
@@ -78,51 +80,48 @@ namespace ALTViewer
                     break; // exit after finding the first matching level
                 }
             }
-            // TODO : list all sections in the level file
-            // TODO : add more sections to the list box
-            // Monsters
-            // Pickups
-            // Boxes
-            // Doors
+            // clear lists
+            vertices.Clear();
+            quads.Clear();
             monsters.Clear();
             pickups.Clear();
             boxes.Clear();
             doors.Clear();
-            // D00? ???? OBJ1 ->
-            // 44 30 30 ?? 00 00 02 94 <-> OBJ1
-            // Destructibles??? Might just be boxes
+            // door models
             listBox2.Items.Clear(); // clear sections list box
             listBox2.Visible = true; // show sections list box
+            //Door Models parsed separately for now
+            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
+            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             // parse level data
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
             ushort vertCount = br.ReadUInt16();
-            textBox2.Text = vertCount.ToString(); // display vertex count
+            textBox2.Text = vertCount.ToString();           // display vertex count
             ushort quadCount = br.ReadUInt16();
-            textBox3.Text = quadCount.ToString(); // display quad count
+            textBox3.Text = quadCount.ToString();           // display quad count
             ushort mapLength = br.ReadUInt16();
-            textBox4.Text = mapLength.ToString(); // display map length
+            textBox4.Text = mapLength.ToString();           // display map length
             ushort mapWidth = br.ReadUInt16();
-            textBox5.Text = mapWidth.ToString(); // display map width
+            textBox5.Text = mapWidth.ToString();            // display map width
             ushort playerStartX = br.ReadUInt16();
-            textBox6.Text = playerStartX.ToString(); // display player start X coordinate
+            textBox6.Text = playerStartX.ToString();        // display player start X coordinate
             ushort playerStartY = br.ReadUInt16();
-            textBox7.Text = playerStartY.ToString(); // display player start Y coordinate
-            br.ReadBytes(2); // unknown 1
+            textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
+            br.ReadBytes(2);                                // unknown 1
             ushort monsterCount = br.ReadUInt16();
-            textBox8.Text = monsterCount.ToString(); // display monster count
+            textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();
-            textBox9.Text = pickupCount.ToString(); // display pickup count
+            textBox9.Text = pickupCount.ToString();         // display pickup count
             ushort boxCount = br.ReadUInt16();
-            textBox10.Text = boxCount.ToString(); // display box count
+            textBox10.Text = boxCount.ToString();           // display box count
             ushort doorCount = br.ReadUInt16();
-            textBox11.Text = doorCount.ToString(); // display door count
-            br.ReadBytes(2); // unknown 2
+            textBox11.Text = doorCount.ToString();          // display door count
+            br.ReadBytes(2);                                // unknown 2
             ushort playerStartAngle = br.ReadUInt16();
-            textBox12.Text = playerStartAngle.ToString(); // display player start angle
-            br.ReadBytes(10); // unknown 3 & 4
+            textBox12.Text = playerStartAngle.ToString();   // display player start angle
+            br.ReadBytes(10);                               // unknown 3 & 4
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
-            var vertices = new List<(short X, short Y, short Z)>();
             for (int i = 0; i < vertCount; i++)
             {
                 short x = br.ReadInt16();
@@ -132,7 +131,6 @@ namespace ALTViewer
                 vertices.Add((x, y, z));
             }
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
-            var quads = new List<(int A, int B, int C, int D, ushort TexIndex)>();
             for (int i = 0; i < quadCount; i++)
             {
                 int a = br.ReadInt32();
@@ -140,15 +138,14 @@ namespace ALTViewer
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16();
-                ushort flags = br.ReadUInt16(); // unused for now
+                byte flags = br.ReadByte(); // unused for now
+                br.ReadByte(); // unknown byte
                 quads.Add((a, b, c, d, texIndex));
             }
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
-            // TODO : Size?
-            int cellSize = mapLength * mapWidth * 16;
+            int cellSize = mapLength * mapWidth * 16; // TODO : Size?
             br.BaseStream.Seek(cellSize, SeekOrigin.Current); // skip cell size data
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
-            //var monsters = new List<(short Type, short X, short Y, short Z, int health, short drop)>();
             for (int i = 0; i < monsterCount; i++)
             {
                 byte type = br.ReadByte();
@@ -157,11 +154,12 @@ namespace ALTViewer
                 byte z = br.ReadByte();
                 short health = br.ReadInt16();
                 byte drop = br.ReadByte();
-                br.ReadBytes(13);
-                monsters.Add((type, x, y, z, health, drop));
+                br.ReadBytes(7); // unknown bytes
+                short speed = br.ReadInt16();
+                br.ReadBytes(4); // unknown bytes
+                monsters.Add((type, x, y, z, health, drop, speed));
             }
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
-            //var pickups = new List<(short X, short Y, short Type, short Amount, short Multiplier, short Z)>();
             for (int i = 0; i < pickupCount; i++)
             {
                 byte x = br.ReadByte();
@@ -175,18 +173,19 @@ namespace ALTViewer
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
-            //var boxes = new List<(short X, short Y, short Type)>();
             for (int i = 0; i < boxCount; i++)
             {
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
-                byte drop = br.ReadByte();
-                br.ReadBytes(12); // unknown bytes
+                byte drop = br.ReadByte(); // 0 = Pickup 2 = Enemy
+                br.ReadBytes(2); // unknown bytes
+                byte dropOne = br.ReadByte(); // index of first pickup dropped
+                byte dropTwo = br.ReadByte(); // index of second pickup dropped
+                br.ReadBytes(8); // unknown bytes
                 boxes.Add((x, y, type));
             }
             // doors formula = value multiplied by 8 - (8 bytes one element)
-            //var doors = new List<(short X, short Y, short Time, short Tag, short Rotation, short Index)>();
             for (int i = 0; i < doorCount; i++)
             {
                 byte x = br.ReadByte();
@@ -199,26 +198,23 @@ namespace ALTViewer
                 byte index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
-
-            listBox3.Items.Clear(); // clear the list box
-            listBox4.Items.Clear(); // clear the list box
-            listBox5.Items.Clear(); // clear the list box
-            listBox6.Items.Clear(); // clear the list box
-
+            // clear list boxes
+            listBox3.Items.Clear();
+            listBox4.Items.Clear();
+            listBox5.Items.Clear();
+            listBox6.Items.Clear();
+            // populate list boxes
             for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Box {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
-
+            // display remaining bytes
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
-            byte[] remainder = br.ReadBytes((int)remainingBytes);
-            File.WriteAllBytes($"remainder_{selected}.bin", remainder);
+            textBox19.Text = remainingBytes.ToString();
+            // dump remaining bytes
+            //byte[] remainder = br.ReadBytes((int)remainingBytes);
+            //File.WriteAllBytes($"remainder_{selected}.bin", remainder);
             //
-
-            //
-            //Door Models parsed separately
-            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
-            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             button3.Enabled = true;
         }
         // full screen toggle

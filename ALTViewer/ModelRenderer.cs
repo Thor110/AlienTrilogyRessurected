@@ -8,8 +8,8 @@ namespace ALTViewer
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection));
-            ushort vertCount = br.ReadUInt16();         // Number of vertices
-            ushort quadCount = br.ReadUInt16();         // Number of quads
+            short vertCount = br.ReadInt16();         // Number of vertices
+            short quadCount = br.ReadInt16();         // Number of quads
             ushort mapLength = br.ReadUInt16();         // Length of the map section
             ushort mapWidth = br.ReadUInt16();          // Width of the map section
             ushort playerStartX = br.ReadUInt16();      // Player start X coordinate
@@ -31,15 +31,16 @@ namespace ALTViewer
                 br.ReadBytes(2); // unknown bytes
                 vertices.Add((x, y, z));
             }
-            List<(int A, int B, int C, int D, ushort TexIndex, ushort Flags)> quads = new();
+            List<(int A, int B, int C, int D, ushort TexIndex, byte Flags)> quads = new();
             for (int i = 0; i < quadCount; i++) // Count Quads
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
-                ushort texIndex = br.ReadUInt16();
-                ushort flags = br.ReadUInt16();
+                ushort texIndex = br.ReadUInt16(); // signed or unsigned?
+                byte flags = br.ReadByte();
+                br.ReadByte(); // unknown byte
 
                 quads.Add((a, b, c, d, texIndex, flags));
             }
