@@ -218,7 +218,7 @@ namespace ALTViewer
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
                 var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
                 if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
-                string textureFileName = $"{textureName}_TP00";
+                string textureFileName = $"{textureName}";
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
                 {

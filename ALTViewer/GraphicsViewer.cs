@@ -271,16 +271,16 @@ namespace ALTViewer
         // export file
         private string ExportFile(BndSection section, string sectionName, bool single)
         {
-            string filepath = "";
+            string filepath = Path.Combine(outputPath, $"{lastSelectedFile}");
             byte[] saving = null!;
+            if (comboBox1.Items.Count != 1) { filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}"); }
             if (!compressed)
             {
-                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}");
                 saving = section.Data; // use section data for non-compressed files
             }
             else
             {
-                filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}");
+                if (comboBox2.Items.Count != 1) { filepath = Path.Combine(outputPath, $"{lastSelectedFile}_{sectionName}_FRAME{comboBox2.SelectedIndex:D2}"); }
                 saving = currentFrame!; // use current frame data for compressed files
                 (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
             }
