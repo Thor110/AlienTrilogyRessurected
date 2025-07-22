@@ -219,7 +219,7 @@ namespace ALTViewer
                 var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
                 if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
                 string textureFileName = $"{textureName}_TP00";
-                // 0 / 1 / 2 are fine
+                // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18) // OBJ3D special case
                 {
                     // unknown locker textures
@@ -240,6 +240,11 @@ namespace ALTViewer
                 else if (special && m == 35) // OBJ3D special case
                 {
                     // coil obstacle
+                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    textureName = "PNL0GFXE"; // append "_TP00" to the filename manually
+                    textureFileName = textureName;
+                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
+                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m == 36) // OBJ3D special case
                 {
@@ -249,7 +254,7 @@ namespace ALTViewer
                 {
                     uvSections = altSections; // restore previous BX sections
                 }
-                else if (special && m == 39 || special && m == 41) // OBJ3D special case
+                else if (special && m == 39 || special && m == 41) // OBJ3D special case // 39 is unknown, 41 is egg husk
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE"; // append "_TP00" to the filename manually
