@@ -207,8 +207,8 @@ namespace ALTViewer
         public static void ExportModel(string modelName, string textureDirectory, List<BndSection> modelSections, string textureName, string outputPath)
         {
             bool special = false;
-            List<(int X, int Y, int Width, int Height)> uvRects = null!;
-            List<BndSection> uvSections; // for OBJ3D special case
+            List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX"); // PICKMOD case
+            List<(int X, int Y, int Width, int Height)> uvRects = ParseBxRectangles(uvSections[0].Data); // PICKMOD case
             string backupName = textureName; // for OBJ3D special case
             string backupDirectory = textureDirectory; // for OBJ3D special case
             if (modelName == "OBJ3D") { special = true; } // OBJ3D has special handling
@@ -252,13 +252,16 @@ namespace ALTViewer
                     textureName = backupName; // restore previous texture name
                     // texture unknown
                 }
-                uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
                 if (uvSections.Count != 1 && !special) // OPTOBJ case
                 {
                     textureName = $"{backupName}_TP{m:D2}";
                     uvRects = ParseBxRectangles(uvSections[m].Data);
                 }
-                else { uvRects = ParseBxRectangles(uvSections[0].Data); } // PICKMOD & OBJ3D cases
+                else if (special) // OBJ3D case // loads the texture file once per model section, try to reduce
+                {
+                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+                    uvRects = ParseBxRectangles(uvSections[0].Data);
+                }
 
                 br.ReadBytes(12); // OBJ1 + unknown
 
