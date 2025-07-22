@@ -206,9 +206,6 @@ namespace ALTViewer
                     sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
                 }
             }
-
-            // Export to OBJ
-            MessageBox.Show($"Exported {levelName} with UVs!");
         }
         public static void ExportModel(string modelName, string textureDirectory, string modelDirectory, string textureName, string outputPath)
         {
@@ -403,7 +400,6 @@ namespace ALTViewer
                     }
                 }
             }
-            MessageBox.Show("Exported OBJ with UVs!");
         }
         // Parse BX rectangles from the BX section data
         public static List<(int X, int Y, int Width, int Height)> ParseBxRectangles(byte[] bxData)

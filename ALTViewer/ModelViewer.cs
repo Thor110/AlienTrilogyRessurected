@@ -7,6 +7,7 @@ namespace ALTViewer
         private string gameDirectory = ""; // default directories
         private string gfxDirectory = "";
         private string outputPath = ""; // output path for exported files
+        private bool exporting;
         public ModelViewer()
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace ALTViewer
                 outputPath = fbd.SelectedPath;
                 textBox1.Text = outputPath; // update text box with selected path
                 button2.Enabled = true; // enable export button
+                button3.Enabled = true; // enable export all button
             }
         }
         // export selected model
@@ -78,13 +80,15 @@ namespace ALTViewer
                 return;
             }
             ModelRenderer.ExportModel(caseName, textureDirectory, modelDirectory, textureName, outputPath);
+            if(!exporting) { MessageBox.Show("Exported OBJ with UVs!"); }
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         { if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); } }
-
+        // export all as OBJ
         private void button3_Click(object sender, EventArgs e)
         {
+            exporting = true;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
@@ -92,6 +96,8 @@ namespace ALTViewer
                 button2_Click(null!, null!);
             }
             listBox1.SelectedIndex = previouslySelectedIndex; // restore previously selected index
+            exporting = false;
+            MessageBox.Show("Exported all OBJ with UVs!");
         }
     }
 }

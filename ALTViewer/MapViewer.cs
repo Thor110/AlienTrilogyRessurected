@@ -37,6 +37,7 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z)> pickups = new();
         private List<(byte X, byte Y, byte Type)> boxes = new();
         private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
+        private bool exporting;
         public MapViewer()
         {
             InitializeComponent();
@@ -291,10 +292,13 @@ namespace ALTViewer
             }*/
             //TODO : make new method for parsing level section data
             ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
+            if(!exporting) { MessageBox.Show($"Exported {caseName} with UVs!"); }
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
         {
+            exporting = true;
+            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
@@ -302,6 +306,9 @@ namespace ALTViewer
                 button5_Click(null!, null!);
             }
             listBox1.SelectedIndex = previouslySelectedIndex; // restore previously selected index
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            exporting = false;
+            MessageBox.Show($"Exported all levels with UVs!");
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
