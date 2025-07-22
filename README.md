@@ -151,6 +151,8 @@ View level data and export level models as OBJ files.
   <img src="Images/levelviewer.png" alt="Level Viewer">
 </div>
 
+Preview of L111LEV exported as an OBJ file.
+
 <div align="center">
   <img src="Images/levelexported.png" alt="L111LEV Exported">
 </div>
