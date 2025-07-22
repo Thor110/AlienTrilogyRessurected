@@ -7,9 +7,9 @@ namespace ALTViewer
         public const float texSize = 256f;
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
         {
-            using var br = new BinaryReader(new MemoryStream(levelSection));
-            short vertCount = br.ReadInt16();         // Number of vertices
-            short quadCount = br.ReadInt16();         // Number of quads
+            using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
+            ushort vertCount = br.ReadUInt16();         // Number of vertices
+            ushort quadCount = br.ReadUInt16();         // Number of quads
             ushort mapLength = br.ReadUInt16();         // Length of the map section
             ushort mapWidth = br.ReadUInt16();          // Width of the map section
             ushort playerStartX = br.ReadUInt16();      // Player start X coordinate
@@ -22,12 +22,12 @@ namespace ALTViewer
             br.ReadBytes(2);                            // unknown 2 bytes
             ushort playerStartAngle = br.ReadUInt16();  // Player start angle
             br.ReadBytes(10);                           // unknown 6 and 4 bytes
-            List<(ushort X, ushort Y, ushort Z)> vertices = new();
+            List<(short X, short Y, short Z)> vertices = new();
             for (int i = 0; i < vertCount; i++) // Count Vertices
             {
-                ushort x = br.ReadUInt16();
-                ushort y = br.ReadUInt16();
-                ushort z = br.ReadUInt16();
+                short x = br.ReadInt16();
+                short y = br.ReadInt16();
+                short z = br.ReadInt16();
                 br.ReadBytes(2); // unknown bytes
                 vertices.Add((x, y, z));
             }
@@ -185,13 +185,13 @@ namespace ALTViewer
                     sw.WriteLine($"usemtl {matName}");
                 }
                 // Validate vertex indices
-                if (q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count || (q.D != -1 && q.D >= vertices.Count))
+                if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
                 {
-                    Debug.WriteLine($"Skipping invalid face at index {i}");
+                    Debug.WriteLine($"Skipping invalid triangle at face {i}");
                     continue;
                 }
                 // Faces
-                if ((uint)q.D == 0xFFFFFFFF)
+                if (q.D == -1)
                 {
                     sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]}");
                 }
