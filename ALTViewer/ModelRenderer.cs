@@ -204,48 +204,61 @@ namespace ALTViewer
             // Export to OBJ
             MessageBox.Show($"Exported {levelName} with UVs!");
         }
-        public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
+        public static void ExportModel(string modelName, string textureDirectory, List<BndSection> modelSections, string textureName, string outputPath)
         {
             bool special = false;
-            string fileDirectory = "";
             List<(int X, int Y, int Width, int Height)> uvRects = null!;
-            List<BndSection> backupSections = uvSections; // for OBJ3D special case
+            List<BndSection> uvSections; // for OBJ3D special case
             string backupName = textureName; // for OBJ3D special case
+            string backupDirectory = textureDirectory; // for OBJ3D special case
             if (modelName == "OBJ3D") { special = true; } // OBJ3D has special handling
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
-                // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
+                // 0 / 1 / 2 are fine to default // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18 || special && m == 35) // OBJ3D LOCKERS & COIL OBSTACLE
                 {
-                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
                 }
                 else if (special && m >=19 && m <= 34 || special && m == 41) // OBJ3D BONESHIP SWITCHES && EGGHUSK
                 {
-                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
+                    textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
                 }
                 else if (special && m == 36) // OBJ3D special case
                 {
                     // unknown switch maybe
+                    textureDirectory = backupDirectory; // restore previous texture directory
+                    textureName = backupName; // restore previous texture name
+                    // unknown switch maybe
                 }
                 else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER
                 {
-                    uvSections = backupSections; // restore previous BX sections
+                    textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                 }
                 else if (special && m == 39) // OBJ3D special case
                 {
                     // 39 is unknown, same model as EGGHUSK
+                    textureDirectory = backupDirectory; // restore previous texture directory
+                    textureName = backupName; // restore previous texture name
+                    // 39 is unknown, same model as EGGHUSK
                 }
                 else if (special && m == 40) // OBJ3D POD COVER
                 {
-                    // OBJ3D POD COVER
+                    // texture unknown
+                    textureDirectory = backupDirectory; // restore previous texture directory
+                    textureName = backupName; // restore previous texture name
+                    // texture unknown
                 }
-                uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKMOD case
-                else { uvRects = ParseBxRectangles(uvSections[0].Data); } // OBJ3D cases
+                uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+                if (uvSections.Count != 1 && !special) // OPTOBJ case
+                {
+                    textureName = $"{backupName}_TP{m:D2}";
+                    uvRects = ParseBxRectangles(uvSections[m].Data);
+                }
+                else { uvRects = ParseBxRectangles(uvSections[0].Data); } // PICKMOD & OBJ3D cases
 
                 br.ReadBytes(12); // OBJ1 + unknown
 
@@ -286,10 +299,6 @@ namespace ALTViewer
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
 
-                /*if (uvSections.Count != 1 && !special) // PICKGFX / OBJ3D case
-                {
-                    textureFileName = $"{textureName}_TP{m:D2}";
-                }*/
                 File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}.png\n");
 
                 // Write vertex positions

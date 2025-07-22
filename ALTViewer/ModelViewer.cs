@@ -48,10 +48,9 @@ namespace ALTViewer
                 return;
             }
             string fileDirectory = "";
-            string textureDirectory = gfxDirectory + "\\" + "OPTGFX.BND";
+            string textureDirectory = "";
             string textureName = "";
             string caseName = "";
-            List<BndSection> uvSections = null!;
             List<BndSection> modelSections = null!;
             switch (listBox1.SelectedItem) // check which model is selected
             {
@@ -79,10 +78,8 @@ namespace ALTViewer
                 MessageBox.Show($"Associated graphics file {caseName}.BND does not exist!");
                 return;
             }
-            uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
-            //List<BndSection> textureSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "TP");
             modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "M0");
-            ModelRenderer.ExportModel(caseName, uvSections, modelSections, textureName, outputPath);
+            ModelRenderer.ExportModel(caseName, textureDirectory, modelSections, textureName, outputPath);
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
