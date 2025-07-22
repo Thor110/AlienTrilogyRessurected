@@ -227,26 +227,26 @@ namespace ALTViewer
                     textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
                 }
-                else if (special && m == 36) // OBJ3D special case
+                else if (special && m == 36) // OBJ3D special case -> defaults to PICKGFX for now
                 {
                     // unknown switch maybe
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // unknown switch maybe
                 }
-                else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER
+                else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER -> uses PICKGFX
                 {
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                 }
-                else if (special && m == 39) // OBJ3D special case
+                else if (special && m == 39) // OBJ3D special case -> defaults to PICKGFX for now
                 {
                     // 39 is unknown, same model as EGGHUSK
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // 39 is unknown, same model as EGGHUSK
                 }
-                else if (special && m == 40) // OBJ3D POD COVER
+                else if (special && m == 40) // OBJ3D POD COVER -> defaults to PICKGFX for now
                 {
                     // texture unknown
                     textureDirectory = backupDirectory; // restore previous texture directory
