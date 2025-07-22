@@ -27,7 +27,7 @@ Level Viewer
 
 The road map for this project.
 
-- [✅ 1 : Text Editor](#text-editor) ( 50% Complete )
+- [❌ 1 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
 - [✅ 2 : Model Viewer](#model-viewer) ( 95% Complete )
