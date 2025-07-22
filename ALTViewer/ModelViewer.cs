@@ -77,9 +77,7 @@ namespace ALTViewer
                 MessageBox.Show($"Associated graphics file {caseName}.BND does not exist!");
                 return;
             }
-            List<BndSection> modelSections = null!;
-            modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(modelDirectory), "M0");
-            ModelRenderer.ExportModel(caseName, textureDirectory, modelSections, textureName, outputPath);
+            ModelRenderer.ExportModel(caseName, textureDirectory, modelDirectory, textureName, outputPath);
         }
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)

@@ -229,7 +229,7 @@ namespace ALTViewer
                 }
                 else if (special && m == 36) // OBJ3D special case -> defaults to PICKGFX for now
                 {
-                    // unknown switch maybe
+                    // unknown switch maybe // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // unknown switch maybe
@@ -241,14 +241,14 @@ namespace ALTViewer
                 }
                 else if (special && m == 39) // OBJ3D special case -> defaults to PICKGFX for now
                 {
-                    // 39 is unknown, same model as EGGHUSK
+                    // 39 is unknown, same model as EGGHUSK // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // 39 is unknown, same model as EGGHUSK
                 }
                 else if (special && m == 40) // OBJ3D POD COVER -> defaults to PICKGFX for now
                 {
-                    // texture unknown
+                    // texture unknown // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // texture unknown
