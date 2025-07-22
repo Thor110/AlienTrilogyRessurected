@@ -207,38 +207,28 @@ namespace ALTViewer
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
             bool special = false;
+            string fileDirectory = "";
             List<BndSection> altSections = uvSections; // for OBJ3D special case
             string backupName = textureName; // for OBJ3D special case
-            if (modelName == "OBJ3D")
-            {
-                special = true; // OBJ3D has special handling
-            }
+            if (modelName == "OBJ3D") { special = true; } // OBJ3D has special handling
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
-                var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
-                if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
                 {
-                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
-                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m >=19 && m <= 34) // OBJ3D BONESHIP SWITCHES
                 {
-                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
+                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
-                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m == 35) // OBJ3D COIL OBSTACLE
                 {
-                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
-                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m == 36) // OBJ3D special case
                 {
@@ -251,16 +241,17 @@ namespace ALTViewer
                 }
                 else if (special && m == 39 || special && m == 41) // OBJ3D special case // 39 is unknown, 41 is egg husk
                 {
-                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
+                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
-                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m == 40) // OBJ3D POD COVER
                 {
                     // OBJ3D POD COVER
                 }
-
+                uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
+                List<(int X, int Y, int Width, int Height)> uvRects = null!; // declare outside for loop
+                if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKMOD case
+                else { uvRects = ParseBxRectangles(uvSections[0].Data); } // OBJ3D cases
 
                 br.ReadBytes(12); // OBJ1 + unknown
 
@@ -292,8 +283,8 @@ namespace ALTViewer
                 }
 
                 string nameAndNumber = $"{modelName}_{modelSections[m].Name}";
-
                 string objPath = outputPath + $"\\{nameAndNumber}.obj";
+
                 using var sw = new StreamWriter(objPath);
 
                 sw.WriteLine($"# OBJ exported from Alien Trilogy {nameAndNumber}");
