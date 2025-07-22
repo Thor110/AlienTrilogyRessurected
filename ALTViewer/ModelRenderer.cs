@@ -204,9 +204,10 @@ namespace ALTViewer
             // Export to OBJ
             MessageBox.Show($"Exported {levelName} with UVs!");
         }
-        public static void ExportModel(string modelName, string textureDirectory, List<BndSection> modelSections, string textureName, string outputPath)
+        public static void ExportModel(string modelName, string textureDirectory, string modelDirectory, string textureName, string outputPath)
         {
             bool special = false;
+            List<BndSection> modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(modelDirectory), "M0");
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX"); // PICKMOD case
             List<(int X, int Y, int Width, int Height)> uvRects = ParseBxRectangles(uvSections[0].Data); // PICKMOD case
             string backupName = textureName; // for OBJ3D special case

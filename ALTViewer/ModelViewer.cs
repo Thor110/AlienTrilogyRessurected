@@ -47,27 +47,26 @@ namespace ALTViewer
                 MessageBox.Show("Please select a model to export.");
                 return;
             }
-            string fileDirectory = "";
+            string modelDirectory = "";
             string textureDirectory = "";
             string textureName = "";
             string caseName = "";
-            List<BndSection> modelSections = null!;
             switch (listBox1.SelectedItem) // check which model is selected
             {
                 case "OBJ3D":
-                    fileDirectory = gfxDirectory + "\\" + "OBJ3D.BND";
+                    modelDirectory = gfxDirectory + "\\" + "OBJ3D.BND";
                     textureDirectory = gfxDirectory + "\\" + "PICKGFX.BND"; // currently unknown
                     textureName = "PICKGFX"; // temporary assignment while the texture is unknown
                     caseName = "OBJ3D"; // possibly PICKGFX.BND with only one BX section?
                     break;
                 case "OPTOBJ":
-                    fileDirectory = gfxDirectory + "\\" + "OPTOBJ.BND";
+                    modelDirectory = gfxDirectory + "\\" + "OPTOBJ.BND";
                     textureDirectory = gfxDirectory + "\\" + "OPTGFX.BND";
                     textureName = "OPTGFX";
                     caseName = "OPTOBJ";
                     break;
                 case "PICKMOD":
-                    fileDirectory = gfxDirectory + "\\" + "PICKMOD.BND";
+                    modelDirectory = gfxDirectory + "\\" + "PICKMOD.BND";
                     textureDirectory = gfxDirectory + "\\" + "PICKGFX.BND";
                     textureName = "PICKGFX";
                     caseName = "PICKMOD";
@@ -78,7 +77,8 @@ namespace ALTViewer
                 MessageBox.Show($"Associated graphics file {caseName}.BND does not exist!");
                 return;
             }
-            modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "M0");
+            List<BndSection> modelSections = null!;
+            modelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(modelDirectory), "M0");
             ModelRenderer.ExportModel(caseName, textureDirectory, modelSections, textureName, outputPath);
         }
         // double click to open output path
