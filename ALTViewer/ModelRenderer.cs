@@ -258,7 +258,7 @@ namespace ALTViewer
                     textureName = $"{backupName}_TP{m:D2}";
                     uvRects = ParseBxRectangles(uvSections[m].Data);
                 }
-                else if (special) // OBJ3D case // loads the texture file once per model section, try to reduce
+                else if (special) // OBJ3D case // loads the texture file once per model section, try to reduce maybe...
                 {
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data);
