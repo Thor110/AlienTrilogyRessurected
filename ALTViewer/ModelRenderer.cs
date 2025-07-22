@@ -208,48 +208,42 @@ namespace ALTViewer
         {
             bool special = false;
             string fileDirectory = "";
-            List<BndSection> altSections = uvSections; // for OBJ3D special case
+            List<(int X, int Y, int Width, int Height)> uvRects = null!;
+            List<BndSection> backupSections = uvSections; // for OBJ3D special case
             string backupName = textureName; // for OBJ3D special case
             if (modelName == "OBJ3D") { special = true; } // OBJ3D has special handling
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
-                if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
+                if (special && m >= 3 && m <= 18 || special && m == 35) // OBJ3D LOCKERS & COIL OBSTACLE
                 {
                     fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
                 }
-                else if (special && m >=19 && m <= 34) // OBJ3D BONESHIP SWITCHES
+                else if (special && m >=19 && m <= 34 || special && m == 41) // OBJ3D BONESHIP SWITCHES && EGGHUSK
                 {
                     fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
-                }
-                else if (special && m == 35) // OBJ3D COIL OBSTACLE
-                {
-                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
-                    textureName = "PNL0GFXE";
                 }
                 else if (special && m == 36) // OBJ3D special case
                 {
-                    // unknown
+                    // unknown switch maybe
                 }
                 else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER
                 {
-                    uvSections = altSections; // restore previous BX sections
+                    uvSections = backupSections; // restore previous BX sections
                     textureName = backupName; // restore previous texture name
                 }
-                else if (special && m == 39 || special && m == 41) // OBJ3D special case // 39 is unknown, 41 is egg husk
+                else if (special && m == 39) // OBJ3D special case
                 {
-                    fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
-                    textureName = "PNL1GFXE";
+                    // 39 is unknown, same model as EGGHUSK
                 }
                 else if (special && m == 40) // OBJ3D POD COVER
                 {
                     // OBJ3D POD COVER
                 }
                 uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                List<(int X, int Y, int Width, int Height)> uvRects = null!; // declare outside for loop
                 if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKMOD case
                 else { uvRects = ParseBxRectangles(uvSections[0].Data); } // OBJ3D cases
 
