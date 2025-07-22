@@ -10,9 +10,6 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 
 Graphics Viewer
 
-- Palettes aren't right for the following two files?
-	- PANEL3GF.BND
-	- PANELGFX.BND
 - Compressed images can not be replaced yet, until I implement a recompression algorithm that matches the original exactly.
 
 Text Editor
@@ -20,9 +17,10 @@ Text Editor
 - UI text viewing .BIN files plaintext.
 - Editing and saving functionality.
 
-Map Editor
+Level Viewer
 
-- Currently only lists all the .MAP files, nothing more.
+- Not really a level "viewer" per-se, currently it is just a testing tool for parsing level data, it can also export the level geometry as OBJ files.
+- May or may not extend it to level viewer and editor functionality one day.
 
 # Road Map
 
@@ -49,9 +47,10 @@ The road map for this project.
 	- Waveform preview for selected sound files.
 	- Link to the music directory, only available with the repack.
 	- Automatic backup of the original file by default.
-- [❌ 6 : Map Editor](#map-editor) ( 5% Complete )
+- [❌ 6 : Level Viewer](#level-viewer) ( 75% Complete )
 	- Map files detected and listed.
 	- Basic details parsed and listed.
+	- Export level geometry as OBJ files.
 
 And possibly more to come.
 
@@ -143,10 +142,14 @@ Listen to, extract, replace or restore audio files from backups.
   <img src="Images/soundeffects.png" alt="Sound Effects Viewer">
 </div>
 
-## Map Editor
+## Level Viewer
 
-Preview and edit levels. (WIP)
+View level data and export level models as OBJ files.
 
 <div align="center">
-  <img src="Images/levelviewer.png" alt="Map Editor">
+  <img src="Images/levelviewer.png" alt="Level Viewer">
+</div>
+
+<div align="center">
+  <img src="Images/levelexported.png" alt="L111LEV Exported">
 </div>
