@@ -82,5 +82,16 @@ namespace ALTViewer
         // double click to open output path
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         { if (outputPath != "") { Process.Start(new ProcessStartInfo() { FileName = outputPath, UseShellExecute = true, Verb = "open" }); } }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
+            {
+                listBox1.SelectedIndex = i;
+                button2_Click(null!, null!);
+            }
+            listBox1.SelectedIndex = previouslySelectedIndex; // restore previously selected index
+        }
     }
 }

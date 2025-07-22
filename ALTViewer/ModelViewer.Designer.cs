@@ -35,6 +35,7 @@
             button2 = new Button();
             label1 = new Label();
             label2 = new Label();
+            button3 = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -97,11 +98,22 @@
             label2.TabIndex = 6;
             label2.Text = "Note : Models from OBJ3D and PICKMOD use the graphics from the PICKGFX file.";
             // 
+            // button3
+            // 
+            button3.Location = new Point(138, 41);
+            button3.Name = "button3";
+            button3.Size = new Size(140, 23);
+            button3.TabIndex = 7;
+            button3.Text = "Export all as OBJ";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // ModelViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 237);
+            Controls.Add(button3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(button2);
@@ -109,7 +121,7 @@
             Controls.Add(textBox1);
             Controls.Add(listBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Model Viewer";
+            Name = "ModelViewer";
             Text = "Model Viewer";
             ResumeLayout(false);
             PerformLayout();
@@ -123,5 +135,6 @@
         private Button button2;
         private Label label1;
         private Label label2;
+        private Button button3;
     }
 }
