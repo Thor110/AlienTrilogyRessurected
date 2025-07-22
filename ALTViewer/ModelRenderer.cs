@@ -220,28 +220,24 @@ namespace ALTViewer
                 if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
                 string textureFileName = $"{textureName}_TP00";
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
-                if (special && m >= 3 && m <= 18) // OBJ3D special case
+                if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
                 {
-                    // unknown locker textures
-                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
-                    textureName = "PNL0GFXE"; // append "_TP00" to the filename manually
-                    textureFileName = textureName;
-                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
-                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
+                    // OBJ3D lockers
+
+                    // tried 902GFX_TP03
                 }
-                else if (special && m >=19 && m <= 34) // OBJ3D special case
+                else if (special && m >=19 && m <= 34) // OBJ3D BONESHIP SWITCHES
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
-                    textureName = "PNL1GFXE"; // append "_TP00" to the filename manually
+                    textureName = "PNL1GFXE";
                     textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
-                else if (special && m == 35) // OBJ3D special case
+                else if (special && m == 35) // OBJ3D COIL OBSTACLE
                 {
-                    // coil obstacle
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
-                    textureName = "PNL0GFXE"; // append "_TP00" to the filename manually
+                    textureName = "PNL0GFXE";
                     textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
@@ -250,21 +246,21 @@ namespace ALTViewer
                 {
                     // unknown
                 }
-                else if (special && m >= 37 && m <= 38) // OBJ3D special case
+                else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER
                 {
                     uvSections = altSections; // restore previous BX sections
                 }
                 else if (special && m == 39 || special && m == 41) // OBJ3D special case // 39 is unknown, 41 is egg husk
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
-                    textureName = "PNL1GFXE"; // append "_TP00" to the filename manually
+                    textureName = "PNL1GFXE";
                     textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
-                else if (special && m == 40) // OBJ3D special case
+                else if (special && m == 40) // OBJ3D POD COVER
                 {
-                    // pod cover
+                    // OBJ3D POD COVER
                 }
 
 
@@ -307,7 +303,7 @@ namespace ALTViewer
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
 
-                if (uvSections.Count != 1) // PICKGFX / OBJ3D case
+                if (uvSections.Count != 1 && !special) // PICKGFX / OBJ3D case
                 {
                     textureFileName = $"{textureName}_TP{m:D2}";
                 }
