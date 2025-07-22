@@ -222,9 +222,11 @@ namespace ALTViewer
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
                 {
-                    // OBJ3D lockers
-
-                    // tried 902GFX_TP03
+                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    textureName = "PNL0GFXE";
+                    textureFileName = textureName;
+                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
+                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
                 else if (special && m >=19 && m <= 34) // OBJ3D BONESHIP SWITCHES
                 {
