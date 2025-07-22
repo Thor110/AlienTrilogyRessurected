@@ -218,13 +218,11 @@ namespace ALTViewer
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
                 var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
                 if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
-                string textureFileName = $"{textureName}";
                 // 0 / 1 / 2 are fine // TODO reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18) // OBJ3D LOCKERS
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
-                    textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
@@ -232,7 +230,6 @@ namespace ALTViewer
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
-                    textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
@@ -240,7 +237,6 @@ namespace ALTViewer
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
                     textureName = "PNL0GFXE";
-                    textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
@@ -251,12 +247,12 @@ namespace ALTViewer
                 else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER
                 {
                     uvSections = altSections; // restore previous BX sections
+                    textureName = backupName; // restore previous texture name
                 }
                 else if (special && m == 39 || special && m == 41) // OBJ3D special case // 39 is unknown, 41 is egg husk
                 {
                     string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
-                    textureFileName = textureName;
                     uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
                     uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
                 }
@@ -305,11 +301,11 @@ namespace ALTViewer
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
 
-                if (uvSections.Count != 1 && !special) // PICKGFX / OBJ3D case
+                /*if (uvSections.Count != 1 && !special) // PICKGFX / OBJ3D case
                 {
                     textureFileName = $"{textureName}_TP{m:D2}";
-                }
-                File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureFileName}.png\n");
+                }*/
+                File.WriteAllText(outputPath + $"\\{nameAndNumber}.mtl", $"newmtl Texture01\nmap_Kd {textureName}.png\n");
 
                 // Write vertex positions
                 foreach (var v in vertices)
