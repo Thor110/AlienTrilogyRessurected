@@ -21,6 +21,7 @@ Level Viewer
 
 - Not really a level "viewer" per-se, currently it is just a testing tool for parsing level data, it can also export the level geometry as OBJ files.
 - May or may not extend it to level viewer and editor functionality one day.
+- Need to implement an export feature for the location of level objects, enemies, crates, pickups, switches, doors etc
 
 # Road Map
 
