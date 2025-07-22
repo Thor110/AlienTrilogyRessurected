@@ -206,11 +206,53 @@ namespace ALTViewer
         }
         public static void ExportModel(string modelName, List<BndSection> uvSections, List<BndSection> modelSections, string textureName, string outputPath)
         {
+            bool special = false;
+            List<BndSection> altSections = uvSections; // for OBJ3D special case
+            string backupName = textureName; // for OBJ3D special case
+            if (modelName == "OBJ3D")
+            {
+                special = true; // OBJ3D has special handling
+            }
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
                 var uvRects = ParseBxRectangles(uvSections[0].Data); // PICKGFX / OBJ3D case
-                if (uvSections.Count != 1) { uvRects = ParseBxRectangles(uvSections[m].Data); } // else PICKGFX / OBJ3D case
+                if (uvSections.Count != 1 && !special) { uvRects = ParseBxRectangles(uvSections[m].Data); } // PICKGFX case
+                string textureFileName = $"{textureName}_TP00";
+                // 0 / 1 / 2 are fine
+                if (special && m >= 3 && m <= 18) // OBJ3D special case
+                {
+                    // unknown locker textures
+                }
+                else if (special && m >=19 && m <= 34) // OBJ3D special case
+                {
+                    string fileDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
+                    textureName = "PNL1GFXE"; // append "_TP00" to the filename manually
+                    textureFileName = textureName;
+                    uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "BX");
+                    uvRects = ParseBxRectangles(uvSections[0].Data); // OBJ3D special case
+                }
+                else if (special && m == 35) // OBJ3D special case
+                {
+                    // coil obstacle
+                }
+                else if (special && m == 36) // OBJ3D special case
+                {
+                    // unknown
+                }
+                else if (special && m >= 37 && m <= 38) // OBJ3D special case
+                {
+                    uvSections = altSections; // restore previous BX sections
+                }
+                else if (special && m >= 39 && m <= 41) // OBJ3D special case
+                {
+                    // grenade looking objects
+                }
+                else if (special && m == 40) // OBJ3D special case
+                {
+                    // pod cover
+                }
+
 
                 br.ReadBytes(12); // OBJ1 + unknown
 
@@ -250,7 +292,6 @@ namespace ALTViewer
 
                 sw.WriteLine($"mtllib {nameAndNumber}.mtl");
                 sw.WriteLine("usemtl Texture01");
-                string textureFileName = $"{textureName}_TP00";
 
                 if (uvSections.Count != 1) // PICKGFX / OBJ3D case
                 {
