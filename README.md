@@ -52,6 +52,7 @@ The road map for this project.
 	- Map files detected and listed.
 	- Basic details parsed and listed.
 	- Export level geometry as OBJ files.
+	- Does not currently extract the associated textures alongside them.
 
 And possibly more to come.
 
