@@ -305,7 +305,7 @@ namespace ALTViewer
                 listBox1.SelectedIndex = i;
                 button5_Click(null!, null!);
             }
-            listBox1.SelectedIndex = previouslySelectedIndex; // restore previously selected index
+            if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
             MessageBox.Show($"Exported all levels with UVs!");
