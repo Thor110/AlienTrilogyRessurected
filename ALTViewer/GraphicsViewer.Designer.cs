@@ -52,9 +52,11 @@
             label4 = new Label();
             comboBox2 = new ComboBox();
             label5 = new Label();
+#if DEBUG
             numericUpDown1 = new NumericUpDown();
             button9 = new Button();
             numericUpDown2 = new NumericUpDown();
+#endif
             checkBox2 = new CheckBox();
             checkBox3 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();

@@ -91,6 +91,8 @@
             label30 = new Label();
             textBox19 = new TextBox();
             label31 = new Label();
+            listBox7 = new ListBox();
+            label32 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -161,17 +163,17 @@
             // textBox1
             // 
             textBox1.AccessibleDescription = "The output directory.";
-            textBox1.Location = new Point(413, 548);
+            textBox1.Location = new Point(302, 548);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
-            textBox1.Size = new Size(689, 23);
+            textBox1.Size = new Size(800, 23);
             textBox1.TabIndex = 6;
             textBox1.MouseDoubleClick += textBox1_MouseDoubleClick;
             // 
             // button4
             // 
             button4.AccessibleDescription = "Select output directory for the files.";
-            button4.Location = new Point(332, 548);
+            button4.Location = new Point(221, 548);
             button4.Name = "button4";
             button4.Size = new Size(75, 23);
             button4.TabIndex = 7;
@@ -183,7 +185,7 @@
             // 
             button5.AccessibleDescription = "Export the selected level as OBJ files.";
             button5.Enabled = false;
-            button5.Location = new Point(221, 548);
+            button5.Location = new Point(110, 548);
             button5.Name = "button5";
             button5.Size = new Size(105, 23);
             button5.TabIndex = 8;
@@ -195,7 +197,7 @@
             // 
             button6.AccessibleDescription = "Export all levels as OBJ files.";
             button6.Enabled = false;
-            button6.Location = new Point(221, 519);
+            button6.Location = new Point(110, 519);
             button6.Name = "button6";
             button6.Size = new Size(105, 23);
             button6.TabIndex = 9;
@@ -207,11 +209,10 @@
             // 
             listBox2.FormattingEnabled = true;
             listBox2.ItemHeight = 15;
-            listBox2.Location = new Point(110, 432);
+            listBox2.Location = new Point(982, 213);
             listBox2.Name = "listBox2";
-            listBox2.Size = new Size(105, 139);
+            listBox2.Size = new Size(120, 139);
             listBox2.TabIndex = 10;
-            listBox2.Visible = false;
             // 
             // textBox2
             // 
@@ -403,7 +404,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(110, 414);
+            label14.Location = new Point(982, 195);
             label14.Name = "label14";
             label14.Size = new Size(81, 15);
             label14.TabIndex = 33;
@@ -665,11 +666,31 @@
             label31.TabIndex = 61;
             label31.Text = "Unread Bytes :";
             // 
+            // listBox7
+            // 
+            listBox7.FormattingEnabled = true;
+            listBox7.ItemHeight = 15;
+            listBox7.Location = new Point(856, 213);
+            listBox7.Name = "listBox7";
+            listBox7.Size = new Size(120, 139);
+            listBox7.TabIndex = 62;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(856, 195);
+            label32.Name = "label32";
+            label32.Size = new Size(72, 15);
+            label32.TabIndex = 63;
+            label32.Text = "Lift Models :";
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(label32);
+            Controls.Add(listBox7);
             Controls.Add(label31);
             Controls.Add(textBox19);
             Controls.Add(label30);
@@ -803,5 +824,7 @@
         private Label label30;
         private TextBox textBox19;
         private Label label31;
+        private ListBox listBox7;
+        private Label label32;
     }
 }

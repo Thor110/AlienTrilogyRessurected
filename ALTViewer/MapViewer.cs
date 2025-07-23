@@ -90,10 +90,13 @@ namespace ALTViewer
             doors.Clear();
             // door models
             listBox2.Items.Clear(); // clear sections list box
-            listBox2.Visible = true; // show sections list box
+            listBox7.Items.Clear(); // clear sections list box
             //Door Models parsed separately for now
             currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
             foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
+            //Lift Models parsed separately for now
+            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse door sections from the selected level file
+            foreach (var section in currentSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
             // parse level data
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
