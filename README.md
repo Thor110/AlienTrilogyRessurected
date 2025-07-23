@@ -30,7 +30,7 @@ The road map for this project.
 - [❌ 1 : Text Editor](#text-editor) ( 50% Complete )
 	- View text from the games missions and user interface.
 	- Editing and saving functions not implemented yet.
-- [✅ 2 : Model Viewer](#model-viewer) ( 95% Complete )
+- [✅ 2 : Model Viewer](#model-viewer) ( 99% Complete )
 	- Can extract models from the three known model files.
 	- Does not currently extract the associated textures alongside them.
 - [✅ 3 : Graphics Viewer](#graphics-viewer) ( 99% Complete )
@@ -48,7 +48,7 @@ The road map for this project.
 	- Waveform preview for selected sound files.
 	- Link to the music directory, only available with the repack.
 	- Automatic backup of the original file by default.
-- [❌ 6 : Level Viewer](#level-viewer) ( 75% Complete )
+- [❌ 6 : Level Viewer](#level-viewer) ( 90% Complete )
 	- Map files detected and listed.
 	- Basic details parsed and listed.
 	- Export level geometry as OBJ files.
