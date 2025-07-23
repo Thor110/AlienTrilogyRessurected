@@ -320,6 +320,7 @@
             label5.TabIndex = 24;
             label5.Text = "Sub-frames";
             label5.Visible = false;
+#if DEBUG
             // 
             // numericUpDown1
             // 
@@ -353,6 +354,7 @@
             numericUpDown2.TabIndex = 26;
             numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
             numericUpDown2.Visible = false;
+#endif
             // 
             // checkBox2
             // 

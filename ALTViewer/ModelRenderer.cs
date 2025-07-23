@@ -54,7 +54,6 @@ namespace ALTViewer
             using var sw = new StreamWriter(objPath);
 
             using var mtlWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}.mtl"));
-
             sw.WriteLine($"# OBJ exported from Alien Trilogy {levelName}");
 
             sw.WriteLine($"mtllib {levelName}.mtl");
@@ -164,7 +163,7 @@ namespace ALTViewer
             }
 
             // Write faces with material switching
-            string currentMtl = null;
+            string currentMtl = null!;
             for (int i = 0; i < quads.Count; i++)
             {
                 var q = quads[i];
