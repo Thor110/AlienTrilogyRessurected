@@ -52,16 +52,9 @@
             label4 = new Label();
             comboBox2 = new ComboBox();
             label5 = new Label();
-#if DEBUG
-            numericUpDown1 = new NumericUpDown();
-            button9 = new Button();
-            numericUpDown2 = new NumericUpDown();
-#endif
             checkBox2 = new CheckBox();
             checkBox3 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
@@ -322,41 +315,6 @@
             label5.TabIndex = 24;
             label5.Text = "Sub-frames";
             label5.Visible = false;
-#if DEBUG
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Increment = new decimal(new int[] { 2, 0, 0, 0 });
-            numericUpDown1.Location = new Point(688, 96);
-            numericUpDown1.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(75, 23);
-            numericUpDown1.TabIndex = 25;
-            numericUpDown1.Visible = false;
-            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
-            // 
-            // button9
-            // 
-            button9.Location = new Point(688, 154);
-            button9.Name = "button9";
-            button9.Size = new Size(75, 23);
-            button9.TabIndex = 28;
-            button9.Text = "Detect";
-            button9.UseVisualStyleBackColor = true;
-            button9.Visible = false;
-            button9.Click += button9_Click;
-            // 
-            // numericUpDown2
-            // 
-            numericUpDown2.Location = new Point(688, 125);
-            numericUpDown2.Maximum = new decimal(new int[] { 300, 0, 0, 0 });
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.ReadOnly = true;
-            numericUpDown2.Size = new Size(75, 23);
-            numericUpDown2.TabIndex = 26;
-            numericUpDown2.Value = new decimal(new int[] { 200, 0, 0, 0 });
-            numericUpDown2.Visible = false;
-#endif
             // 
             // checkBox2
             // 
@@ -388,9 +346,6 @@
             ClientSize = new Size(800, 450);
             Controls.Add(checkBox3);
             Controls.Add(checkBox2);
-            Controls.Add(button9);
-            Controls.Add(numericUpDown2);
-            Controls.Add(numericUpDown1);
             Controls.Add(label5);
             Controls.Add(comboBox2);
             Controls.Add(label4);
@@ -417,11 +372,9 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "Graphics Viewer";
+            Name = "GraphicsViewer";
             Text = "Graphics Viewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -451,9 +404,6 @@
         private Label label4;
         private ComboBox comboBox2;
         private Label label5;
-        private NumericUpDown numericUpDown1;
-        private Button button9;
-        private NumericUpDown numericUpDown2;
         private CheckBox checkBox2;
         private CheckBox checkBox3;
     }

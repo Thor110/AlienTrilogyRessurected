@@ -108,7 +108,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(342, 16);
+            label1.Location = new Point(289, 16);
             label1.Name = "label1";
             label1.Size = new Size(92, 15);
             label1.TabIndex = 1;
@@ -118,7 +118,7 @@
             // 
             label2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(191, 16);
+            label2.Location = new Point(110, 16);
             label2.Name = "label2";
             label2.Size = new Size(69, 15);
             label2.TabIndex = 2;
@@ -128,18 +128,19 @@
             // 
             button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(1027, 12);
+            button1.Location = new Point(1027, 82);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
             button1.Text = "Full Screen";
             button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
             button1.Click += button1_Click;
             // 
             // button2
             // 
             button2.AccessibleDescription = "Close the level.";
-            button2.Location = new Point(110, 12);
+            button2.Location = new Point(1027, 111);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
@@ -152,12 +153,13 @@
             // 
             button3.AccessibleDescription = "Open the selected level.";
             button3.Enabled = false;
-            button3.Location = new Point(110, 12);
+            button3.Location = new Point(1027, 111);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
             button3.Text = "Open Level";
             button3.UseVisualStyleBackColor = true;
+            button3.Visible = false;
             button3.Click += button3_Click;
             // 
             // textBox1
@@ -651,7 +653,7 @@
             // textBox19
             // 
             textBox19.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox19.Location = new Point(921, 12);
+            textBox19.Location = new Point(209, 460);
             textBox19.Name = "textBox19";
             textBox19.ReadOnly = true;
             textBox19.Size = new Size(100, 23);
@@ -660,7 +662,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(833, 15);
+            label31.Location = new Point(121, 463);
             label31.Name = "label31";
             label31.Size = new Size(82, 15);
             label31.TabIndex = 61;

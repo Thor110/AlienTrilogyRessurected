@@ -585,34 +585,6 @@ namespace ALTViewer
             };
             form.Move += (s, args) => { if (this.Location != form.Location) { this.Location = form.Location; } };
         }
-#if DEBUG
-        // testing functions for numeric up down controls used to help determine the frame sizes
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e) { ReRender(); }
-        private void ReRender()
-        {
-            int width = (int)numericUpDown1.Value; // get width from numeric up down control
-            (w, h) = DetectDimensions.AutoDetectDimensions(lastSelectedFile, comboBox1.SelectedIndex, comboBox2.SelectedIndex);
-            pictureBox1.Image = TileRenderer.RenderRaw8bppImage(currentFrame!, currentPalette!, width, h, transparentValues);
-            pictureBox1.Width = width; // set picture box width
-        }
-        private void DetectAfterRender() // TEST Code commented out
-        {
-            numericUpDown1.Value = pictureBox1.Width;
-            numericUpDown2.Value = pictureBox1.Height;
-        }
-        private void button9_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < 300; i++)
-            {
-                if (pictureBox1.Width * i == currentFrame!.Length)
-                {
-                    numericUpDown2.Value = i;
-                    pictureBox1.Height = i;
-                    break;
-                }
-            }
-        }
-#endif
         // checkBox1_CheckedChanged event handler for transparency checkbox
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
