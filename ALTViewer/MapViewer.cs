@@ -137,7 +137,7 @@ namespace ALTViewer
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             //MessageBox.Show($"{ms.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
-            for (int i = 0; i < monsterCount; i++)
+            for (int i = 0; i < monsterCount; i++) // 28
             {
                 byte type = br.ReadByte();
                 byte x = br.ReadByte();
@@ -152,7 +152,7 @@ namespace ALTViewer
             }
             //MessageBox.Show($"Pickups : {ms.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
-            for (int i = 0; i < pickupCount; i++)
+            for (int i = 0; i < pickupCount; i++) // 28
             {
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
@@ -166,7 +166,7 @@ namespace ALTViewer
             }
             //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
-            for (int i = 0; i < boxCount; i++)
+            for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
@@ -180,7 +180,7 @@ namespace ALTViewer
             }
             //MessageBox.Show($"Doors : {ms.Position}"); // 479196 + 20 = 479216 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
-            for (int i = 0; i < doorCount; i++)
+            for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
