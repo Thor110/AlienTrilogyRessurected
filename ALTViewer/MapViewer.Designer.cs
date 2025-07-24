@@ -375,11 +375,11 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(162, 285);
+            label11.Location = new Point(153, 285);
             label11.Name = "label11";
-            label11.Size = new Size(44, 15);
+            label11.Size = new Size(53, 15);
             label11.TabIndex = 29;
-            label11.Text = "Boxes :";
+            label11.Text = "Objects :";
             // 
             // label12
             // 
@@ -479,9 +479,9 @@
             label17.AutoSize = true;
             label17.Location = new Point(856, 355);
             label17.Name = "label17";
-            label17.Size = new Size(38, 15);
+            label17.Size = new Size(47, 15);
             label17.TabIndex = 40;
-            label17.Text = "Boxes";
+            label17.Text = "Objects";
             // 
             // label18
             // 

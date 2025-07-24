@@ -200,7 +200,7 @@ namespace ALTViewer
             // populate list boxes
             for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
-            for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Box {i}"); }
+            for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
             // display remaining bytes
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
