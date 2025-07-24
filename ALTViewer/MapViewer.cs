@@ -38,6 +38,7 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Type)> boxes = new();
         private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
         private bool exporting;
+        private byte[] remainder = null!; // remainder of the file data after parsing
         public MapViewer()
         {
             InitializeComponent();
@@ -97,7 +98,7 @@ namespace ALTViewer
             //Lift Models parsed separately for now
             currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse door sections from the selected level file
             foreach (var section in currentSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
-            // parse level data
+            // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
             ushort vertCount = br.ReadUInt16();
@@ -126,29 +127,11 @@ namespace ALTViewer
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             br.ReadBytes(10);                               // unknown 3 & 4
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
-            for (int i = 0; i < vertCount; i++)
-            {
-                short x = br.ReadInt16();
-                short y = br.ReadInt16();
-                short z = br.ReadInt16();
-                br.ReadUInt16(); // padding
-                vertices.Add((x, y, z));
-            }
+            br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
-            for (int i = 0; i < quadCount; i++)
-            {
-                int a = br.ReadInt32();
-                int b = br.ReadInt32();
-                int c = br.ReadInt32();
-                int d = br.ReadInt32();
-                ushort texIndex = br.ReadUInt16();
-                byte flags = br.ReadByte(); // unused for now
-                br.ReadByte(); // unknown byte
-                quads.Add((a, b, c, d, texIndex));
-            }
+            br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
-            int cellSize = mapLength * mapWidth * 16; // TODO : Size?
-            br.BaseStream.Seek(cellSize, SeekOrigin.Current); // skip cell size data
+            br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             for (int i = 0; i < monsterCount; i++)
             {
@@ -216,8 +199,7 @@ namespace ALTViewer
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             textBox19.Text = remainingBytes.ToString();
             // dump remaining bytes
-            //byte[] remainder = br.ReadBytes((int)remainingBytes);
-            //File.WriteAllBytes($"remainder_{selected}.bin", remainder);
+            remainder = br.ReadBytes((int)remainingBytes);
             //
             button3.Enabled = true;
         }
@@ -256,6 +238,8 @@ namespace ALTViewer
                 textBox1.Text = outputPath; // update text box with selected path
                 button5.Enabled = true; // enable export button
                 button6.Enabled = true; // enable export all button
+                button7.Enabled = true; // enable dump remainder button
+                button8.Enabled = true; // enable dump all remainders button
             }
         }
         // export selected map as OBJ
@@ -449,5 +433,26 @@ namespace ALTViewer
         private void checkBox1_CheckedChanged(object sender, EventArgs e) { if (checkBox1.Checked) { checkBox2.Checked = false; } }
         // debug unknown flags
         private void checkBox2_CheckedChanged(object sender, EventArgs e) { if (checkBox2.Checked) { checkBox1.Checked = false; } }
+        // dump remainder of the file data
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first!"); return; }
+            File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
+            MessageBox.Show("Remainder dumped.");
+        }
+        // dump all remainders from all levels data
+        private void button8_Click(object sender, EventArgs e)
+        {
+            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
+            {
+                listBox1.SelectedIndex = i;
+                File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
+            }
+            if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            MessageBox.Show("All remainders dumped.");
+        }
     }
 }

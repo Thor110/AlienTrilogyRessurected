@@ -95,6 +95,8 @@
             label32 = new Label();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
+            button7 = new Button();
+            button8 = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -712,11 +714,35 @@
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
+            // button7
+            // 
+            button7.Enabled = false;
+            button7.Location = new Point(315, 460);
+            button7.Name = "button7";
+            button7.Size = new Size(114, 23);
+            button7.TabIndex = 66;
+            button7.Text = "Dump Remainder";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
+            // button8
+            // 
+            button8.Enabled = false;
+            button8.Location = new Point(315, 431);
+            button8.Name = "button8";
+            button8.Size = new Size(114, 23);
+            button8.TabIndex = 67;
+            button8.Text = "Dump Remainders";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(button8);
+            Controls.Add(button7);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(label32);
@@ -858,5 +884,7 @@
         private Label label32;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
+        private Button button7;
+        private Button button8;
     }
 }
