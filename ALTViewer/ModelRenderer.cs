@@ -278,7 +278,7 @@ namespace ALTViewer
         }
         public static void GenerateFlagTextures(string outputDir, string levelName)
         {
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 18; i++) // textureFlags.Count = 18
             {
                 using var bmp = new Bitmap(256, 256);
                 using var g = Graphics.FromImage(bmp);
