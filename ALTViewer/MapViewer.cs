@@ -294,8 +294,12 @@ namespace ALTViewer
                 File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
             }*/
             //TODO : make new method for parsing level section data
-            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath);
-            if(!exporting) { MessageBox.Show($"Exported {caseName} with UVs!"); }
+            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
+            if(!exporting)
+            {
+                if (checkBox2.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, caseName); } // Generate textures for unknown flags
+                MessageBox.Show($"Exported {caseName} with UVs!");
+            }
         }
         // export all maps as OBJ
         private void button6_Click(object sender, EventArgs e)
@@ -311,6 +315,8 @@ namespace ALTViewer
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
+
+            if (checkBox2.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for unknown flags
             MessageBox.Show($"Exported all levels with UVs!");
         }
         // double click to open output path

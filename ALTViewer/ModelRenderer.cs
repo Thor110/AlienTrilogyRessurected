@@ -1,11 +1,32 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace ALTViewer
 {
     public static class ModelRenderer
     {
         public const float texSize = 256f;
-        public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
+        public static int[] unknownValues = new int[]
+        {
+            3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+            22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 38,
+            40, 43, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 59, 61,
+            62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 75, 77, 78, 79,
+            80, 81, 82, 83, 84, 85, 87, 88, 89, 90, 91, 93, 94, 95, 96, 97,
+            98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+            111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
+            124, 125, 126, 127, 128, 133, 134, 135, 136, 137, 138, 139, 140,
+            141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153,
+            154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 166, 168,
+            171, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184,
+            187, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200,
+            201, 203, 205, 206, 207, 208, 209, 210, 211, 212, 213, 215, 216,
+            217, 218, 219, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231,
+            232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244,
+            245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
+        };
+        public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 };
+        public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
@@ -31,7 +52,7 @@ namespace ALTViewer
                 br.ReadBytes(2); // unknown bytes
                 vertices.Add((x, y, z));
             }
-            List<(int A, int B, int C, int D, ushort TexIndex, byte Flags)> quads = new();
+            List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
             for (int i = 0; i < quadCount; i++) // Count Quads
             {
                 int a = br.ReadInt32();
@@ -40,9 +61,9 @@ namespace ALTViewer
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16(); // signed or unsigned?
                 byte flags = br.ReadByte();
-                br.ReadByte(); // unknown byte
+                byte other = br.ReadByte(); // unknown byte
 
-                quads.Add((a, b, c, d, texIndex, flags));
+                quads.Add((a, b, c, d, texIndex, flags, other));
             }
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
@@ -57,11 +78,39 @@ namespace ALTViewer
             sw.WriteLine($"# OBJ exported from Alien Trilogy {levelName}");
 
             sw.WriteLine($"mtllib {levelName}.mtl");
-            
-            for (int t = 0; t < 5; t++)
+
+
+            if (debug)
             {
-                mtlWriter.WriteLine($"newmtl Texture{t:D2}");
-                mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
+                foreach (int f in textureFlags)
+                {
+                    if (f == 255)
+                    {
+                        mtlWriter.WriteLine($"newmtl Texture{f}");
+                        mtlWriter.WriteLine($"map_Kd TEST{f}.png");
+                    }
+                    else
+                    {
+                        mtlWriter.WriteLine($"newmtl Texture{f:D2}");
+                        mtlWriter.WriteLine($"map_Kd TEST{f}.png");
+                    }
+                }
+            }
+            else if (unknown)
+            {
+                for (int t = 0; t < 222; t++)
+                {
+                    mtlWriter.WriteLine($"newmtl UnkByte_{unknownValues[t]}");
+                    mtlWriter.WriteLine($"map_Kd UnkByte_{unknownValues[t]}.png");
+                }
+            }
+            else
+            {
+                for (int t = 0; t < 5; t++)
+                {
+                    mtlWriter.WriteLine($"newmtl Texture{t:D2}");
+                    mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
+                }
             }
             // Write vertex positions
             foreach (var v in vertices)
@@ -69,6 +118,7 @@ namespace ALTViewer
                 sw.WriteLine($"v {v.X:F4} {v.Y:F4} {v.Z:F4}");
             }
 
+            //using var unkWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}.unk"));
             // Store unique UVs and their indices
             var uvDict = new Dictionary<(float, float), int>();
             var uvList = new List<(float, float)>();
@@ -182,12 +232,32 @@ namespace ALTViewer
                     }
                     localIndex -= count;
                 }
+                //
+                string matName = "";
+                if (debug)
+                {
+                    if(q.Flags == 255) { matName = $"usemtl UnkByte_{q.Flags:D3}"; }
+                    else { matName = $"usemtl UnkByte_{q.Flags:D2}"; }
+                }
+                else if (unknown) { matName = $"usemtl UnkByte_{q.Other}"; }
+                else { matName = $"Texture{texGroup:D2}"; }
 
-                string matName = $"Texture{texGroup:D2}";
                 if (matName != currentMtl)
                 {
                     currentMtl = matName;
-                    sw.WriteLine($"usemtl {matName}");
+                    if(debug)
+                    {
+                        if (q.Flags == 255) { sw.WriteLine($"usemtl Texture{q.Flags:D3}"); }
+                        else { sw.WriteLine($"usemtl Texture{q.Flags:D2}"); }
+                    }
+                    else if (unknown)
+                    {
+                        sw.WriteLine($"usemtl UnkByte_{q.Other}");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"usemtl {matName}");
+                    }   
                 }
                 // Validate vertex indices
                 if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
@@ -204,6 +274,40 @@ namespace ALTViewer
                 {
                     sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
                 }
+            }
+        }
+        public static void GenerateFlagTextures(string outputDir, string levelName)
+        {
+            using var unkWriter = new StreamWriter(Path.Combine(outputDir, $"{levelName}.mtl"));
+
+            for (int i = 0; i < 222; i++) // unknownValues.Count = 222
+            {
+                unkWriter.WriteLine($"newmtl UnkByte_{unknownValues[i]}");
+                unkWriter.WriteLine($"map_Kd UnkByte_{unknownValues[i]}.png");
+
+                using var bmp = new Bitmap(256, 256);
+                using var g = Graphics.FromImage(bmp);
+                g.Clear(Color.Black);
+
+                string number = $"{unknownValues[i]}";
+                using var font = new Font("Arial", 8, FontStyle.Bold);
+                using var brush = new SolidBrush(Color.White);
+                var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+
+                for (int y = 0; y < 8; y++)
+                {
+                    for (int x = 0; x < 8; x++)
+                    {
+                        int tileIndex = y * 8 + x;
+                        if (tileIndex >= 64) break;
+
+                        Rectangle tileRect = new Rectangle(x * 32, y * 32, 32, 32);
+                        g.DrawRectangle(Pens.Gray, tileRect);
+                        g.DrawString(number, font, brush, tileRect, sf);
+                    }
+                }
+
+                bmp.Save(Path.Combine(outputDir, $"UnkByte_{unknownValues[i]}.png"), ImageFormat.Png);
             }
         }
         public static void ExportModel(string modelName, string textureDirectory, string modelDirectory, string textureName, string outputPath)

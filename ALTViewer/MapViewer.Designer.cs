@@ -93,6 +93,8 @@
             label31 = new Label();
             listBox7 = new ListBox();
             label32 = new Label();
+            checkBox1 = new CheckBox();
+            checkBox2 = new CheckBox();
             SuspendLayout();
             // 
             // listBox1
@@ -686,11 +688,35 @@
             label32.TabIndex = 63;
             label32.Text = "Lift Models :";
             // 
+            // checkBox1
+            // 
+            checkBox1.AccessibleDescription = "For exporting with all faces mapped to their in-game flags, for debugging.";
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(226, 521);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(91, 19);
+            checkBox1.TabIndex = 64;
+            checkBox1.Text = "Debug Flags";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            checkBox2.AccessibleDescription = "For exporting with all faces mapped to their in-game unknown bytes, for debugging.";
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(226, 496);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(115, 19);
+            checkBox2.TabIndex = 65;
+            checkBox2.Text = "Debug Unknown";
+            checkBox2.UseVisualStyleBackColor = true;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(checkBox2);
+            Controls.Add(checkBox1);
             Controls.Add(label32);
             Controls.Add(listBox7);
             Controls.Add(label31);
@@ -828,5 +854,7 @@
         private Label label31;
         private ListBox listBox7;
         private Label label32;
+        private CheckBox checkBox1;
+        private CheckBox checkBox2;
     }
 }
