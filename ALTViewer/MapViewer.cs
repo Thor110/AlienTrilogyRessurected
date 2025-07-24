@@ -29,7 +29,8 @@ namespace ALTViewer
         };
         private string lastSelectedLevel = "";
         FullScreen fullScreen;
-        private List<BndSection> currentSections = null!; // current sections for the selected file
+        private List<BndSection> doorSections = null!; // door sections for the selected file
+        private List<BndSection> liftSections = null!; // lift sections for the selected file
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
@@ -93,11 +94,11 @@ namespace ALTViewer
             listBox2.Items.Clear(); // clear sections list box
             listBox7.Items.Clear(); // clear sections list box
             //Door Models parsed separately for now
-            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
-            foreach (var section in currentSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
+            doorSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
+            foreach (var section in doorSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             //Lift Models parsed separately for now
-            currentSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse door sections from the selected level file
-            foreach (var section in currentSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
+            liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse door sections from the selected level file
+            foreach (var section in doorSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
             // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var ms = new MemoryStream(levelSections[0].Data);
@@ -133,6 +134,7 @@ namespace ALTViewer
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
+            //MessageBox.Show($"{ms.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
@@ -208,13 +210,10 @@ namespace ALTViewer
             // dump remaining bytes
             remainder = br.ReadBytes((int)remainingBytes);
             //
-            button3.Enabled = true;
+            button3.Enabled = true; // enable open level button
         }
         // full screen toggle
-        private void button1_Click(object sender, EventArgs e)
-        {
-            fullScreen.Toggle();
-        }
+        private void button1_Click(object sender, EventArgs e) { fullScreen.Toggle(); }
         // close level button
         private void button2_Click(object sender, EventArgs e)
         {
@@ -435,6 +434,16 @@ namespace ALTViewer
                 ListBox lb when lb == listBox6 => listBox6_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
+        }
+        // door models
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        // lift models
+        private void listBox7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
         // debug texture flags
         private void checkBox1_CheckedChanged(object sender, EventArgs e) { if (checkBox1.Checked) { checkBox2.Checked = false; } }

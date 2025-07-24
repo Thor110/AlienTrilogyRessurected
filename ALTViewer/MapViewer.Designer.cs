@@ -219,6 +219,7 @@
             listBox2.Name = "listBox2";
             listBox2.Size = new Size(120, 139);
             listBox2.TabIndex = 10;
+            listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged;
             // 
             // textBox2
             // 
@@ -680,6 +681,7 @@
             listBox7.Name = "listBox7";
             listBox7.Size = new Size(120, 139);
             listBox7.TabIndex = 62;
+            listBox7.SelectedIndexChanged += listBox7_SelectedIndexChanged;
             // 
             // label32
             // 
