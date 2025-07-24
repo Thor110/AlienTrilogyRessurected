@@ -698,6 +698,7 @@
             checkBox1.TabIndex = 64;
             checkBox1.Text = "Debug Flags";
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // checkBox2
             // 
@@ -709,6 +710,7 @@
             checkBox2.TabIndex = 65;
             checkBox2.Text = "Debug Unknown";
             checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
             // MapViewer
             // 

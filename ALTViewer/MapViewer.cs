@@ -295,9 +295,10 @@ namespace ALTViewer
             }*/
             //TODO : make new method for parsing level section data
             ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
-            if(!exporting)
+            if (!exporting)
             {
-                if (checkBox2.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, caseName); } // Generate textures for unknown flags
+                if (checkBox1.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, caseName); } // Generate textures for unknown flags
+                else if (checkBox2.Checked) { ModelRenderer.GenerateUnknownTextures(outputPath, caseName); } // Generate textures for unknown flags
                 MessageBox.Show($"Exported {caseName} with UVs!");
             }
         }
@@ -316,7 +317,8 @@ namespace ALTViewer
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
 
-            if (checkBox2.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for unknown flags
+            if (checkBox1.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for unknown flags
+            else if (checkBox2.Checked) { ModelRenderer.GenerateUnknownTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for unknown flags
             MessageBox.Show($"Exported all levels with UVs!");
         }
         // double click to open output path
@@ -440,5 +442,9 @@ namespace ALTViewer
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
+        // debug texture flags
+        private void checkBox1_CheckedChanged(object sender, EventArgs e) { if (checkBox1.Checked) { checkBox2.Checked = false; } }
+        // debug unknown flags
+        private void checkBox2_CheckedChanged(object sender, EventArgs e) { if (checkBox2.Checked) { checkBox1.Checked = false; } }
     }
 }

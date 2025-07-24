@@ -87,12 +87,12 @@ namespace ALTViewer
                     if (f == 255)
                     {
                         mtlWriter.WriteLine($"newmtl Texture{f}");
-                        mtlWriter.WriteLine($"map_Kd TEST{f}.png");
+                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
                     }
                     else
                     {
                         mtlWriter.WriteLine($"newmtl Texture{f:D2}");
-                        mtlWriter.WriteLine($"map_Kd TEST{f}.png");
+                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
                     }
                 }
             }
@@ -278,13 +278,40 @@ namespace ALTViewer
         }
         public static void GenerateFlagTextures(string outputDir, string levelName)
         {
-            using var unkWriter = new StreamWriter(Path.Combine(outputDir, $"{levelName}.mtl"));
+            for (int i = 0; i < 18; i++)
+            {
+                using var bmp = new Bitmap(256, 256);
+                using var g = Graphics.FromImage(bmp);
 
+                switch (textureFlags[i])
+                {
+                    case 0: g.Clear(Color.Black); break;
+                    case 1: g.Clear(Color.DarkGray); break;
+                    case 2: g.Clear(Color.DarkRed); break;
+                    case 3: g.Clear(Color.Red); break;
+                    case 4: g.Clear(Color.Orange); break;
+                    case 5: g.Clear(Color.Yellow); break;
+                    case 6: g.Clear(Color.Green); break;
+                    case 8: g.Clear(Color.Blue); break;
+                    case 10: g.Clear(Color.DarkBlue); break;
+                    case 12: g.Clear(Color.Purple); break;
+                    case 13: g.Clear(Color.White); break;
+                    case 14: g.Clear(Color.LightGray); break;
+                    case 26: g.Clear(Color.Brown); break;
+                    case 28: g.Clear(Color.Pink); break;
+                    case 30: g.Clear(Color.Gold); break;
+                    case 32: g.Clear(Color.Tan); break;
+                    case 34: g.Clear(Color.LimeGreen); break;
+                    case 255: g.Clear(Color.SkyBlue); break;
+                }
+                
+                bmp.Save(Path.Combine(outputDir, $"FLAGS{textureFlags[i]}.png"), ImageFormat.Png);
+            }
+        }
+        public static void GenerateUnknownTextures(string outputDir, string levelName)
+        {
             for (int i = 0; i < 222; i++) // unknownValues.Count = 222
             {
-                unkWriter.WriteLine($"newmtl UnkByte_{unknownValues[i]}");
-                unkWriter.WriteLine($"map_Kd UnkByte_{unknownValues[i]}.png");
-
                 using var bmp = new Bitmap(256, 256);
                 using var g = Graphics.FromImage(bmp);
                 g.Clear(Color.Black);
