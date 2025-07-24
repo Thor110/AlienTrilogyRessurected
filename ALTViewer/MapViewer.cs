@@ -100,7 +100,9 @@ namespace ALTViewer
             foreach (var section in currentSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
             // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
-            using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
+            using var ms = new MemoryStream(levelSections[0].Data);
+            using var br = new BinaryReader(ms);
+            //using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
             ushort vertCount = br.ReadUInt16();
             textBox2.Text = vertCount.ToString();           // display vertex count
             ushort quadCount = br.ReadUInt16();
@@ -114,6 +116,7 @@ namespace ALTViewer
             ushort playerStartY = br.ReadUInt16();
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             br.ReadBytes(2);                                // unknown 1
+            //MessageBox.Show($"Monster : {ms.Position}"); // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();
@@ -133,6 +136,7 @@ namespace ALTViewer
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
+            //MessageBox.Show($"{ms.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++)
             {
                 byte type = br.ReadByte();
@@ -146,6 +150,7 @@ namespace ALTViewer
                 br.ReadBytes(4); // unknown bytes
                 monsters.Add((type, x, y, z, health, drop, speed));
             }
+            //MessageBox.Show($"Pickups : {ms.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++)
             {
@@ -159,6 +164,7 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
+            //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++)
             {
@@ -172,6 +178,7 @@ namespace ALTViewer
                 br.ReadBytes(8); // unknown bytes
                 boxes.Add((x, y, type));
             }
+            //MessageBox.Show($"Doors : {ms.Position}"); // 479196 + 20 = 479216 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++)
             {

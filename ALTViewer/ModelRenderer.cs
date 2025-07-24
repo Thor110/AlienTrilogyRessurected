@@ -31,6 +31,7 @@ namespace ALTViewer
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
             ushort quadCount = br.ReadUInt16();         // Number of quads
+            /* // uncomment if you want to read the level header
             ushort mapLength = br.ReadUInt16();         // Length of the map section
             ushort mapWidth = br.ReadUInt16();          // Width of the map section
             ushort playerStartX = br.ReadUInt16();      // Player start X coordinate
@@ -43,6 +44,8 @@ namespace ALTViewer
             br.ReadBytes(2);                            // unknown 2 bytes
             ushort playerStartAngle = br.ReadUInt16();  // Player start angle
             br.ReadBytes(10);                           // unknown 6 and 4 bytes
+            */ // comment out the next line if you want to read the level header
+            br.BaseStream.Seek(32, SeekOrigin.Current); // Skip 36 bytes to reach vertex and quad data
             List<(short X, short Y, short Z)> vertices = new();
             for (int i = 0; i < vertCount; i++) // Count Vertices
             {
