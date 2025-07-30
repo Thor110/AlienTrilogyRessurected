@@ -193,7 +193,7 @@
             // 
             // button5
             // 
-            button5.AccessibleDescription = "Export the selected level as OBJ files.";
+            button5.AccessibleDescription = "Export the selected level as an OBJ file.";
             button5.Enabled = false;
             button5.Location = new Point(110, 548);
             button5.Name = "button5";
@@ -698,7 +698,7 @@
             // 
             // checkBox1
             // 
-            checkBox1.AccessibleDescription = "For exporting with all faces mapped to their in-game flags, for debugging.";
+            checkBox1.AccessibleDescription = "For exporting levels with all faces mapped to their in-game flags, for debugging.";
             checkBox1.AutoSize = true;
             checkBox1.Location = new Point(226, 521);
             checkBox1.Name = "checkBox1";
@@ -710,7 +710,7 @@
             // 
             // checkBox2
             // 
-            checkBox2.AccessibleDescription = "For exporting with all faces mapped to their in-game unknown bytes, for debugging.";
+            checkBox2.AccessibleDescription = "For exporting levels with all faces mapped to their in-game unknown bytes, for debugging.";
             checkBox2.AutoSize = true;
             checkBox2.Location = new Point(226, 496);
             checkBox2.Name = "checkBox2";
@@ -744,6 +744,7 @@
             // 
             // button9
             // 
+            button9.AccessibleDescription = "Export the selected door as an OBJ file.";
             button9.Enabled = false;
             button9.Location = new Point(982, 169);
             button9.Name = "button9";
@@ -755,6 +756,7 @@
             // 
             // button10
             // 
+            button10.AccessibleDescription = "Export all doors as OBJ files.";
             button10.Enabled = false;
             button10.Location = new Point(110, 490);
             button10.Name = "button10";
@@ -766,6 +768,7 @@
             // 
             // button11
             // 
+            button11.AccessibleDescription = "Export the selected lift as an OBJ file.";
             button11.Enabled = false;
             button11.Location = new Point(856, 169);
             button11.Name = "button11";
@@ -777,6 +780,7 @@
             // 
             // button12
             // 
+            button12.AccessibleDescription = "Export all lifts as OBJ files.";
             button12.Enabled = false;
             button12.Location = new Point(110, 461);
             button12.Name = "button12";
