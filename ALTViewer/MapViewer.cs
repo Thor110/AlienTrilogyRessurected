@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ALTViewer
 {
@@ -83,13 +84,6 @@ namespace ALTViewer
                     break; // exit after finding the first matching level
                 }
             }
-            // clear lists
-            vertices.Clear();
-            quads.Clear();
-            monsters.Clear();
-            pickups.Clear();
-            boxes.Clear();
-            doors.Clear();
             // door models
             listBox2.Items.Clear(); // clear sections list box
             listBox7.Items.Clear(); // clear sections list box
@@ -97,8 +91,16 @@ namespace ALTViewer
             doorSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "D0"); // parse door sections from the selected level file
             foreach (var section in doorSections) { listBox2.Items.Add(section.Name); } // Populate ListBox with section names
             //Lift Models parsed separately for now
-            liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse door sections from the selected level file
-            foreach (var section in doorSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
+            liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse lift sections from the selected level file
+            foreach (var section in liftSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
+            if (exporting) { return; } // if exporting, do not parse level data meant for viewing
+            // clear lists
+            vertices.Clear();
+            quads.Clear();
+            monsters.Clear();
+            pickups.Clear();
+            boxes.Clear();
+            doors.Clear();
             // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var ms = new MemoryStream(levelSections[0].Data);
@@ -246,6 +248,10 @@ namespace ALTViewer
                 button6.Enabled = true; // enable export all button
                 button7.Enabled = true; // enable dump remainder button
                 button8.Enabled = true; // enable dump all remainders button
+                button9.Enabled = true; // enable export doors button
+                button10.Enabled = true; // enable export all doors button
+                button11.Enabled = true; // enable export lifts button
+                button12.Enabled = true; // enable export all lifts button
             }
         }
         // export selected map as OBJ
@@ -435,16 +441,6 @@ namespace ALTViewer
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
-        // door models
-        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-        // lift models
-        private void listBox7_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         // debug texture flags
         private void checkBox1_CheckedChanged(object sender, EventArgs e) { if (checkBox1.Checked) { checkBox2.Checked = false; } }
         // debug unknown flags
@@ -469,6 +465,114 @@ namespace ALTViewer
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             MessageBox.Show("All remainders dumped.");
+        }
+        // door models
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // unused for now
+        }
+        // lift models
+        private void listBox7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // unused for now
+        }
+        // export door as OBJ
+        private void button9_Click(object sender, EventArgs e)
+        {
+            int selectedIndex = listBox2.SelectedIndex;
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first."); return; }
+            if (selectedIndex == -1) { MessageBox.Show("Please select a door first."); return; }
+            string caseName = listBox1.SelectedItem!.ToString()!;
+            string levelNumber = caseName.Substring(1, 3);
+            string fileDirectory = levelNumber.Substring(0, 2) switch
+            {
+                "11" or "12" or "13" => levelPath1,
+                "14" or "15" or "16" => levelPath2,
+                "21" or "22" or "23" => levelPath3,
+                "24" or "26" => levelPath4,
+                "31" or "32" or "33" => levelPath5,
+                "35" or "36" or "37" or "38" or "39" => levelPath6,
+                "90" => levelPath7,
+                _ => throw new Exception("Unknown section selected!")
+            };
+            string textureDirectory = fileDirectory + "\\" + $"{levelNumber}GFX.B16";
+            if (!File.Exists(textureDirectory))
+            {
+                MessageBox.Show($"Associated graphics file {caseName}.MAP does not exist!");
+                return;
+            }
+            // parse the BND sections for UVs and model data
+            List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_DOOR{selectedIndex:D2}", uvSections, doorSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath);
+            if (!exporting) { MessageBox.Show("Door model exported."); }
+        }
+        // export all doors as OBJ
+        private void button10_Click(object sender, EventArgs e)
+        {
+            exporting = true;
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
+            {
+                listBox1.SelectedIndex = i;
+                for (int d = 0; d < listBox2.Items.Count; d++) // loop through all levels and export each map
+                {
+                    listBox2.SelectedIndex = d;
+                    button9_Click(null!, null!);
+                }
+            }
+            if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
+            exporting = false;
+            MessageBox.Show("All door models exported.");
+        }
+        // export lift as OBJ
+        private void button11_Click(object sender, EventArgs e)
+        {
+            int selectedIndex = listBox7.SelectedIndex;
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first."); return; }
+            if (selectedIndex == -1) { MessageBox.Show("Please select a lift first."); return; }
+            if (liftSections.Count == 0 && !exporting) { MessageBox.Show("No lift sections found for the selected level!"); return; }
+            string caseName = listBox1.SelectedItem!.ToString()!;
+            string levelNumber = caseName.Substring(1, 3);
+            string fileDirectory = levelNumber.Substring(0, 2) switch
+            {
+                "11" or "12" or "13" => levelPath1,
+                "14" or "15" or "16" => levelPath2,
+                "21" or "22" or "23" => levelPath3,
+                "24" or "26" => levelPath4,
+                "31" or "32" or "33" => levelPath5,
+                "35" or "36" or "37" or "38" or "39" => levelPath6,
+                "90" => levelPath7,
+                _ => throw new Exception("Unknown section selected!")
+            };
+            string textureDirectory = fileDirectory + "\\" + $"{levelNumber}GFX.B16";
+            if (!File.Exists(textureDirectory))
+            {
+                MessageBox.Show($"Associated graphics file {caseName}.MAP does not exist!");
+                return;
+            }
+            // parse the BND sections for UVs and model data
+            List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
+            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_LIFT{selectedIndex:D2}", uvSections, liftSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath);
+            if (!exporting) { MessageBox.Show("Lift model exported."); }
+        }
+        // export all lifts as OBJ
+        private void button12_Click(object sender, EventArgs e)
+        {
+            exporting = true;
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
+            {
+                listBox1.SelectedIndex = i;
+                if (liftSections == null || liftSections.Count == 0) { continue; }
+                for (int d = 0; d < listBox7.Items.Count; d++) // loop through all levels and export each map
+                {
+                    listBox7.SelectedIndex = d;
+                    button11_Click(null!, null!);
+                }
+            }
+            if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
+            exporting = false;
+            MessageBox.Show("All lift models exported.");
         }
     }
 }

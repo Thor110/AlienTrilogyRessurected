@@ -163,3 +163,15 @@ A view of L112LEV from within Blender.
 <div align="center">
   <img src="Images/blender.png" alt="L112LEV Blender Preview">
 </div>
+
+A preview of the door D000 from L111LEV.
+
+<div align="center">
+  <img src="Images/doorobject.png" alt="L111LEV Door Preview">
+</div>
+
+A preview of the lift L000 from L232LEV.
+
+<div align="center">
+  <img src="Images/liftobject.png" alt="L232LEV Lift Preview">
+</div>

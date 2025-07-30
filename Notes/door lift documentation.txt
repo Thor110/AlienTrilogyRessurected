@@ -1,0 +1,16 @@
+Door or Lift Header
+0x4 - Object Name & Number "D###" or "L###"
+0x2 - Unknown or padding
+0x2 - Length of Data (Big Endian) <->
+
+Model Header ( Data ) <->
+0x4 - Model Header "OBJ1"
+0x4 - Unknown or padding
+0x4 - Unknown
+0x4 - Quad Count
+0x4 - Vert Count
+
+Quad * 20
+Vert * 8
+
+Uses BX sections from level data

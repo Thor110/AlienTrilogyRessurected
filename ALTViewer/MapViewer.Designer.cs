@@ -97,6 +97,10 @@
             checkBox2 = new CheckBox();
             button7 = new Button();
             button8 = new Button();
+            button9 = new Button();
+            button10 = new Button();
+            button11 = new Button();
+            button12 = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -132,7 +136,7 @@
             // 
             button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(1027, 82);
+            button1.Location = new Point(1027, 74);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
@@ -144,7 +148,7 @@
             // button2
             // 
             button2.AccessibleDescription = "Close the level.";
-            button2.Location = new Point(1027, 111);
+            button2.Location = new Point(1027, 103);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
@@ -157,7 +161,7 @@
             // 
             button3.AccessibleDescription = "Open the selected level.";
             button3.Enabled = false;
-            button3.Location = new Point(1027, 111);
+            button3.Location = new Point(1027, 103);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
@@ -658,7 +662,7 @@
             // textBox19
             // 
             textBox19.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox19.Location = new Point(209, 460);
+            textBox19.Location = new Point(882, 41);
             textBox19.Name = "textBox19";
             textBox19.ReadOnly = true;
             textBox19.Size = new Size(100, 23);
@@ -667,7 +671,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(121, 463);
+            label31.Location = new Point(794, 44);
             label31.Name = "label31";
             label31.Size = new Size(82, 15);
             label31.TabIndex = 61;
@@ -719,7 +723,7 @@
             // button7
             // 
             button7.Enabled = false;
-            button7.Location = new Point(315, 460);
+            button7.Location = new Point(988, 41);
             button7.Name = "button7";
             button7.Size = new Size(114, 23);
             button7.TabIndex = 66;
@@ -730,7 +734,7 @@
             // button8
             // 
             button8.Enabled = false;
-            button8.Location = new Point(315, 431);
+            button8.Location = new Point(988, 12);
             button8.Name = "button8";
             button8.Size = new Size(114, 23);
             button8.TabIndex = 67;
@@ -738,11 +742,59 @@
             button8.UseVisualStyleBackColor = true;
             button8.Click += button8_Click;
             // 
+            // button9
+            // 
+            button9.Enabled = false;
+            button9.Location = new Point(982, 169);
+            button9.Name = "button9";
+            button9.Size = new Size(120, 23);
+            button9.TabIndex = 68;
+            button9.Text = "Export Door";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
+            // button10
+            // 
+            button10.Enabled = false;
+            button10.Location = new Point(110, 490);
+            button10.Name = "button10";
+            button10.Size = new Size(105, 23);
+            button10.TabIndex = 69;
+            button10.Text = "Export All Doors";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
+            // 
+            // button11
+            // 
+            button11.Enabled = false;
+            button11.Location = new Point(856, 169);
+            button11.Name = "button11";
+            button11.Size = new Size(120, 23);
+            button11.TabIndex = 70;
+            button11.Text = "Export Lift";
+            button11.UseVisualStyleBackColor = true;
+            button11.Click += button11_Click;
+            // 
+            // button12
+            // 
+            button12.Enabled = false;
+            button12.Location = new Point(110, 461);
+            button12.Name = "button12";
+            button12.Size = new Size(105, 23);
+            button12.TabIndex = 71;
+            button12.Text = "Export All Lifts";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(button12);
+            Controls.Add(button11);
+            Controls.Add(button10);
+            Controls.Add(button9);
             Controls.Add(button8);
             Controls.Add(button7);
             Controls.Add(checkBox2);
@@ -888,5 +940,9 @@
         private CheckBox checkBox2;
         private Button button7;
         private Button button8;
+        private Button button9;
+        private Button button10;
+        private Button button11;
+        private Button button12;
     }
 }
