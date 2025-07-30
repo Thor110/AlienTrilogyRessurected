@@ -138,6 +138,8 @@ namespace ALTViewer
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
             //MessageBox.Show($"{ms.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
+            // collision 16
+            //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             //MessageBox.Show($"{ms.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )

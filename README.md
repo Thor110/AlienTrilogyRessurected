@@ -48,10 +48,12 @@ The road map for this project.
 	- Waveform preview for selected sound files.
 	- Link to the music directory, only available with the repack.
 	- Automatic backup of the original file by default.
-- [❌ 6 : Level Viewer](#level-viewer) ( 90% Complete )
+- [❌ 6 : Level Viewer](#level-viewer) ( 95% Complete )
 	- Map files detected and listed.
 	- Basic details parsed and listed.
 	- Export level geometry as OBJ files.
+	- Export levels with debug and unknown byte flags displayed visually.
+	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
 
 And possibly more to come.
