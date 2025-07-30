@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace ALTViewer
 {
@@ -286,12 +285,6 @@ namespace ALTViewer
             // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
-            // parse extra sections to the level data
-            /*foreach (BndSection section in levelSections)
-            {
-                File.WriteAllBytes(outputPath + $"\\{caseName}_{section.Name}.MAP", section.Data);
-            }*/
-            //TODO : make new method for parsing level section data
             ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
             if (!exporting)
             {

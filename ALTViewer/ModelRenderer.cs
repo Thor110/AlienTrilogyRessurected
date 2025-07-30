@@ -352,7 +352,7 @@ namespace ALTViewer
             for (int m = 0; m < modelSections.Count; m++)
             {
                 using var br = new BinaryReader(new MemoryStream(modelSections[m].Data));
-                // 0 / 1 / 2 are fine to default // TODO reduce duplicate code when all cases are resolved
+                // 0 / 1 / 2 are fine to default // TODO : reduce duplicate code when all cases are resolved
                 if (special && m >= 3 && m <= 18 || special && m == 35) // OBJ3D LOCKERS & COIL OBSTACLE
                 {
                     textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL0GFXE.16";
@@ -363,7 +363,7 @@ namespace ALTViewer
                     textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
                 }
-                else if (special && m == 36) // OBJ3D special case -> defaults to PICKGFX for now
+                else if (special && m == 36) // OBJ3D special case -> defaults to PICKGFX for now // UNRESOLVED
                 {
                     // unknown switch maybe // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
@@ -375,14 +375,14 @@ namespace ALTViewer
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                 }
-                else if (special && m == 39) // OBJ3D special case -> defaults to PICKGFX for now
+                else if (special && m == 39) // OBJ3D special case -> defaults to PICKGFX for now // UNRESOLVED
                 {
                     // 39 is unknown, same model as EGGHUSK // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
                     // 39 is unknown, same model as EGGHUSK
                 }
-                else if (special && m == 40) // OBJ3D POD COVER -> defaults to PICKGFX for now
+                else if (special && m == 40) // OBJ3D POD COVER -> defaults to PICKGFX for now // UNRESOLVED
                 {
                     // texture unknown // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
                     textureDirectory = backupDirectory; // restore previous texture directory
