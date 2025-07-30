@@ -199,7 +199,7 @@
             button5.Name = "button5";
             button5.Size = new Size(105, 23);
             button5.TabIndex = 8;
-            button5.Text = "Export as OBJ";
+            button5.Text = "Export Level";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
@@ -211,7 +211,7 @@
             button6.Name = "button6";
             button6.Size = new Size(105, 23);
             button6.TabIndex = 9;
-            button6.Text = "Export all as OBJ";
+            button6.Text = "Export All Levels";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
