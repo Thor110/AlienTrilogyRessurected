@@ -6,7 +6,7 @@ namespace ALTViewer
     public static class ModelRenderer
     {
         public const float texSize = 256f;
-        public static int[] unknownValues = new int[]
+        public static int[] unknownValues = new int[] // level specific
         {
             3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
             22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 38,
@@ -25,7 +25,8 @@ namespace ALTViewer
             232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244,
             245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
         };
-        public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 };
+        public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 }; // level specific
+        public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
@@ -564,7 +565,7 @@ namespace ALTViewer
             int quadCount = br.ReadInt32();         // Number of quads
             int vertCount = br.ReadInt32();         // Number of vertices
 
-            List<(int A, int B, int C, int D, ushort TexIndex, ushort Flags)> quads = new();
+            List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
             List<(short X, short Y, short Z)> vertices = new();
 
             for (int i = 0; i < quadCount; i++)
@@ -574,9 +575,10 @@ namespace ALTViewer
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16();
-                ushort flags = br.ReadUInt16();
+                byte flags = br.ReadByte();
+                byte other = br.ReadByte(); // unknown byte
 
-                quads.Add((a, b, c, d, texIndex, flags));
+                quads.Add((a, b, c, d, texIndex, flags, other));
             }
 
             for (int i = 0; i < vertCount; i++)
@@ -674,7 +676,8 @@ namespace ALTViewer
                 // levels and lifts
                 switch (q.Flags)
                 {
-                    case 2:
+                    case 2:     // 0000 0010
+                    case 130:   // 1000 0010
                         // Triangle with special order: A → 0, C → 2, D → 3
                         uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
                         break;

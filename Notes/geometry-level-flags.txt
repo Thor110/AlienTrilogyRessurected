@@ -1,4 +1,4 @@
-Flags
+Unique Level Flags
 
 0 - Geometry (Quad)
 1 - Geometry (Triangles) - Note : Sometimes *incorrect* flags are applied such as in L904LEV where one Tri has a flag of 5
