@@ -26,8 +26,9 @@ namespace ALTViewer
             245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
         };
         public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 }; // level specific
-        public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific
         // lift unknown values only use 0
+        public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific
+        // 0, 2, 11, 128, 139 // door specific
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
@@ -599,13 +600,13 @@ namespace ALTViewer
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
 
-            /*using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
+            using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
             
             foreach (var quad in quads)
             {
                 testWriter.WriteLine($"{(int)quad.Flags}");
             }
-            return;*/ // stop here for now
+            return; // stop here for now
             // Read vertex positions
             for (int i = 0; i < vertCount; i++)
             {
