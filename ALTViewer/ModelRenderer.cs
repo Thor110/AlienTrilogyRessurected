@@ -600,13 +600,13 @@ namespace ALTViewer
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
 
-            using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
+            /*using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
             
             foreach (var quad in quads)
             {
                 testWriter.WriteLine($"{(int)quad.Flags}");
             }
-            return; // stop here for now
+            return;*/ // stop here for now
             // Read vertex positions
             for (int i = 0; i < vertCount; i++)
             {
