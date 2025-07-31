@@ -27,6 +27,7 @@ namespace ALTViewer
         };
         public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 }; // level specific
         public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific
+        // lift unknown values only use 0
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
@@ -280,36 +281,53 @@ namespace ALTViewer
                 }
             }
         }
-        public static void GenerateFlagTextures(string outputDir, string levelName)
+        public static void GenerateFlagTextures(string outputDir, string levelName, bool levelLifts = false)
         {
             for (int i = 0; i < 18; i++) // textureFlags.Count = 18
             {
                 using var bmp = new Bitmap(256, 256);
                 using var g = Graphics.FromImage(bmp);
 
-                switch (textureFlags[i])
+                if(levelLifts)
                 {
-                    case 0: g.Clear(Color.Black); break;
-                    case 1: g.Clear(Color.DarkGray); break;
-                    case 2: g.Clear(Color.DarkRed); break;
-                    case 3: g.Clear(Color.Red); break;
-                    case 4: g.Clear(Color.Orange); break;
-                    case 5: g.Clear(Color.Yellow); break;
-                    case 6: g.Clear(Color.Green); break;
-                    case 8: g.Clear(Color.Blue); break;
-                    case 10: g.Clear(Color.DarkBlue); break;
-                    case 12: g.Clear(Color.Purple); break;
-                    case 13: g.Clear(Color.White); break;
-                    case 14: g.Clear(Color.LightGray); break;
-                    case 26: g.Clear(Color.Brown); break;
-                    case 28: g.Clear(Color.Pink); break;
-                    case 30: g.Clear(Color.Gold); break;
-                    case 32: g.Clear(Color.Tan); break;
-                    case 34: g.Clear(Color.LimeGreen); break;
-                    case 255: g.Clear(Color.SkyBlue); break;
+                    if (i == 6) { break; }
+                    switch (liftFlags[i])
+                    {
+                        case 0: g.Clear(Color.Black); break;
+                        case 2: g.Clear(Color.DarkGray); break;
+                        case 11: g.Clear(Color.DarkRed); break;
+                        case 128: g.Clear(Color.Red); break;
+                        case 130: g.Clear(Color.Orange); break;
+                        case 139: g.Clear(Color.Yellow); break;
+                    }
+                    bmp.Save(Path.Combine(outputDir, $"FLAGS{liftFlags[i]}.png"), ImageFormat.Png);
+                }
+                else // levels
+                {
+                    switch (textureFlags[i])
+                    {
+                        case 0: g.Clear(Color.Black); break;
+                        case 1: g.Clear(Color.DarkGray); break;
+                        case 2: g.Clear(Color.DarkRed); break;
+                        case 3: g.Clear(Color.Red); break;
+                        case 4: g.Clear(Color.Orange); break;
+                        case 5: g.Clear(Color.Yellow); break;
+                        case 6: g.Clear(Color.Green); break;
+                        case 8: g.Clear(Color.Blue); break;
+                        case 10: g.Clear(Color.DarkBlue); break;
+                        case 12: g.Clear(Color.Purple); break;
+                        case 13: g.Clear(Color.White); break;
+                        case 14: g.Clear(Color.LightGray); break;
+                        case 26: g.Clear(Color.Brown); break;
+                        case 28: g.Clear(Color.Pink); break;
+                        case 30: g.Clear(Color.Gold); break;
+                        case 32: g.Clear(Color.Tan); break;
+                        case 34: g.Clear(Color.LimeGreen); break;
+                        case 255: g.Clear(Color.SkyBlue); break;
+                    }
+                    bmp.Save(Path.Combine(outputDir, $"FLAGS{textureFlags[i]}.png"), ImageFormat.Png);
                 }
                 
-                bmp.Save(Path.Combine(outputDir, $"FLAGS{textureFlags[i]}.png"), ImageFormat.Png);
             }
         }
         public static void GenerateUnknownTextures(string outputDir, string levelName)
@@ -557,7 +575,7 @@ namespace ALTViewer
             return rectangles;
         }
         // export doors or lifts as OBJ
-        public static void ExportDoorLift(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath)
+        public static void ExportDoorLift(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection));
             br.BaseStream.Seek(12, SeekOrigin.Current); // Skip 12 bytes to reach vertex and quad data
@@ -581,6 +599,14 @@ namespace ALTViewer
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
 
+            /*using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
+            
+            foreach (var quad in quads)
+            {
+                testWriter.WriteLine($"{(int)quad.Flags}");
+            }
+            return;*/ // stop here for now
+            // Read vertex positions
             for (int i = 0; i < vertCount; i++)
             {
                 short x = br.ReadInt16();
@@ -603,11 +629,37 @@ namespace ALTViewer
 
             sw.WriteLine($"mtllib {levelName}.mtl");
 
-
-            for (int t = 0; t < 5; t++)
+            if (debug)
             {
-                mtlWriter.WriteLine($"newmtl Texture{t:D2}");
-                mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
+                foreach (int f in liftFlags)
+                {
+                    if (f == 255)
+                    {
+                        mtlWriter.WriteLine($"newmtl Texture{f}");
+                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
+                    }
+                    else
+                    {
+                        mtlWriter.WriteLine($"newmtl Texture{f:D2}");
+                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
+                    }
+                }
+            }
+            else if (unknown)
+            {
+                for (int t = 0; t < 222; t++)
+                {
+                    mtlWriter.WriteLine($"newmtl UnkByte_{unknownValues[t]}");
+                    mtlWriter.WriteLine($"map_Kd UnkByte_{unknownValues[t]}.png");
+                }
+            }
+            else
+            {
+                for (int t = 0; t < 5; t++)
+                {
+                    mtlWriter.WriteLine($"newmtl Texture{t:D2}");
+                    mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
+                }
             }
 
             // Write vertex positions
@@ -737,7 +789,19 @@ namespace ALTViewer
                 if (matName != currentMtl)
                 {
                     currentMtl = matName;
-                    sw.WriteLine($"usemtl {matName}");
+                    if (debug)
+                    {
+                        if (q.Flags == 255) { sw.WriteLine($"usemtl Texture{q.Flags:D3}"); }
+                        else { sw.WriteLine($"usemtl Texture{q.Flags:D2}"); }
+                    }
+                    else if (unknown)
+                    {
+                        sw.WriteLine($"usemtl UnkByte_{q.Other}");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"usemtl {matName}");
+                    }
                 }
                 // Validate vertex indices
                 if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)

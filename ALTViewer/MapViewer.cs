@@ -310,9 +310,9 @@ namespace ALTViewer
             GenerateDebugTextures();
             MessageBox.Show($"Exported all levels with UVs!");
         }
-        private void GenerateDebugTextures()
+        private void GenerateDebugTextures(bool lifts = false)
         {
-            if (checkBox1.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for known flags
+            if (checkBox1.Checked) { ModelRenderer.GenerateFlagTextures(outputPath, listBox1.SelectedItem!.ToString()!, lifts); } // Generate textures for known flags
             else if (checkBox2.Checked) { ModelRenderer.GenerateUnknownTextures(outputPath, listBox1.SelectedItem!.ToString()!); } // Generate textures for unknown flags
         }
         // double click to open output path
@@ -498,8 +498,12 @@ namespace ALTViewer
             }
             // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
-            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_DOOR{selectedIndex:D2}", uvSections, doorSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath);
-            if (!exporting) { MessageBox.Show("Door model exported."); }
+            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_DOOR{selectedIndex:D2}", uvSections, doorSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
+            if (!exporting)
+            {
+                GenerateDebugTextures();
+                MessageBox.Show("Door model exported.");
+            }
         }
         // export all doors as OBJ
         private void button10_Click(object sender, EventArgs e)
@@ -517,6 +521,7 @@ namespace ALTViewer
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
+            GenerateDebugTextures();
             MessageBox.Show("All door models exported.");
         }
         // export lift as OBJ
@@ -547,8 +552,12 @@ namespace ALTViewer
             }
             // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
-            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_LIFT{selectedIndex:D2}", uvSections, liftSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath);
-            if (!exporting) { MessageBox.Show("Lift model exported."); }
+            ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_LIFT{selectedIndex:D2}", uvSections, liftSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
+            if (!exporting)
+            {
+                GenerateDebugTextures(true);
+                MessageBox.Show("Lift model exported.");
+            }
         }
         // export all lifts as OBJ
         private void button12_Click(object sender, EventArgs e)
@@ -567,6 +576,7 @@ namespace ALTViewer
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
+            GenerateDebugTextures(true);
             MessageBox.Show("All lift models exported.");
         }
     }
