@@ -9,6 +9,10 @@ This project aims to create a modding toolkit and possibly more for Alien Trilog
 
 # To Do List
 
+Cleanup Script
+
+- Delete L361LEV and 361GFX.B16 from the game files, this level is unused and is an unfinished version of Multiplayer Map #10.
+
 Text Editor
 
 - UI text viewing .BIN files plaintext.
@@ -27,6 +31,13 @@ Level Viewer
 - Not really a level "viewer" per-se, currently it is just a testing tool for parsing level data, it can also export the level geometry as OBJ files.
 - May or may not extend it to level viewer and editor functionality one day.
 - Need to implement an export feature for the location of level objects, enemies, crates, pickups, switches, doors etc
+
+Patches
+
+- Multiple UVs across the games levels, lifts and doors need fixing.
+- The UVs for the Queens Egg Sack from the final level need fixing.
+- A trigger for a lift with an inaccessible secret needs fixing on L371LEV as noted by Bobblen. ( https://www.avpgalaxy.net/forum/index.php?topic=67544.0 )
+- Create an installer script to patch the relevant bytes rather than providing the entire level.
 
 # Road Map
 
