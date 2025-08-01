@@ -20,4 +20,4 @@ Unique Level Flags
 	255 - Unknown ( Sky Blue ) ( L111LEV, L112LEV, L113LEV, L114LEV, L115LEV, L122LEV, L131LEV, L141LEV, L154LEV, L155LEV, L161LEV, L162LEV, L211LEV, L212LEV, L213LEV, L222LEV, L231LEV, L232LEV, L242LEV, L243LEV, L262LEV, L263LEV, L311LEV, L321LEV, L322LEV, L323LEV, L324LEV, L325LEV, L331LEV, L351LEV, L352LEV, L353LEV, L361LEV, L371LEV, L381LEV, L391LEV, L900LEV, L901LEV, L902LEV, L903LEV, L904LEV, L905LEV, L906LEV, L907LEV, L908LEV, L909LEV )
 
 
-12, 13, 30, 32 & 34 are all specifically used in the Hatching Chamber in a unique pattern, these might be destructibles.
+12, 13, 30, 32 & 34 are all specifically used in the Hatching Chamber in a unique pattern, these might be destructible floors.
