@@ -60,7 +60,7 @@ namespace ALTViewer
                 vertices.Add((x, y, z));
             }
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
-            for (int i = 0; i < quadCount - 1; i++) // Count Quads ( -1 to skip the last quad which is always empty )
+            for (int i = 1; i < quadCount; i++) // Count Quads ( start at 1 to account for zero based indexing )
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
@@ -124,8 +124,6 @@ namespace ALTViewer
             {
                 sw.WriteLine($"v {v.X:F4} {v.Y:F4} {v.Z:F4}");
             }
-
-            //using var unkWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}.unk"));
             // Store unique UVs and their indices
             var uvDict = new Dictionary<(float, float), int>();
             var uvList = new List<(float, float)>();
@@ -269,12 +267,12 @@ namespace ALTViewer
                     }   
                 }
                 // Validate vertex indices
-                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
+                if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
                 {
-                    //MessageBox.Show($"Skipping invalid triangle at face {i} on {levelName}");
-                    Debug.WriteLine($"Skipping invalid triangle at face {i}");
+                    //MessageBox.Show($"Skipping invalid triangle at face {i} on {levelName} count of {quadCount}");
+                    Debug.WriteLine($"Skipping invalid triangle at face {i}"); // 10899 out of 12610 on L906LEV
                     continue;
-                }*/
+                }
                 // Faces
                 if (q.D == -1)
                 {
@@ -581,8 +579,8 @@ namespace ALTViewer
         {
             using var br = new BinaryReader(new MemoryStream(levelSection));
             br.BaseStream.Seek(12, SeekOrigin.Current); // Skip 12 bytes to reach vertex and quad data
-            int quadCount = br.ReadInt32();         // Number of quads
-            int vertCount = br.ReadInt32();         // Number of vertices
+            int quadCount = br.ReadInt32();             // Number of quads
+            int vertCount = br.ReadInt32();             // Number of vertices
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
             List<(short X, short Y, short Z)> vertices = new();
             // Read quads
@@ -598,12 +596,6 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            /*using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
-            foreach (var quad in quads)
-            {
-                testWriter.WriteLine($"{(int)quad.Other}");
-            }
-            return;*/ // stop here for now
             // Read vertex positions
             for (int i = 0; i < vertCount; i++)
             {
@@ -781,12 +773,6 @@ namespace ALTViewer
                         sw.WriteLine($"usemtl {matName}");
                     }
                 }
-                // Validate vertex indices
-                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
-                {
-                    Debug.WriteLine($"Skipping invalid triangle at face {i}");
-                    continue;
-                }*/
                 // Faces
                 if (q.D == -1)
                 {
