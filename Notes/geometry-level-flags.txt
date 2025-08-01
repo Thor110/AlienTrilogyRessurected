@@ -4,17 +4,17 @@ Unique Level Flags
 1 - Geometry (Triangles) - Note : Sometimes *incorrect* flags are applied such as in L904LEV where one Tri has a flag of 5
 2 - Unknown (Appear to just be Geometry)
 3 - Unknown (Appear to just be Geometry)
-4 - Unknown (Appear to just be Geometry)
+4 - Transparency in some levels (L231LEV)
 5 - Unknown
-6 - Unknown
+6 - Transparency in some levels (L231LEV)
 8 - Lights ( Sometimes incorrectly used )
 10 - Unknown
-12 - Transparency
+12 - Transparency ( Queens Egg Sack )
 13 - Unknown
 14 - Unknown
 26 - Unknown
 28 - Unknown
 30 - Unknown
 32 - Unknown
-34 - Transparency
+34 - Transparency ( Queens Egg Sack )
 255 - Unknown

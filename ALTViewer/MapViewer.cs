@@ -501,7 +501,7 @@ namespace ALTViewer
             ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_DOOR{selectedIndex:D2}", uvSections, doorSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
             if (!exporting)
             {
-                GenerateDebugTextures();
+                if (!checkBox2.Checked) { GenerateDebugTextures(); } // Generate debug textures if not exporting unknowns
                 MessageBox.Show("Door model exported.");
             }
         }
@@ -521,7 +521,7 @@ namespace ALTViewer
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
-            GenerateDebugTextures();
+            if(!checkBox2.Checked) { GenerateDebugTextures(); } // Generate debug textures if not exporting unknowns
             MessageBox.Show("All door models exported.");
         }
         // export lift as OBJ
@@ -555,7 +555,7 @@ namespace ALTViewer
             ModelRenderer.ExportDoorLift($"{listBox1.SelectedItem!.ToString()!}_LIFT{selectedIndex:D2}", uvSections, liftSections[selectedIndex].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
             if (!exporting)
             {
-                GenerateDebugTextures(true);
+                if (!checkBox2.Checked) { GenerateDebugTextures(true); } // Generate debug textures if not exporting unknowns
                 MessageBox.Show("Lift model exported.");
             }
         }
@@ -576,7 +576,7 @@ namespace ALTViewer
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
-            GenerateDebugTextures(true);
+            if (!checkBox2.Checked) { GenerateDebugTextures(true); } // Generate debug textures if not exporting unknowns
             MessageBox.Show("All lift models exported.");
         }
     }

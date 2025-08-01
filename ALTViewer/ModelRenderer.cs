@@ -6,7 +6,7 @@ namespace ALTViewer
     public static class ModelRenderer
     {
         public const float texSize = 256f;
-        public static int[] unknownValues = new int[] // level specific
+        public static int[] unknownValues = new int[] // level specific unknown values
         {
             3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
             22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 38,
@@ -25,10 +25,11 @@ namespace ALTViewer
             232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244,
             245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
         };
-        public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 }; // level specific
+        public static int[] textureFlags = new int[] { 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 13, 14, 26, 28, 30, 32, 34, 255 }; // level specific flags
         // lift unknown values only use 0
-        public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific
-        // 0, 2, 11, 128, 139 // door specific
+        public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific flags
+        // door unknown values only use 0
+        // 0, 2, 11, 128, 139 // door specific flags
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
@@ -560,9 +561,7 @@ namespace ALTViewer
             var rectangles = new List<(int X, int Y, int Width, int Height)>();
             using var ms = new MemoryStream(bxData);
             using var br = new BinaryReader(ms);
-
             int rectCount = br.ReadInt16();
-
             for (int i = 0; i < rectCount; i++)
             {
                 byte x = br.ReadByte();
@@ -570,8 +569,7 @@ namespace ALTViewer
                 byte width = br.ReadByte();
                 byte height = br.ReadByte();
                 br.ReadBytes(2); // unknown bytes
-
-                rectangles.Add((x, y, width + 1, height + 1));
+                rectangles.Add((x, y, width, height));
             }
             return rectangles;
         }
@@ -580,13 +578,11 @@ namespace ALTViewer
         {
             using var br = new BinaryReader(new MemoryStream(levelSection));
             br.BaseStream.Seek(12, SeekOrigin.Current); // Skip 12 bytes to reach vertex and quad data
-
             int quadCount = br.ReadInt32();         // Number of quads
             int vertCount = br.ReadInt32();         // Number of vertices
-
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
             List<(short X, short Y, short Z)> vertices = new();
-
+            // Read quads
             for (int i = 0; i < quadCount; i++)
             {
                 int a = br.ReadInt32();
@@ -599,12 +595,10 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-
             /*using var testWriter = new StreamWriter(Path.Combine(outputPath, $"{levelName}_flags.bin"));
-            
             foreach (var quad in quads)
             {
-                testWriter.WriteLine($"{(int)quad.Flags}");
+                testWriter.WriteLine($"{(int)quad.Other}");
             }
             return;*/ // stop here for now
             // Read vertex positions
@@ -630,7 +624,7 @@ namespace ALTViewer
 
             sw.WriteLine($"mtllib {levelName}.mtl");
 
-            if (debug)
+            if (debug) // show debug flags
             {
                 foreach (int f in liftFlags)
                 {
@@ -646,14 +640,6 @@ namespace ALTViewer
                     }
                 }
             }
-            else if (unknown)
-            {
-                for (int t = 0; t < 222; t++)
-                {
-                    mtlWriter.WriteLine($"newmtl UnkByte_{unknownValues[t]}");
-                    mtlWriter.WriteLine($"map_Kd UnkByte_{unknownValues[t]}.png");
-                }
-            }
             else
             {
                 for (int t = 0; t < 5; t++)
@@ -662,13 +648,11 @@ namespace ALTViewer
                     mtlWriter.WriteLine($"map_Kd {textureName}_TP{t:D2}.png");
                 }
             }
-
             // Write vertex positions
             foreach (var v in vertices)
             {
                 sw.WriteLine($"v {v.X:F4} {v.Y:F4} {v.Z:F4}");
             }
-
             // Store unique UVs and their indices
             var uvDict = new Dictionary<(float, float), int>();
             var uvList = new List<(float, float)>();
@@ -680,7 +664,7 @@ namespace ALTViewer
             }
             // Map of per-face vertex UV indices
             var faceUvs = new List<int[]>();
-
+            // Loop through quads to resolve UVs
             for (int i = 0; i < quads.Count; i++)
             {
                 var q = quads[i];
@@ -690,7 +674,7 @@ namespace ALTViewer
                 bool found = false;
                 int texGroup = 0;
                 int localIndex = q.TexIndex;
-
+                // Iterate through texture groups to find the correct one
                 for (int t = 0; t < 5; t++)
                 {
                     int count = uvRects[t].Count;
@@ -702,20 +686,20 @@ namespace ALTViewer
                     }
                     localIndex -= count;
                 }
-
+                // Check if we found a valid texture group and local index
                 if (!found || localIndex >= uvRects[texGroup].Count)
                 {
                     // Fallback rectangle or skip invalid quad
                     faceUvs.Add(new int[] { 1, 1, 1, 1 }); // or log + continue
                     continue;
                 }
-
+                // Resolve UV rectangle
                 var rect = uvRects[texGroup][localIndex];
                 float x0 = rect.X / texSize;
                 float y0 = rect.Y / texSize;
                 float x1 = (rect.X + rect.Width) / texSize;
                 float y1 = (rect.Y + rect.Height) / texSize;
-
+                // Define base UV coordinates
                 var baseUvs = new (float, float)[]
                 {
                     (x0, y1), // top-left
@@ -723,9 +707,7 @@ namespace ALTViewer
                     (x1, y0), // bottom-right
                     (x0, y0), // top-right
                 };
-
                 var uvs = baseUvs;
-
                 // levels and lifts
                 switch (q.Flags)
                 {
@@ -743,7 +725,7 @@ namespace ALTViewer
                         uvs = baseUvs;
                         break;
                 }
-
+                // Store UV indices
                 for (int j = 0; j < 4; j++)
                 {
                     if (!uvDict.TryGetValue(uvs[j], out int idx))
@@ -754,23 +736,19 @@ namespace ALTViewer
                     }
                     uvIndices[j] = idx;
                 }
-
                 faceUvs.Add(uvIndices);
             }
-
             // Write UVs
             foreach (var uv in uvList)
             {
                 sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
             }
-
             // Write faces with material switching
             string currentMtl = null!;
             for (int i = 0; i < quads.Count; i++)
             {
                 var q = quads[i];
                 var uv = faceUvs[i];
-
                 // Resolve which BX section this texIndex belongs to
                 int texGroup = 0;
                 int localIndex = q.TexIndex;
@@ -784,9 +762,9 @@ namespace ALTViewer
                     }
                     localIndex -= count;
                 }
-                //
+                // Store the material name
                 string matName = $"Texture{texGroup:D2}";
-
+                // Check if the material name has changed
                 if (matName != currentMtl)
                 {
                     currentMtl = matName;
@@ -794,10 +772,6 @@ namespace ALTViewer
                     {
                         if (q.Flags == 255) { sw.WriteLine($"usemtl Texture{q.Flags:D3}"); }
                         else { sw.WriteLine($"usemtl Texture{q.Flags:D2}"); }
-                    }
-                    else if (unknown)
-                    {
-                        sw.WriteLine($"usemtl UnkByte_{q.Other}");
                     }
                     else
                     {
