@@ -797,5 +797,28 @@ namespace ALTViewer
                 }
             }
         }
+        public static void ExportCollision(string levelName, byte[] levelSection, string outputPath)
+        {
+            using var br = new BinaryReader(new MemoryStream(levelSection)); // skips first 20 bytes
+            ushort vertCount = br.ReadUInt16();         // Number of vertices
+            ushort quadCount = br.ReadUInt16();         // Number of quads
+            // uncomment if you want to read the level header
+            ushort mapLength = br.ReadUInt16();         // Length of the map section
+            ushort mapWidth = br.ReadUInt16();          // Width of the map section
+            br.BaseStream.Seek(vertCount * 8 + quadCount * 20 + 28, SeekOrigin.Current); // Skip vertex and quad data plus unread level data
+
+            //4
+            //2
+            //2
+            //1
+            //1
+            //1
+            //1
+            //2
+            //1
+            //1
+
+            //br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current);
+        }
     }
 }

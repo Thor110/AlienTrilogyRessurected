@@ -521,7 +521,7 @@ namespace ALTViewer
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
-            if(!checkBox2.Checked) { GenerateDebugTextures(); } // Generate debug textures if not exporting unknowns
+            if (!checkBox2.Checked) { GenerateDebugTextures(); } // Generate debug textures if not exporting unknowns
             MessageBox.Show("All door models exported.");
         }
         // export lift as OBJ
@@ -578,6 +578,50 @@ namespace ALTViewer
             exporting = false;
             if (!checkBox2.Checked) { GenerateDebugTextures(true); } // Generate debug textures if not exporting unknowns
             MessageBox.Show("All lift models exported.");
+        }
+        // export level collison as OBJ
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a model to export."); return; }
+            // determine level number and file directory based on selected item
+            string caseName = listBox1.SelectedItem!.ToString()!;
+            string levelNumber = caseName.Substring(1, 3);
+            string fileDirectory = levelNumber.Substring(0, 2) switch
+            {
+                "11" or "12" or "13" => levelPath1,
+                "14" or "15" or "16" => levelPath2,
+                "21" or "22" or "23" => levelPath3,
+                "24" or "26" => levelPath4,
+                "31" or "32" or "33" => levelPath5,
+                "35" or "36" or "37" or "38" or "39" => levelPath6,
+                "90" => levelPath7,
+                _ => throw new Exception("Unknown section selected!")
+            };
+            // determine the file directory for the selected map
+            fileDirectory = fileDirectory + $"\\{caseName}.MAP";
+            // parse the BND sections for UVs and model data
+            List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
+            ModelRenderer.ExportCollision(caseName, levelSections[0].Data, outputPath);
+            if (!exporting)
+            {
+                MessageBox.Show($"Exported {caseName} collison!");
+            }
+        }
+        // export all level collisons as OBJ
+        private void button14_Click(object sender, EventArgs e)
+        {
+            exporting = true;
+            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
+            {
+                listBox1.SelectedIndex = i;
+                button13_Click(null!, null!);
+            }
+            if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            exporting = false;
+            MessageBox.Show($"Exported all levels collision!");
         }
     }
 }
