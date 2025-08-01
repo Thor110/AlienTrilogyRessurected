@@ -187,8 +187,7 @@ A preview of the lift L000 from L232LEV.
 ## Patches
 
 I am also looking at making patches for any issues I find in the original game.
-
-Patched an issue with L906LEV where a vertex had incorrect coordinates.
+- Patched an issue with L906LEV where a vertex had incorrect coordinates.
 
 Here is how the level was originally.
 
