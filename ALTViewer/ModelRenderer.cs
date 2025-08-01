@@ -623,16 +623,8 @@ namespace ALTViewer
             {
                 foreach (int f in liftFlags)
                 {
-                    if (f == 255)
-                    {
-                        mtlWriter.WriteLine($"newmtl Texture{f}");
-                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
-                    }
-                    else
-                    {
-                        mtlWriter.WriteLine($"newmtl Texture{f:D2}");
-                        mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
-                    }
+                    mtlWriter.WriteLine($"newmtl Texture{f:D2}");
+                    mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
                 }
             }
             else
