@@ -189,6 +189,8 @@ A preview of the lift L000 from L232LEV.
 I am also looking at making patches for any issues I find in the original game.
 - Patched an issue with L906LEV where a vertex had incorrect coordinates.
 
+#L906LEV - Multiplayer Map 7
+
 Here is how the level was originally.
 
 <div align="center">
