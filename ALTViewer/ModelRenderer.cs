@@ -64,7 +64,6 @@ namespace ALTViewer
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
-                if (b == -1) { b = 8884; } // special case for L906LEV, where B is -1
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16(); // signed or unsigned?
@@ -73,6 +72,13 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
+            if (levelName == "L906LEV" && quads[10899].B == -1) // Special case for L906LEV, where B is -1 for quad 10899
+            {
+                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08); // fix the invalid triangle on L906LEV
+                MessageBox.Show("TEST");
+            }
+            
+            return;
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
