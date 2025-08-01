@@ -2,19 +2,19 @@ Unique Level Flags
 
 0 - Geometry (Quad)
 1 - Geometry (Triangles) - Note : Sometimes *incorrect* flags are applied such as in L904LEV where one Tri has a flag of 5
-2 - Unknown (Appear to just be Geometry)
+2 - Flip Texture 180
 3 - Unknown (Appear to just be Geometry)
-4 - Transparency in some levels (L231LEV)
-5 - Unknown
+4 - Transparency in some levels (L231LEV & L906LEV) Incorrect in others? ( L232LEV )
+5 - Geometry (Triangles)
 6 - Transparency in some levels (L231LEV)
-8 - Lights ( Sometimes incorrectly used )
-10 - Unknown
-12 - Transparency ( Queens Egg Sack )
-13 - Unknown
-14 - Unknown
-26 - Unknown
-28 - Unknown
-30 - Unknown
-32 - Unknown
-34 - Transparency ( Queens Egg Sack )
-255 - Unknown
+8 - Lights ( Sometimes incorrectly used ) Possibly vents? Facehuggers? Destructibles Lockers ( L211LEV )
+10 - Unknown ( Dark Blue )
+12 - Transparency ( Queens Egg Sack & Hatching Chamber L381LEV )
+13 - Unknown ( White )
+14 - Unknown ( Light Gray )
+26 - Destructible Scenery ( L211LEV ) Curtains Medical Bay Type
+28 - Destructible Wall ( L232LEV )
+30 - Breakable Glass ( Also used in Hatching Chamber L381LEV )
+32 - Transparency ( Hatching Chamber L381LEV )
+34 - Transparency ( Queens Egg Sack & Hatching Chamber L381LEV )
+255 - Unknown ( Sky Blue )
