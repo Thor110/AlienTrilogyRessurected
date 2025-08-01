@@ -64,6 +64,7 @@ namespace ALTViewer
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
+                if (b == -1) { b = 8884; } // special case for L906LEV, where B is -1
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16(); // signed or unsigned?
@@ -259,12 +260,15 @@ namespace ALTViewer
                     }   
                 }
                 // Validate vertex indices
-                if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
+                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
                 {
                     //MessageBox.Show($"Skipping invalid triangle at face {i} on {levelName} count of {quadCount}");
-                    Debug.WriteLine($"Skipping invalid triangle at face {i}"); // 10899 out of 12610 on L906LEV
+                    //MessageBox.Show($"A : {q.A} B : {q.B} C : {q.C} D : {q.D} vertCount : {vertCount} vertices.Count : {vertices.Count}");
+                    //8480, -1, 9439, -1, 14082, 14082
+                    Debug.WriteLine($"Skipping invalid triangle at face {i}");
+                    // 10899 out of 12610 on L906LEV is the only invalid triangle left after starting the quadCount at 1
                     continue;
-                }
+                }*/
                 // Faces
                 if (q.D == -1)
                 {

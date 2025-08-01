@@ -1,0 +1,3 @@
+Incorrect vertice FF FF FF FF at 0x50BC8 on L906LEV
+
+Patched to 8884
