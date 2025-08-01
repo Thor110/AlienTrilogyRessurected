@@ -1,3 +1,5 @@
 Incorrect vertice FF FF FF FF at 0x50BC8 on L906LEV
 
-Patched to 8884
+Patched to 8884 ( B4 22 00 00 )
+
+Install to HDD/TRILOGY/SECT90 and rename back to L906LEV.MAP
