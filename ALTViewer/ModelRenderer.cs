@@ -185,6 +185,12 @@ namespace ALTViewer
 
                 switch (q.Flags)
                 {
+                    case 1:
+                    case 5:
+                    case 13:
+                        // Triangle with special order: A → 0, C → 2, D → 3
+                        uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
+                        break;
                     case 2:
                         // Flip texture 180
                         uvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
