@@ -72,13 +72,9 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            if (levelName == "L906LEV" && quads[10899].B == -1) // Special case for L906LEV, where B is -1 for quad 10899
-            {
-                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08); // fix the invalid triangle on L906LEV
-                MessageBox.Show("TEST");
-            }
-            
-            return;
+            // Special case for L906LEV, where B is -1 for quad 10899 // fix the invalid triangle on L906LEV
+            if (levelName == "L906LEV" && quads[10899].B == -1) { quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08); }
+
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -265,16 +261,6 @@ namespace ALTViewer
                         sw.WriteLine($"usemtl {matName}");
                     }   
                 }
-                // Validate vertex indices
-                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
-                {
-                    //MessageBox.Show($"Skipping invalid triangle at face {i} on {levelName} count of {quadCount}");
-                    //MessageBox.Show($"A : {q.A} B : {q.B} C : {q.C} D : {q.D} vertCount : {vertCount} vertices.Count : {vertices.Count}");
-                    //8480, -1, 9439, -1, 14082, 14082
-                    Debug.WriteLine($"Skipping invalid triangle at face {i}");
-                    // 10899 out of 12610 on L906LEV is the only invalid triangle left after starting the quadCount at 1
-                    continue;
-                }*/
                 // Faces
                 if (q.D == -1)
                 {
