@@ -60,7 +60,7 @@ namespace ALTViewer
                 vertices.Add((x, y, z));
             }
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
-            for (int i = 0; i < quadCount; i++) // Count Quads
+            for (int i = 0; i < quadCount - 1; i++) // Count Quads ( -1 to skip the last quad which is always empty )
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
@@ -269,11 +269,12 @@ namespace ALTViewer
                     }   
                 }
                 // Validate vertex indices
-                if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
+                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
                 {
+                    //MessageBox.Show($"Skipping invalid triangle at face {i} on {levelName}");
                     Debug.WriteLine($"Skipping invalid triangle at face {i}");
                     continue;
-                }
+                }*/
                 // Faces
                 if (q.D == -1)
                 {
@@ -781,11 +782,11 @@ namespace ALTViewer
                     }
                 }
                 // Validate vertex indices
-                if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
+                /*if (q.A < 0 || q.B < 0 || q.C < 0 || q.A >= vertices.Count || q.B >= vertices.Count || q.C >= vertices.Count)
                 {
                     Debug.WriteLine($"Skipping invalid triangle at face {i}");
                     continue;
-                }
+                }*/
                 // Faces
                 if (q.D == -1)
                 {
