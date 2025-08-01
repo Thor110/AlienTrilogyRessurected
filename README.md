@@ -59,6 +59,8 @@ The road map for this project.
 	- Export levels with debug and unknown byte flags displayed visually.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
+- [❌ 7 : Patches](#patches) ( 5% Complete )
+	- Patched an issue with L906LEV where a vertex had incorrect coordinates.
 
 And possibly more to come.
 
@@ -180,4 +182,22 @@ A preview of the lift L000 from L232LEV.
 
 <div align="center">
   <img src="Images/liftobject.png" alt="L232LEV Lift Preview">
+</div>
+
+## Patches
+
+I am also looking at making patches for any issues I find in the original game.
+
+Patched an issue with L906LEV where a vertex had incorrect coordinates.
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906LEV-unpatched.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906LEV-patched.png" alt="L906LEV Patched">
 </div>
