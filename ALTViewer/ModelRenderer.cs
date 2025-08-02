@@ -32,6 +32,7 @@ namespace ALTViewer
         // 0, 2, 11, 128, 139 // door specific flags
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
+            bool fix = false;
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
             ushort quadCount = br.ReadUInt16();         // Number of quads
@@ -70,10 +71,24 @@ namespace ALTViewer
                 byte flags = br.ReadByte();
                 byte other = br.ReadByte(); // unknown byte
 
+                /*if(b == -1)
+                {
+                    MessageBox.Show($"{i}");
+                }
+                if (a == 8484 && b == 8884 && c == 9439 && d == 9440) //8484//8884//9439//9440
+                {
+                    MessageBox.Show($"{i} {texIndex}");
+                }*/
+
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
             // Special case for L906LEV, where B is -1 for quad 10899 // fix the invalid triangle on L906LEV
-            if (levelName == "L906LEV" && quads[10899].B == -1) { quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08); }
+            if (levelName == "L906LEV" && quads[10899].B == -1)
+            {
+                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08);
+                quads[10900] = (8484, 8884, 9439, 9440, 117, 02, 08);
+                fix = true;
+            }
 
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
@@ -268,7 +283,14 @@ namespace ALTViewer
                 }
                 else
                 {
-                    sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                    if (fix && i == 10900) // temporary fix or the misaligned UV on L906LEV
+                    {
+                        sw.WriteLine($"f 8485/256 8885/253 9440/254 9441/255");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                    }
                 }
             }
         }
