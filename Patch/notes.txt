@@ -12,3 +12,6 @@ Right side railing double sided transparency fix.
 0x51EBE == 04
 0x5236E == 04
 0x52AEE == 04
+
+
+0x22BF9 == 04

@@ -71,6 +71,7 @@ The road map for this project.
 	- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
 	- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
+	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
 
 And possibly more to come.
 
@@ -245,4 +246,18 @@ Here it is with the fix I applied to the level.
 
 <div align="center">
   <img src="Images/L906LEV-missingrail-fixed.png" alt="L906LEV Patched">
+</div>
+
+## L906LEV Multiplayer Map 7 Fix 4
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906LEV-anotherrail.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906LEV-anotherrail-fixed.png" alt="L906LEV Patched">
 </div>

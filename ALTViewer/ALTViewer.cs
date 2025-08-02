@@ -32,11 +32,12 @@ namespace ALTViewer
         // patch changes
         private void button6_Click(object sender, EventArgs e)
         {
-            BinaryUtility.ReplaceByte(0x51342, 0x04, patchDirectory);
-            BinaryUtility.ReplaceByte(0x51A0E, 0x04, patchDirectory);
-            BinaryUtility.ReplaceByte(0x51EBE, 0x04, patchDirectory);
-            BinaryUtility.ReplaceByte(0x5236E, 0x04, patchDirectory);
-            BinaryUtility.ReplaceByte(0x52AEE, 0x04, patchDirectory);
+            BinaryUtility.ReplaceByte(0x51342, 04, patchDirectory); // fix 3 ( left rail )
+            BinaryUtility.ReplaceByte(0x51A0E, 04, patchDirectory); // fix 2 ( right rails )
+            BinaryUtility.ReplaceByte(0x51EBE, 04, patchDirectory); // fix 2 ( right rails )
+            BinaryUtility.ReplaceByte(0x5236E, 04, patchDirectory); // fix 2 ( right rails )
+            BinaryUtility.ReplaceByte(0x52AEE, 04, patchDirectory); // fix 2 ( right rails )
+            BinaryUtility.ReplaceByte(0x22BF9, 04, patchDirectory); // fix 4 ( left rail )
             List<Tuple<long, byte[]>> replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x50BC8L, new byte[] { 0xB4, 0x22, 0x00, 0x00 }) };
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             button6.Visible = false; // hide button after patching

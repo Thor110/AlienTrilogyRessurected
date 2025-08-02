@@ -283,9 +283,31 @@ namespace ALTViewer
                 }
                 else
                 {
-                    if (fix && i == 10900) // temporary fix or the misaligned UV on L906LEV
+                    if (fix) // temporary fix or the misaligned UVs on L906LEV
                     {
-                        sw.WriteLine($"f 8485/256 8885/253 9440/254 9441/255");
+                        switch(i)
+                        {
+                            case 10900:
+                                sw.WriteLine($"f 8485/255 8885/254 9440/253 9441/256");
+                                continue;
+                            case 10608:
+                            case 10374:
+                            case 10132:
+                            case 9904:
+                            case 10993:
+                            case 8978:
+                                sw.WriteLine($"f {q.A + 1}/254 {q.B + 1}/253 {q.C + 1}/256 {q.D + 1}/255");
+                                continue;
+                            case 10495:
+                            case 10248:
+                            case 10040:
+                            case 9778:
+                                sw.WriteLine($"f {q.A + 1}/253 {q.B + 1}/254 {q.C + 1}/255 {q.D + 1}/256");
+                                continue;
+                            default:
+                                sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                                continue;
+                        }
                     }
                     else
                     {
