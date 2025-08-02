@@ -72,7 +72,8 @@ The road map for this project.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
 - [❌ 7 : Patches](#patches) ( 5% Complete )
-	- [Patched an issue with L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7)
+	- [Patched an issue with L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
+	- [Patched an issue with L906LEV where a four faces were lacking double sided transparency.](#L906LEV-Multiplayer-Map-7-Fix-2)
 
 And possibly more to come.
 
@@ -201,7 +202,7 @@ A preview of the lift L000 from L232LEV.
 I am also looking at making patches for any issues I find in the original game.
 - Patched an issue with L906LEV where a vertex had incorrect coordinates.
 
-## L906LEV Multiplayer Map 7
+## L906LEV Multiplayer Map 7 Fix 1
 
 Here is how the level was originally.
 
@@ -213,4 +214,18 @@ Here it is with the fix I applied to the level.
 
 <div align="center">
   <img src="Images/L906LEV-patched.png" alt="L906LEV Patched">
+</div>
+
+## L906LEV Multiplayer Map 7 Fix 2
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906LEV-rail.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906LEV-railfix.png" alt="L906LEV Patched">
 </div>
