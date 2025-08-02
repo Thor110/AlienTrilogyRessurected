@@ -73,7 +73,7 @@ The road map for this project.
 	- Does not currently extract the associated textures alongside them.
 - [❌ 7 : Patches](#patches) ( 5% Complete )
 	- [Patched an issue with L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
-	- [Patched an issue with L906LEV where a four faces were lacking double sided transparency.](#L906LEV-Multiplayer-Map-7-Fix-2)
+	- [Patched an issue on L906LEV where four faces were lacking double sided transparency.](#L906LEV-Multiplayer-Map-7-Fix-2)
 
 And possibly more to come.
 
