@@ -2,9 +2,17 @@ namespace ALTViewer
 {
     public partial class ALTViewer : Form
     {
+        public string patchDirectory = "";
         public ALTViewer()
         {
             InitializeComponent();
+            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L906LEV.MAP";
+            byte[] patched = File.ReadAllBytes(patchDirectory);
+            using var ms = new MemoryStream(patched);
+            using var br = new BinaryReader(ms);
+            br.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
+            int check = br.ReadInt32(); // this checks if the patch v1 has been applied ( first three fixes )
+            if (check == -1) { button6.Visible = true; }
         }
         // create new form method
         private void newForm(Form form)
@@ -21,6 +29,18 @@ namespace ALTViewer
         private void button3_Click(object sender, EventArgs e) { newForm(new GraphicsViewer()); }
         private void button4_Click(object sender, EventArgs e) { newForm(new SoundEffects()); }
         private void button5_Click(object sender, EventArgs e) { newForm(new MapViewer()); }
-
+        // patch changes
+        private void button6_Click(object sender, EventArgs e)
+        {
+            BinaryUtility.ReplaceByte(0x51342, 0x04, patchDirectory);
+            BinaryUtility.ReplaceByte(0x51A0E, 0x04, patchDirectory);
+            BinaryUtility.ReplaceByte(0x51EBE, 0x04, patchDirectory);
+            BinaryUtility.ReplaceByte(0x5236E, 0x04, patchDirectory);
+            BinaryUtility.ReplaceByte(0x52AEE, 0x04, patchDirectory);
+            List<Tuple<long, byte[]>> replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x50BC8L, new byte[] { 0xB4, 0x22, 0x00, 0x00 }) };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            button6.Visible = false; // hide button after patching
+            MessageBox.Show("Patch applied successfully!");
+        }
     }
 }

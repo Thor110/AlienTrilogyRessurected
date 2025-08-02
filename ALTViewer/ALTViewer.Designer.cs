@@ -35,6 +35,7 @@
             button5 = new Button();
             pictureBox1 = new PictureBox();
             button2 = new Button();
+            button6 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -97,11 +98,23 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // button6
+            // 
+            button6.Location = new Point(12, 157);
+            button6.Name = "button6";
+            button6.Size = new Size(99, 23);
+            button6.TabIndex = 8;
+            button6.Text = "Patch Game";
+            button6.UseVisualStyleBackColor = true;
+            button6.Visible = false;
+            button6.Click += button6_Click;
+            // 
             // ALTViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(714, 288);
+            Controls.Add(button6);
             Controls.Add(button2);
             Controls.Add(pictureBox1);
             Controls.Add(button5);
@@ -111,7 +124,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "Alien Trilogy Viewer";
+            Name = "ALTViewer";
             Text = "Alien Trilogy Viewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
@@ -125,5 +138,6 @@
         private Button button5;
         private PictureBox pictureBox1;
         private Button button2;
+        private Button button6;
     }
 }
