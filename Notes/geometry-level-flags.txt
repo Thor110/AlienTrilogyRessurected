@@ -4,7 +4,7 @@ Unique Level Flags
 1 - Geometry (Triangles) - Note : Sometimes *incorrect* flags are applied such as in L904LEV where one Tri has a flag of 5
 2 - Flip Texture 180
 	3 - Unknown (Appear to just be Geometry) (Quad)
-4 - Transparency in some levels (L231LEV & L906LEV) Incorrect in others? ( L232LEV )
+4 - Double Sided Transparency
 5 - Geometry (Triangles)
 6 - Transparency in some levels (L231LEV)
 8 - Lights ( Sometimes incorrectly used ) Possibly vents? Facehuggers? Destructibles Lockers ( L211LEV )
