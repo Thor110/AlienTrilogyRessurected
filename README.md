@@ -72,8 +72,9 @@ The road map for this project.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
 - [❌ 7 : Patches](#patches) ( 5% Complete )
-	- [Patched an issue with L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
-	- [Patched an issue on L906LEV where four faces were lacking double sided transparency.](#L906LEV-Multiplayer-Map-7-Fix-2)
+	- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
+	- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)
+	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
 
 And possibly more to come.
 
@@ -210,6 +211,12 @@ Here is how the level was originally.
   <img src="Images/L906LEV-unpatched.png" alt="L906LEV Original">
 </div>
 
+This would cause this to appear when close enough to the missing triangle.
+
+<div align="center">
+  <img src="Images/L906LEV-unpatched-tear.png" alt="L906LEV Original Close Up">
+</div>
+
 Here it is with the fix I applied to the level.
 
 <div align="center">
@@ -228,4 +235,18 @@ Here it is with the fix I applied to the level.
 
 <div align="center">
   <img src="Images/L906LEV-railfix.png" alt="L906LEV Patched">
+</div>
+
+## L906LEV Multiplayer Map 7 Fix 3
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906LEV-missingrail.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906LEV-missingrail-fixed.png" alt="L906LEV Patched">
 </div>

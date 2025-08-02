@@ -5,3 +5,10 @@ Patched to 8884 ( B4 22 00 00 )
 Install to HDD/TRILOGY/SECT90 and rename back to L906LEV.MAP
 
 0x51342 == 04 ( double sided transparency fix because the previous change broke the nearby fence panels transparency )
+
+Right side railing double sided transparency fix.
+
+0x51A0E == 04
+0x51EBE == 04
+0x5236E == 04
+0x52AEE == 04
