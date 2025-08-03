@@ -85,28 +85,22 @@ namespace ALTViewer
             // Special case for L906LEV, where B is -1 for quad 10899 // fix the invalid triangle on L906LEV
             if (levelName == "L906LEV" && quads[10899].B == -1)
             {
-                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08);
+                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08);             // triangle fix
                 // fix other issues
-                quads[10900] = (8484, 8884, 9439, 9440, 117, 02, 08);
-
-                int[] fixes = { 7834, 7832, 7830, 7828, 7826, 7824,
-                8578, 8580, 8596, 8598, 8600, 8602, 8604,
-                6857, 6787, 5607, 5428,
-                6839, 6766, 6655, 6411, 6299, 6122, 5948, 5773, 5586, 5410,
-                4550, 4548, 4546, 4544, 4542, 4540,
-                5385, 5383, 5381, 5379, 5377, 5375,
-                6736, 6836, 6887, 6938, 7006, 7085,
-                6730, 6830, 6881, 6932, 7000, 7079
+                quads[10900] = (8484, 8884, 9439, 9440, 117, 02, 08);           // texture fix by triangle
+                int[] fixes = {
+                7834, 7832, 7830, 7828, 7826, 7824,                             // bridge section 1
+                8578, 8580, 8596, 8598, 8600, 8602, 8604,                       // bridge section 2
+                6857, 6787, 5607, 5428,                                         // bridge section 3
+                6839, 6766, 6655, 6411, 6299, 6122, 5948, 5773, 5586, 5410,     // bridge section 4
+                4550, 4548, 4546, 4544, 4542, 4540,                             // bridge section 5
+                5385, 5383, 5381, 5379, 5377, 5375,                             // bridge section 6
+                6736, 6836, 6887, 6938, 7006, 7085,                             // bridge section 7
+                6730, 6830, 6881, 6932, 7000, 7079                              // bridge section 8
                 };
-
-                foreach( int f in fixes )
-                {
-                    quads[f] = (quads[f].A, quads[f].B, quads[f].C, quads[f].D, 117, quads[f].Flags, quads[f].Other);
-                }
-
+                foreach( int f in fixes ) { quads[f] = (quads[f].A, quads[f].B, quads[f].C, quads[f].D, 117, quads[f].Flags, quads[f].Other); }
                 fix = true;
             }
-
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
