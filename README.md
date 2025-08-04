@@ -67,11 +67,12 @@ The road map for this project.
 	- Export levels with debug and unknown byte flags displayed visually.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
-- [❌ 7 : Patches](#patches) ( 5% Complete )
+- [❌ 7 : Patches](#patches) ( ???% Complete )
 	- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
 	- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
+	- [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
 
 And possibly more to come.
 
@@ -261,3 +262,19 @@ Here it is with the fix I applied to the level.
 <div align="center">
   <img src="Images/L906LEV-anotherrail-fixed.png" alt="L906LEV Patched">
 </div>
+
+## L906LEV Multiplayer Map 7 Fix 5
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906LEV-bridge.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906LEV-bridge-fixed.png" alt="L906LEV Patched">
+</div>
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
