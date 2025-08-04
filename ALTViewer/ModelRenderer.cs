@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 
 namespace ALTViewer
 {
@@ -31,7 +32,8 @@ namespace ALTViewer
         // 0, 2, 11, 128, 139 // door specific flags
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
-            bool fix = false;
+            bool L111LEVFIX = false;
+            bool L906LEVFIX = false;
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
             ushort quadCount = br.ReadUInt16();         // Number of quads
@@ -82,7 +84,9 @@ namespace ALTViewer
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
             using var test = new StreamWriter(Path.Combine(outputPath, $"test.bin"));
-            if (levelName == "L906LEV" && quads[10899].B != -1) { fix = true; } // test adjustments necessary for unity version (pre-patched)
+            // test adjustments necessary for unity version (pre-patched)
+            if (levelName == "L906LEV" && quads[10899].B != -1) { L906LEVFIX = true; }
+            if (levelName == "L111LEV") { L111LEVFIX = true; }
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -276,7 +280,23 @@ namespace ALTViewer
                 }
                 else
                 {
-                    if (fix) // temporary fix for the misaligned UVs on L906LEV
+                    if (L111LEVFIX)
+                    {
+                        switch (i)
+                        {
+                            case 6527: // rotate crate UV large room ( and this isn't +1???? )
+                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
+                                continue;
+                            case 3622: // right side room upside down crate UV small room ( this isn't +1 either???? )
+                            case 7780: // upside down crate UV large room ( why is this +1???? )
+                                sw.WriteLine($"f {q.A + 1}/{uv[2]} {q.B + 1}/{uv[3]} {q.C + 1}/{uv[0]} {q.D + 1}/{uv[1]}");
+                                continue;
+                            default:
+                                sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                                continue;
+                        }
+                    }
+                    else if (L906LEVFIX) // temporary fix for the misaligned UVs on L906LEV
                     {
                         switch(i) // use this as reference for fixing the UVs in the original BX sections if possible
                         {
