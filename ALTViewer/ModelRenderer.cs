@@ -83,7 +83,6 @@ namespace ALTViewer
             }
             using var test = new StreamWriter(Path.Combine(outputPath, $"test.bin"));
             if (levelName == "L906LEV" && quads[10899].B != -1) { fix = true; } // test adjustments necessary for unity version (pre-patched)
-            return;
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
