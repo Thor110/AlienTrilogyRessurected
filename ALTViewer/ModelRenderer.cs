@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 
 namespace ALTViewer
 {
@@ -295,7 +294,7 @@ namespace ALTViewer
                 else
                 {
                     if (fix) // temporary fix for the misaligned UVs on L906LEV
-                    {
+                    { // uncomment fixes once fixed!!!
                         switch(i) // use this as reference for fixing the UVs in the original BX sections
                         {
                             case 10900:
@@ -308,14 +307,14 @@ namespace ALTViewer
                             case 10993:
                             case 8978:
                             case 8578:
-                            case 6299://
+                            //case 6299://fixed with flip byte
                             case 7822: // flip original uv extra <->
-                            case 5387://flip
-                            case 5391:
-                            case 5395:
-                            case 5399:
-                            case 5403:
-                            case 5407:
+                            //case 5387://flip
+                            //case 5391:
+                            //case 5395:
+                            //case 5399:
+                            //case 5403:
+                            //case 5407:
                             case 6592://edge case//
                             case 4574://next
                             case 4251:
@@ -333,11 +332,11 @@ namespace ALTViewer
                             case 10040:
                             case 9778:
                             case 6122:
-                            case 5389://flip
-                            case 5393:
-                            case 5397:
-                            case 5401:
-                            case 5405:
+                            //case 5389://flip
+                            //case 5393:
+                            //case 5397:
+                            //case 5401:
+                            //case 5405:
                             case 4397://
                             case 3843:
                             case 2976://
@@ -703,7 +702,7 @@ namespace ALTViewer
                 byte width = br.ReadByte();
                 byte height = br.ReadByte();
                 br.ReadBytes(2); // unknown bytes
-                rectangles.Add((x, y, width, height));
+                rectangles.Add((x, y, width + 1, height + 1)); // +/- 1 and no +/- all have their own problems???...
             }
             return rectangles;
         }
