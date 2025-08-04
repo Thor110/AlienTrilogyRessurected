@@ -226,6 +226,8 @@ namespace ALTViewer
                 sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
             }
 
+            int[] fixuv = null!;
+            if (L111LEVFIX) { fixuv = faceUvs[6527]; }
             // Write faces with material switching
             string currentMtl = null!;
             for (int i = 0; i < quads.Count; i++)
@@ -284,6 +286,9 @@ namespace ALTViewer
                     {
                         switch (i)
                         {
+                            case 1062: // hallway crate top ( this isn't +1 either???? )
+                                sw.WriteLine($"f {q.A + 1}/{fixuv[0]} {q.B + 1}/{fixuv[1]} {q.C + 1}/{fixuv[2]} {q.D + 1}/{fixuv[3]}");
+                                continue;
                             case 6527: // rotate crate UV large room ( and this isn't +1???? )
                                 sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
                                 continue;
