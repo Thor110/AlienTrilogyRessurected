@@ -41,6 +41,7 @@ namespace ALTViewer
             // otherwise retain original imperfection for those that might want to see them
             int[] fixuv = null!;
             bool L111LEVFIX = false;
+            bool L141LEVFIX = false;
             bool L906LEVFIX = false;
             // above are unique patch specific variables
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
@@ -82,11 +83,12 @@ namespace ALTViewer
                 byte other = br.ReadByte(); // unknown byte
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            if (check == 0xFF) // test adjustments necessary for unity version (pre-patched)
+            if (check != 0xFF) // test adjustments necessary for unity version (pre-patched)
             {
                 switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
                 {
                     case "L111LEV": L111LEVFIX = true; break;
+                    case "L141LEV": L141LEVFIX = true; break;
                     case "L906LEV": L906LEVFIX = true; break;
                 }
             }
@@ -228,8 +230,6 @@ namespace ALTViewer
             {
                 sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
             }
-
-            if (L111LEVFIX) { fixuv = faceUvs[6527]; } // record UVs from another face to use for face 1062
             // Write faces with material switching
             string currentMtl = null!;
             for (int i = 0; i < quads.Count; i++)
@@ -292,7 +292,7 @@ namespace ALTViewer
                                 sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[2]}");
                                 continue;
                             case 1062: // hallway crate top as side ( this isn't +1 either???? )
-                                sw.WriteLine($"f {q.A + 1}/{fixuv[0]} {q.B + 1}/{fixuv[1]} {q.C + 1}/{fixuv[2]} {q.D + 1}/{fixuv[3]}");
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[6527][0]} {q.B + 1}/{faceUvs[6527][1]} {q.C + 1}/{faceUvs[6527][2]} {q.D + 1}/{faceUvs[6527][3]}");
                                 continue;
                             case 6527: // rotate crate UV large room ( and this isn't +1???? )
                                 sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
@@ -300,6 +300,50 @@ namespace ALTViewer
                             case 3622: // right side room upside down crate UV small room ( this isn't +1 either???? )
                             case 7780: // upside down crate UV large room ( why is this +1???? )
                                 sw.WriteLine($"f {q.A + 1}/{uv[2]} {q.B + 1}/{uv[3]} {q.C + 1}/{uv[0]} {q.D + 1}/{uv[1]}");
+                                continue;
+                            default:
+                                sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                                continue;
+                        }
+                    }
+                    else if (L141LEVFIX)
+                    {
+                        switch (i)
+                        {
+                            case 2736: // door texture on back of weyland yutani crate side
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[2727][0]} {q.B + 1}/{faceUvs[2727][1]} {q.C + 1}/{faceUvs[2727][2]} {q.D + 1}/{faceUvs[2727][3]}");
+                                continue;
+                            case 4449:
+                            case 4450: // incorrect weyland yutani crate sides
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[4268][0]} {q.B + 1}/{faceUvs[4268][1]} {q.C + 1}/{faceUvs[4268][2]} {q.D + 1}/{faceUvs[4268][3]}");
+                                continue;
+                            case 4451: // incorrect weyland yutani crate top // maybe adjust more????
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[4269][0]} {q.B + 1}/{faceUvs[4269][1]} {q.C + 1}/{faceUvs[4269][2]} {q.D + 1}/{faceUvs[4269][3]}");
+                                continue;
+                            case 6168:
+                            case 6169: // incorrect weyland yutani crate sides
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[6173][0]} {q.B + 1}/{faceUvs[6173][1]} {q.C + 1}/{faceUvs[6173][2]} {q.D + 1}/{faceUvs[6173][3]}");
+                                continue;
+                            case 6186: // weyland yutani sideways crate
+                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
+                                continue;
+                            /*case 7431: // rotate weyland yutani crate top // open crate or not open crate????
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[7413][0]} {q.B + 1}/{faceUvs[7413][1]} {q.C + 1}/{faceUvs[7413][2]} {q.D + 1}/{faceUvs[7413][3]}");
+                                continue;*/
+                            case 7413: // rotate weyland yutani crate top
+                                sw.WriteLine($"f {q.A + 1}/{uv[3]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[1]} {q.D + 1}/{uv[2]}");
+                                continue;
+                            /*case 7962: // weyland yutani crate top // open crate or not open crate????
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[7965][0]} {q.B + 1}/{faceUvs[7965][1]} {q.C + 1}/{faceUvs[7965][2]} {q.D + 1}/{faceUvs[7965][3]}");
+                                continue;*/
+                            case 8108: // grey crate side
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[8110][1]} {q.B + 1}/{faceUvs[8110][2]} {q.C + 1}/{faceUvs[8110][3]} {q.D + 1}/{faceUvs[8110][0]}");
+                                continue;
+                            case 8111: // grey crate side
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[8110][3]} {q.B + 1}/{faceUvs[8110][0]} {q.C + 1}/{faceUvs[8110][1]} {q.D + 1}/{faceUvs[8110][2]}");
+                                continue;
+                            case 8112: // grey crate top
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[8111][0]} {q.B + 1}/{faceUvs[8111][1]} {q.C + 1}/{faceUvs[8111][2]} {q.D + 1}/{faceUvs[8111][3]}");
                                 continue;
                             default:
                                 sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
