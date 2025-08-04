@@ -229,7 +229,7 @@ namespace ALTViewer
                 sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
             }
 
-            if (L111LEVFIX) { fixuv = faceUvs[6527]; }
+            if (L111LEVFIX) { fixuv = faceUvs[6527]; } // record UVs from another face to use for face 1062
             // Write faces with material switching
             string currentMtl = null!;
             for (int i = 0; i < quads.Count; i++)
@@ -291,7 +291,7 @@ namespace ALTViewer
                             case 10208: // starting lift panel ( this is +1 as well???? )
                                 sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[2]}");
                                 continue;
-                            case 1062: // hallway crate top ( this isn't +1 either???? )
+                            case 1062: // hallway crate top as side ( this isn't +1 either???? )
                                 sw.WriteLine($"f {q.A + 1}/{fixuv[0]} {q.B + 1}/{fixuv[1]} {q.C + 1}/{fixuv[2]} {q.D + 1}/{fixuv[3]}");
                                 continue;
                             case 6527: // rotate crate UV large room ( and this isn't +1???? )
