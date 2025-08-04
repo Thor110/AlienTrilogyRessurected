@@ -280,6 +280,7 @@ namespace ALTViewer
                     {
                         switch(i) // use this as reference for fixing the UVs in the original BX sections if possible
                         {
+                            // NOTE : these will fix the incorrect UVs in Unity incase I cannot fix the BX sections and are also for me to use to cross reference them
                             case 10900:
                                 sw.WriteLine($"f {q.A + 1}/{uv[2]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[0]} {q.D + 1}/{uv[3]}");
                                 continue;
