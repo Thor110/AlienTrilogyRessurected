@@ -80,16 +80,6 @@ namespace ALTViewer
                 ushort texIndex = br.ReadUInt16(); // signed or unsigned?
                 byte flags = br.ReadByte();
                 byte other = br.ReadByte(); // unknown byte
-
-                /*if(b == -1)
-                {
-                    MessageBox.Show($"{i}");
-                }*/
-                /*if (a == 8484 && b == 8884 && c == 9439 && d == 9440) //8484//8884//9439//9440
-                {
-                    MessageBox.Show($"{i}, {texIndex}");//10900, 117
-                }*/
-
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
             if (check == 0xFF) // test adjustments necessary for unity version (pre-patched)
