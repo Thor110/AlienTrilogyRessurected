@@ -32,8 +32,17 @@ namespace ALTViewer
         // 0, 2, 11, 128, 139 // door specific flags
         public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
         {
+            string patchDirectory = Utilities.CheckDirectory() + "SECT90\\L906LEV.MAP";
+            byte[] patched = File.ReadAllBytes(patchDirectory);
+            using var ms = new MemoryStream(patched);
+            using var read = new BinaryReader(ms);
+            read.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
+            byte check = read.ReadByte(); // only update incorrect UVs if patch is applied
+            // otherwise retain original imperfection for those that might want to see them
+            int[] fixuv = null!;
             bool L111LEVFIX = false;
             bool L906LEVFIX = false;
+            // above are unique patch specific variables
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
             ushort quadCount = br.ReadUInt16();         // Number of quads
@@ -83,10 +92,14 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            using var test = new StreamWriter(Path.Combine(outputPath, $"test.bin"));
-            // test adjustments necessary for unity version (pre-patched)
-            if (levelName == "L906LEV" && quads[10899].B != -1) { L906LEVFIX = true; }
-            if (levelName == "L111LEV") { L111LEVFIX = true; }
+            if (check == 0xFF) // test adjustments necessary for unity version (pre-patched)
+            {
+                switch (levelName)
+                {
+                    case "L111LEV": L111LEVFIX = true; break;
+                    case "L906LEV": L906LEVFIX = true; break;
+                }
+            }
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -226,7 +239,6 @@ namespace ALTViewer
                 sw.WriteLine($"vt {uv.Item1:F6} {1 - uv.Item2:F6}"); // Flip Y for OBJ
             }
 
-            int[] fixuv = null!;
             if (L111LEVFIX) { fixuv = faceUvs[6527]; }
             // Write faces with material switching
             string currentMtl = null!;
@@ -286,6 +298,9 @@ namespace ALTViewer
                     {
                         switch (i)
                         {
+                            case 10208: // starting lift panel ( this is +1 as well???? )
+                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[2]}");
+                                continue;
                             case 1062: // hallway crate top ( this isn't +1 either???? )
                                 sw.WriteLine($"f {q.A + 1}/{fixuv[0]} {q.B + 1}/{fixuv[1]} {q.C + 1}/{fixuv[2]} {q.D + 1}/{fixuv[3]}");
                                 continue;
