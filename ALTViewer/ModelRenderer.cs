@@ -281,9 +281,10 @@ namespace ALTViewer
                 {
                     sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]}");
                 }
-                else
+                else // TODO : I plan to use all of this as reference for fixing the UVs in the original BX sections if possible and when I get a chance
                 {
-                    if (L111LEVFIX)
+                    // NOTE : These will fix the incorrect UVs in Unity incase I cannot fix the BX sections and are also for me to use to cross reference them
+                    if (L111LEVFIX) // fix some incorrect textures on the first level
                     {
                         switch (i)
                         {
@@ -305,7 +306,7 @@ namespace ALTViewer
                                 continue;
                         }
                     }
-                    else if (L141LEVFIX)
+                    else if (L141LEVFIX) // fix some incorrect textures on weyland yutani crates
                     {
                         switch (i)
                         {
@@ -349,11 +350,10 @@ namespace ALTViewer
                                 continue;
                         }
                     }
-                    else if (L906LEVFIX) // temporary fix for the misaligned UVs on L906LEV
+                    else if (L906LEVFIX) // fix for the misaligned UVs on L906LEV
                     {
-                        switch(i) // use this as reference for fixing the UVs in the original BX sections if possible
+                        switch(i)
                         {
-                            // NOTE : these will fix the incorrect UVs in Unity incase I cannot fix the BX sections and are also for me to use to cross reference them
                             case 10900:
                                 sw.WriteLine($"f {q.A + 1}/{uv[2]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[0]} {q.D + 1}/{uv[3]}");
                                 continue;
