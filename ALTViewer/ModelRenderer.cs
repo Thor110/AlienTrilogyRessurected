@@ -84,7 +84,7 @@ namespace ALTViewer
             }
             if (check == 0xFF) // test adjustments necessary for unity version (pre-patched)
             {
-                switch (levelName)
+                switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
                 {
                     case "L111LEV": L111LEVFIX = true; break;
                     case "L906LEV": L906LEVFIX = true; break;
