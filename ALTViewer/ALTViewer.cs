@@ -61,17 +61,16 @@ namespace ALTViewer
             long[] flip02 = { 0x3A476L, 0x35D36L, 0x35E26L, 0x35D86L, 0x35DD6L, 0x35E76L, 0x35EC6L, 0x2549AL,
             0x278B2L, 0x293A6L, 0x2B0B6L, 0x2D2EEL, 0x2F116L, 0x30476L, 0x31DB2L,
             0x5132EL, 0x4F51AL, 0x4E2D2L, 0x4CFEAL, 0x4BE1AL,
-            0x458B2L, 0x45902L
+            0x458B2L, 0x45902L,
+            0x408B2L, 0x3E936L, 0x41B72L, 0x4123AL, 0x3EB66L, 0x3DDE2L
             };
             foreach (long value in flip02) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
             long[] flip00 = { 0x35D5EL, 0x35DAEL, 0x35DFEL, 0x35E4EL, 0x35E9EL, 0x254C2L, 0x269EEL,
             0x2A0DAL, 0x2E496L, 0x30FDEL,
             0x4EC46L, 0x4D8FAL, 0x4C8BAL, 0x4B442L,
-            0x458DAL, 0x4592AL
+            0x458DAL, 0x4592AL,
+            0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
             };
-            
-            
-
             foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");

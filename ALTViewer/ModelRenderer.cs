@@ -81,7 +81,9 @@ namespace ALTViewer
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
+            using var test = new StreamWriter(Path.Combine(outputPath, $"test.bin"));
             if (levelName == "L906LEV" && quads[10899].B != -1) { fix = true; } // test adjustments necessary for unity version (pre-patched)
+            return;
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -333,20 +335,6 @@ namespace ALTViewer
                             case 6938:
                             case 6836:
                                 sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
-                                continue;
-                            case 7582:
-                            case 7334:
-                            case 7179:
-                            case 7822:
-                            case 7820:
-                            case 7704:
-                            case 7404:
-                            case 7207:
-                            case 7113:
-                            case 7034:
-                            case 6962:
-                            case 6895:
-                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[2]}");
                                 continue;
                             case 5357:
                             case 5373:
