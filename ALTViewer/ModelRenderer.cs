@@ -73,33 +73,15 @@ namespace ALTViewer
                 /*if(b == -1)
                 {
                     MessageBox.Show($"{i}");
-                }
-                if (a == 8484 && b == 8884 && c == 9439 && d == 9440) //8484//8884//9439//9440
+                }*/
+                /*if (a == 8484 && b == 8884 && c == 9439 && d == 9440) //8484//8884//9439//9440
                 {
-                    MessageBox.Show($"{i} {texIndex}");
+                    MessageBox.Show($"{i}, {texIndex}");//10900, 117
                 }*/
 
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            // Special case for L906LEV, where B is -1 for quad 10899 // fix the invalid triangle on L906LEV
-            if (levelName == "L906LEV" && quads[10899].B == -1)
-            {
-                quads[10899] = (8480, 8884, 9439, -1, 305, 01, 08);             // triangle fix
-                // fix other issues
-                quads[10900] = (8484, 8884, 9439, 9440, 117, 02, 08);           // texture fix by triangle
-                int[] fixes = {
-                7834, 7832, 7830, 7828, 7826, 7824,                             // bridge section 1
-                8578, 8580, 8596, 8598, 8600, 8602, 8604,                       // bridge section 2
-                6857, 6787, 5607, 5428,                                         // bridge section 3
-                6839, 6766, 6655, 6411, 6299, 6122, 5948, 5773, 5586, 5410,     // bridge section 4
-                4550, 4548, 4546, 4544, 4542, 4540,                             // bridge section 5
-                5385, 5383, 5381, 5379, 5377, 5375,                             // bridge section 6
-                6736, 6836, 6887, 6938, 7006, 7085,                             // bridge section 7
-                6730, 6830, 6881, 6932, 7000, 7079                              // bridge section 8
-                };
-                foreach( int f in fixes ) { quads[f] = (quads[f].A, quads[f].B, quads[f].C, quads[f].D, 117, quads[f].Flags, quads[f].Other); }
-                fix = true;
-            }
+            if (levelName == "L906LEV" && quads[10899].B != -1) { fix = true; } // test adjustments necessary for unity version (pre-patched)
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -294,115 +276,83 @@ namespace ALTViewer
                 else
                 {
                     if (fix) // temporary fix for the misaligned UVs on L906LEV
-                    { // uncomment fixes once fixed!!!
-                        switch(i) // use this as reference for fixing the UVs in the original BX sections
+                    {
+                        switch(i) // use this as reference for fixing the UVs in the original BX sections if possible
                         {
                             case 10900:
-                                sw.WriteLine($"f 8485/255 8885/254 9440/253 9441/256");
+                                sw.WriteLine($"f {q.A + 1}/{uv[2]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[0]} {q.D + 1}/{uv[3]}");
                                 continue;
-                            case 10608:
-                            case 10374:
-                            case 10132:
-                            case 9904:
-                            case 10993:
-                            case 8978:
-                            case 8578:
-                            //case 6299://fixed with flip byte
-                            case 7822: // flip original uv extra <->
-                            //case 5387://flip
-                            //case 5391:
-                            //case 5395:
-                            //case 5399:
-                            //case 5403:
-                            //case 5407:
-                            case 6592://edge case//
-                            case 4574://next
-                            case 4251:
-                            case 4003:
-                            case 3617:
-                            case 3179:
-                            case 3976:
-                            case 2807:
-                            case 2000://
-                            case 2462://
-                                sw.WriteLine($"f {q.A + 1}/254 {q.B + 1}/253 {q.C + 1}/256 {q.D + 1}/255");//flip <->
-                                continue;
-                            case 10495:
-                            case 10248:
-                            case 10040:
-                            case 9778:
-                            case 6122:
-                            //case 5389://flip
-                            //case 5393:
-                            //case 5397:
-                            //case 5401:
-                            //case 5405:
-                            case 4397://
-                            case 3843:
-                            case 2976://
-                            case 2273://////
-                            case 2002://next
-                                sw.WriteLine($"f {q.A + 1}/253 {q.B + 1}/254 {q.C + 1}/255 {q.D + 1}/256");//regular
-                                continue;
-                            case 7832:
-                            case 7828:
-                            case 7824:
-                            case 8580://
+                            case 8580:
                             case 8598:
                             case 8602:
-                            case 6787:// here
-                            case 5607:
-                            case 6766:
-                            case 6411:
-                            case 5773:
-                            case 5410:
-                            case 4548:
-                            case 4544:
-                            case 4540:
-                            case 5385:
-                            case 5381:
-                            case 5377:
-                            case 6736:
-                            case 6887:
-                            case 7006:
-                            case 6730:
-                            case 6881:
-                            case 7000:
-                                sw.WriteLine($"f {q.A + 1}/254 {q.B + 1}/255 {q.C + 1}/256 {q.D + 1}/253");//face right
-                                continue;
-                            case 7834:
-                            case 7830:
                             case 7826:
-                            case 8596://
-                            case 8600:
-                            case 8604:
-                            case 6857://
-                            case 5428://
-                            case 6839://
-                            case 6655://
-                            case 5948:
+                            case 7830:
+                            case 7834:
+                            case 5428:
                             case 5586:
-                            case 5383:
-                            case 5379:
+                            case 5948:
+                            case 6655:
+                            case 6839:
                             case 5375:
+                            case 5379:
+                            case 5383:
                             case 4550:
                             case 4546:
                             case 4542:
-                            case 6938://
-                            case 6836:
-                            case 7085:
                             case 6830:
                             case 6932:
-                            case 7079://
-                                sw.WriteLine($"f {q.A + 1}/253 {q.B + 1}/256 {q.C + 1}/255 {q.D + 1}/254");//face left
+                            case 7079:
+                            case 7006:
+                            case 6887:
+                            case 6736:
+                            case 6787:
+                                sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[3]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[1]}");
                                 continue;
-                            case 4538://edge case
+                            case 8596:
+                            case 8600:
+                            case 8604:
+                            case 7824:
+                            case 7828:
+                            case 7832:
+                            case 6857:
+                            case 5607:
+                            case 5410:
+                            case 5773:
+                            case 6411:
+                            case 6766:
+                            case 5377:
+                            case 5381:
+                            case 5385:
+                            case 4548:
+                            case 4544:
+                            case 4540:
+                            case 6730:
+                            case 6881:
+                            case 7000:
+                            case 7085:
+                            case 6938:
+                            case 6836:
+                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[0]}");
+                                continue;
+                            case 7582:
+                            case 7334:
+                            case 7179:
+                            case 7822:
+                            case 7820:
+                            case 7704:
+                            case 7404:
+                            case 7207:
+                            case 7113:
+                            case 7034:
+                            case 6962:
+                            case 6895:
+                                sw.WriteLine($"f {q.A + 1}/{uv[1]} {q.B + 1}/{uv[0]} {q.C + 1}/{uv[3]} {q.D + 1}/{uv[2]}");
+                                continue;
                             case 5357:
-                                sw.WriteLine($"f {q.A + 1}/256 {q.B + 1}/255 {q.C + 1}/254 {q.D + 1}/253");
-                                continue;
-                            case 4522:
                             case 5373:
-                                sw.WriteLine($"f {q.A + 1}/255 {q.B + 1}/256 {q.C + 1}/253 {q.D + 1}/254");//flip <->
+                            case 4538:
+                            case 4522:
+                                sw.WriteLine($"f {q.A + 1}/{uv[3]} {q.B + 1}/{uv[2]} {q.C + 1}/{uv[1]} {q.D + 1}/{uv[0]}");//upside down?
                                 continue;
                             default:
                                 sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");

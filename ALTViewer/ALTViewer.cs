@@ -11,8 +11,8 @@ namespace ALTViewer
             using var ms = new MemoryStream(patched);
             using var br = new BinaryReader(ms);
             br.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
-            int check = br.ReadInt32(); // this checks if the patch v1 has been applied ( first five fixes )
-            if (check == -1) { button6.Visible = true; }
+            byte check = br.ReadByte(); // this checks if the patch v1 has been applied ( first five fixes )
+            if (check == 0xFF) { button6.Visible = true; }
         }
         // create new form method
         private void newForm(Form form)
@@ -52,11 +52,27 @@ namespace ALTViewer
             0x41C60L, 0x41C38L,  0x41C10L, 0x41BE8L, 0x41BC0L, 0x41B98L,                                        // fix 5 ( bridge section 2 )
             0x3D00CL, 0x3CA94L, 0x36E64L, 0x36068L,                                                             // fix 5 ( bridge section 3 )
             0x35F00L, 0x36CC0L, 0x37B5CL, 0x38908L, 0x396A0L, 0x3A474L, 0x3AD34L, 0x3C044L, 0x3C8F0L, 0x3CEA4L, // fix 5 ( bridge section 4 )
-            0x35C44, 0x35C6C, 0x35C94, 0x35CBC, 0x35CE4, 0x35D0C,                                               // fix 5 ( bridge section 5 )
-            0x31BD0, 0x31BA8, 0x31B80, 0x31B58, 0x31B30, 0x31B08,                                               // fix 5 ( bridge section 6 )
-            0x3C620, 0x3CDF0, 0x3D1EC, 0x3D5E8, 0x3DB38, 0x3E164,                                               // fix 5 ( bridge section 7 )
-            0x3E1DC, 0x3DBB0, 0x3D660, 0x3D264, 0x3CE68, 0x3C698 };                                             // fix 5 ( bridge section 8 )
+            0x35C44L, 0x35C6CL, 0x35C94L, 0x35CBCL, 0x35CE4L, 0x35D0CL,                                               // fix 5 ( bridge section 5 )
+            0x31BD0L, 0x31BA8L, 0x31B80L, 0x31B58L, 0x31B30L, 0x31B08L,                                               // fix 5 ( bridge section 6 )
+            0x3C620L, 0x3CDF0L, 0x3D1ECL, 0x3D5E8L, 0x3DB38L, 0x3E164L,                                               // fix 5 ( bridge section 7 )
+            0x3E1DCL, 0x3DBB0L, 0x3D660L, 0x3D264L, 0x3CE68L, 0x3C698L };                                             // fix 5 ( bridge section 8 )
             foreach (long value in bridge) { BinaryUtility.ReplaceByte(value, 0x75, patchDirectory); }          // fix 5 ( bridge section )
+            // fix texture flips
+            long[] flip02 = { 0x3A476L, 0x35D36L, 0x35E26L, 0x35D86L, 0x35DD6L, 0x35E76L, 0x35EC6L, 0x2549AL,
+            0x278B2L, 0x293A6L, 0x2B0B6L, 0x2D2EEL, 0x2F116L, 0x30476L, 0x31DB2L,
+            0x5132EL, 0x4F51AL, 0x4E2D2L, 0x4CFEAL, 0x4BE1AL,
+            0x458B2L, 0x45902L
+            };
+            foreach (long value in flip02) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
+            long[] flip00 = { 0x35D5EL, 0x35DAEL, 0x35DFEL, 0x35E4EL, 0x35E9EL, 0x254C2L, 0x269EEL,
+            0x2A0DAL, 0x2E496L, 0x30FDEL,
+            0x4EC46L, 0x4D8FAL, 0x4C8BAL, 0x4B442L,
+            0x458DAL, 0x4592AL
+            };
+            
+            
+
+            foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
         }
