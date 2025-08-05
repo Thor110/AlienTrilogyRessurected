@@ -82,7 +82,7 @@ namespace ALTViewer
                 byte other = br.ReadByte(); // unknown byte
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            if (check != 0xFF) // test adjustments necessary for unity version (pre-patched)
+            if (check != 0xFF && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
             {
                 switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
                 {
