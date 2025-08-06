@@ -171,6 +171,10 @@ namespace ALTViewer
 
                 if (!found || localIndex >= uvRects[texGroup].Count)
                 {
+                    //MessageBox.Show($"{levelName}:{i}");              //L905LEV:6358 //this only pops for one face in one level
+                    //MessageBox.Show($"{localIndex}");                 //65167
+                    //MessageBox.Show($"{uvRects[texGroup].Count}");    //64
+                    //MessageBox.Show($"{q.TexIndex}");                 //65535 ( FF FF ) @ 0x3A6D0
                     // Fallback rectangle or skip invalid quad
                     faceUvs.Add(new int[] { 1, 1, 1, 1 }); // or log + continue
                     continue;
@@ -190,33 +194,30 @@ namespace ALTViewer
                     (x0, y0), // top-right
                 };
 
-                var uvs = baseUvs;
-
                 switch (q.Flags)
                 {
                     case 1:
                     case 5:
                     case 13:
                         // Triangle with special order: A → 0, C → 2, D → 3
-                        uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
+                        baseUvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
                         break;
                     case 2:
                         // Flip texture 180
-                        uvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
+                        baseUvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
                         break;
                     default:
-                        // Standard quad order
-                        uvs = baseUvs;
+                        // Standard quad order - no change
                         break;
                 }
 
                 for (int j = 0; j < 4; j++)
                 {
-                    if (!uvDict.TryGetValue(uvs[j], out int idx))
+                    if (!uvDict.TryGetValue(baseUvs[j], out int idx))
                     {
                         idx = uvList.Count + 1;
-                        uvDict[uvs[j]] = idx;
-                        uvList.Add(uvs[j]);
+                        uvDict[baseUvs[j]] = idx;
+                        uvList.Add(baseUvs[j]);
                     }
                     uvIndices[j] = idx;
                 }
