@@ -72,6 +72,11 @@ namespace ALTViewer
             0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
             };
             foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            //L905LEV.MAP
+            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L905LEV.MAP";
+            BinaryUtility.ReplaceByte(0x56ADA, 0x00, patchDirectory);
+            BinaryUtility.ReplaceByte(0x57A8E, 0x00, patchDirectory);
+            //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
         }

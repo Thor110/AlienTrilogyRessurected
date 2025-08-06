@@ -73,6 +73,7 @@ The road map for this project.
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
 	- [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
+	- [Patched an issue on L905LEV where 2 different textures were flipped when they shouldn't have been.](#L906LEV-Multiplayer-Map-6-Fix-1)
 
 And possibly more to come.
 
@@ -278,3 +279,17 @@ Here it is with the fix I applied to the level.
 </div>
 
 Currently this is only fixed when exporting the model and partially fixed in the original game files.
+
+## L906LEV Multiplayer Map 6 Fix 1
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L905LEV-texture.png" alt="L905LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L905LEV-texture-fixed.png" alt="L905LEV Patched">
+</div>
