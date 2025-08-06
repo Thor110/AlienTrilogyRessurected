@@ -36,12 +36,21 @@ namespace ALTViewer
             using var ms = new MemoryStream(patched);
             using var read = new BinaryReader(ms);
             read.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
-            byte check = read.ReadByte(); // only update incorrect UVs if patch is applied
-            // otherwise retain original imperfection for those that might want to see them
-            int[] fixuv = null!;
+            byte check = read.ReadByte(); // only update incorrect UVs if the first patch is applied
+            // otherwise retain original imperfections for those that might want to see them
             bool L111LEVFIX = false;
             bool L141LEVFIX = false;
             bool L906LEVFIX = false;
+            // switch on level name after checking if the first patch is applied
+            if (check != 0xFF && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
+            {
+                switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
+                {
+                    case "L111LEV": L111LEVFIX = true; break;
+                    case "L141LEV": L141LEVFIX = true; break;
+                    case "L906LEV": L906LEVFIX = true; break;
+                }
+            }
             // above are unique patch specific variables
             using var br = new BinaryReader(new MemoryStream(levelSection)); // skip first 20 bytes + 36 below = 56
             ushort vertCount = br.ReadUInt16();         // Number of vertices
@@ -51,14 +60,15 @@ namespace ALTViewer
             ushort mapWidth = br.ReadUInt16();          // Width of the map section
             ushort playerStartX = br.ReadUInt16();      // Player start X coordinate
             ushort playerStartY = br.ReadUInt16();      // Player start Y coordinate
-            br.ReadBytes(2);                            // unknown 2 bytes
+            byte unknown = br.ReadByte();               // unknown object type ( possibly lights )
+            br.ReadByte();                              // unknown 1 ( unused? 128 on all levels )
             ushort monster = br.ReadUInt16();           // Number of monsters
             ushort pickups = br.ReadUInt16();           // Number of pickups
             ushort boxes = br.ReadUInt16();             // Number of boxes
             ushort doors = br.ReadUInt16();             // Number of doors
-            br.ReadBytes(2);                            // unknown 2 bytes
+            br.ReadBytes(2);                            // unknown 2
             ushort playerStartAngle = br.ReadUInt16();  // Player start angle
-            br.ReadBytes(10);                           // unknown 6 and 4 bytes
+            br.ReadBytes(10);                           // unknown 3 & 4
             */ // comment out the next line if you want to read the level header
             br.BaseStream.Seek(32, SeekOrigin.Current); // Skip 36 bytes to reach vertex and quad data
             List<(short X, short Y, short Z)> vertices = new();
@@ -82,15 +92,6 @@ namespace ALTViewer
                 byte other = br.ReadByte(); // unknown byte
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
-            if (check != 0xFF && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
-            {
-                switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
-                {
-                    case "L111LEV": L111LEVFIX = true; break;
-                    case "L141LEV": L141LEVFIX = true; break;
-                    case "L906LEV": L906LEVFIX = true; break;
-                }
-            }
             // Read UV rectangles BX00-BX04
             var uvRects = new List<(int X, int Y, int Width, int Height)>[5];
             for (int i = 0; i < 5; i++)
@@ -105,8 +106,7 @@ namespace ALTViewer
 
             sw.WriteLine($"mtllib {levelName}.mtl");
 
-
-            if (debug)
+            if (debug) // create debug material file
             {
                 foreach (int f in textureFlags)
                 {
@@ -114,7 +114,7 @@ namespace ALTViewer
                     mtlWriter.WriteLine($"map_Kd FLAGS{f}.png");
                 }
             }
-            else if (unknown)
+            else if (unknown) // create unknown material file
             {
                 for (int t = 0; t < 222; t++)
                 {
@@ -122,7 +122,7 @@ namespace ALTViewer
                     mtlWriter.WriteLine($"map_Kd UnkByte_{unknownValues[t]}.png");
                 }
             }
-            else
+            else // create standard material file
             {
                 for (int t = 0; t < 5; t++)
                 {
@@ -251,30 +251,14 @@ namespace ALTViewer
                 }
                 //
                 string matName = "";
-                if (debug)
-                {
-                    if(q.Flags == 255) { matName = $"usemtl UnkByte_{q.Flags:D3}"; }
-                    else { matName = $"usemtl UnkByte_{q.Flags:D2}"; }
-                }
+                if (debug) { matName = $"usemtl Texture{q.Flags:D2}"; }
                 else if (unknown) { matName = $"usemtl UnkByte_{q.Other}"; }
-                else { matName = $"Texture{texGroup:D2}"; }
-
+                else { matName = $"usemtl Texture{texGroup:D2}"; }
+                //
                 if (matName != currentMtl)
                 {
                     currentMtl = matName;
-                    if(debug)
-                    {
-                        if (q.Flags == 255) { sw.WriteLine($"usemtl Texture{q.Flags:D3}"); }
-                        else { sw.WriteLine($"usemtl Texture{q.Flags:D2}"); }
-                    }
-                    else if (unknown)
-                    {
-                        sw.WriteLine($"usemtl UnkByte_{q.Other}");
-                    }
-                    else
-                    {
-                        sw.WriteLine($"usemtl {matName}");
-                    }   
+                    sw.WriteLine(matName);
                 }
                 // Faces
                 if (q.D == -1)
