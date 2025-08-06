@@ -117,8 +117,8 @@ namespace ALTViewer
             textBox6.Text = playerStartX.ToString();        // display player start X coordinate
             ushort playerStartY = br.ReadUInt16();
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
-            byte unknown = br.ReadByte();                   // unknown 1
-            br.ReadByte();                                  // unknown 2
+            byte unknown = br.ReadByte();                   // unknown object type
+            br.ReadByte();                                  // unknown 1 ( 128 on L111LEV.MAP )
             //MessageBox.Show($"Monster : {ms.Position}"); // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();
             textBox8.Text = monsterCount.ToString();        // display monster count
@@ -170,8 +170,8 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
-            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to object data
-            //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 ( L111LEV.MAP )
+            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to object data ( 568 L111LEV.MAP )
+            //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
@@ -185,7 +185,7 @@ namespace ALTViewer
                 br.ReadBytes(8); // unknown bytes
                 boxes.Add((x, y, type));
             }
-            //MessageBox.Show($"Doors : {ms.Position}"); // 479196 + 20 = 479216 ( L111LEV.MAP )
+            //MessageBox.Show($"Doors : {ms.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
