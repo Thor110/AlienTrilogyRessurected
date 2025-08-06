@@ -117,7 +117,8 @@ namespace ALTViewer
             textBox6.Text = playerStartX.ToString();        // display player start X coordinate
             ushort playerStartY = br.ReadUInt16();
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
-            br.ReadBytes(2);                                // unknown 1
+            byte unknown = br.ReadByte();                   // unknown 1
+            br.ReadByte();                                  // unknown 2
             //MessageBox.Show($"Monster : {ms.Position}"); // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();
             textBox8.Text = monsterCount.ToString();        // display monster count
@@ -169,6 +170,7 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
+            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to object data
             //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
