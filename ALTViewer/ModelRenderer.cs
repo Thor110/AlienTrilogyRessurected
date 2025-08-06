@@ -255,11 +255,7 @@ namespace ALTViewer
                 else if (unknown) { matName = $"usemtl UnkByte_{q.Other}"; }
                 else { matName = $"usemtl Texture{texGroup:D2}"; }
                 //
-                if (matName != currentMtl)
-                {
-                    currentMtl = matName;
-                    sw.WriteLine(matName);
-                }
+                if (matName != currentMtl) { sw.WriteLine(currentMtl = matName); } // assign and write current material
                 // Faces
                 if (q.D == -1)
                 {
