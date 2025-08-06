@@ -1,0 +1,1 @@
+Incorrect UVs on some faces, fixed in code on export for now. ( same as L903LEV )

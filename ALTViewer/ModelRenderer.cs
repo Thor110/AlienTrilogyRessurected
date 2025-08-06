@@ -40,6 +40,7 @@ namespace ALTViewer
             // otherwise retain original imperfections for those that might want to see them
             bool L111LEVFIX = false;
             bool L141LEVFIX = false;
+            bool L161LEVFIX = false;
             bool L906LEVFIX = false;
             // switch on level name after checking if the first patch is applied
             if (check != 0xFF && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
@@ -48,6 +49,9 @@ namespace ALTViewer
                 {
                     case "L111LEV": L111LEVFIX = true; break;
                     case "L141LEV": L141LEVFIX = true; break;
+                    case "L161LEV": L161LEVFIX = true; break;
+                    case "L903LEV": L141LEVFIX = true; break; // L903LEV is the same as L141LEV
+                    case "L900LEV": L111LEVFIX = true; break; // L900LEV is the same as L111LEV
                     case "L906LEV": L906LEVFIX = true; break;
                 }
             }
@@ -325,6 +329,18 @@ namespace ALTViewer
                                 continue;
                             case 8112: // grey crate top
                                 sw.WriteLine($"f {q.A + 1}/{faceUvs[8111][0]} {q.B + 1}/{faceUvs[8111][1]} {q.C + 1}/{faceUvs[8111][2]} {q.D + 1}/{faceUvs[8111][3]}");
+                                continue;
+                            default:
+                                sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
+                                continue;
+                        }
+                    }
+                    else if (L161LEVFIX)
+                    {
+                        switch (i)
+                        {
+                            case 3505: // secretion covered wall
+                                sw.WriteLine($"f {q.A + 1}/{faceUvs[3315][2]} {q.B + 1}/{faceUvs[3315][3]} {q.C + 1}/{faceUvs[3315][0]} {q.D + 1}/{faceUvs[3315][1]}");
                                 continue;
                             default:
                                 sw.WriteLine($"f {q.A + 1}/{uv[0]} {q.B + 1}/{uv[1]} {q.C + 1}/{uv[2]} {q.D + 1}/{uv[3]}");
