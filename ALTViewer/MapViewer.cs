@@ -118,7 +118,7 @@ namespace ALTViewer
             ushort playerStartY = br.ReadUInt16();
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             byte unknown = br.ReadByte();                   // unknown object type
-            br.ReadByte();                                  // unknown 1 ( 128 on L111LEV.MAP )
+            br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels )
             //MessageBox.Show($"Monster : {ms.Position}"); // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();
             textBox8.Text = monsterCount.ToString();        // display monster count
