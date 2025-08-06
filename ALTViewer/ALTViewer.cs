@@ -32,22 +32,20 @@ namespace ALTViewer
         // patch changes
         private void button6_Click(object sender, EventArgs e)
         {
-            BinaryUtility.ReplaceByte(0x51342, 0x04, patchDirectory); // fix 3 ( left rail )
-            BinaryUtility.ReplaceByte(0x51A0E, 0x04, patchDirectory); // fix 2 ( right rails )
-            BinaryUtility.ReplaceByte(0x51EBE, 0x04, patchDirectory); // fix 2 ( right rails )
-            BinaryUtility.ReplaceByte(0x5236E, 0x04, patchDirectory); // fix 2 ( right rails )
-            BinaryUtility.ReplaceByte(0x52AEE, 0x04, patchDirectory); // fix 2 ( right rails )
-            BinaryUtility.ReplaceByte(0x22BF9, 0x04, patchDirectory); // fix 4 ( left rail )
-            List<Tuple<long, byte[]>> replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x50BC8L, new byte[] { 0xB4, 0x22, 0x00, 0x00 }) };
-            BinaryUtility.ReplaceBytes(replacements, patchDirectory); // fix 1 ( triangle )
-            replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x45680L, new byte[] { 0x75, 0x00 }) };
-            BinaryUtility.ReplaceBytes(replacements, patchDirectory); // fix 5 ( bridge section )
-            replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x22BF9L, new byte[] { 0x01, 0x04 }) };
-            BinaryUtility.ReplaceBytes(replacements, patchDirectory); //0x22BF9 == 01 04 ( railing texture fix )
-            // NOTE : This face still isn't visible
-            replacements = new List<Tuple<long, byte[]>>() { Tuple.Create(0x50BE8L, new byte[] { 0x75, 0x00 }) };
-            BinaryUtility.ReplaceBytes(replacements, patchDirectory); //0x50BE8 == 75 00 ( under railing texture fix )
-            // NOTE : This face still isn't visible
+            // L906LEV.MAP
+            long[] transparency = { 0x51342, 0x51A0E, 0x51EBE, 0x5236E, 0x52AEE, 0x22BF9 };
+            foreach (long value in transparency) { BinaryUtility.ReplaceByte(value, 0x04, patchDirectory); } // fix 2, 3 & 4 ( railing transparency )
+            List<Tuple<long, byte[]>> replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x50BC8L, new byte[] { 0xB4, 0x22, 0x00, 0x00 }), // fix 1 ( triangle )
+                Tuple.Create(0x45680L, new byte[] { 0x75, 0x00 }), // fix 5 ( bridge section )
+                Tuple.Create(0x22BF9L, new byte[] { 0x01, 0x04 }), //0x22BF9 == 01 04 ( railing texture fix )
+            // NOTE : This face still isn't visible in-game
+                Tuple.Create(0x50BE8L, new byte[] { 0x75, 0x00 }) //0x50BE8 == 75 00 ( under railing texture fix )
+            // NOTE : This face still isn't visible in-game
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            //
             long[] bridge = { 0x456A8L, 0x457E8L, 0x45810L, 0x45838L, 0x45860L, 0x45888L,                       // fix 5 ( bridge section 1 )
             0x41C60L, 0x41C38L,  0x41C10L, 0x41BE8L, 0x41BC0L, 0x41B98L,                                        // fix 5 ( bridge section 2 )
             0x3D00CL, 0x3CA94L, 0x36E64L, 0x36068L,                                                             // fix 5 ( bridge section 3 )
@@ -72,7 +70,7 @@ namespace ALTViewer
             0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
             };
             foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
-            //L905LEV.MAP
+            // L905LEV.MAP
             patchDirectory = Utilities.CheckDirectory() + "SECT90\\L905LEV.MAP";
             long[] flip00905 = { 0x56ADA, 0x57A8E, // fix 1 ( pipes )
             0x41356, 0x4645A, 0x46432, 0x4A8F2, 0x50F4A, 0x5186E, 0x5211A, 0x50FC2, 0x51896, 0x52142, 0x51012, 0x518BE, 0x5216A, // fix 2 ( pipes )
