@@ -111,8 +111,13 @@ namespace ALTViewer
             pickups.Clear();
             boxes.Clear();
             doors.Clear();
-            using var br = new BinaryReader(new MemoryStream(File.ReadAllBytes(selectedLevelFile))); // read entire .MAP file
-            br.BaseStream.Seek(20, SeekOrigin.Current);     // skip 20 byte header
+            lifts.Clear();
+            // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
+            List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
+            using var ms = new MemoryStream(levelSections[0].Data);
+            using var br = new BinaryReader(ms); // currently just reading the MAP0 block so that an accurate remainder is known
+            //using var br = new BinaryReader(new MemoryStream(File.ReadAllBytes(selectedLevelFile))); // read entire .MAP file
+            //br.BaseStream.Seek(20, SeekOrigin.Current);     // skip 20 byte header
             ushort vertCount = br.ReadUInt16();             // vertex count
             textBox2.Text = vertCount.ToString();           // display vertex count
             ushort quadCount = br.ReadUInt16();             // quad count
@@ -229,11 +234,13 @@ namespace ALTViewer
             listBox4.Items.Clear();
             listBox5.Items.Clear();
             listBox6.Items.Clear();
+            listBox8.Items.Clear();
             // populate list boxes
             for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
+            for (int i = 0; i < lifts.Count; i++) { listBox8.Items.Add($"Lift {i}"); }
             // display remaining bytes
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             textBox19.Text = remainingBytes.ToString();
@@ -348,7 +355,8 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8 });
+            int index = listBox3.SelectedIndex;
             //
             label21.Visible = true;
             label22.Visible = true;
@@ -361,17 +369,18 @@ namespace ALTViewer
             label29.Visible = false;
             label30.Visible = false;
             //
-            textBox13.Text = $"{monsters[listBox3.SelectedIndex].X}";
-            textBox14.Text = $"{monsters[listBox3.SelectedIndex].Y}";
-            textBox15.Text = $"{monsters[listBox3.SelectedIndex].Z}";
-            textBox16.Text = $"{monsters[listBox3.SelectedIndex].Type}";
-            textBox17.Text = $"{monsters[listBox3.SelectedIndex].Health}";
-            textBox18.Text = $"{monsters[listBox3.SelectedIndex].Drop}";
+            textBox13.Text = $"{monsters[index].X}";
+            textBox14.Text = $"{monsters[index].Y}";
+            textBox15.Text = $"{monsters[index].Z}";
+            textBox16.Text = $"{monsters[index].Type}";
+            textBox17.Text = $"{monsters[index].Health}";
+            textBox18.Text = $"{monsters[index].Drop}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8 });
+            int index = listBox4.SelectedIndex;
             //
             label21.Visible = true;
             label22.Visible = true;
@@ -384,17 +393,18 @@ namespace ALTViewer
             label29.Visible = false;
             label30.Visible = false;
             //
-            textBox13.Text = $"{pickups[listBox4.SelectedIndex].X}";
-            textBox14.Text = $"{pickups[listBox4.SelectedIndex].Y}";
-            textBox15.Text = $"{pickups[listBox4.SelectedIndex].Z}";
-            textBox16.Text = $"{pickups[listBox4.SelectedIndex].Type}";
-            textBox17.Text = $"{pickups[listBox4.SelectedIndex].Amount}";
-            textBox18.Text = $"{pickups[listBox4.SelectedIndex].Multiplier}";
+            textBox13.Text = $"{pickups[index].X}";
+            textBox14.Text = $"{pickups[index].Y}";
+            textBox15.Text = $"{pickups[index].Z}";
+            textBox16.Text = $"{pickups[index].Type}";
+            textBox17.Text = $"{pickups[index].Amount}";
+            textBox18.Text = $"{pickups[index].Multiplier}";
         }
         // boxes
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8 });
+            int index = listBox5.SelectedIndex;
             //
             label21.Visible = false;
             label22.Visible = true;
@@ -407,9 +417,9 @@ namespace ALTViewer
             label29.Visible = false;
             label30.Visible = false;
             //
-            textBox13.Text = $"{boxes[listBox5.SelectedIndex].X}";
-            textBox14.Text = $"{boxes[listBox5.SelectedIndex].Y}";
-            textBox16.Text = $"{boxes[listBox5.SelectedIndex].Type}";
+            textBox13.Text = $"{boxes[index].X}";
+            textBox14.Text = $"{boxes[index].Y}";
+            textBox16.Text = $"{boxes[index].Type}";
             textBox15.Text = "";
             textBox17.Text = "";
             textBox18.Text = "";
@@ -417,7 +427,8 @@ namespace ALTViewer
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8 });
+            int index = listBox6.SelectedIndex;
             //
             label21.Visible = false;
             label22.Visible = false;
@@ -430,12 +441,36 @@ namespace ALTViewer
             label29.Visible = true;
             label30.Visible = true;
             //
-            textBox13.Text = $"{doors[listBox6.SelectedIndex].X}";
-            textBox14.Text = $"{doors[listBox6.SelectedIndex].Y}";
-            textBox15.Text = $"{doors[listBox6.SelectedIndex].Time}";
-            textBox16.Text = $"{doors[listBox6.SelectedIndex].Tag}";
-            textBox17.Text = $"{doors[listBox6.SelectedIndex].Rotation}";
-            textBox18.Text = $"{doors[listBox6.SelectedIndex].Index}";
+            textBox13.Text = $"{doors[index].X}";
+            textBox14.Text = $"{doors[index].Y}";
+            textBox15.Text = $"{doors[index].Time}";
+            textBox16.Text = $"{doors[index].Tag}";
+            textBox17.Text = $"{doors[index].Rotation}";
+            textBox18.Text = $"{doors[index].Index}";
+        }
+        // lifts
+        private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6 });
+            int index = listBox8.SelectedIndex;
+            //
+            label21.Visible = true; // Z
+            label22.Visible = false;
+            label23.Visible = false;
+            label24.Visible = false;
+            label25.Visible = false;
+            label26.Visible = false;
+            label27.Visible = false;
+            label28.Visible = false;
+            label29.Visible = false;
+            label30.Visible = false;
+            //
+            textBox13.Text = $"{lifts[index].X}";
+            textBox14.Text = $"{lifts[index].Y}";
+            textBox15.Text = $"{lifts[index].Z}";
+            textBox16.Text = "";
+            textBox17.Text = "";
+            textBox18.Text = "";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
@@ -460,6 +495,7 @@ namespace ALTViewer
                 ListBox lb when lb == listBox4 => listBox4_SelectedIndexChanged!,
                 ListBox lb when lb == listBox5 => listBox5_SelectedIndexChanged!,
                 ListBox lb when lb == listBox6 => listBox6_SelectedIndexChanged!,
+                ListBox lb when lb == listBox8 => listBox8_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
