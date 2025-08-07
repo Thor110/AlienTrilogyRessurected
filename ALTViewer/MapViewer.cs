@@ -34,11 +34,11 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte Type, byte X, byte Y, byte Z, byte Health, byte Drop, short Speed)> monsters = new();
-        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z)> pickups = new();
-        private List<(byte X, byte Y, byte Type)> boxes = new();
-        private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
-        private List<(byte X, byte Y, byte Z)> lifts = new();
+        private List<(byte Type, byte X, byte Y, byte Z, byte Health, byte Drop, short Speed, long Offset)> monsters = new();
+        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z, long Offset)> pickups = new();
+        private List<(byte X, byte Y, byte Type, long Offset)> boxes = new();
+        private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index, long Offset)> doors = new();
+        private List<(byte X, byte Y, byte Z, long Offset)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
@@ -165,6 +165,7 @@ namespace ALTViewer
             //MessageBox.Show($"{br.BaseStream.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++) // 28
             {
+                long offset = br.BaseStream.Position + 20;
                 byte type = br.ReadByte();
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
@@ -175,12 +176,13 @@ namespace ALTViewer
                 br.ReadBytes(7); // unknown bytes
                 short speed = br.ReadInt16();
                 br.ReadBytes(4); // unknown bytes
-                monsters.Add((type, x, y, z, health, drop, speed));
+                monsters.Add((type, x, y, z, health, drop, speed, offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++) // 28
             {
+                long offset = br.BaseStream.Position + 20;
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
@@ -189,12 +191,13 @@ namespace ALTViewer
                 br.ReadByte(); // unk1
                 byte z = br.ReadByte();
                 br.ReadByte(); // unk2
-                pickups.Add((x, y, type, amount, multiplier, z));
+                pickups.Add((x, y, type, amount, multiplier, z, offset));
             }
             //MessageBox.Show($"Boxes : {br.BaseStream.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
+                long offset = br.BaseStream.Position + 20;
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
@@ -203,12 +206,13 @@ namespace ALTViewer
                 byte dropOne = br.ReadByte(); // index of first pickup dropped
                 byte dropTwo = br.ReadByte(); // index of second pickup dropped
                 br.ReadBytes(8); // unknown bytes
-                boxes.Add((x, y, type));
+                boxes.Add((x, y, type, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
+                long offset = br.BaseStream.Position + 20;
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 br.ReadByte(); // unk1
@@ -217,16 +221,17 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 byte rotation = br.ReadByte();
                 byte index = br.ReadByte();
-                doors.Add((x, y, time, tag, rotation, index));
+                doors.Add((x, y, time, tag, rotation, index, offset));
             }
             // lifts formula = value multiplied by 16 - (16 bytes one element)
             for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
             {
+                long offset = br.BaseStream.Position + 20;
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte z = br.ReadByte();
                 br.ReadBytes(13); // unknown bytes
-                lifts.Add((x, y, z));
+                lifts.Add((x, y, z, offset));
             }
             textBox22.Text = $"{br.BaseStream.Position + 20}"; // display data remainder offset plus header
             // clear list boxes
@@ -375,6 +380,7 @@ namespace ALTViewer
             textBox16.Text = $"{monsters[index].Type}";
             textBox17.Text = $"{monsters[index].Health}";
             textBox18.Text = $"{monsters[index].Drop}";
+            textBox23.Text = $"{monsters[index].Offset}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -399,6 +405,7 @@ namespace ALTViewer
             textBox16.Text = $"{pickups[index].Type}";
             textBox17.Text = $"{pickups[index].Amount}";
             textBox18.Text = $"{pickups[index].Multiplier}";
+            textBox23.Text = $"{pickups[index].Offset}";
         }
         // boxes
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
@@ -423,6 +430,7 @@ namespace ALTViewer
             textBox15.Text = "";
             textBox17.Text = "";
             textBox18.Text = "";
+            textBox23.Text = $"{boxes[index].Offset}";
         }
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
@@ -447,6 +455,7 @@ namespace ALTViewer
             textBox16.Text = $"{doors[index].Tag}";
             textBox17.Text = $"{doors[index].Rotation}";
             textBox18.Text = $"{doors[index].Index}";
+            textBox23.Text = $"{doors[index].Offset}";
         }
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
@@ -471,6 +480,7 @@ namespace ALTViewer
             textBox16.Text = "";
             textBox17.Text = "";
             textBox18.Text = "";
+            textBox23.Text = $"{lifts[index].Offset}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
