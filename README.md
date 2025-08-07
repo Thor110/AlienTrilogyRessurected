@@ -205,7 +205,7 @@ A preview of the lift L000 from L232LEV.
 ## Patches
 
 I am also looking at making patches for any issues I find in the original game.
-- Patched an issue with L906LEV where a vertex had incorrect coordinates.
+- Patched an issue on L906LEV where a vertex had incorrect coordinates.
 - Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.
 - Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
 - Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
