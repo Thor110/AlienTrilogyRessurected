@@ -135,12 +135,12 @@ namespace ALTViewer
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             br.ReadBytes(10);                               // unknown 3 & 4
-            //2
-            //1 - always 0x40
-            //1 - always 0x40
-            //2
-            //2
-            //2 - always 0x0000 ( padding )
+            // these 10 bytes
+            //2 - always different  ( unknown )
+            //2 - always 0x4040     ( unknown )
+            //2 - always different  ( unknown )
+            //2 - always different  ( unknown )
+            //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
