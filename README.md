@@ -74,6 +74,11 @@ The road map for this project.
 	- [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
 	- [Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-1)
 	- [Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-2)
+	- [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
+	- [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
+	- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
+	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEVFix-1)
+	- [Patched an issue on L141LEV where one face had an incorrect texture.](#L161LEVFix-1)
 
 And possibly more to come.
 
@@ -307,3 +312,31 @@ Here it is with the fix I applied to the level.
 <div align="center">
   <img src="Images/L905-textured-pipe-fixed.png" alt="L905LEV Patched">
 </div>
+
+## L903LEV Multiplayer Map 4 Fix 1
+
+These fixes are the same as on L141LEV
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
+
+## L900LEV Multiplayer Map 1 Fix 1
+
+These fixes are the same as on L111LEV
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
+
+## L111LEV Fix 1
+
+These fixes are the same as on L900LEV
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
+
+## L141LEV Fix 1
+
+These fixes are the same as on L903LEV
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
+
+## L161LEV Fix 1
+
+Currently this is only fixed when exporting the model and partially fixed in the original game files.
