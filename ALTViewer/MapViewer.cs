@@ -141,21 +141,19 @@ namespace ALTViewer
             textBox20.Text = liftCount.ToString();          // display lift count
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
-            br.ReadBytes(10);                               // unknown 3 & 4
-            // these 10 bytes
-            //2 - always different  ( unknown )
-            //2 - always 0x4040     ( unknown )
-            //2 - always different  ( unknown )
-            //2 - always different  ( unknown )
-            //2 - always 0x0000     ( padding )
+            // unknown bytes
+            ushort unknown1 = br.ReadUInt16();  //2 - always different  ( unknown )
+            br.ReadBytes(2);                    //2 - always 0x4040     ( unknown )
+            ushort unknown2 = br.ReadUInt16();  //2 - always different  ( unknown )
+            ushort unknown3 = br.ReadUInt16();  //2 - always different  ( unknown )
+            br.ReadBytes(2);                    //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
-            br.ReadBytes(10);
+            br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
             //MessageBox.Show($"{br.BaseStream.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
-            // collision 16
-            //4//2//2//1//1//1//1//2//1//1
+            // collision 16 //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
