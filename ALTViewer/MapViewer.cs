@@ -41,6 +41,7 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Z)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
+        private bool patch;
         public MapViewer()
         {
             InitializeComponent();
@@ -53,6 +54,15 @@ namespace ALTViewer
             levelPath6 = gameDirectory + "SECT32";
             levelPath7 = gameDirectory + "SECT90";
             levels = new string[] { levelPath1, levelPath2, levelPath3, levelPath4, levelPath5, levelPath6, levelPath7 };
+            // check if the game is patched
+            string patchDirectory = Utilities.CheckDirectory() + "SECT90\\L906LEV.MAP";
+            byte[] patched = File.ReadAllBytes(patchDirectory);
+            using var ms = new MemoryStream(patched);
+            using var read = new BinaryReader(ms);
+            read.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
+            byte check = read.ReadByte();
+            if (check != 0xFF) { patch = true; }
+            // if it is more patches will be applied when exporting the levels
             ToolTip tooltip = new ToolTip(); // no tooltips added yet
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(Label), typeof(ListBox) });
             ListLevels();
@@ -101,11 +111,8 @@ namespace ALTViewer
             pickups.Clear();
             boxes.Clear();
             doors.Clear();
-            // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
-            List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
-            using var ms = new MemoryStream(levelSections[0].Data);
-            using var br = new BinaryReader(ms);
-            //using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
+            using var br = new BinaryReader(new MemoryStream(File.ReadAllBytes(selectedLevelFile))); // read entire .MAP file
+            br.BaseStream.Seek(20, SeekOrigin.Current);     // skip 20 byte header
             ushort vertCount = br.ReadUInt16();             // vertex count
             textBox2.Text = vertCount.ToString();           // display vertex count
             ushort quadCount = br.ReadUInt16();             // quad count
@@ -121,7 +128,7 @@ namespace ALTViewer
             byte unknown = br.ReadByte();                   // unknown object type ( possibly lights )
             textBox21.Text = unknown.ToString();            // display lift count
             br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
-            //MessageBox.Show($"Monster : {ms.Position}");  // 14 + 20 = 34 ( L111LEV.MAP )
+            //MessageBox.Show($"Monster : {br.BaseStream.Position}");  // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
@@ -142,17 +149,17 @@ namespace ALTViewer
             //2 - always different  ( unknown )
             //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
-            br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
+            br.ReadBytes(10);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
-            //MessageBox.Show($"{ms.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
+            //MessageBox.Show($"{br.BaseStream.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             // collision 16
             //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
-            //MessageBox.Show($"{ms.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
+            //MessageBox.Show($"{br.BaseStream.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 byte type = br.ReadByte();
@@ -167,7 +174,7 @@ namespace ALTViewer
                 br.ReadBytes(4); // unknown bytes
                 monsters.Add((type, x, y, z, health, drop, speed));
             }
-            //MessageBox.Show($"Pickups : {ms.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
+            //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++) // 28
             {
@@ -181,7 +188,7 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
-            //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
+            //MessageBox.Show($"Boxes : {br.BaseStream.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
@@ -195,7 +202,7 @@ namespace ALTViewer
                 br.ReadBytes(8); // unknown bytes
                 boxes.Add((x, y, type));
             }
-            //MessageBox.Show($"Doors : {ms.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
+            //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
@@ -307,7 +314,7 @@ namespace ALTViewer
             // parse the BND sections for UVs and model data
             List<BndSection> uvSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(textureDirectory), "BX");
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(fileDirectory), "MAP0");
-            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked);
+            ModelRenderer.ExportLevel(caseName, uvSections, levelSections[0].Data, $"{levelNumber}GFX", outputPath, checkBox1.Checked, checkBox2.Checked, patch);
             if (!exporting)
             {
                 GenerateDebugTextures();

@@ -29,21 +29,16 @@ namespace ALTViewer
         public static int[] liftFlags = new int[] { 0, 2, 11, 128, 130, 139 }; // lift specific flags
         // door unknown values only use 0
         // 0, 2, 11, 128, 139 // door specific flags
-        public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown)
+        public static void ExportLevel(string levelName, List<BndSection> uvSections, byte[] levelSection, string textureName, string outputPath, bool debug, bool unknown, bool patch)
         {
-            string patchDirectory = Utilities.CheckDirectory() + "SECT90\\L906LEV.MAP";
-            byte[] patched = File.ReadAllBytes(patchDirectory);
-            using var ms = new MemoryStream(patched);
-            using var read = new BinaryReader(ms);
-            read.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
-            byte check = read.ReadByte(); // only update incorrect UVs if the first patch is applied
-            // otherwise retain original imperfections for those that might want to see them
             bool L111LEVFIX = false;
             bool L141LEVFIX = false;
             bool L161LEVFIX = false;
             bool L906LEVFIX = false;
             // switch on level name after checking if the first patch is applied
-            if (check != 0xFF && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
+            // only update incorrect UVs if the first patch is applied
+            // otherwise retain original imperfections for those that might want to see them
+            if (patch && !debug && !unknown) // test adjustments necessary for unity version (pre-patched)
             {
                 switch (levelName) // level specific booleans so that string comparison is only done once and only booleans have to be checked when writing every face
                 {

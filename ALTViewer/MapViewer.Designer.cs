@@ -810,7 +810,7 @@
             // button13
             // 
             button13.Enabled = false;
-            button13.Location = new Point(415, 198);
+            button13.Location = new Point(856, 140);
             button13.Name = "button13";
             button13.Size = new Size(120, 23);
             button13.TabIndex = 72;
@@ -821,7 +821,7 @@
             // button14
             // 
             button14.Enabled = false;
-            button14.Location = new Point(541, 198);
+            button14.Location = new Point(982, 140);
             button14.Name = "button14";
             button14.Size = new Size(120, 23);
             button14.TabIndex = 73;
