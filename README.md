@@ -206,6 +206,18 @@ A preview of the lift L000 from L232LEV.
 
 I am also looking at making patches for any issues I find in the original game.
 - Patched an issue with L906LEV where a vertex had incorrect coordinates.
+- Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.
+- Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
+- Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
+- Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.
+- Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.
+- Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.
+- Patched an issue on L903LEV where some crates had incorrect textures.
+- Patched an issue on L900LEV where four crates had textures which were sideways.
+- Patched an issue on L111LEV where four crates had textures which were sideways.
+- Patched an issue on L141LEV where some crates had incorrect textures.
+- Patched an issue on L161LEV where one face had an incorrect texture.
+
 
 ## L906LEV Multiplayer Map 7 Fix 1
 
