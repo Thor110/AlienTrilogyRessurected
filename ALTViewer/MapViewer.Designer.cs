@@ -103,6 +103,10 @@
             button12 = new Button();
             button13 = new Button();
             button14 = new Button();
+            textBox20 = new TextBox();
+            label33 = new Label();
+            label34 = new Label();
+            textBox21 = new TextBox();
             SuspendLayout();
             // 
             // listBox1
@@ -229,6 +233,7 @@
             // 
             // textBox2
             // 
+            textBox2.AccessibleDescription = "Number of vertices in the level model.";
             textBox2.Location = new Point(209, 50);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
@@ -237,6 +242,7 @@
             // 
             // textBox3
             // 
+            textBox3.AccessibleDescription = "Number of quads in the level model.";
             textBox3.Location = new Point(209, 79);
             textBox3.Name = "textBox3";
             textBox3.ReadOnly = true;
@@ -245,6 +251,7 @@
             // 
             // textBox4
             // 
+            textBox4.AccessibleDescription = "Length of the level grid.";
             textBox4.Location = new Point(209, 108);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
@@ -253,6 +260,7 @@
             // 
             // textBox5
             // 
+            textBox5.AccessibleDescription = "Width of the level grid.";
             textBox5.Location = new Point(209, 137);
             textBox5.Name = "textBox5";
             textBox5.ReadOnly = true;
@@ -297,6 +305,7 @@
             // 
             // textBox6
             // 
+            textBox6.AccessibleDescription = "Player start X coordinate.";
             textBox6.Location = new Point(209, 166);
             textBox6.Name = "textBox6";
             textBox6.ReadOnly = true;
@@ -305,6 +314,7 @@
             // 
             // textBox7
             // 
+            textBox7.AccessibleDescription = "Player start Y coordinate.";
             textBox7.Location = new Point(209, 195);
             textBox7.Name = "textBox7";
             textBox7.ReadOnly = true;
@@ -313,7 +323,8 @@
             // 
             // textBox8
             // 
-            textBox8.Location = new Point(209, 224);
+            textBox8.AccessibleDescription = "Number of monsters in the level.";
+            textBox8.Location = new Point(209, 253);
             textBox8.Name = "textBox8";
             textBox8.ReadOnly = true;
             textBox8.Size = new Size(100, 23);
@@ -340,7 +351,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(144, 227);
+            label9.Location = new Point(144, 256);
             label9.Name = "label9";
             label9.Size = new Size(62, 15);
             label9.TabIndex = 24;
@@ -348,7 +359,8 @@
             // 
             // textBox9
             // 
-            textBox9.Location = new Point(209, 253);
+            textBox9.AccessibleDescription = "Number of pickups in the level.";
+            textBox9.Location = new Point(209, 282);
             textBox9.Name = "textBox9";
             textBox9.ReadOnly = true;
             textBox9.Size = new Size(100, 23);
@@ -356,7 +368,8 @@
             // 
             // textBox10
             // 
-            textBox10.Location = new Point(209, 282);
+            textBox10.AccessibleDescription = "Number of objects in the level.";
+            textBox10.Location = new Point(209, 311);
             textBox10.Name = "textBox10";
             textBox10.ReadOnly = true;
             textBox10.Size = new Size(100, 23);
@@ -364,7 +377,8 @@
             // 
             // textBox11
             // 
-            textBox11.Location = new Point(209, 311);
+            textBox11.AccessibleDescription = "Number of doors in the level.";
+            textBox11.Location = new Point(209, 340);
             textBox11.Name = "textBox11";
             textBox11.ReadOnly = true;
             textBox11.Size = new Size(100, 23);
@@ -373,7 +387,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(152, 256);
+            label10.Location = new Point(152, 285);
             label10.Name = "label10";
             label10.Size = new Size(54, 15);
             label10.TabIndex = 28;
@@ -382,7 +396,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(153, 285);
+            label11.Location = new Point(153, 314);
             label11.Name = "label11";
             label11.Size = new Size(53, 15);
             label11.TabIndex = 29;
@@ -391,7 +405,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(162, 314);
+            label12.Location = new Point(162, 343);
             label12.Name = "label12";
             label12.Size = new Size(44, 15);
             label12.TabIndex = 30;
@@ -399,7 +413,8 @@
             // 
             // textBox12
             // 
-            textBox12.Location = new Point(209, 340);
+            textBox12.AccessibleDescription = "Player start rotation.";
+            textBox12.Location = new Point(209, 398);
             textBox12.Name = "textBox12";
             textBox12.ReadOnly = true;
             textBox12.Size = new Size(100, 23);
@@ -408,7 +423,7 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(121, 343);
+            label13.Location = new Point(121, 401);
             label13.Name = "label13";
             label13.Size = new Size(85, 15);
             label13.TabIndex = 32;
@@ -795,7 +810,7 @@
             // button13
             // 
             button13.Enabled = false;
-            button13.Location = new Point(110, 369);
+            button13.Location = new Point(415, 198);
             button13.Name = "button13";
             button13.Size = new Size(120, 23);
             button13.TabIndex = 72;
@@ -806,7 +821,7 @@
             // button14
             // 
             button14.Enabled = false;
-            button14.Location = new Point(236, 369);
+            button14.Location = new Point(541, 198);
             button14.Name = "button14";
             button14.Size = new Size(120, 23);
             button14.TabIndex = 73;
@@ -814,11 +829,51 @@
             button14.UseVisualStyleBackColor = true;
             button14.Click += button14_Click;
             // 
+            // textBox20
+            // 
+            textBox20.AccessibleDescription = "Number of lifts in the level.";
+            textBox20.Location = new Point(209, 369);
+            textBox20.Name = "textBox20";
+            textBox20.ReadOnly = true;
+            textBox20.Size = new Size(100, 23);
+            textBox20.TabIndex = 74;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Location = new Point(171, 372);
+            label33.Name = "label33";
+            label33.Size = new Size(35, 15);
+            label33.TabIndex = 75;
+            label33.Text = "Lifts :";
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(142, 227);
+            label34.Name = "label34";
+            label34.Size = new Size(64, 15);
+            label34.TabIndex = 77;
+            label34.Text = "Unknown :";
+            // 
+            // textBox21
+            // 
+            textBox21.AccessibleDescription = "Unknown list of objects, possibly lights.";
+            textBox21.Location = new Point(209, 224);
+            textBox21.Name = "textBox21";
+            textBox21.ReadOnly = true;
+            textBox21.Size = new Size(100, 23);
+            textBox21.TabIndex = 76;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(label34);
+            Controls.Add(textBox21);
+            Controls.Add(label33);
+            Controls.Add(textBox20);
             Controls.Add(button14);
             Controls.Add(button13);
             Controls.Add(button12);
@@ -976,5 +1031,9 @@
         private Button button12;
         private Button button13;
         private Button button14;
+        private TextBox textBox20;
+        private Label label33;
+        private Label label34;
+        private TextBox textBox21;
     }
 }

@@ -34,10 +34,11 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte Type, byte X, byte Y, byte Z, short Health, byte Drop, short Speed)> monsters = new();
+        private List<(byte Type, byte X, byte Y, byte Z, byte Health, byte Drop, short Speed)> monsters = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z)> pickups = new();
         private List<(byte X, byte Y, byte Type)> boxes = new();
         private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index)> doors = new();
+        private List<(byte X, byte Y, byte Z)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         public MapViewer()
@@ -105,31 +106,33 @@ namespace ALTViewer
             using var ms = new MemoryStream(levelSections[0].Data);
             using var br = new BinaryReader(ms);
             //using var br = new BinaryReader(new MemoryStream(levelSections[0].Data)); // read MAP0 data
-            ushort vertCount = br.ReadUInt16();
+            ushort vertCount = br.ReadUInt16();             // vertex count
             textBox2.Text = vertCount.ToString();           // display vertex count
-            ushort quadCount = br.ReadUInt16();
+            ushort quadCount = br.ReadUInt16();             // quad count
             textBox3.Text = quadCount.ToString();           // display quad count
-            ushort mapLength = br.ReadUInt16();
+            ushort mapLength = br.ReadUInt16();             // map length
             textBox4.Text = mapLength.ToString();           // display map length
-            ushort mapWidth = br.ReadUInt16();
+            ushort mapWidth = br.ReadUInt16();              // map width
             textBox5.Text = mapWidth.ToString();            // display map width
-            ushort playerStartX = br.ReadUInt16();
+            ushort playerStartX = br.ReadUInt16();          // player start X coordinate
             textBox6.Text = playerStartX.ToString();        // display player start X coordinate
-            ushort playerStartY = br.ReadUInt16();
+            ushort playerStartY = br.ReadUInt16();          // player start Y coordinate
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             byte unknown = br.ReadByte();                   // unknown object type ( possibly lights )
-            br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels )
-            //MessageBox.Show($"Monster : {ms.Position}"); // 14 + 20 = 34 ( L111LEV.MAP )
-            ushort monsterCount = br.ReadUInt16();
+            textBox21.Text = unknown.ToString();            // display lift count
+            br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
+            //MessageBox.Show($"Monster : {ms.Position}");  // 14 + 20 = 34 ( L111LEV.MAP )
+            ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
-            ushort pickupCount = br.ReadUInt16();
+            ushort pickupCount = br.ReadUInt16();           // pickup count
             textBox9.Text = pickupCount.ToString();         // display pickup count
-            ushort boxCount = br.ReadUInt16();
+            ushort boxCount = br.ReadUInt16();              // box count
             textBox10.Text = boxCount.ToString();           // display box count
-            ushort doorCount = br.ReadUInt16();
+            ushort doorCount = br.ReadUInt16();             // door count
             textBox11.Text = doorCount.ToString();          // display door count
-            br.ReadBytes(2);                                // unknown 2
-            ushort playerStartAngle = br.ReadUInt16();
+            ushort liftCount = br.ReadUInt16();             // lift count
+            textBox20.Text = liftCount.ToString();          // display lift count
+            ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             br.ReadBytes(10);                               // unknown 3 & 4
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
@@ -141,6 +144,7 @@ namespace ALTViewer
             // collision 16
             //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
+            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             //MessageBox.Show($"{ms.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++) // 28
@@ -149,7 +153,8 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte z = br.ReadByte();
-                short health = br.ReadInt16();
+                br.ReadByte(); // another unknown byte
+                byte health = br.ReadByte();
                 byte drop = br.ReadByte();
                 br.ReadBytes(7); // unknown bytes
                 short speed = br.ReadInt16();
@@ -170,7 +175,6 @@ namespace ALTViewer
                 br.ReadByte(); // unk2
                 pickups.Add((x, y, type, amount, multiplier, z));
             }
-            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to object data ( 568 L111LEV.MAP )
             //MessageBox.Show($"Boxes : {ms.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
@@ -199,6 +203,16 @@ namespace ALTViewer
                 byte index = br.ReadByte();
                 doors.Add((x, y, time, tag, rotation, index));
             }
+            // lifts formula = value multiplied by 16 - (16 bytes one element)
+            for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
+            {
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
+                byte z = br.ReadByte();
+                br.ReadBytes(13); // unknown bytes
+                lifts.Add((x, y, z));
+            }
+            //MessageBox.Show($"{br.BaseStream.Position}");
             // clear list boxes
             listBox3.Items.Clear();
             listBox4.Items.Clear();
