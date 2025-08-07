@@ -228,7 +228,7 @@ namespace ALTViewer
                 br.ReadBytes(13); // unknown bytes
                 lifts.Add((x, y, z));
             }
-            //MessageBox.Show($"{br.BaseStream.Position}");
+            textBox22.Text = $"{br.BaseStream.Position + 20}"; // display data remainder offset plus header
             // clear list boxes
             listBox3.Items.Clear();
             listBox4.Items.Clear();

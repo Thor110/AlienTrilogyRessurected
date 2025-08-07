@@ -109,6 +109,8 @@
             textBox21 = new TextBox();
             label35 = new Label();
             listBox8 = new ListBox();
+            label36 = new Label();
+            textBox22 = new TextBox();
             SuspendLayout();
             // 
             // listBox1
@@ -886,11 +888,31 @@
             listBox8.TabIndex = 78;
             listBox8.SelectedIndexChanged += listBox8_SelectedIndexChanged;
             // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(651, 44);
+            label36.Name = "label36";
+            label36.Size = new Size(105, 15);
+            label36.TabIndex = 80;
+            label36.Text = "Remainder Offset :";
+            // 
+            // textBox22
+            // 
+            textBox22.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
+            textBox22.Location = new Point(762, 41);
+            textBox22.Name = "textBox22";
+            textBox22.ReadOnly = true;
+            textBox22.Size = new Size(100, 23);
+            textBox22.TabIndex = 81;
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(textBox22);
+            Controls.Add(label36);
             Controls.Add(label35);
             Controls.Add(listBox8);
             Controls.Add(label34);
@@ -1060,5 +1082,7 @@
         private TextBox textBox21;
         private Label label35;
         private ListBox listBox8;
+        private Label label36;
+        private TextBox textBox22;
     }
 }
