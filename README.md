@@ -317,26 +317,26 @@ Here it is with the fix I applied to the level.
 
 These fixes are the same as on L141LEV
 
-Currently this is only fixed when exporting the model and partially fixed in the original game files.
+Currently this is only fixed when exporting the level model.
 
 ## L900LEV Multiplayer Map 1 Fix 1
 
 These fixes are the same as on L111LEV
 
-Currently this is only fixed when exporting the model and partially fixed in the original game files.
+Currently this is only fixed when exporting the level model.
 
 ## L111LEV Fix 1
 
 These fixes are the same as on L900LEV
 
-Currently this is only fixed when exporting the model and partially fixed in the original game files.
+Currently this is only fixed when exporting the level model.
 
 ## L141LEV Fix 1
 
 These fixes are the same as on L903LEV
 
-Currently this is only fixed when exporting the model and partially fixed in the original game files.
+Currently this is only fixed when exporting the level model.
 
 ## L161LEV Fix 1
 
-Currently this is only fixed when exporting the model and partially fixed in the original game files.
+Currently this is only fixed when exporting the level model.
