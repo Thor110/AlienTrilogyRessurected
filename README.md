@@ -66,7 +66,7 @@ The road map for this project.
 	- Export levels with debug and unknown byte flags displayed visually.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
-- [❌ 7 : Patches](#patches) ( ???% Complete )
+- [❌ 7 : Patches](#patches) ( ??% Complete )
 	- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
 	- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
@@ -78,7 +78,7 @@ The road map for this project.
 	- [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
 	- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
 	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEVFix-1)
-	- [Patched an issue on L141LEV where one face had an incorrect texture.](#L161LEVFix-1)
+	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEVFix-1)
 
 And possibly more to come.
 
