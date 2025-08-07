@@ -144,7 +144,7 @@
             // 
             button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(1027, 74);
+            button1.Location = new Point(512, 12);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
@@ -156,7 +156,7 @@
             // button2
             // 
             button2.AccessibleDescription = "Close the level.";
-            button2.Location = new Point(1027, 103);
+            button2.Location = new Point(593, 12);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
@@ -169,7 +169,7 @@
             // 
             button3.AccessibleDescription = "Open the selected level.";
             button3.Enabled = false;
-            button3.Location = new Point(1027, 103);
+            button3.Location = new Point(593, 12);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
@@ -227,9 +227,9 @@
             // 
             listBox2.FormattingEnabled = true;
             listBox2.ItemHeight = 15;
-            listBox2.Location = new Point(856, 213);
+            listBox2.Location = new Point(856, 183);
             listBox2.Name = "listBox2";
-            listBox2.Size = new Size(120, 139);
+            listBox2.Size = new Size(120, 169);
             listBox2.TabIndex = 10;
             listBox2.SelectedIndexChanged += listBox2_SelectedIndexChanged;
             // 
@@ -434,7 +434,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(856, 195);
+            label14.Location = new Point(856, 165);
             label14.Name = "label14";
             label14.Size = new Size(81, 15);
             label14.TabIndex = 33;
@@ -485,36 +485,36 @@
             label15.AutoSize = true;
             label15.Location = new Point(478, 354);
             label15.Name = "label15";
-            label15.Size = new Size(56, 15);
+            label15.Size = new Size(62, 15);
             label15.TabIndex = 38;
-            label15.Text = "Monsters";
+            label15.Text = "Monsters :";
             // 
             // label16
             // 
             label16.AutoSize = true;
             label16.Location = new Point(604, 354);
             label16.Name = "label16";
-            label16.Size = new Size(48, 15);
+            label16.Size = new Size(54, 15);
             label16.TabIndex = 39;
-            label16.Text = "Pickups";
+            label16.Text = "Pickups :";
             // 
             // label17
             // 
             label17.AutoSize = true;
             label17.Location = new Point(730, 354);
             label17.Name = "label17";
-            label17.Size = new Size(47, 15);
+            label17.Size = new Size(53, 15);
             label17.TabIndex = 40;
-            label17.Text = "Objects";
+            label17.Text = "Objects :";
             // 
             // label18
             // 
             label18.AutoSize = true;
             label18.Location = new Point(856, 354);
             label18.Name = "label18";
-            label18.Size = new Size(38, 15);
+            label18.Size = new Size(44, 15);
             label18.TabIndex = 41;
-            label18.Text = "Doors";
+            label18.Text = "Doors :";
             // 
             // textBox13
             // 
@@ -700,16 +700,16 @@
             // 
             listBox7.FormattingEnabled = true;
             listBox7.ItemHeight = 15;
-            listBox7.Location = new Point(982, 213);
+            listBox7.Location = new Point(982, 183);
             listBox7.Name = "listBox7";
-            listBox7.Size = new Size(120, 139);
+            listBox7.Size = new Size(120, 169);
             listBox7.TabIndex = 62;
             listBox7.SelectedIndexChanged += listBox7_SelectedIndexChanged;
             // 
             // label32
             // 
             label32.AutoSize = true;
-            label32.Location = new Point(982, 195);
+            label32.Location = new Point(982, 165);
             label32.Name = "label32";
             label32.Size = new Size(72, 15);
             label32.TabIndex = 63;
@@ -765,7 +765,7 @@
             // 
             button9.AccessibleDescription = "Export the selected door as an OBJ file.";
             button9.Enabled = false;
-            button9.Location = new Point(856, 169);
+            button9.Location = new Point(856, 139);
             button9.Name = "button9";
             button9.Size = new Size(120, 23);
             button9.TabIndex = 68;
@@ -789,7 +789,7 @@
             // 
             button11.AccessibleDescription = "Export the selected lift as an OBJ file.";
             button11.Enabled = false;
-            button11.Location = new Point(982, 169);
+            button11.Location = new Point(982, 139);
             button11.Name = "button11";
             button11.Size = new Size(120, 23);
             button11.TabIndex = 70;
@@ -812,7 +812,7 @@
             // button13
             // 
             button13.Enabled = false;
-            button13.Location = new Point(856, 140);
+            button13.Location = new Point(856, 110);
             button13.Name = "button13";
             button13.Size = new Size(120, 23);
             button13.TabIndex = 72;
@@ -823,7 +823,7 @@
             // button14
             // 
             button14.Enabled = false;
-            button14.Location = new Point(982, 140);
+            button14.Location = new Point(982, 110);
             button14.Name = "button14";
             button14.Size = new Size(120, 23);
             button14.TabIndex = 73;
@@ -872,9 +872,9 @@
             label35.AutoSize = true;
             label35.Location = new Point(982, 355);
             label35.Name = "label35";
-            label35.Size = new Size(29, 15);
+            label35.Size = new Size(35, 15);
             label35.TabIndex = 79;
-            label35.Text = "Lifts";
+            label35.Text = "Lifts :";
             // 
             // listBox8
             // 
