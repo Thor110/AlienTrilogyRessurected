@@ -681,7 +681,7 @@
             // textBox19
             // 
             textBox19.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox19.Location = new Point(882, 41);
+            textBox19.Location = new Point(762, 12);
             textBox19.Name = "textBox19";
             textBox19.ReadOnly = true;
             textBox19.Size = new Size(100, 23);
@@ -690,7 +690,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(794, 44);
+            label31.Location = new Point(674, 15);
             label31.Name = "label31";
             label31.Size = new Size(82, 15);
             label31.TabIndex = 61;
@@ -742,7 +742,7 @@
             // button7
             // 
             button7.Enabled = false;
-            button7.Location = new Point(988, 41);
+            button7.Location = new Point(868, 12);
             button7.Name = "button7";
             button7.Size = new Size(114, 23);
             button7.TabIndex = 66;
@@ -765,7 +765,7 @@
             // 
             button9.AccessibleDescription = "Export the selected door as an OBJ file.";
             button9.Enabled = false;
-            button9.Location = new Point(982, 169);
+            button9.Location = new Point(856, 169);
             button9.Name = "button9";
             button9.Size = new Size(120, 23);
             button9.TabIndex = 68;
@@ -789,7 +789,7 @@
             // 
             button11.AccessibleDescription = "Export the selected lift as an OBJ file.";
             button11.Enabled = false;
-            button11.Location = new Point(856, 169);
+            button11.Location = new Point(982, 169);
             button11.Name = "button11";
             button11.Size = new Size(120, 23);
             button11.TabIndex = 70;
