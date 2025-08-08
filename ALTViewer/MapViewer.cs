@@ -165,24 +165,28 @@ namespace ALTViewer
             //MessageBox.Show($"{br.BaseStream.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++) // 28
             {
-                long offset = br.BaseStream.Position + 20;
-                byte type = br.ReadByte();
-                byte x = br.ReadByte();
-                byte y = br.ReadByte();
-                byte z = br.ReadByte();
-                br.ReadByte(); // another unknown byte
-                byte health = br.ReadByte();
-                byte drop = br.ReadByte();
-                br.ReadBytes(7); // unknown bytes
-                short speed = br.ReadInt16();
-                br.ReadBytes(4); // unknown bytes
+                long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
+                byte type = br.ReadByte();                  // 2
+                byte x = br.ReadByte();                     // 75
+                byte y = br.ReadByte();                     // 65
+                byte z = br.ReadByte();                     // 255
+                br.ReadByte(); // another unknown byte      // 6
+                byte health = br.ReadByte();                // 1
+                byte drop = br.ReadByte();                  // 255
+                br.ReadBytes(7); // unknown bytes           // 00 00 00 3E 05 9B 0E (0x)
+                short speed = br.ReadInt16();               // 100
+                br.ReadBytes(4); // unknown bytes           // 00 00 06 36 (0x)
+                // monster types
+                // 2 - face hugger
+                // 6 - warrior
+                // 7 - queen
                 monsters.Add((type, x, y, z, health, drop, speed, offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++) // 28
             {
-                long offset = br.BaseStream.Position + 20;
+                long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
@@ -197,7 +201,7 @@ namespace ALTViewer
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
-                long offset = br.BaseStream.Position + 20;
+                long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
@@ -212,7 +216,7 @@ namespace ALTViewer
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
-                long offset = br.BaseStream.Position + 20;
+                long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 br.ReadByte(); // unk1
@@ -226,7 +230,7 @@ namespace ALTViewer
             // lifts formula = value multiplied by 16 - (16 bytes one element)
             for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
             {
-                long offset = br.BaseStream.Position + 20;
+                long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte z = br.ReadByte();
