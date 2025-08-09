@@ -179,10 +179,10 @@ namespace ALTViewer
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
-            ushort unknown1 = br.ReadUInt16();  //2 - always different  ( unknown )
-            br.ReadBytes(2);                    //2 - always 0x4040     ( unknown )
-            ushort unknown2 = br.ReadUInt16();  //2 - always different  ( unknown )
-            ushort unknown3 = br.ReadUInt16();  //2 - Available Enemy Types
+            ushort unknown1 = br.ReadUInt16();              //2 - always different  ( unknown )
+            br.ReadBytes(2);                                //2 - always 0x4040     ( unknown )
+            ushort unknown2 = br.ReadUInt16();              //2 - always different  ( unknown )
+            ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( unknown 3 )
             // L111LEV - 22 00 // 2 / 6
             // L112LEV - 22 00 // 2 / 6
@@ -193,12 +193,12 @@ namespace ALTViewer
             // L141LEV - 23 00 // 6 / 1 / 2
             // L115LEV - 00 00 // null
             // L154LEV - 23 10 // 6 / 1 / 2 / 13 / 16 / 17 / 19
-            // L155LEV - 00 00 // 18 / 16 / 19
+            // L155LEV - 0C 00 // 18 / 16 / 19
             // L161LEV - A7 02 // 6 / 1 / 2 / 8 / 10 / 3
             // L162LEV - 43 00 // 7 / 1 / 2
             // Chapter 2 ( unknown 3 )
             // L211LEV - 0E 08 // 4 / 12 / 2 / 3
-            // L212LEV - 0A 08 // 4 / 2 / 12 /
+            // L212LEV - 0A 08 // 4 / 2 / 12
             // L213LEV - 02 08 // 2 / 12
             // L222LEV - 0B 08 // 1 / 2 / 12 / 4 / 17 / 19
             // L242LEV - 00 00 // null
@@ -221,7 +221,7 @@ namespace ALTViewer
             // L381LEV - 23 00 // 6 / 1 / 2
             // L325LEV - 36 00 // 3 / 5 / 2 / 6
             // L391LEV - 43 00 // 7 / 1 / 2
-            br.ReadBytes(2);                    //2 - always 0x0000     ( padding )
+            br.ReadBytes(2);                                //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
@@ -236,42 +236,28 @@ namespace ALTViewer
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
-                //test1.WriteLine($"{offset:X2}");
-                byte type = br.ReadByte();                  // 2 // x 53 y 67 // 478316
+                byte type = br.ReadByte();
                 // Monster Types (0x)
-                // 00 - No Enemy
                 // 01 - Egg
                 // 02 - Face Hugger
                 // 03 - Chest Burster
-                // 04 - Invisible Enemy???
-                // 05 - Invisible Enemy???
+                // 04 - Bambi
+                // 05 - Dog Alien
                 // 06 - Warrior Drone
                 // 07 - Queen - Crashes on first level // 199016
-                // 08 - Invisible Drone???
-                // 09 - Invisible Enemy???
-                // 0A - Invisible Enemy No Weapon           ( Red Blood )??? // Wall Body???
-                // 0B - Security Guard
+                // 08 - Ceiling Warrior Drone
+                // 09 - Ceiling Dog Alien
+                // 0A - Colonist
+                // 0B - Guard
                 // 0C - Soldier
-                // 0D - Invisible Enemy With Smart Gun      ( Red Blood )???
-                // 0E - Invisible Enemy With Smart Gun      ( Red Blood )???
-                // 0F - No Enemy???
-                // 10 - Invisible Enemy Doesn't Move???
-                // 11 - Invisible Enemy Doesn't Move???
-                // 12 - Invisible Enemy Doesn't Move???
-                // 13 - Invisible Enemy Doesn't Move???
-                // 14 - Crashes on Queens Lair Level L162LEV.MAP
-                // 15 - Crashes on Queens Lair Level L162LEV.MAP
-                // 16 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 8
-                // 17 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 74
-                // 18 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 10 for int 8
-                // 19 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 8
-                // 1A - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 10 for int 8
-                // 1B - 
-                // 1C - 
-                // 1D - 
-                // 1E - 
-                // 1F - 
-                // 20 - 
+                // 0D - Synthetic
+                // 0E - Handler
+                // 0F - Value not used in any level
+                // 10 - Nonexistent
+                // 11 - Nonexistent
+                // 12 - Nonexistent
+                // 13 - Nonexistent
+                // BAMBI / COLONIST / DOG / 
                 byte x = br.ReadByte();                     // 75
                 byte y = br.ReadByte();                     // 65
                 byte z = br.ReadByte();                     // 255
@@ -300,15 +286,20 @@ namespace ALTViewer
                     offset));
             }
             // L111LEV - 22 00 // 2 / 6
-            // L213LEV - 02 08 // 2 / 12
+            // L154LEV - 23 10 // 6 / 1 / 2 / 13 / 16 / 17 / 19
+            // L155LEV - 0C 00 // 18 / 16 / 19 // ???????
             // for testing purposes only
-            /*BinaryUtility.ReplaceByte(0x34, 0x02, "L111LEV.MAP");
-            BinaryUtility.ReplaceByte(0x35, 0x08, "L111LEV.MAP");
+            /*BinaryUtility.ReplaceByte(0x34, 0x23, "L111LEV.MAP");
+            BinaryUtility.ReplaceByte(0x35, 0x10, "L111LEV.MAP");
             foreach (var enemy in enemies)
             {
-                if(enemy.Type == 6)
+                if(enemy.Type != 6)
                 {
-                    BinaryUtility.ReplaceByte(enemy.Offset, 0x0C, "L111LEV.MAP");
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x13, "L111LEV.MAP");
+                }
+                else
+                {
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x13, "L111LEV.MAP");
                 }
             }*/
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
