@@ -797,7 +797,7 @@ namespace ALTViewer
         private void listBox9_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8 });
-            int index = listBox8.SelectedIndex;
+            int index = listBox9.SelectedIndex;
             textBox13.Text = $"U1 : {unknown[index].U1}";
             textBox14.Text = $"U2 : {unknown[index].U2}";
             textBox16.Text = $"U3 : {unknown[index].U3}";
