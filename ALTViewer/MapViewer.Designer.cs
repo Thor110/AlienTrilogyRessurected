@@ -74,21 +74,9 @@
             textBox13 = new TextBox();
             textBox14 = new TextBox();
             textBox15 = new TextBox();
-            label19 = new Label();
-            label20 = new Label();
-            label21 = new Label();
             textBox16 = new TextBox();
             textBox17 = new TextBox();
             textBox18 = new TextBox();
-            label22 = new Label();
-            label23 = new Label();
-            label24 = new Label();
-            label25 = new Label();
-            label26 = new Label();
-            label27 = new Label();
-            label28 = new Label();
-            label29 = new Label();
-            label30 = new Label();
             textBox19 = new TextBox();
             label31 = new Label();
             listBox7 = new ListBox();
@@ -127,6 +115,8 @@
             textBox35 = new TextBox();
             textBox36 = new TextBox();
             textBox37 = new TextBox();
+            label19 = new Label();
+            label20 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -558,34 +548,6 @@
             textBox15.Size = new Size(100, 23);
             textBox15.TabIndex = 44;
             // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Location = new Point(368, 53);
-            label19.Name = "label19";
-            label19.RightToLeft = RightToLeft.No;
-            label19.Size = new Size(20, 15);
-            label19.TabIndex = 45;
-            label19.Text = "X :";
-            // 
-            // label20
-            // 
-            label20.AutoSize = true;
-            label20.Location = new Point(368, 82);
-            label20.Name = "label20";
-            label20.Size = new Size(20, 15);
-            label20.TabIndex = 46;
-            label20.Text = "Y :";
-            // 
-            // label21
-            // 
-            label21.AutoSize = true;
-            label21.Location = new Point(368, 111);
-            label21.Name = "label21";
-            label21.Size = new Size(20, 15);
-            label21.TabIndex = 47;
-            label21.Text = "Z :";
-            // 
             // textBox16
             // 
             textBox16.Location = new Point(394, 137);
@@ -609,93 +571,6 @@
             textBox18.ReadOnly = true;
             textBox18.Size = new Size(100, 23);
             textBox18.TabIndex = 50;
-            // 
-            // label22
-            // 
-            label22.AutoSize = true;
-            label22.Location = new Point(351, 140);
-            label22.Name = "label22";
-            label22.Size = new Size(37, 15);
-            label22.TabIndex = 51;
-            label22.Text = "Type :";
-            // 
-            // label23
-            // 
-            label23.AutoSize = true;
-            label23.Location = new Point(340, 169);
-            label23.Name = "label23";
-            label23.Size = new Size(48, 15);
-            label23.TabIndex = 52;
-            label23.Text = "Health :";
-            // 
-            // label24
-            // 
-            label24.AutoSize = true;
-            label24.Location = new Point(349, 198);
-            label24.Name = "label24";
-            label24.Size = new Size(39, 15);
-            label24.TabIndex = 53;
-            label24.Text = "Drop :";
-            // 
-            // label25
-            // 
-            label25.AutoSize = true;
-            label25.Location = new Point(331, 169);
-            label25.Name = "label25";
-            label25.Size = new Size(57, 15);
-            label25.TabIndex = 54;
-            label25.Text = "Amount :";
-            label25.Visible = false;
-            // 
-            // label26
-            // 
-            label26.AutoSize = true;
-            label26.Location = new Point(324, 198);
-            label26.Name = "label26";
-            label26.Size = new Size(64, 15);
-            label26.TabIndex = 55;
-            label26.Text = "Multiplier :";
-            label26.Visible = false;
-            // 
-            // label27
-            // 
-            label27.AutoSize = true;
-            label27.Location = new Point(349, 111);
-            label27.Name = "label27";
-            label27.Size = new Size(39, 15);
-            label27.TabIndex = 56;
-            label27.Text = "Time :";
-            label27.Visible = false;
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Location = new Point(357, 140);
-            label28.Name = "label28";
-            label28.Size = new Size(31, 15);
-            label28.TabIndex = 57;
-            label28.Text = "Tag :";
-            label28.Visible = false;
-            // 
-            // label29
-            // 
-            label29.AutoSize = true;
-            label29.Location = new Point(330, 169);
-            label29.Name = "label29";
-            label29.Size = new Size(58, 15);
-            label29.TabIndex = 58;
-            label29.Text = "Rotation :";
-            label29.Visible = false;
-            // 
-            // label30
-            // 
-            label30.AutoSize = true;
-            label30.Location = new Point(346, 198);
-            label30.Name = "label30";
-            label30.Size = new Size(42, 15);
-            label30.TabIndex = 59;
-            label30.Text = "Index :";
-            label30.Visible = false;
             // 
             // textBox19
             // 
@@ -1053,11 +928,31 @@
             textBox37.Size = new Size(100, 23);
             textBox37.TabIndex = 88;
             // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(351, 53);
+            label19.Name = "label19";
+            label19.Size = new Size(37, 15);
+            label19.TabIndex = 98;
+            label19.Text = "Start :";
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(581, 314);
+            label20.Name = "label20";
+            label20.Size = new Size(33, 15);
+            label20.TabIndex = 99;
+            label20.Text = "End :";
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(label20);
+            Controls.Add(label19);
             Controls.Add(textBox28);
             Controls.Add(textBox29);
             Controls.Add(textBox30);
@@ -1096,21 +991,9 @@
             Controls.Add(listBox7);
             Controls.Add(label31);
             Controls.Add(textBox19);
-            Controls.Add(label30);
-            Controls.Add(label29);
-            Controls.Add(label28);
-            Controls.Add(label27);
-            Controls.Add(label26);
-            Controls.Add(label25);
-            Controls.Add(label24);
-            Controls.Add(label23);
-            Controls.Add(label22);
             Controls.Add(textBox18);
             Controls.Add(textBox17);
             Controls.Add(textBox16);
-            Controls.Add(label21);
-            Controls.Add(label20);
-            Controls.Add(label19);
             Controls.Add(textBox15);
             Controls.Add(textBox14);
             Controls.Add(textBox13);
@@ -1210,21 +1093,9 @@
         private TextBox textBox13;
         private TextBox textBox14;
         private TextBox textBox15;
-        private Label label19;
-        private Label label20;
-        private Label label21;
         private TextBox textBox16;
         private TextBox textBox17;
         private TextBox textBox18;
-        private Label label22;
-        private Label label23;
-        private Label label24;
-        private Label label25;
-        private Label label26;
-        private Label label27;
-        private Label label28;
-        private Label label29;
-        private Label label30;
         private TextBox textBox19;
         private Label label31;
         private ListBox listBox7;
@@ -1263,5 +1134,7 @@
         private TextBox textBox35;
         private TextBox textBox36;
         private TextBox textBox37;
+        private Label label19;
+        private Label label20;
     }
 }

@@ -503,24 +503,26 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8 });
             int index = listBox3.SelectedIndex;
-            //
-            label21.Visible = true;
-            label22.Visible = true;
-            label23.Visible = true;
-            label24.Visible = true;
-            label25.Visible = false;
-            label26.Visible = false;
-            label27.Visible = false;
-            label28.Visible = false;
-            label29.Visible = false;
-            label30.Visible = false;
-            //
-            textBox13.Text = $"{enemies[index].X}";
-            textBox14.Text = $"{enemies[index].Y}";
-            textBox15.Text = $"{enemies[index].Z}";
-            textBox16.Text = $"{enemies[index].Type}";
-            textBox17.Text = $"{enemies[index].Health}";
-            textBox18.Text = $"{enemies[index].Drop}";
+            textBox13.Text = $"Type : {enemies[index].Type}";
+            textBox14.Text = $"X : {enemies[index].X}";
+            textBox15.Text = $"Y : {enemies[index].Y}";
+            textBox16.Text = $"Z : {enemies[index].Z}";
+            textBox17.Text = $"Unk1 : {enemies[index].Unk1}";
+            textBox18.Text = $"Health : {enemies[index].Health}";
+            textBox24.Text = $"Drop : {enemies[index].Drop}";
+            textBox25.Text = $"Unk2 : {enemies[index].Unk2}";
+            textBox26.Text = $"Unk3 : {enemies[index].Unk3}";
+            textBox27.Text = $"Unk4 : {enemies[index].Unk4}";
+            textBox28.Text = $"Unk5 : {enemies[index].Unk5}";
+            textBox29.Text = $"Unk6 : {enemies[index].Unk6}";
+            textBox30.Text = $"Unk7 : {enemies[index].Unk7}";
+            textBox31.Text = $"Unk8 : {enemies[index].Unk8}";
+            textBox32.Text = $"Speed : {enemies[index].Speed}";
+            textBox33.Text = "null";
+            textBox34.Text = $"Unk9 : {enemies[index].Unk9}";
+            textBox35.Text = $"Unk10 : {enemies[index].Unk10}";
+            textBox36.Text = $"Unk11 : {enemies[index].Unk11}";
+            textBox37.Text = $"Unk12 : {enemies[index].Unk12}";
             textBox23.Text = $"{enemies[index].Offset}";
         }
         // pickups
@@ -528,49 +530,53 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8 });
             int index = listBox4.SelectedIndex;
-            //
-            label21.Visible = true;
-            label22.Visible = true;
-            label23.Visible = false;
-            label24.Visible = false;
-            label25.Visible = true;
-            label26.Visible = true;
-            label27.Visible = false;
-            label28.Visible = false;
-            label29.Visible = false;
-            label30.Visible = false;
-            //
-            textBox13.Text = $"{pickups[index].X}";
-            textBox14.Text = $"{pickups[index].Y}";
-            textBox15.Text = $"{pickups[index].Z}";
-            textBox16.Text = $"{pickups[index].Type}";
-            textBox17.Text = $"{pickups[index].Amount}";
-            textBox18.Text = $"{pickups[index].Multiplier}";
+            textBox13.Text = $"X : {pickups[index].X}";
+            textBox14.Text = $"Y : {pickups[index].Y}";
+            textBox15.Text = $"Type : {pickups[index].Type}";
+            textBox16.Text = $"Amount : {pickups[index].Amount}";
+            textBox17.Text = $"Multiplier : {pickups[index].Multiplier}";
+            textBox18.Text = $"Unk1 : {pickups[index].Unk1}";
+            textBox24.Text = $"Z : {pickups[index].Z}";
+            textBox25.Text = $"Unk2 : {pickups[index].Unk2}";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
             textBox23.Text = $"{pickups[index].Offset}";
         }
-        // boxes
+        // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8 });
             int index = listBox5.SelectedIndex;
-            //
-            label21.Visible = false;
-            label22.Visible = true;
-            label23.Visible = false;
-            label24.Visible = false;
-            label25.Visible = false;
-            label26.Visible = false;
-            label27.Visible = false;
-            label28.Visible = false;
-            label29.Visible = false;
-            label30.Visible = false;
-            //
-            textBox13.Text = $"{objects[index].X}";
-            textBox14.Text = $"{objects[index].Y}";
-            textBox16.Text = $"{objects[index].Type}";
-            textBox15.Text = "";
-            textBox17.Text = "";
-            textBox18.Text = "";
+            textBox13.Text = $"X : {objects[index].X}";
+            textBox14.Text = $"Y : {objects[index].Y}";
+            textBox16.Text = $"ObjectType : {objects[index].ObjectType}";
+            textBox15.Text = $"DropType : {objects[index].DropType}";
+            textBox17.Text = $"Unk1 : {objects[index].Unk1}";
+            textBox18.Text = $"Unk2 : {objects[index].Unk2}";
+            textBox24.Text = $"DropOne : {objects[index].DropOne}";
+            textBox25.Text = $"DropTwo : {objects[index].DropTwo}";
+            textBox26.Text = $"Unk3 : {objects[index].Unk3}";
+            textBox27.Text = $"Unk4 : {objects[index].Unk4}";
+            textBox28.Text = $"Unk5 : {objects[index].Unk5}";
+            textBox29.Text = $"Unk6 : {objects[index].Unk6}";
+            textBox30.Text = $"Unk7 : {objects[index].Unk7}";
+            textBox31.Text = $"Unk8 : {objects[index].Unk8}";
+            textBox32.Text = $"Rotation : {objects[index].Rotation}";
+            textBox33.Text = $"Unk9 : {objects[index].Unk9}";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
             textBox23.Text = $"{objects[index].Offset}";
         }
         // doors
@@ -578,24 +584,26 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8 });
             int index = listBox6.SelectedIndex;
-            //
-            label21.Visible = false;
-            label22.Visible = false;
-            label23.Visible = false;
-            label24.Visible = false;
-            label25.Visible = false;
-            label26.Visible = false;
-            label27.Visible = true;
-            label28.Visible = true;
-            label29.Visible = true;
-            label30.Visible = true;
-            //
-            textBox13.Text = $"{doors[index].X}";
-            textBox14.Text = $"{doors[index].Y}";
-            textBox15.Text = $"{doors[index].Time}";
-            textBox16.Text = $"{doors[index].Tag}";
-            textBox17.Text = $"{doors[index].Rotation}";
-            textBox18.Text = $"{doors[index].Index}";
+            textBox13.Text = $"X : {doors[index].X}";
+            textBox14.Text = $"Y : {doors[index].Y}";
+            textBox15.Text = $"Unk1 : {doors[index].Unk1}";
+            textBox16.Text = $"Time : {doors[index].Time}";
+            textBox17.Text = $"Tag : {doors[index].Tag}";
+            textBox18.Text = $"Unk2 : {doors[index].Unk2}";
+            textBox24.Text = $"Rotation : {doors[index].Rotation}";
+            textBox25.Text = $"Index : {doors[index].Index}";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
             textBox23.Text = $"{doors[index].Offset}";
         }
         // lifts
@@ -603,24 +611,26 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6 });
             int index = listBox8.SelectedIndex;
-            //
-            label21.Visible = true; // Z
-            label22.Visible = false;
-            label23.Visible = false;
-            label24.Visible = false;
-            label25.Visible = false;
-            label26.Visible = false;
-            label27.Visible = false;
-            label28.Visible = false;
-            label29.Visible = false;
-            label30.Visible = false;
-            //
-            textBox13.Text = $"{lifts[index].X}";
-            textBox14.Text = $"{lifts[index].Y}";
-            textBox15.Text = $"{lifts[index].Z}";
-            textBox16.Text = "";
-            textBox17.Text = "";
-            textBox18.Text = "";
+            textBox13.Text = $"X : {lifts[index].X}";
+            textBox14.Text = $"Y : {lifts[index].Y}";
+            textBox16.Text = $"Z : {lifts[index].Z}";
+            textBox15.Text = $"Unk1 : {lifts[index].Unk1}";
+            textBox17.Text = $"Unk2 : {lifts[index].Unk2}";
+            textBox18.Text = $"Unk3 : {lifts[index].Unk3}";
+            textBox24.Text = $"Unk4 : {lifts[index].Unk4}";
+            textBox25.Text = $"Unk5 : {lifts[index].Unk5}";
+            textBox26.Text = $"Unk6 : {lifts[index].Unk6}";
+            textBox27.Text = $"Unk7 :  {lifts[index].Unk7}";
+            textBox28.Text = $"Unk8 :  {lifts[index].Unk8}";
+            textBox29.Text = $"Unk9 :  {lifts[index].Unk9}";
+            textBox30.Text = $"Unk10 :  {lifts[index].Unk10}";
+            textBox31.Text = $"Unk11 :  {lifts[index].Unk11}";
+            textBox32.Text = $"Unk12 :  {lifts[index].Unk12}";
+            textBox33.Text = $"Unk13 :  {lifts[index].Unk13}";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
             textBox23.Text = $"{lifts[index].Offset}";
         }
         // Refresh all list boxes to clear selections and reset indices
