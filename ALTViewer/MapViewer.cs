@@ -197,29 +197,29 @@ namespace ALTViewer
             // L161LEV - A7 02 // 6 / 1 / 2 / 8 / 10 / 3
             // L162LEV - 43 00 // 7 / 1 / 2
             // Chapter 2 ( unknown 3 )
-            // L211LEV - 
-            // L212LEV - 
-            // L213LEV - 
-            // L222LEV - 
-            // L242LEV - 
-            // L231LEV - 
-            // L232LEV - 
-            // L243LEV - 
-            // L262LEV - 
+            // L211LEV - 0E 08 // 4 / 12 / 2 / 3
+            // L212LEV - 0A 08 // 4 / 2 / 12 /
+            // L213LEV - 02 08 // 2 / 12
+            // L222LEV - 0B 08 // 1 / 2 / 12 / 4 / 17 / 19
+            // L242LEV - 00 00 // null
+            // L231LEV - 14 21 // 14 / 5 / 3 / 9
+            // L232LEV - 13 10 // 1 / 2 / 5 / 13 / 16 / 17
+            // L243LEV - 00 00 // null
+            // L262LEV - 17 02 // 5 / 1 / 2 / 10 / 3
             // L263LEV - 43 00 // 7 / 1 / 2
             // Chapter 3 ( unknown 3 )
-            // L311LEV - 
-            // L321LEV - 
-            // L331LEV - 
-            // L322LEV - 
-            // L351LEV - 
-            // L352LEV - 
-            // L323LEV - 
-            // L371LEV - 
-            // L353LEV - 
-            // L324LEV - 
-            // L381LEV - 
-            // L325LEV - 
+            // L311LEV - 10 20 // 5 / 14
+            // L321LEV - 02 00 // 2
+            // L331LEV - 12 21 // 5 / 14 / 2 / 9
+            // L322LEV - 08 00 // 4
+            // L351LEV - 24 12 // 6 / 13 / 10 / 3
+            // L352LEV - 00 00 // null
+            // L323LEV - 10 00 // 5
+            // L371LEV - 20 10 // 6 / 13
+            // L353LEV - 00 00 // null
+            // L324LEV - 22 00 // 2 / 6
+            // L381LEV - 23 00 // 6 / 1 / 2
+            // L325LEV - 36 00 // 3 / 5 / 2 / 6
             // L391LEV - 43 00 // 7 / 1 / 2
             br.ReadBytes(2);                    //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
@@ -239,19 +239,19 @@ namespace ALTViewer
                 //test1.WriteLine($"{offset:X2}");
                 byte type = br.ReadByte();                  // 2 // x 53 y 67 // 478316
                 // Monster Types (0x)
-                // 00 - No Enemy???
-                // 01 - No Enemy???
+                // 00 - No Enemy
+                // 01 - Egg
                 // 02 - Face Hugger
-                // 03 - Invisible Enemy???
+                // 03 - Chest Burster
                 // 04 - Invisible Enemy???
                 // 05 - Invisible Enemy???
-                // 06 - Drone
+                // 06 - Warrior Drone
                 // 07 - Queen - Crashes on first level // 199016
                 // 08 - Invisible Drone???
                 // 09 - Invisible Enemy???
-                // 0A - Invisible Enemy No Weapon           ( Red Blood )???
-                // 0B - Invisible Enemy With Pistol         ( Red Blood )???
-                // 0C - Invisible Enemy With Pulse Rifle    ( Red Blood )???
+                // 0A - Invisible Enemy No Weapon           ( Red Blood )??? // Wall Body???
+                // 0B - Security Guard
+                // 0C - Soldier
                 // 0D - Invisible Enemy With Smart Gun      ( Red Blood )???
                 // 0E - Invisible Enemy With Smart Gun      ( Red Blood )???
                 // 0F - No Enemy???
@@ -272,13 +272,6 @@ namespace ALTViewer
                 // 1E - 
                 // 1F - 
                 // 20 - 
-
-                // 03 - Chest Burster
-                // 06 - Warrior
-                // 07 - Queen
-                // 08 - Praetorian
-                // 10 - Wall Body
-                // 11 - Security Guard
                 byte x = br.ReadByte();                     // 75
                 byte y = br.ReadByte();                     // 65
                 byte z = br.ReadByte();                     // 255
@@ -306,6 +299,18 @@ namespace ALTViewer
                     unk9, unk10, unk11, unk12, unk13,
                     offset));
             }
+            // L111LEV - 22 00 // 2 / 6
+            // L213LEV - 02 08 // 2 / 12
+            // for testing purposes only
+            /*BinaryUtility.ReplaceByte(0x34, 0x02, "L111LEV.MAP");
+            BinaryUtility.ReplaceByte(0x35, 0x08, "L111LEV.MAP");
+            foreach (var enemy in enemies)
+            {
+                if(enemy.Type == 6)
+                {
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x0C, "L111LEV.MAP");
+                }
+            }*/
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++) // 28
