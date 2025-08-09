@@ -79,6 +79,7 @@ The road map for this project.
 	- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
 	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEVFix-1)
 	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEVFix-1)
+- [✅ 8 : Easter Eggs](#easter-eggs) ( ??% Complete )
 
 And possibly more to come.
 
@@ -352,3 +353,15 @@ Currently this is only fixed when exporting the level model.
 ## L161LEV Fix 1
 
 Currently this is only fixed when exporting the level model.
+
+## Easter Eggs
+
+Not entirely sure if this is an easter egg or not...
+
+Object Type 33 is the Steel Coil and Steel Grade 33 is a widely used grade of steel.
+
+According to ChatGPT : "Grade 33 is literally the first widely adopted U.S. structural steel grade (ASTM A15, 1911)."
+
+<div align="center">
+  <img src="Images/steel33.png" alt="Steel Grade 33">
+</div>

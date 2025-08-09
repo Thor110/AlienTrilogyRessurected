@@ -34,7 +34,7 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte X, byte Y, byte U3, byte U4, byte U5, byte U6, byte U7, byte U8, long Offset)> unknown = new(); // UNKNOWN
+        private List<(byte X, byte Y, byte U3, byte U4, byte U5, byte U6, byte U7, byte U8, long Offset)> lights = new(); // UNKNOWN
         private List<(byte Type, byte X, byte Y, byte Z,
             byte Rotation,
             byte Health, byte Drop,
@@ -118,7 +118,7 @@ namespace ALTViewer
             // clear lists
             vertices.Clear();
             quads.Clear();
-            unknown.Clear();
+            lights.Clear();
             monsters.Clear();
             pickups.Clear();
             objects.Clear();
@@ -164,8 +164,8 @@ namespace ALTViewer
             textBox6.Text = playerStartX.ToString();        // display player start X coordinate
             ushort playerStartY = br.ReadUInt16();          // player start Y coordinate
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
-            byte unknownCount = br.ReadByte();                   // unknown object type ( possibly lights )
-            textBox21.Text = unknownCount.ToString();            // display lift count
+            byte lightingCount = br.ReadByte();                   // unknown object type ( possibly lights )
+            textBox21.Text = lightingCount.ToString();            // display lift count
             br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
@@ -306,8 +306,7 @@ namespace ALTViewer
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             // collision 16 //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
-            //br.BaseStream.Seek(unknownCount * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
-            for (int i = 0; i < unknownCount; i++)
+            for (int i = 0; i < lightingCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();             // x coordinate of the unknown object
@@ -318,7 +317,7 @@ namespace ALTViewer
                 byte U6 = br.ReadByte();
                 byte U7 = br.ReadByte();
                 byte U8 = br.ReadByte();
-                unknown.Add((x, y, U3, U4, U5, U6, U7, U8, offset));
+                lights.Add((x, y, U3, U4, U5, U6, U7, U8, offset));
             }
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             for (int i = 0; i < monsterCount; i++) // 28
@@ -540,7 +539,7 @@ namespace ALTViewer
             listBox6.Items.Clear(); // clear doors
             listBox8.Items.Clear(); // clear lifts
             // populate list boxes
-            for (int i = 0; i < unknownCount; i++) { listBox9.Items.Add($"Unknown {i}"); }
+            for (int i = 0; i < lightingCount; i++) { listBox9.Items.Add($"Unknown {i}"); }
             for (int i = 0; i < monsterCount; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickupCount; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
@@ -798,14 +797,14 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8 });
             int index = listBox9.SelectedIndex;
-            textBox13.Text = $"X : {unknown[index].X}";
-            textBox14.Text = $"Y : {unknown[index].Y}";
-            textBox16.Text = $"U3 : {unknown[index].U3}";
-            textBox15.Text = $"U4 : {unknown[index].U4}";
-            textBox17.Text = $"U5 : {unknown[index].U5}";
-            textBox18.Text = $"U6 : {unknown[index].U6}";
-            textBox24.Text = $"U7 : {unknown[index].U7}";
-            textBox25.Text = $"U8 : {unknown[index].U8}";
+            textBox13.Text = $"X : {lights[index].X}";
+            textBox14.Text = $"Y : {lights[index].Y}";
+            textBox16.Text = $"U3 : {lights[index].U3}";
+            textBox15.Text = $"U4 : {lights[index].U4}";
+            textBox17.Text = $"U5 : {lights[index].U5}";
+            textBox18.Text = $"U6 : {lights[index].U6}";
+            textBox24.Text = $"U7 : {lights[index].U7}";
+            textBox25.Text = $"U8 : {lights[index].U8}";
             textBox26.Text = "null";
             textBox27.Text = "null";
             textBox28.Text = "null";
@@ -818,7 +817,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{unknown[index].Offset:X2}";
+            textBox23.Text = $"{lights[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
