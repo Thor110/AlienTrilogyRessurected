@@ -34,11 +34,21 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte Type, byte X, byte Y, byte Z, byte Unk1, byte Health, byte Drop, short Speed, long Offset)> monsters = new();
+        private List<(byte Type, byte X, byte Y, byte Z,
+            byte Unk1,
+            byte Health, byte Drop,
+            byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
+            short Speed,
+            byte Unk9, byte Unk10, byte Unk11, byte Unk12,
+            long Offset)> enemies = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Unk1, byte Z, byte Unk2, long Offset)> pickups = new();
-        private List<(byte X, byte Y, byte Type, long Offset)> boxes = new();
+        private List<(byte X, byte Y, byte ObjectType, byte DropType,
+            byte Unk1, byte Unk2, byte DropOne, byte DropTwo, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Rotation, byte Unk9,
+            long Offset)> objects = new();
         private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Unk2, byte Rotation, byte Index, long Offset)> doors = new();
-        private List<(byte X, byte Y, byte Z, long Offset)> lifts = new();
+        private List<(byte X, byte Y, byte Z,
+            byte Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
+            long Offset)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
@@ -107,9 +117,9 @@ namespace ALTViewer
             // clear lists
             vertices.Clear();
             quads.Clear();
-            monsters.Clear();
+            enemies.Clear();
             pickups.Clear();
-            boxes.Clear();
+            objects.Clear();
             doors.Clear();
             lifts.Clear();
             // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
@@ -166,34 +176,41 @@ namespace ALTViewer
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
+                //test1.WriteLine($"{offset:X2}");
                 byte type = br.ReadByte();                  // 2 // x 53 y 67 // 478316
                 // Monster Types (0x)
-                // 00 - No Enemy
-                // 01 - No Enemy
+                // 00 - No Enemy???
+                // 01 - No Enemy???
                 // 02 - Face Hugger
-                // 03 - Invisible Enemy
-                // 04 - Invisible Enemy
-                // 05 - Invisible Enemy
+                // 03 - Invisible Enemy???
+                // 04 - Invisible Enemy???
+                // 05 - Invisible Enemy???
                 // 06 - Drone
-                // 07 - Queen // 199016
-                // 08 - Invisible Drone
-                // 09 - Invisible Enemy
-                // 0A - Invisible Enemy No Weapon           ( Red Blood )
-                // 0B - Invisible Enemy With Pistol         ( Red Blood )
-                // 0C - Invisible Enemy With Pulse Rifle    ( Red Blood )
-                // 0D - Invisible Enemy With Smart Gun      ( Red Blood )
-                // 0E - Invisible Enemy With Smart Gun      ( Red Blood )
-                // 0F - No Enemy
-                // 10 - Invisible Enemy Doesn't Move
-                // 11 - Invisible Enemy Doesn't Move
-                // 12 - Invisible Enemy Doesn't Move
-                // 13 - Invisible Enemy Doesn't Move
-                // 14 - 
-                // 15 - 
-                // 16 - 
-                // 17 - 
-                // 18 - 
-                // 19 - 
+                // 07 - Queen - Crashes on first level // 199016
+                // 08 - Invisible Drone???
+                // 09 - Invisible Enemy???
+                // 0A - Invisible Enemy No Weapon           ( Red Blood )???
+                // 0B - Invisible Enemy With Pistol         ( Red Blood )???
+                // 0C - Invisible Enemy With Pulse Rifle    ( Red Blood )???
+                // 0D - Invisible Enemy With Smart Gun      ( Red Blood )???
+                // 0E - Invisible Enemy With Smart Gun      ( Red Blood )???
+                // 0F - No Enemy???
+                // 10 - Invisible Enemy Doesn't Move???
+                // 11 - Invisible Enemy Doesn't Move???
+                // 12 - Invisible Enemy Doesn't Move???
+                // 13 - Invisible Enemy Doesn't Move???
+                // 14 - Crashes on Queens Lair Level L162LEV.MAP
+                // 15 - Crashes on Queens Lair Level L162LEV.MAP
+                // 16 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 8
+                // 17 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 74
+                // 18 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 10 for int 8
+                // 19 - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 0 for int 8
+                // 1A - Crashes on Queens Lair Level L162LEV.MAP // Illegal descriptor type 10 for int 8
+                // 1B - 
+                // 1C - 
+                // 1D - 
+                // 1E - 
+                // 1F - 
                 // 20 - 
 
                 // 03 - Chest Burster
@@ -208,21 +225,25 @@ namespace ALTViewer
                 byte unk1 = br.ReadByte();                  // another unknown byte // 6 // possibly rotation?
                 byte health = br.ReadByte();                // 1
                 byte drop = br.ReadByte();                  // 255 //
-                br.ReadBytes(7); // unknown bytes           // 00 00 00 3E 05 9B 0E (0x)
-                //byte unk2 = br.ReadByte();                  // 00
-                //byte unk3 = br.ReadByte();                  // 00
-                //byte unk4 = br.ReadByte();                  // 00
-                //byte unk5 = br.ReadByte();                  // 3E
-                //byte unk6 = br.ReadByte();                  // 05
-                //byte unk7 = br.ReadByte();                  // 9B
-                //byte unk8 = br.ReadByte();                  // 0E
+                byte unk2 = br.ReadByte();                  // 00
+                byte unk3 = br.ReadByte();                  // 00
+                byte unk4 = br.ReadByte();                  // 00
+                byte unk5 = br.ReadByte();                  // 3E
+                byte unk6 = br.ReadByte();                  // 05
+                byte unk7 = br.ReadByte();                  // 9B
+                byte unk8 = br.ReadByte();                  // 0E
                 short speed = br.ReadInt16();               // 100 //
-                br.ReadBytes(4); // unknown bytes           // 00 00 06 36 (0x)
-                //byte unk9 = br.ReadByte();                  // 00
-                //byte unk10 = br.ReadByte();                 // 00
-                //byte unk11 = br.ReadByte();                 // 06
-                //byte unk12 = br.ReadByte();                 // 36
-                monsters.Add((type, x, y, z, unk1, health, drop, speed, offset));
+                byte unk9 = br.ReadByte();                  // 00
+                byte unk10 = br.ReadByte();                 // 00
+                byte unk11 = br.ReadByte();                 // 06
+                byte unk12 = br.ReadByte();                 // 36
+                enemies.Add((type, x, y, z,
+                    unk1,
+                    health, drop,
+                    unk2, unk3, unk4, unk5, unk6, unk7, unk8,
+                    speed,
+                    unk9, unk10, unk11, unk12,
+                    offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
@@ -307,23 +328,19 @@ namespace ALTViewer
                 // 28 - an empty object that can be shot
                 // 29 - an empty object that can be shot through, something will spawn on death
                 // 30 - is a regular box that can be blown up
-                boxes.Add((x, y, objectType, offset));
+                objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk6, unk7, unk8, rotation, unk9, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
-            //using var test1 = new StreamWriter("test1.bin");
-            //using var test2 = new StreamWriter("test2.bin");
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
-                byte unk1 = br.ReadByte(); // unk1 // speed or sound? // always 0 in L111LEV.MAP
-                //test1.WriteLine($"{unk1"); // 64 or 0 on L351LEV.MAP
+                byte unk1 = br.ReadByte(); // unk1 // speed or sound? // always 0 in L111LEV.MAP // 64 or 0 on L351LEV.MAP
                 byte time = br.ReadByte();
                 byte tag = br.ReadByte();
                 byte unk2 = br.ReadByte(); // unk2 // speed or sound? // always 0 in L111LEV.MAP
-                //test2.WriteLine($"{unk2}");
                 byte rotation = br.ReadByte();
                 // Byte Direction  Facing
                 // 00 - North   // Y+
@@ -340,8 +357,22 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte z = br.ReadByte();
-                br.ReadBytes(13); // unknown bytes
-                lifts.Add((x, y, z, offset));
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                byte unk5 = br.ReadByte();
+                byte unk6 = br.ReadByte();
+                byte unk7 = br.ReadByte();
+                byte unk8 = br.ReadByte();
+                byte unk9 = br.ReadByte();
+                byte unk10 = br.ReadByte();
+                byte unk11 = br.ReadByte();
+                byte unk12 = br.ReadByte();
+                byte unk13 = br.ReadByte();
+                lifts.Add((x, y, z,
+                    unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13,
+                    offset));
             }
             textBox22.Text = $"{br.BaseStream.Position + 20}"; // display data remainder offset plus header
             // clear list boxes
@@ -351,9 +382,9 @@ namespace ALTViewer
             listBox6.Items.Clear();
             listBox8.Items.Clear();
             // populate list boxes
-            for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
+            for (int i = 0; i < enemies.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
-            for (int i = 0; i < boxes.Count; i++) { listBox5.Items.Add($"Object {i}"); }
+            for (int i = 0; i < objects.Count; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
             for (int i = 0; i < lifts.Count; i++) { listBox8.Items.Add($"Lift {i}"); }
             // display remaining bytes
@@ -484,13 +515,13 @@ namespace ALTViewer
             label29.Visible = false;
             label30.Visible = false;
             //
-            textBox13.Text = $"{monsters[index].X}";
-            textBox14.Text = $"{monsters[index].Y}";
-            textBox15.Text = $"{monsters[index].Z}";
-            textBox16.Text = $"{monsters[index].Type}";
-            textBox17.Text = $"{monsters[index].Health}";
-            textBox18.Text = $"{monsters[index].Drop}";
-            textBox23.Text = $"{monsters[index].Offset}";
+            textBox13.Text = $"{enemies[index].X}";
+            textBox14.Text = $"{enemies[index].Y}";
+            textBox15.Text = $"{enemies[index].Z}";
+            textBox16.Text = $"{enemies[index].Type}";
+            textBox17.Text = $"{enemies[index].Health}";
+            textBox18.Text = $"{enemies[index].Drop}";
+            textBox23.Text = $"{enemies[index].Offset}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -534,13 +565,13 @@ namespace ALTViewer
             label29.Visible = false;
             label30.Visible = false;
             //
-            textBox13.Text = $"{boxes[index].X}";
-            textBox14.Text = $"{boxes[index].Y}";
-            textBox16.Text = $"{boxes[index].Type}";
+            textBox13.Text = $"{objects[index].X}";
+            textBox14.Text = $"{objects[index].Y}";
+            textBox16.Text = $"{objects[index].Type}";
             textBox15.Text = "";
             textBox17.Text = "";
             textBox18.Text = "";
-            textBox23.Text = $"{boxes[index].Offset}";
+            textBox23.Text = $"{objects[index].Offset}";
         }
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
