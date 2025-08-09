@@ -182,7 +182,45 @@ namespace ALTViewer
             ushort unknown1 = br.ReadUInt16();  //2 - always different  ( unknown )
             br.ReadBytes(2);                    //2 - always 0x4040     ( unknown )
             ushort unknown2 = br.ReadUInt16();  //2 - always different  ( unknown )
-            ushort unknown3 = br.ReadUInt16();  //2 - always different  ( unknown )
+            ushort unknown3 = br.ReadUInt16();  //2 - Available Enemy Types
+            // Chapter 1 ( unknown 3 )
+            // L111LEV - 22 00 // 2 / 6
+            // L112LEV - 22 00 // 2 / 6
+            // L113LEV - 00 00 // null
+            // L122LEV - 22 04 // 2 / 6 / 11 / 16
+            // L131LEV - 26 04 // 2 / 6 / 11 / 3
+            // L114LEV - 00 00 // null
+            // L141LEV - 23 00 // 6 / 1 / 2
+            // L115LEV - 00 00 // null
+            // L154LEV - 23 10 // 6 / 1 / 2 / 13 / 16 / 17 / 19
+            // L155LEV - 00 00 // 18 / 16 / 19
+            // L161LEV - A7 02 // 6 / 1 / 2 / 8 / 10 / 3
+            // L162LEV - 43 00 // 7 / 1 / 2
+            // Chapter 2 ( unknown 3 )
+            // L211LEV - 
+            // L212LEV - 
+            // L213LEV - 
+            // L222LEV - 
+            // L242LEV - 
+            // L231LEV - 
+            // L232LEV - 
+            // L243LEV - 
+            // L262LEV - 
+            // L263LEV - 43 00 // 7 / 1 / 2
+            // Chapter 3 ( unknown 3 )
+            // L311LEV - 
+            // L321LEV - 
+            // L331LEV - 
+            // L322LEV - 
+            // L351LEV - 
+            // L352LEV - 
+            // L323LEV - 
+            // L371LEV - 
+            // L353LEV - 
+            // L324LEV - 
+            // L381LEV - 
+            // L325LEV - 
+            // L391LEV - 43 00 // 7 / 1 / 2
             br.ReadBytes(2);                    //2 - always 0x0000     ( padding )
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
