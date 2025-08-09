@@ -181,7 +181,7 @@ namespace ALTViewer
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
-            ushort unknown1 = br.ReadUInt16();              //2 - always different  ( unknown )
+            ushort unknown1 = br.ReadUInt16();              // unknown1
             // Chapter 1 ( unknown 1 )
             // L111LEV - 0A 00
             // L112LEV - 1D 00
@@ -220,8 +220,19 @@ namespace ALTViewer
             // L381LEV - 1C 00
             // L325LEV - 18 00
             // L391LEV - 0C 00
-            br.ReadBytes(2);                                //2 - always 0x4040     ( unknown )
-            ushort unknown2 = br.ReadUInt16();              //2 - always different  ( unknown )
+            // Multiplayer Levels ( unknown 1 )
+            // L900LEV - 0A 00
+            // L901LEV - 16 00
+            // L902LEV - 52 00
+            // L903LEV - 16 00
+            // L904LEV - 6F 00
+            // L905LEV - B0 00
+            // L906LEV - 17 00
+            // L907LEV - 17 00
+            // L908LEV - 0A 00
+            // L909LEV - 0A 00
+            br.ReadBytes(2);                                // always 0x4040    ( unknown )
+            ushort unknown2 = br.ReadUInt16();              // unknown2
             // Chapter 1 ( unknown 2 )
             // L111LEV - 14 00
             // L112LEV - 57 01
@@ -260,6 +271,17 @@ namespace ALTViewer
             // L381LEV - 78 00
             // L325LEV - 54 00
             // L391LEV - 55 00
+            // Multiplayer Levels ( unknown 2 )
+            // L900LEV - 14 00
+            // L901LEV - 71 00
+            // L902LEV - 95 00
+            // L903LEV - 30 00
+            // L904LEV - D1 00
+            // L905LEV - EC 00
+            // L906LEV - 69 00
+            // L907LEV - 69 00
+            // L908LEV - 52 00
+            // L909LEV - 52 00
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( enemyTypes )
             // L111LEV - 22 00 // 2 / 6
@@ -299,7 +321,49 @@ namespace ALTViewer
             // L381LEV - 23 00 // 6 / 1 / 2
             // L325LEV - 36 00 // 3 / 5 / 2 / 6
             // L391LEV - 43 00 // 7 / 1 / 2
-            br.ReadBytes(2);                                //2 - always 0x0000     ( padding )
+            // Multiplayer Levels ( enemyTypes )
+            // All = 00 10
+            ushort unknown3 = br.ReadUInt16();              // unknown3
+            // Chapter 1 ( unknown 3 )
+            // L111LEV - 00 00
+            // L112LEV - 04 00
+            // L113LEV - 00 00
+            // L122LEV - 04 00
+            // L131LEV - 00 00
+            // L114LEV - 00 00
+            // L141LEV - 00 00
+            // L115LEV - 00 00
+            // L154LEV - 34 00
+            // L155LEV - 2C 00
+            // L161LEV - 00 00
+            // L162LEV - 00 00
+            // Chapter 2 ( unknown 3 )
+            // L211LEV - 00 00
+            // L212LEV - 00 00
+            // L213LEV - 00 00
+            // L222LEV - 30 00
+            // L242LEV - 00 00
+            // L231LEV - 00 00
+            // L232LEV - 14 00
+            // L243LEV - 00 00
+            // L262LEV - 00 00
+            // L263LEV - 00 00
+            // Chapter 3 ( unknown 3 )
+            // L311LEV - 00 00
+            // L321LEV - 00 00
+            // L331LEV - 00 00
+            // L322LEV - 00 00
+            // L351LEV - 00 00
+            // L352LEV - 00 00
+            // L323LEV - 00 00
+            // L371LEV - 00 00
+            // L353LEV - 00 00
+            // L324LEV - 00 00
+            // L381LEV - 00 00
+            // L325LEV - 00 00
+            // L391LEV - 00 00
+            // Multiplayer Levels ( unknown 3 )
+            // All = 00 00
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
@@ -508,9 +572,9 @@ namespace ALTViewer
             for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
-                byte x = br.ReadByte();
-                byte y = br.ReadByte();
-                byte z = br.ReadByte();
+                byte x = br.ReadByte();             // x coordinate of the lift
+                byte y = br.ReadByte();             // y coordinate of the lift
+                byte z = br.ReadByte();             // z coordinate of the lift
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();
                 byte unk3 = br.ReadByte();
@@ -528,7 +592,10 @@ namespace ALTViewer
                     unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13,
                     offset));
             }
-            textBox22.Text = $"{br.BaseStream.Position + 20:X2}"; // display data remainder offset plus header
+            textBox22.Text = $"{br.BaseStream.Position + 20:X2}";                   // display data remainder offset plus header
+            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;    // calculate remaining bytes
+            textBox19.Text = remainingBytes.ToString();                             // display remaining bytes
+            remainder = br.ReadBytes((int)remainingBytes);                          // for dumping remaining bytes
             // clear list boxes
             listBox9.Items.Clear(); // clear unknowns
             listBox3.Items.Clear(); // clear monsters
@@ -543,11 +610,6 @@ namespace ALTViewer
             for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doorCount; i++) { listBox6.Items.Add($"Door {i}"); }
             for (int i = 0; i < liftCount; i++) { listBox8.Items.Add($"Lift {i}"); }
-            // display remaining bytes
-            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
-            textBox19.Text = remainingBytes.ToString();
-            // dump remaining bytes
-            remainder = br.ReadBytes((int)remainingBytes);
             // not used for now
             button3.Enabled = true; // enable open level button
         }
