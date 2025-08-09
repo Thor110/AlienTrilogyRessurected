@@ -244,7 +244,7 @@ namespace ALTViewer
                 // 04 - Bambi
                 // 05 - Dog Alien
                 // 06 - Warrior Drone
-                // 07 - Queen - Crashes on first level // 199016
+                // 07 - Queen
                 // 08 - Ceiling Warrior Drone
                 // 09 - Ceiling Dog Alien
                 // 0A - Colonist
