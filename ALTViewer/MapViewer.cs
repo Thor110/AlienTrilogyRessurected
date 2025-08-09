@@ -34,6 +34,7 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
+        private List<(byte U1, byte U2, byte U3, byte U4, byte U5, byte U6, byte U7, byte U8, long Offset)> unknown = new(); // UNKNOWN
         private List<(byte Type, byte X, byte Y, byte Z,
             byte Rotation,
             byte Health, byte Drop,
@@ -117,6 +118,7 @@ namespace ALTViewer
             // clear lists
             vertices.Clear();
             quads.Clear();
+            unknown.Clear();
             monsters.Clear();
             pickups.Clear();
             objects.Clear();
@@ -162,8 +164,8 @@ namespace ALTViewer
             textBox6.Text = playerStartX.ToString();        // display player start X coordinate
             ushort playerStartY = br.ReadUInt16();          // player start Y coordinate
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
-            byte unknown = br.ReadByte();                   // unknown object type ( possibly lights )
-            textBox21.Text = unknown.ToString();            // display lift count
+            byte unknownCount = br.ReadByte();                   // unknown object type ( possibly lights )
+            textBox21.Text = unknownCount.ToString();            // display lift count
             br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
@@ -304,11 +306,24 @@ namespace ALTViewer
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             // collision 16 //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
-            br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
+            //br.BaseStream.Seek(unknownCount * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
+            for (int i = 0; i < unknownCount; i++)
+            {
+                long offset = br.BaseStream.Position + 20;  // offset for reference
+                byte U1 = br.ReadByte();
+                byte U2 = br.ReadByte();
+                byte U3 = br.ReadByte();
+                byte U4 = br.ReadByte();
+                byte U5 = br.ReadByte();
+                byte U6 = br.ReadByte();
+                byte U7 = br.ReadByte();
+                byte U8 = br.ReadByte();
+                unknown.Add((U1, U2, U3, U4, U5, U6, U7, U8, offset));
+            }
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             for (int i = 0; i < monsterCount; i++) // 28
             {
-                long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
+                long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte type = br.ReadByte();          // type of the monster
                 // Monster Types (0x)
                 // 01 - Egg
@@ -435,7 +450,7 @@ namespace ALTViewer
                 byte y = br.ReadByte();
                 byte objectType = br.ReadByte();
                 // My Object Types (int) - indented = unused
-                    // less than 20 - a box that cannot be blown up
+                // less than 20 - a box that cannot be blown up
                 // 20 - a regular box that can be blown up ( or an egg husk if in chapter 3 )
                 // 21 - destructible walls
                 // 22 - another small switch, the difference is at the bottom of the model ( lightning is drawn )
@@ -446,18 +461,18 @@ namespace ALTViewer
                 // 27 - wide switch without zipper
                 // 28 - an empty object that can be shot
                 // 29 - an empty object that can be shot through, something will spawn on death
-                    // 30 - is not used across any level in the game
-                    // 31 - a regular box that can be blown up
+                // 30 - is not used across any level in the game
+                // 31 - a regular box that can be blown up
                 // 32 - Strange Little Yellow Square
                 // 33 - Steel Coil
-                    // 34 - Strange Unused Shape
-                    // 35 - Light Pylon With No Texture, Completely Red...
-                    // 36 - Strange Tall Square ( improperly textured )
-                    // 37 - Egg Husk Shape ( untextured )
-                    // 38 - a regular box that can be blown up
-                    // 39 - a regular box that can be blown up
-                    // 40 - a regular box that can be blown up
-                    // 41 - a regular box that can be blown up
+                // 34 - Strange Unused Shape
+                // 35 - Light Pylon With No Texture, Completely Red...
+                // 36 - Strange Tall Square ( improperly textured )
+                // 37 - Egg Husk Shape ( untextured )
+                // 38 - a regular box that can be blown up
+                // 39 - a regular box that can be blown up
+                // 40 - a regular box that can be blown up
+                // 41 - a regular box that can be blown up
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
@@ -518,17 +533,19 @@ namespace ALTViewer
             }
             textBox22.Text = $"{br.BaseStream.Position + 20:X2}"; // display data remainder offset plus header
             // clear list boxes
-            listBox3.Items.Clear();
-            listBox4.Items.Clear();
-            listBox5.Items.Clear();
-            listBox6.Items.Clear();
-            listBox8.Items.Clear();
+            listBox9.Items.Clear(); // clear unknowns
+            listBox3.Items.Clear(); // clear monsters
+            listBox4.Items.Clear(); // clear pickups
+            listBox5.Items.Clear(); // clear objects
+            listBox6.Items.Clear(); // clear doors
+            listBox8.Items.Clear(); // clear lifts
             // populate list boxes
-            for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
-            for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
-            for (int i = 0; i < objects.Count; i++) { listBox5.Items.Add($"Object {i}"); }
-            for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
-            for (int i = 0; i < lifts.Count; i++) { listBox8.Items.Add($"Lift {i}"); }
+            for (int i = 0; i < unknownCount; i++) { listBox9.Items.Add($"Unknown {i}"); }
+            for (int i = 0; i < monsterCount; i++) { listBox3.Items.Add($"Monster {i}"); }
+            for (int i = 0; i < pickupCount; i++) { listBox4.Items.Add($"Pickup {i}"); }
+            for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
+            for (int i = 0; i < doorCount; i++) { listBox6.Items.Add($"Door {i}"); }
+            for (int i = 0; i < liftCount; i++) { listBox8.Items.Add($"Lift {i}"); }
             // display remaining bytes
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;
             textBox19.Text = remainingBytes.ToString();
@@ -644,7 +661,7 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9 });
             int index = listBox3.SelectedIndex;
             textBox13.Text = $"Type : {monsters[index].Type}";
             textBox14.Text = $"X : {monsters[index].X}";
@@ -671,7 +688,7 @@ namespace ALTViewer
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9 });
             int index = listBox4.SelectedIndex;
             textBox13.Text = $"X : {pickups[index].X}";
             textBox14.Text = $"Y : {pickups[index].Y}";
@@ -698,7 +715,7 @@ namespace ALTViewer
         // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9 });
             int index = listBox5.SelectedIndex;
             textBox13.Text = $"X : {objects[index].X}";
             textBox14.Text = $"Y : {objects[index].Y}";
@@ -725,7 +742,7 @@ namespace ALTViewer
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9 });
             int index = listBox6.SelectedIndex;
             textBox13.Text = $"X : {doors[index].X}";
             textBox14.Text = $"Y : {doors[index].Y}";
@@ -752,7 +769,7 @@ namespace ALTViewer
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9 });
             int index = listBox8.SelectedIndex;
             textBox13.Text = $"X : {lifts[index].X}";
             textBox14.Text = $"Y : {lifts[index].Y}";
@@ -775,6 +792,33 @@ namespace ALTViewer
             textBox36.Text = "null";
             textBox37.Text = "null";
             textBox23.Text = $"{lifts[index].Offset:X2}";
+        }
+        // unknowns
+        private void listBox9_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8 });
+            int index = listBox8.SelectedIndex;
+            textBox13.Text = $"U1 : {unknown[index].U1}";
+            textBox14.Text = $"U2 : {unknown[index].U2}";
+            textBox16.Text = $"U3 : {unknown[index].U3}";
+            textBox15.Text = $"U4 : {unknown[index].U4}";
+            textBox17.Text = $"U5 : {unknown[index].U5}";
+            textBox18.Text = $"U6 : {unknown[index].U6}";
+            textBox24.Text = $"U7 : {unknown[index].U7}";
+            textBox25.Text = $"U8 : {unknown[index].U8}";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{unknown[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
@@ -800,6 +844,7 @@ namespace ALTViewer
                 ListBox lb when lb == listBox5 => listBox5_SelectedIndexChanged!,
                 ListBox lb when lb == listBox6 => listBox6_SelectedIndexChanged!,
                 ListBox lb when lb == listBox8 => listBox8_SelectedIndexChanged!,
+                ListBox lb when lb == listBox9 => listBox9_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
         }

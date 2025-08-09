@@ -119,6 +119,8 @@
             label20 = new Label();
             label21 = new Label();
             label22 = new Label();
+            listBox9 = new ListBox();
+            label23 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -986,11 +988,32 @@
             label22.TabIndex = 101;
             label22.Text = "Objects/Lifts :";
             // 
+            // listBox9
+            // 
+            listBox9.FormattingEnabled = true;
+            listBox9.ItemHeight = 15;
+            listBox9.Location = new Point(352, 372);
+            listBox9.Name = "listBox9";
+            listBox9.Size = new Size(120, 169);
+            listBox9.TabIndex = 102;
+            listBox9.SelectedIndexChanged += listBox9_SelectedIndexChanged;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(352, 355);
+            label23.Name = "label23";
+            label23.Size = new Size(64, 15);
+            label23.TabIndex = 103;
+            label23.Text = "Unknown :";
+            // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(label23);
+            Controls.Add(listBox9);
             Controls.Add(label22);
             Controls.Add(label21);
             Controls.Add(label20);
@@ -1180,5 +1203,7 @@
         private Label label20;
         private Label label21;
         private Label label22;
+        private ListBox listBox9;
+        private Label label23;
     }
 }
