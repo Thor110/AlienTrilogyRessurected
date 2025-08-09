@@ -166,14 +166,40 @@ namespace ALTViewer
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
-                byte type = br.ReadByte();                  // 2
-                // monster types (int)
-                // 1 - Egg
-                // 2 - Face Hugger
-                // 3 - Chest Burster
-                // 6 - Warrior
-                // 7 - Queen
-                // 8 - Praetorian
+                byte type = br.ReadByte();                  // 2 // x 53 y 67 // 478316
+                // Monster Types (0x)
+                // 00 - No Enemy
+                // 01 - No Enemy
+                // 02 - Face Hugger
+                // 03 - Invisible Enemy
+                // 04 - Invisible Enemy
+                // 05 - Invisible Enemy
+                // 06 - Drone
+                // 07 - Queen // 199016
+                // 08 - Invisible Drone
+                // 09 - Invisible Enemy
+                // 0A - Invisible Enemy No Weapon           ( Red Blood )
+                // 0B - Invisible Enemy With Pistol         ( Red Blood )
+                // 0C - Invisible Enemy With Pulse Rifle    ( Red Blood )
+                // 0D - Invisible Enemy With Smart Gun      ( Red Blood )
+                // 0E - Invisible Enemy With Smart Gun      ( Red Blood )
+                // 0F - No Enemy
+                // 10 - Invisible Enemy Doesn't Move
+                // 11 - Invisible Enemy Doesn't Move
+                // 12 - Invisible Enemy Doesn't Move
+                // 13 - Invisible Enemy Doesn't Move
+                // 14 - 
+                // 15 - 
+                // 16 - 
+                // 17 - 
+                // 18 - 
+                // 19 - 
+                // 20 - 
+
+                // 03 - Chest Burster
+                // 06 - Warrior
+                // 07 - Queen
+                // 08 - Praetorian
                 // 10 - Wall Body
                 // 11 - Security Guard
                 byte x = br.ReadByte();                     // 75
@@ -206,7 +232,7 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
-                // pickup types (0x)
+                // Pickup Types (0x)
                 // 00 - Pistol
                 // 01 - Shotgun                 // 478880 ( L111LEV.MAP )
                 // 02 - Pulse Rifle
@@ -268,7 +294,7 @@ namespace ALTViewer
                 byte unk8 = br.ReadByte();
                 byte rotation = br.ReadByte();
                 byte unk9 = br.ReadByte(); // drop spawn rotation or speed?
-                // object types (int)
+                // Object Types (int)
                 // 19 - a box that cannot be blown up
                 // 20 - a regular box that can be blown up
                 // 21 - empty object(at the moment), maybe a switch for levels on the ship
@@ -299,10 +325,11 @@ namespace ALTViewer
                 byte unk2 = br.ReadByte(); // unk2 // speed or sound? // always 0 in L111LEV.MAP
                 //test2.WriteLine($"{unk2}");
                 byte rotation = br.ReadByte();
-                // 0 - North    // Y+
-                // 2 - East     // X+
-                // 4 - South    // Y-
-                // 6 - West     // X-
+                // Byte Direction  Facing
+                // 00 - North   // Y+
+                // 02 - East    // X+
+                // 04 - South   // Y-
+                // 06 - West    // X-
                 byte index = br.ReadByte();
                 doors.Add((x, y, unk1, time, tag, unk2, rotation, index, offset));
             }
