@@ -170,8 +170,8 @@ namespace ALTViewer
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
             textBox9.Text = pickupCount.ToString();         // display pickup count
-            ushort objectCount = br.ReadUInt16();              // box count
-            textBox10.Text = objectCount.ToString();           // display box count
+            ushort objectCount = br.ReadUInt16();           // object count
+            textBox10.Text = objectCount.ToString();        // display object count
             ushort doorCount = br.ReadUInt16();             // door count
             textBox11.Text = doorCount.ToString();          // display door count
             ushort liftCount = br.ReadUInt16();             // lift count
@@ -180,7 +180,7 @@ namespace ALTViewer
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
             ushort unknown1 = br.ReadUInt16();              //2 - always different  ( unknown )
-            // Chapter 1 ( unknown 3 )
+            // Chapter 1 ( unknown 1 )
             // L111LEV - 0A 00
             // L112LEV - 1D 00
             // L113LEV - 6D 00
@@ -193,7 +193,7 @@ namespace ALTViewer
             // L155LEV - 03 00
             // L161LEV - 30 00
             // L162LEV - 00 00
-            // Chapter 2 ( unknown 3 )
+            // Chapter 2 ( unknown 1 )
             // L211LEV - 6F 00
             // L212LEV - B0 00
             // L213LEV - 06 00
@@ -204,7 +204,7 @@ namespace ALTViewer
             // L243LEV - 00 00
             // L262LEV - 0A 00
             // L263LEV - 02 00
-            // Chapter 3 ( unknown 3 )
+            // Chapter 3 ( unknown 1 )
             // L311LEV - 0A 00
             // L321LEV - 12 00
             // L331LEV - 1C 00
@@ -220,7 +220,7 @@ namespace ALTViewer
             // L391LEV - 0C 00
             br.ReadBytes(2);                                //2 - always 0x4040     ( unknown )
             ushort unknown2 = br.ReadUInt16();              //2 - always different  ( unknown )
-            // Chapter 1 ( unknown 3 )
+            // Chapter 1 ( unknown 2 )
             // L111LEV - 14 00
             // L112LEV - 57 01
             // L113LEV - 34 00
@@ -233,7 +233,7 @@ namespace ALTViewer
             // L155LEV - 0C 00
             // L161LEV - 54 00
             // L162LEV - 00 00
-            // Chapter 2 ( unknown 3 )
+            // Chapter 2 ( unknown 2 )
             // L211LEV - D1 00
             // L212LEV - EC 00
             // L213LEV - 1D 00
@@ -244,7 +244,7 @@ namespace ALTViewer
             // L243LEV - 00 00
             // L262LEV - 60 00
             // L263LEV - 0C 00
-            // Chapter 3 ( unknown 3 )
+            // Chapter 3 ( unknown 2 )
             // L311LEV - 52 00
             // L321LEV - 54 00
             // L331LEV - 7E 00
