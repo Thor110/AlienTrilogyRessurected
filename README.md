@@ -356,11 +356,7 @@ Currently this is only fixed when exporting the level model.
 
 ## Easter Eggs
 
-Not entirely sure if this is an easter egg or not...
-
-Object Type 33 is the Steel Coil and Steel Grade 33 is a widely used grade of steel.
-
-According to ChatGPT : "Grade 33 is literally the first widely adopted U.S. structural steel grade (ASTM A15, 1911)."
+Object Type 33 is the Steel Coil, which may be a nod to Grade 33 steel, the first widely adopted U.S. structural steel grade (ASTM A15, 1911).
 
 <div align="center">
   <img src="Images/steel33.png" alt="Steel Grade 33">
