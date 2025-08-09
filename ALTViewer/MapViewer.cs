@@ -37,7 +37,7 @@ namespace ALTViewer
         private List<(byte Type, byte X, byte Y, byte Z,
             byte Rotation,
             byte Health, byte Drop,
-            byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
+            byte Unk2, byte Difficulty, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
             byte Speed,
             byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> enemies = new();
@@ -261,7 +261,7 @@ namespace ALTViewer
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( unknown 3 )
             // L111LEV - 22 00 // 2 / 6
-            // L112LEV - 22 00 // 2 / 6
+            // L112LEV - 22 00 // 2 / 6 / 16
             // L113LEV - 00 00 // null
             // L122LEV - 22 04 // 2 / 6 / 11 / 16
             // L131LEV - 26 04 // 2 / 6 / 11 / 3
@@ -348,7 +348,8 @@ namespace ALTViewer
                 byte health = br.ReadByte();                // 1
                 byte drop = br.ReadByte();                  // 255 //
                 byte unk2 = br.ReadByte();                  // 00
-                byte unk3 = br.ReadByte();                  // 00
+                byte difficulty = br.ReadByte();                  // 00
+                //0 - Easy, 1 - Medium, 2 - Hard
                 byte unk4 = br.ReadByte();                  // 00
                 byte unk5 = br.ReadByte();                  // 3E
                 byte unk6 = br.ReadByte();                  // 05
@@ -361,7 +362,7 @@ namespace ALTViewer
                 byte unk12 = br.ReadByte();                 // 06
                 byte unk13 = br.ReadByte();                 // 36
                 enemies.Add((type, x, y, z, rotation, health, drop,
-                    unk2, unk3, unk4, unk5, unk6, unk7, unk8,
+                    unk2, difficulty, unk4, unk5, unk6, unk7, unk8,
                     speed,
                     unk9, unk10, unk11, unk12, unk13,
                     offset));
@@ -648,7 +649,7 @@ namespace ALTViewer
             textBox18.Text = $"Health : {enemies[index].Health}";
             textBox24.Text = $"Drop : {enemies[index].Drop}";
             textBox25.Text = $"Unk2 : {enemies[index].Unk2}";
-            textBox26.Text = $"Unk3 : {enemies[index].Unk3}";
+            textBox26.Text = $"Difficulty : {enemies[index].Difficulty}";
             textBox27.Text = $"Unk4 : {enemies[index].Unk4}";
             textBox28.Text = $"Unk5 : {enemies[index].Unk5}";
             textBox29.Text = $"Unk6 : {enemies[index].Unk6}";
