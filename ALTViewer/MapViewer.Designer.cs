@@ -528,6 +528,7 @@
             // 
             // textBox13
             // 
+            textBox13.AccessibleDescription = "Entity Byte 1";
             textBox13.Location = new Point(428, 50);
             textBox13.Name = "textBox13";
             textBox13.ReadOnly = true;
@@ -536,6 +537,7 @@
             // 
             // textBox14
             // 
+            textBox14.AccessibleDescription = "Entity Byte 2";
             textBox14.Location = new Point(428, 79);
             textBox14.Name = "textBox14";
             textBox14.ReadOnly = true;
@@ -544,6 +546,7 @@
             // 
             // textBox15
             // 
+            textBox15.AccessibleDescription = "Entity Byte 3";
             textBox15.Location = new Point(428, 108);
             textBox15.Name = "textBox15";
             textBox15.ReadOnly = true;
@@ -552,6 +555,7 @@
             // 
             // textBox16
             // 
+            textBox16.AccessibleDescription = "Entity Byte 4";
             textBox16.Location = new Point(428, 137);
             textBox16.Name = "textBox16";
             textBox16.ReadOnly = true;
@@ -560,6 +564,7 @@
             // 
             // textBox17
             // 
+            textBox17.AccessibleDescription = "Entity Byte 5";
             textBox17.Location = new Point(428, 166);
             textBox17.Name = "textBox17";
             textBox17.ReadOnly = true;
@@ -568,6 +573,7 @@
             // 
             // textBox18
             // 
+            textBox18.AccessibleDescription = "Entity Byte 6";
             textBox18.Location = new Point(428, 195);
             textBox18.Name = "textBox18";
             textBox18.ReadOnly = true;
@@ -820,6 +826,7 @@
             // 
             // textBox24
             // 
+            textBox24.AccessibleDescription = "Entity Byte 7";
             textBox24.Location = new Point(428, 224);
             textBox24.Name = "textBox24";
             textBox24.ReadOnly = true;
@@ -828,6 +835,7 @@
             // 
             // textBox25
             // 
+            textBox25.AccessibleDescription = "Entity Byte 8";
             textBox25.Location = new Point(428, 253);
             textBox25.Name = "textBox25";
             textBox25.ReadOnly = true;
@@ -836,6 +844,7 @@
             // 
             // textBox26
             // 
+            textBox26.AccessibleDescription = "Entity Byte 9 (If it exists!)";
             textBox26.Location = new Point(428, 282);
             textBox26.Name = "textBox26";
             textBox26.ReadOnly = true;
@@ -844,6 +853,7 @@
             // 
             // textBox27
             // 
+            textBox27.AccessibleDescription = "Entity Byte 10 (If it exists!)";
             textBox27.Location = new Point(428, 311);
             textBox27.Name = "textBox27";
             textBox27.ReadOnly = true;
@@ -852,6 +862,7 @@
             // 
             // textBox28
             // 
+            textBox28.AccessibleDescription = "Entity Byte 11 (If it exists!)";
             textBox28.Location = new Point(620, 50);
             textBox28.Name = "textBox28";
             textBox28.ReadOnly = true;
@@ -860,6 +871,7 @@
             // 
             // textBox29
             // 
+            textBox29.AccessibleDescription = "Entity Byte 12 (If it exists!)";
             textBox29.Location = new Point(620, 79);
             textBox29.Name = "textBox29";
             textBox29.ReadOnly = true;
@@ -868,6 +880,7 @@
             // 
             // textBox30
             // 
+            textBox30.AccessibleDescription = "Entity Byte 13 (If it exists!)";
             textBox30.Location = new Point(620, 108);
             textBox30.Name = "textBox30";
             textBox30.ReadOnly = true;
@@ -876,6 +889,7 @@
             // 
             // textBox31
             // 
+            textBox31.AccessibleDescription = "Entity Byte 14 (If it exists!)";
             textBox31.Location = new Point(620, 137);
             textBox31.Name = "textBox31";
             textBox31.ReadOnly = true;
@@ -884,6 +898,7 @@
             // 
             // textBox32
             // 
+            textBox32.AccessibleDescription = "Entity Byte 15 (If it exists!)";
             textBox32.Location = new Point(620, 166);
             textBox32.Name = "textBox32";
             textBox32.ReadOnly = true;
@@ -892,6 +907,7 @@
             // 
             // textBox33
             // 
+            textBox33.AccessibleDescription = "Entity Byte 16 (If it exists!)";
             textBox33.Location = new Point(620, 195);
             textBox33.Name = "textBox33";
             textBox33.ReadOnly = true;
@@ -900,6 +916,7 @@
             // 
             // textBox34
             // 
+            textBox34.AccessibleDescription = "Entity Byte 17 (If it exists!)";
             textBox34.Location = new Point(620, 224);
             textBox34.Name = "textBox34";
             textBox34.ReadOnly = true;
@@ -908,6 +925,7 @@
             // 
             // textBox35
             // 
+            textBox35.AccessibleDescription = "Entity Byte 18 (If it exists!)";
             textBox35.Location = new Point(620, 253);
             textBox35.Name = "textBox35";
             textBox35.ReadOnly = true;
@@ -916,6 +934,7 @@
             // 
             // textBox36
             // 
+            textBox36.AccessibleDescription = "Entity Byte 19 (If it exists!)";
             textBox36.Location = new Point(620, 282);
             textBox36.Name = "textBox36";
             textBox36.ReadOnly = true;
@@ -924,6 +943,7 @@
             // 
             // textBox37
             // 
+            textBox37.AccessibleDescription = "Entity Byte 20 (If it exists!)";
             textBox37.Location = new Point(620, 311);
             textBox37.Name = "textBox37";
             textBox37.ReadOnly = true;
