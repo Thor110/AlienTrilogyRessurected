@@ -625,6 +625,7 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             exporting = true;
+            // TODO : re-enable this event handler removal when done determining all the unknown bytes
             //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
