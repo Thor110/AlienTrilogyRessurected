@@ -35,7 +35,7 @@ namespace ALTViewer
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
         private List<(byte Type, byte X, byte Y, byte Z,
-            byte Unk1,
+            byte Rotation,
             byte Health, byte Drop,
             byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
             byte Speed,
@@ -328,15 +328,23 @@ namespace ALTViewer
                 // 0C - Soldier
                 // 0D - Synthetic
                 // 0E - Handler
-                // 0F - Value not used in any level
-                // 10 - Steam Vents North
-                // 11 - Steam Vents East
-                // 12 - Steam Vents South
-                // 13 - Steam Vents West
+                // 0F - Value not used in any level ( possibly the player )
+                // 10 - Horizontal Steam Vent
+                // 11 - Horizontal Flame Vent
+                // 12 - Vertical Steam Vent
+                // 13 - Vertical Flame Vent
                 byte x = br.ReadByte();                     // 75
                 byte y = br.ReadByte();                     // 65
                 byte z = br.ReadByte();                     // 255
-                byte unk1 = br.ReadByte();                  // another unknown byte // 6 // possibly rotation?
+                byte rotation = br.ReadByte();              // 6
+                // 00 - North       // Y+
+                // 01 - North East  // X+ Y+
+                // 02 - East        // X+
+                // 03 - South East  // X+ Y-
+                // 04 - South       // Y-
+                // 05 - South West  // X- Y-
+                // 06 - West        // X-
+                // 07 - North West  // X- Y+
                 byte health = br.ReadByte();                // 1
                 byte drop = br.ReadByte();                  // 255 //
                 byte unk2 = br.ReadByte();                  // 00
@@ -352,9 +360,7 @@ namespace ALTViewer
                 byte unk11 = br.ReadByte();                 // 00
                 byte unk12 = br.ReadByte();                 // 06
                 byte unk13 = br.ReadByte();                 // 36
-                enemies.Add((type, x, y, z,
-                    unk1,
-                    health, drop,
+                enemies.Add((type, x, y, z, rotation, health, drop,
                     unk2, unk3, unk4, unk5, unk6, unk7, unk8,
                     speed,
                     unk9, unk10, unk11, unk12, unk13,
@@ -638,7 +644,7 @@ namespace ALTViewer
             textBox14.Text = $"X : {enemies[index].X}";
             textBox15.Text = $"Y : {enemies[index].Y}";
             textBox16.Text = $"Z : {enemies[index].Z}";
-            textBox17.Text = $"Unk1 : {enemies[index].Unk1}";
+            textBox17.Text = $"Rotation : {enemies[index].Rotation}";
             textBox18.Text = $"Health : {enemies[index].Health}";
             textBox24.Text = $"Drop : {enemies[index].Drop}";
             textBox25.Text = $"Unk2 : {enemies[index].Unk2}";
