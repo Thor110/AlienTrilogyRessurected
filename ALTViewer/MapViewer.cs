@@ -39,13 +39,13 @@ namespace ALTViewer
             byte Health, byte Drop,
             byte Unk2, byte Difficulty, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
             byte Speed,
-            byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
-            long Offset)> enemies = new();
+            byte Unk10, byte Unk11, byte Unk12, byte Unk13,
+            long Offset)> monsters = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z, byte Unk2, long Offset)> pickups = new();
         private List<(byte X, byte Y, byte ObjectType, byte DropType,
-            byte Unk1, byte Unk2, byte DropOne, byte DropTwo, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Rotation, byte Unk9,
+            byte Unk1, byte Unk2, byte DropOne, byte DropTwo, byte Unk3, byte Unk4, byte Unk5, byte Unk7, byte Rotation,
             long Offset)> objects = new();
-        private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Unk2, byte Rotation, byte Index, long Offset)> doors = new();
+        private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Rotation, byte Index, long Offset)> doors = new();
         private List<(byte X, byte Y, byte Z,
             byte Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
@@ -113,11 +113,11 @@ namespace ALTViewer
             //Lift Models parsed separately for now
             liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse lift sections from the selected level file
             foreach (var section in liftSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
-            if (exporting) { return; } // if exporting, do not parse level data meant for viewing
+            //if (exporting) { return; } // if exporting, do not parse level data meant for viewing
             // clear lists
             vertices.Clear();
             quads.Clear();
-            enemies.Clear();
+            monsters.Clear();
             pickups.Clear();
             objects.Clear();
             doors.Clear();
@@ -312,7 +312,7 @@ namespace ALTViewer
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
-                byte type = br.ReadByte();
+                byte type = br.ReadByte();          // type of the monster
                 // Monster Types (0x)
                 // 01 - Egg
                 // 02 - Face Hugger
@@ -333,10 +333,10 @@ namespace ALTViewer
                 // 11 - Horizontal Flame Vent
                 // 12 - Vertical Steam Vent
                 // 13 - Vertical Flame Vent
-                byte x = br.ReadByte();                     // 75
-                byte y = br.ReadByte();                     // 65
-                byte z = br.ReadByte();                     // 255
-                byte rotation = br.ReadByte();              // 6
+                byte x = br.ReadByte();             // x coordinate of the monster
+                byte y = br.ReadByte();             // y coordinate of the monster
+                byte z = br.ReadByte();             // z coordinate of the monster
+                byte rotation = br.ReadByte();      // rotation of the monster
                 // 00 - North       // Y+
                 // 01 - North East  // X+ Y+
                 // 02 - East        // X+
@@ -345,26 +345,25 @@ namespace ALTViewer
                 // 05 - South West  // X- Y-
                 // 06 - West        // X-
                 // 07 - North West  // X- Y+
-                byte health = br.ReadByte();                // 1
-                byte drop = br.ReadByte();                  // 255 //
-                byte unk2 = br.ReadByte();                  // 00
-                byte difficulty = br.ReadByte();                  // 00
-                //0 - Easy, 1 - Medium, 2 - Hard
-                byte unk4 = br.ReadByte();                  // 00
-                byte unk5 = br.ReadByte();                  // 3E
-                byte unk6 = br.ReadByte();                  // 05
-                byte unk7 = br.ReadByte();                  // 9B
-                byte unk8 = br.ReadByte();                  // 0E
-                byte speed = br.ReadByte();                 // 100 //
-                byte unk9 = br.ReadByte();                  // 00
-                byte unk10 = br.ReadByte();                 // 00
-                byte unk11 = br.ReadByte();                 // 00
-                byte unk12 = br.ReadByte();                 // 06
-                byte unk13 = br.ReadByte();                 // 36
-                enemies.Add((type, x, y, z, rotation, health, drop,
+                byte health = br.ReadByte();        // health of the monster
+                byte drop = br.ReadByte();          // index of object to be dropped
+                byte unk2 = br.ReadByte();          // 
+                byte difficulty = br.ReadByte();    // 0 - Easy, 1 - Medium, 2 - Hard
+                byte unk4 = br.ReadByte();          // 
+                byte unk5 = br.ReadByte();          // 
+                byte unk6 = br.ReadByte();          // 
+                byte unk7 = br.ReadByte();          // 
+                byte unk8 = br.ReadByte();          // 
+                byte speed = br.ReadByte();         // speed of the monster
+                br.ReadByte();                      // only ever 0 across every level in the game
+                byte unk10 = br.ReadByte();         // 
+                byte unk11 = br.ReadByte();         // 
+                byte unk12 = br.ReadByte();         // 
+                byte unk13 = br.ReadByte();         // 
+                monsters.Add((type, x, y, z, rotation, health, drop,
                     unk2, difficulty, unk4, unk5, unk6, unk7, unk8,
                     speed,
-                    unk9, unk10, unk11, unk12, unk13,
+                    unk10, unk11, unk12, unk13,
                     offset));
             }
             // L111LEV - 22 00 // 2 / 6
@@ -388,9 +387,9 @@ namespace ALTViewer
             for (int i = 0; i < pickupCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
-                byte x = br.ReadByte();
-                byte y = br.ReadByte();
-                byte type = br.ReadByte();
+                byte x = br.ReadByte();             // x coordinate of the pickup
+                byte y = br.ReadByte();             // y coordinate of the pickup
+                byte type = br.ReadByte();          // pickup type
                 // Pickup Types (0x)
                 // 00 - Pistol
                 // 01 - Shotgun                 // 478880 ( L111LEV.MAP )
@@ -425,8 +424,8 @@ namespace ALTViewer
                 // 1E - Crashes when near the object
                 // 1F - Nothing / Unused
                 // 20 - Crashes when near the object
-                byte amount = br.ReadByte();
-                byte multiplier = br.ReadByte();
+                byte amount = br.ReadByte();        // amount of the pickup
+                byte multiplier = br.ReadByte();    // multiplier for the pickup
                 br.ReadByte();                      // padding / unused / zero for every pickup across every level
                 byte z = br.ReadByte();             // only ever 0 or 1 across every level in the game
                 byte unk2 = br.ReadByte();          // unk2 is always the same as amount for ammunition
@@ -473,32 +472,32 @@ namespace ALTViewer
                 byte unk3 = br.ReadByte();
                 byte unk4 = br.ReadByte();
                 byte unk5 = br.ReadByte();
-                byte unk6 = br.ReadByte();          // only ever 0 across every level in the game
+                br.ReadByte();                      // only ever 0 across every level in the game
                 byte unk7 = br.ReadByte();
-                byte unk8 = br.ReadByte();          // only ever 0 across every level in the game
+                br.ReadByte();                      // only ever 0 across every level in the game
                 byte rotation = br.ReadByte();      // 0 / 2 / 4 / 6
-                byte unk9 = br.ReadByte();          // only ever 0 across every level in the game
-                objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk6, unk7, unk8, rotation, unk9, offset));
+                br.ReadByte();                      // only ever 0 across every level in the game
+                objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk7, rotation, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
-                byte x = br.ReadByte();
-                byte y = br.ReadByte();
+                byte x = br.ReadByte();             // x coordinate of the door
+                byte y = br.ReadByte();             // y coordinate of the door
                 byte unk1 = br.ReadByte();          // only ever 64 or 0 across every level in the game
-                byte time = br.ReadByte();
-                byte tag = br.ReadByte();
-                byte unk2 = br.ReadByte();          // only ever 0 across every level in the game
-                byte rotation = br.ReadByte();
+                byte time = br.ReadByte();          // door open time
+                byte tag = br.ReadByte();           // door tag
+                br.ReadByte();                      // only ever 0 across every level in the game
+                byte rotation = br.ReadByte();      // 0 / 2 / 4 / 6
                 // Byte Direction  Facing
                 // 00 - North   // Y+
                 // 02 - East    // X+
                 // 04 - South   // Y-
                 // 06 - West    // X-
-                byte index = br.ReadByte();
-                doors.Add((x, y, unk1, time, tag, unk2, rotation, index, offset));
+                byte index = br.ReadByte();         // index of the door model in the BND file
+                doors.Add((x, y, unk1, time, tag, rotation, index, offset));
             }
             // lifts formula = value multiplied by 16 - (16 bytes one element)
             for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
@@ -532,7 +531,7 @@ namespace ALTViewer
             listBox6.Items.Clear();
             listBox8.Items.Clear();
             // populate list boxes
-            for (int i = 0; i < enemies.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
+            for (int i = 0; i < monsters.Count; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickups.Count; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < objects.Count; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doors.Count; i++) { listBox6.Items.Add($"Door {i}"); }
@@ -653,27 +652,27 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8 });
             int index = listBox3.SelectedIndex;
-            textBox13.Text = $"Type : {enemies[index].Type}";
-            textBox14.Text = $"X : {enemies[index].X}";
-            textBox15.Text = $"Y : {enemies[index].Y}";
-            textBox16.Text = $"Z : {enemies[index].Z}";
-            textBox17.Text = $"Rotation : {enemies[index].Rotation}";
-            textBox18.Text = $"Health : {enemies[index].Health}";
-            textBox24.Text = $"Drop : {enemies[index].Drop}";
-            textBox25.Text = $"Unk2 : {enemies[index].Unk2}";
-            textBox26.Text = $"Difficulty : {enemies[index].Difficulty}";
-            textBox27.Text = $"Unk4 : {enemies[index].Unk4}";
-            textBox28.Text = $"Unk5 : {enemies[index].Unk5}";
-            textBox29.Text = $"Unk6 : {enemies[index].Unk6}";
-            textBox30.Text = $"Unk7 : {enemies[index].Unk7}";
-            textBox31.Text = $"Unk8 : {enemies[index].Unk8}";
-            textBox32.Text = $"Speed : {enemies[index].Speed}";
-            textBox33.Text = $"Unk9 : {enemies[index].Unk9}";
-            textBox34.Text = $"Unk10 : {enemies[index].Unk10}";
-            textBox35.Text = $"Unk11 : {enemies[index].Unk11}";
-            textBox36.Text = $"Unk12 : {enemies[index].Unk12}";
-            textBox37.Text = $"Unk13 : {enemies[index].Unk13}";
-            textBox23.Text = $"{enemies[index].Offset:X2}";
+            textBox13.Text = $"Type : {monsters[index].Type}";
+            textBox14.Text = $"X : {monsters[index].X}";
+            textBox15.Text = $"Y : {monsters[index].Y}";
+            textBox16.Text = $"Z : {monsters[index].Z}";
+            textBox17.Text = $"Rotation : {monsters[index].Rotation}";
+            textBox18.Text = $"Health : {monsters[index].Health}";
+            textBox24.Text = $"Drop : {monsters[index].Drop}";
+            textBox25.Text = $"Unk2 : {monsters[index].Unk2}";
+            textBox26.Text = $"Difficulty : {monsters[index].Difficulty}";
+            textBox27.Text = $"Unk4 : {monsters[index].Unk4}";
+            textBox28.Text = $"Unk5 : {monsters[index].Unk5}";
+            textBox29.Text = $"Unk6 : {monsters[index].Unk6}";
+            textBox30.Text = $"Unk7 : {monsters[index].Unk7}";
+            textBox31.Text = $"Unk8 : {monsters[index].Unk8}";
+            textBox32.Text = $"Speed : {monsters[index].Speed}";
+            textBox33.Text = "Unused : 0";
+            textBox34.Text = $"Unk10 : {monsters[index].Unk10}";
+            textBox35.Text = $"Unk11 : {monsters[index].Unk11}";
+            textBox36.Text = $"Unk12 : {monsters[index].Unk12}";
+            textBox37.Text = $"Unk13 : {monsters[index].Unk13}";
+            textBox23.Text = $"{monsters[index].Offset:X2}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -718,11 +717,11 @@ namespace ALTViewer
             textBox26.Text = $"Unk3 : {objects[index].Unk3}";
             textBox27.Text = $"Unk4 : {objects[index].Unk4}";
             textBox28.Text = $"Unk5 : {objects[index].Unk5}";
-            textBox29.Text = $"Unk6 : {objects[index].Unk6}";
+            textBox29.Text = "Unused : 0";
             textBox30.Text = $"Unk7 : {objects[index].Unk7}";
-            textBox31.Text = $"Unk8 : {objects[index].Unk8}";
+            textBox31.Text = "Unused : 0";
             textBox32.Text = $"Rotation : {objects[index].Rotation}";
-            textBox33.Text = $"Unk9 : {objects[index].Unk9}";
+            textBox33.Text = "Unused : 0";
             textBox34.Text = "null";
             textBox35.Text = "null";
             textBox36.Text = "null";
@@ -739,7 +738,7 @@ namespace ALTViewer
             textBox15.Text = $"Unk1 : {doors[index].Unk1}";
             textBox16.Text = $"Time : {doors[index].Time}";
             textBox17.Text = $"Tag : {doors[index].Tag}";
-            textBox18.Text = $"Unk2 : {doors[index].Unk2}";
+            textBox18.Text = "Unused : 0";
             textBox24.Text = $"Rotation : {doors[index].Rotation}";
             textBox25.Text = $"Index : {doors[index].Index}";
             textBox26.Text = "null";
