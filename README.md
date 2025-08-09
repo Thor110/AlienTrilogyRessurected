@@ -356,8 +356,10 @@ Currently this is only fixed when exporting the level model.
 
 ## Easter Eggs
 
-Object Type 33 is the Steel Coil, which may be a nod to Grade 33 steel, the first widely adopted U.S. structural steel grade (ASTM A15, 1911).
+Object type 33 is the Steel Coil, which may be a nod to Grade 33 steel, the first widely adopted U.S. structural steel grade (ASTM A15, 1911).
 
 <div align="center">
   <img src="Images/steel33.png" alt="Steel Grade 33">
 </div>
+
+The object type is stored in a byte (0-255) so if the assignment is random and every one of the 256 potential values is equally likely, the chance the Steel Coil specifically lands on 33 is 1 ÷ 256 = 0.00390625 = 0.390625% (~0.39%).

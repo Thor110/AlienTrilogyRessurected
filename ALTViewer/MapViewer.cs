@@ -114,6 +114,7 @@ namespace ALTViewer
             //Lift Models parsed separately for now
             liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse lift sections from the selected level file
             foreach (var section in liftSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
+            // TODO : reenable this when done analysing remaining bytes
             //if (exporting) { return; } // if exporting, do not parse level data meant for viewing
             // clear lists
             vertices.Clear();
@@ -468,10 +469,7 @@ namespace ALTViewer
                 // // // 35 - Light Pylon With No Texture, Completely Red...
                 // // // 36 - Strange Tall Square ( improperly textured )
                 // // // 37 - Egg Husk Shape ( untextured )
-                // // // 38 - a regular box that can be blown up
-                // // // 39 - a regular box that can be blown up
-                // // // 40 - a regular box that can be blown up
-                // // // 41 - a regular box that can be blown up
+                // // // greater than 37 - a regular box that can be blown up
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
@@ -800,7 +798,7 @@ namespace ALTViewer
             textBox13.Text = $"X : {paths[index].X}";
             textBox14.Text = $"Y : {paths[index].Y}";
             textBox15.Text = "Unused : 0";
-            textBox16.Text = $"Unknown : {paths[index].AlternateNode}";
+            textBox16.Text = $"Alternate : {paths[index].AlternateNode}";
             textBox17.Text = $"NodeA : {paths[index].NodeA}";
             textBox18.Text = $"NodeB : {paths[index].NodeB}";
             textBox24.Text = $"NodeC : {paths[index].NodeC}";
