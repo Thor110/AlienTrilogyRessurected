@@ -165,7 +165,6 @@ namespace ALTViewer
             byte unknown = br.ReadByte();                   // unknown object type ( possibly lights )
             textBox21.Text = unknown.ToString();            // display lift count
             br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
-            //MessageBox.Show($"Monster : {br.BaseStream.Position}");  // 14 + 20 = 34 ( L111LEV.MAP )
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
@@ -302,13 +301,11 @@ namespace ALTViewer
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
-            //MessageBox.Show($"{br.BaseStream.Position}"); // 323148 + 20 = 323168 ( L111LEV.MAP )
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             // collision 16 //4//2//2//1//1//1//1//2//1//1
             br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
             br.BaseStream.Seek(unknown * 8, SeekOrigin.Current); // skip up to monster data ( 568 L111LEV.MAP )
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
-            //MessageBox.Show($"{br.BaseStream.Position}"); //477708 + 20 = 477728 ( L111LEV.MAP )
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
@@ -382,7 +379,6 @@ namespace ALTViewer
                     BinaryUtility.ReplaceByte(enemy.Offset, 0x0B, "L111LEV.MAP");
                 }
             }*/
-            //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
             for (int i = 0; i < pickupCount; i++) // 28
             {
@@ -392,7 +388,7 @@ namespace ALTViewer
                 byte type = br.ReadByte();          // pickup type
                 // Pickup Types (0x)
                 // 00 - Pistol
-                // 01 - Shotgun                 // 478880 ( L111LEV.MAP )
+                // 01 - Shotgun
                 // 02 - Pulse Rifle
                 // 03 - Flame Thrower
                 // 04 - Smartgun
@@ -413,7 +409,7 @@ namespace ALTViewer
                 // 13 - Body Suit
                 // 14 - Medi Kit
                 // 15 - Derm Patch
-                // 16 - Auto Mapper             // 478872 ( L111LEV.MAP )
+                // 16 - Auto Mapper
                 // 17 - Adrenaline Burst
                 // 18 - Derm Patch
                 // 19 - Shoulder Lamp
@@ -431,7 +427,6 @@ namespace ALTViewer
                 byte unk2 = br.ReadByte();          // unk2 is always the same as amount for ammunition
                 pickups.Add((x, y, type, amount, multiplier, z, unk2, offset));
             }
-            //MessageBox.Show($"Boxes : {br.BaseStream.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
             for (int i = 0; i < objectCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
@@ -463,7 +458,6 @@ namespace ALTViewer
                     // 39 - a regular box that can be blown up
                     // 40 - a regular box that can be blown up
                     // 41 - a regular box that can be blown up
-                //74FC8
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
@@ -479,7 +473,6 @@ namespace ALTViewer
                 br.ReadByte();                      // only ever 0 across every level in the game
                 objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk7, rotation, offset));
             }
-            //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
