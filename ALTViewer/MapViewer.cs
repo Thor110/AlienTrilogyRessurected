@@ -283,7 +283,7 @@ namespace ALTViewer
             // L908LEV - 52 00
             // L909LEV - 52 00
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
-            // Chapter 1 ( enemyTypes )
+            // Chapter 1 ( enemyTypes ) - 16/17/18/19 are likely not a part of the enemyTypes ( example : first two levels )
             // L111LEV - 22 00 // 2 / 6
             // L112LEV - 22 00 // 2 / 6 / 16
             // L113LEV - 00 00 // null
