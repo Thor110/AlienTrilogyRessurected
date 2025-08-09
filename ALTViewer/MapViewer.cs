@@ -37,7 +37,7 @@ namespace ALTViewer
         private List<(byte Type, byte X, byte Y, byte Z, byte Unk1, byte Health, byte Drop, short Speed, long Offset)> monsters = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Unk1, byte Z, byte Unk2, long Offset)> pickups = new();
         private List<(byte X, byte Y, byte Type, long Offset)> boxes = new();
-        private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Rotation, byte Unk2, byte Index, long Offset)> doors = new();
+        private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Unk2, byte Rotation, byte Index, long Offset)> doors = new();
         private List<(byte X, byte Y, byte Z, long Offset)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
@@ -167,7 +167,7 @@ namespace ALTViewer
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
                 byte type = br.ReadByte();                  // 2
-                // monster types
+                // monster types (int)
                 // 1 - Egg
                 // 2 - Face Hugger
                 // 3 - Chest Burster
@@ -182,18 +182,20 @@ namespace ALTViewer
                 byte unk1 = br.ReadByte();                  // another unknown byte // 6 // possibly rotation?
                 byte health = br.ReadByte();                // 1
                 byte drop = br.ReadByte();                  // 255 //
-                byte unk2 = br.ReadByte();                  // 00
-                byte unk3 = br.ReadByte();                  // 00
-                byte unk4 = br.ReadByte();                  // 00
-                byte unk5 = br.ReadByte();                  // 3E
-                byte unk6 = br.ReadByte();                  // 05
-                byte unk7 = br.ReadByte();                  // 9B
-                byte unk8 = br.ReadByte();                  // 0E
+                br.ReadBytes(7); // unknown bytes           // 00 00 00 3E 05 9B 0E (0x)
+                //byte unk2 = br.ReadByte();                  // 00
+                //byte unk3 = br.ReadByte();                  // 00
+                //byte unk4 = br.ReadByte();                  // 00
+                //byte unk5 = br.ReadByte();                  // 3E
+                //byte unk6 = br.ReadByte();                  // 05
+                //byte unk7 = br.ReadByte();                  // 9B
+                //byte unk8 = br.ReadByte();                  // 0E
                 short speed = br.ReadInt16();               // 100 //
-                byte unk9 = br.ReadByte();                  // 00
-                byte unk10 = br.ReadByte();                 // 00
-                byte unk11 = br.ReadByte();                 // 06
-                byte unk12 = br.ReadByte();                 // 36
+                br.ReadBytes(4); // unknown bytes           // 00 00 06 36 (0x)
+                //byte unk9 = br.ReadByte();                  // 00
+                //byte unk10 = br.ReadByte();                 // 00
+                //byte unk11 = br.ReadByte();                 // 06
+                //byte unk12 = br.ReadByte();                 // 36
                 monsters.Add((type, x, y, z, unk1, health, drop, speed, offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
@@ -252,8 +254,8 @@ namespace ALTViewer
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
-                byte type = br.ReadByte();
-                byte drop = br.ReadByte(); // 0 = Pickup 2 = Enemy
+                byte objectType = br.ReadByte();
+                byte dropType = br.ReadByte(); // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte(); //
                 byte unk2 = br.ReadByte(); //
                 byte dropOne = br.ReadByte(); // index of first pickup dropped
@@ -279,12 +281,12 @@ namespace ALTViewer
                 // 28 - an empty object that can be shot
                 // 29 - an empty object that can be shot through, something will spawn on death
                 // 30 - is a regular box that can be blown up
-                boxes.Add((x, y, type, offset));
+                boxes.Add((x, y, objectType, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
-            using var test1 = new StreamWriter("test1.bin");
-            using var test2 = new StreamWriter("test2.bin");
+            //using var test1 = new StreamWriter("test1.bin");
+            //using var test2 = new StreamWriter("test2.bin");
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -297,10 +299,10 @@ namespace ALTViewer
                 byte unk2 = br.ReadByte(); // unk2 // speed or sound? // always 0 in L111LEV.MAP
                 //test2.WriteLine($"{unk2}");
                 byte rotation = br.ReadByte();
-                // 0 - North?
-                // 2 - East?
-                // 4 - South?
-                // 6 - West?
+                // 0 - North    // Y+
+                // 2 - East     // X+
+                // 4 - South    // Y-
+                // 6 - West     // X-
                 byte index = br.ReadByte();
                 doors.Add((x, y, unk1, time, tag, unk2, rotation, index, offset));
             }
