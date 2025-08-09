@@ -258,7 +258,7 @@ namespace ALTViewer
             // L325LEV - 54 00
             // L391LEV - 55 00
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
-            // Chapter 1 ( unknown 3 )
+            // Chapter 1 ( enemyTypes )
             // L111LEV - 22 00 // 2 / 6
             // L112LEV - 22 00 // 2 / 6 / 16
             // L113LEV - 00 00 // null
@@ -271,7 +271,7 @@ namespace ALTViewer
             // L155LEV - 0C 00 // 18 / 16 / 19
             // L161LEV - A7 02 // 6 / 1 / 2 / 8 / 10 / 3
             // L162LEV - 43 00 // 7 / 1 / 2
-            // Chapter 2 ( unknown 3 )
+            // Chapter 2 ( enemyTypes )
             // L211LEV - 0E 08 // 4 / 12 / 2 / 3
             // L212LEV - 0A 08 // 4 / 2 / 12
             // L213LEV - 02 08 // 2 / 12
@@ -282,7 +282,7 @@ namespace ALTViewer
             // L243LEV - 00 00 // null
             // L262LEV - 17 02 // 5 / 1 / 2 / 10 / 3
             // L263LEV - 43 00 // 7 / 1 / 2
-            // Chapter 3 ( unknown 3 )
+            // Chapter 3 ( enemyTypes )
             // L311LEV - 10 20 // 5 / 14
             // L321LEV - 02 00 // 2
             // L331LEV - 12 21 // 5 / 14 / 2 / 9
