@@ -253,11 +253,10 @@ namespace ALTViewer
                 // 0D - Synthetic
                 // 0E - Handler
                 // 0F - Value not used in any level
-                // 10 - Nonexistent
-                // 11 - Nonexistent
-                // 12 - Nonexistent
-                // 13 - Nonexistent
-                // BAMBI / COLONIST / DOG / 
+                // 10 - Steam Vents North
+                // 11 - Steam Vents East
+                // 12 - Steam Vents South
+                // 13 - Steam Vents West
                 byte x = br.ReadByte();                     // 75
                 byte y = br.ReadByte();                     // 65
                 byte z = br.ReadByte();                     // 255
