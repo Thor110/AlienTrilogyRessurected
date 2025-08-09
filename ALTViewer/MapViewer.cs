@@ -38,8 +38,8 @@ namespace ALTViewer
             byte Unk1,
             byte Health, byte Drop,
             byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8,
-            short Speed,
-            byte Unk9, byte Unk10, byte Unk11, byte Unk12,
+            byte Speed,
+            byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> enemies = new();
         private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Unk1, byte Z, byte Unk2, long Offset)> pickups = new();
         private List<(byte X, byte Y, byte ObjectType, byte DropType,
@@ -254,17 +254,18 @@ namespace ALTViewer
                 byte unk6 = br.ReadByte();                  // 05
                 byte unk7 = br.ReadByte();                  // 9B
                 byte unk8 = br.ReadByte();                  // 0E
-                short speed = br.ReadInt16();               // 100 //
+                byte speed = br.ReadByte();                 // 100 //
                 byte unk9 = br.ReadByte();                  // 00
                 byte unk10 = br.ReadByte();                 // 00
-                byte unk11 = br.ReadByte();                 // 06
-                byte unk12 = br.ReadByte();                 // 36
+                byte unk11 = br.ReadByte();                 // 00
+                byte unk12 = br.ReadByte();                 // 06
+                byte unk13 = br.ReadByte();                 // 36
                 enemies.Add((type, x, y, z,
                     unk1,
                     health, drop,
                     unk2, unk3, unk4, unk5, unk6, unk7, unk8,
                     speed,
-                    unk9, unk10, unk11, unk12,
+                    unk9, unk10, unk11, unk12, unk13,
                     offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
@@ -540,11 +541,11 @@ namespace ALTViewer
             textBox30.Text = $"Unk7 : {enemies[index].Unk7}";
             textBox31.Text = $"Unk8 : {enemies[index].Unk8}";
             textBox32.Text = $"Speed : {enemies[index].Speed}";
-            textBox33.Text = "null";
-            textBox34.Text = $"Unk9 : {enemies[index].Unk9}";
-            textBox35.Text = $"Unk10 : {enemies[index].Unk10}";
-            textBox36.Text = $"Unk11 : {enemies[index].Unk11}";
-            textBox37.Text = $"Unk12 : {enemies[index].Unk12}";
+            textBox33.Text = $"Unk9 : {enemies[index].Unk9}";
+            textBox34.Text = $"Unk10 : {enemies[index].Unk10}";
+            textBox35.Text = $"Unk11 : {enemies[index].Unk11}";
+            textBox36.Text = $"Unk12 : {enemies[index].Unk12}";
+            textBox37.Text = $"Unk13 : {enemies[index].Unk13}";
             textBox23.Text = $"{enemies[index].Offset:X2}";
         }
         // pickups

@@ -117,6 +117,8 @@
             textBox37 = new TextBox();
             label19 = new Label();
             label20 = new Label();
+            label21 = new Label();
+            label22 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -526,7 +528,7 @@
             // 
             // textBox13
             // 
-            textBox13.Location = new Point(394, 50);
+            textBox13.Location = new Point(428, 50);
             textBox13.Name = "textBox13";
             textBox13.ReadOnly = true;
             textBox13.Size = new Size(100, 23);
@@ -534,7 +536,7 @@
             // 
             // textBox14
             // 
-            textBox14.Location = new Point(394, 79);
+            textBox14.Location = new Point(428, 79);
             textBox14.Name = "textBox14";
             textBox14.ReadOnly = true;
             textBox14.Size = new Size(100, 23);
@@ -542,7 +544,7 @@
             // 
             // textBox15
             // 
-            textBox15.Location = new Point(394, 108);
+            textBox15.Location = new Point(428, 108);
             textBox15.Name = "textBox15";
             textBox15.ReadOnly = true;
             textBox15.Size = new Size(100, 23);
@@ -550,7 +552,7 @@
             // 
             // textBox16
             // 
-            textBox16.Location = new Point(394, 137);
+            textBox16.Location = new Point(428, 137);
             textBox16.Name = "textBox16";
             textBox16.ReadOnly = true;
             textBox16.Size = new Size(100, 23);
@@ -558,7 +560,7 @@
             // 
             // textBox17
             // 
-            textBox17.Location = new Point(394, 166);
+            textBox17.Location = new Point(428, 166);
             textBox17.Name = "textBox17";
             textBox17.ReadOnly = true;
             textBox17.Size = new Size(100, 23);
@@ -566,7 +568,7 @@
             // 
             // textBox18
             // 
-            textBox18.Location = new Point(394, 195);
+            textBox18.Location = new Point(428, 195);
             textBox18.Name = "textBox18";
             textBox18.ReadOnly = true;
             textBox18.Size = new Size(100, 23);
@@ -818,7 +820,7 @@
             // 
             // textBox24
             // 
-            textBox24.Location = new Point(394, 224);
+            textBox24.Location = new Point(428, 224);
             textBox24.Name = "textBox24";
             textBox24.ReadOnly = true;
             textBox24.Size = new Size(100, 23);
@@ -826,7 +828,7 @@
             // 
             // textBox25
             // 
-            textBox25.Location = new Point(394, 253);
+            textBox25.Location = new Point(428, 253);
             textBox25.Name = "textBox25";
             textBox25.ReadOnly = true;
             textBox25.Size = new Size(100, 23);
@@ -834,7 +836,7 @@
             // 
             // textBox26
             // 
-            textBox26.Location = new Point(394, 282);
+            textBox26.Location = new Point(428, 282);
             textBox26.Name = "textBox26";
             textBox26.ReadOnly = true;
             textBox26.Size = new Size(100, 23);
@@ -842,7 +844,7 @@
             // 
             // textBox27
             // 
-            textBox27.Location = new Point(394, 311);
+            textBox27.Location = new Point(428, 311);
             textBox27.Name = "textBox27";
             textBox27.ReadOnly = true;
             textBox27.Size = new Size(100, 23);
@@ -931,7 +933,7 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(351, 53);
+            label19.Location = new Point(385, 53);
             label19.Name = "label19";
             label19.Size = new Size(37, 15);
             label19.TabIndex = 98;
@@ -940,17 +942,37 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(581, 314);
+            label20.Location = new Point(557, 314);
             label20.Name = "label20";
-            label20.Size = new Size(33, 15);
+            label20.Size = new Size(57, 15);
             label20.TabIndex = 99;
-            label20.Text = "End :";
+            label20.Text = "Enemies :";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(332, 256);
+            label21.Name = "label21";
+            label21.Size = new Size(90, 15);
+            label21.TabIndex = 100;
+            label21.Text = "Pickups/Doors :";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(534, 198);
+            label22.Name = "label22";
+            label22.Size = new Size(80, 15);
+            label22.TabIndex = 101;
+            label22.Text = "Objects/Lifts :";
             // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(label22);
+            Controls.Add(label21);
             Controls.Add(label20);
             Controls.Add(label19);
             Controls.Add(textBox28);
@@ -1136,5 +1158,7 @@
         private TextBox textBox37;
         private Label label19;
         private Label label20;
+        private Label label21;
+        private Label label22;
     }
 }
