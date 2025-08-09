@@ -122,6 +122,28 @@ namespace ALTViewer
             objects.Clear();
             doors.Clear();
             lifts.Clear();
+            // clear textboxes
+            textBox13.Text = "";
+            textBox14.Text = "";
+            textBox16.Text = "";
+            textBox15.Text = "";
+            textBox17.Text = "";
+            textBox18.Text = "";
+            textBox24.Text = "";
+            textBox25.Text = "";
+            textBox26.Text = "";
+            textBox27.Text = "";
+            textBox28.Text = "";
+            textBox29.Text = "";
+            textBox30.Text = "";
+            textBox31.Text = "";
+            textBox32.Text = "";
+            textBox33.Text = "";
+            textBox34.Text = "";
+            textBox35.Text = "";
+            textBox36.Text = "";
+            textBox37.Text = "";
+            textBox23.Text = "";
             // parse level data -> skip 20 bytes in rather than using ParseBndFormSections in future
             List<BndSection> levelSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "MAP0"); // read MAP0 block
             using var ms = new MemoryStream(levelSections[0].Data);
@@ -374,7 +396,7 @@ namespace ALTViewer
                     unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13,
                     offset));
             }
-            textBox22.Text = $"{br.BaseStream.Position + 20}"; // display data remainder offset plus header
+            textBox22.Text = $"{br.BaseStream.Position + 20:X2}"; // display data remainder offset plus header
             // clear list boxes
             listBox3.Items.Clear();
             listBox4.Items.Clear();
@@ -523,7 +545,7 @@ namespace ALTViewer
             textBox35.Text = $"Unk10 : {enemies[index].Unk10}";
             textBox36.Text = $"Unk11 : {enemies[index].Unk11}";
             textBox37.Text = $"Unk12 : {enemies[index].Unk12}";
-            textBox23.Text = $"{enemies[index].Offset}";
+            textBox23.Text = $"{enemies[index].Offset:X2}";
         }
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -550,7 +572,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{pickups[index].Offset}";
+            textBox23.Text = $"{pickups[index].Offset:X2}";
         }
         // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
@@ -577,7 +599,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{objects[index].Offset}";
+            textBox23.Text = $"{objects[index].Offset:X2}";
         }
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
@@ -604,7 +626,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{doors[index].Offset}";
+            textBox23.Text = $"{doors[index].Offset:X2}";
         }
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
@@ -631,7 +653,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{lifts[index].Offset}";
+            textBox23.Text = $"{lifts[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)

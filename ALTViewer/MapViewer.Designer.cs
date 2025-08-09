@@ -791,7 +791,7 @@
             // 
             // textBox22
             // 
-            textBox22.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
+            textBox22.AccessibleDescription = "Offset of the remaining bytes at the end of the MAP0 section which have not been processed.";
             textBox22.Location = new Point(876, 41);
             textBox22.Name = "textBox22";
             textBox22.ReadOnly = true;
@@ -800,7 +800,7 @@
             // 
             // textBox23
             // 
-            textBox23.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
+            textBox23.AccessibleDescription = "Offset of the selected entity.";
             textBox23.Location = new Point(876, 70);
             textBox23.Name = "textBox23";
             textBox23.ReadOnly = true;
