@@ -34,10 +34,10 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte Type, byte X, byte Y, byte Z, byte Health, byte Drop, short Speed, long Offset)> monsters = new();
-        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z, long Offset)> pickups = new();
+        private List<(byte Type, byte X, byte Y, byte Z, byte Unk1, byte Health, byte Drop, short Speed, long Offset)> monsters = new();
+        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Unk1, byte Z, byte Unk2, long Offset)> pickups = new();
         private List<(byte X, byte Y, byte Type, long Offset)> boxes = new();
-        private List<(byte X, byte Y, byte Time, byte Tag, byte Rotation, byte Index, long Offset)> doors = new();
+        private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Rotation, byte Unk2, byte Index, long Offset)> doors = new();
         private List<(byte X, byte Y, byte Z, long Offset)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
@@ -138,8 +138,8 @@ namespace ALTViewer
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
             textBox9.Text = pickupCount.ToString();         // display pickup count
-            ushort boxCount = br.ReadUInt16();              // box count
-            textBox10.Text = boxCount.ToString();           // display box count
+            ushort objectCount = br.ReadUInt16();              // box count
+            textBox10.Text = objectCount.ToString();           // display box count
             ushort doorCount = br.ReadUInt16();             // door count
             textBox11.Text = doorCount.ToString();          // display door count
             ushort liftCount = br.ReadUInt16();             // lift count
@@ -167,20 +167,34 @@ namespace ALTViewer
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference ( L111LEV.MAP - Monster 0 )
                 byte type = br.ReadByte();                  // 2
+                // monster types
+                // 1 - Egg
+                // 2 - Face Hugger
+                // 3 - Chest Burster
+                // 6 - Warrior
+                // 7 - Queen
+                // 8 - Praetorian
+                // 10 - Wall Body
+                // 11 - Security Guard
                 byte x = br.ReadByte();                     // 75
                 byte y = br.ReadByte();                     // 65
                 byte z = br.ReadByte();                     // 255
-                br.ReadByte(); // another unknown byte      // 6
+                byte unk1 = br.ReadByte();                  // another unknown byte // 6 // possibly rotation?
                 byte health = br.ReadByte();                // 1
-                byte drop = br.ReadByte();                  // 255
-                br.ReadBytes(7); // unknown bytes           // 00 00 00 3E 05 9B 0E (0x)
-                short speed = br.ReadInt16();               // 100
-                br.ReadBytes(4); // unknown bytes           // 00 00 06 36 (0x)
-                // monster types
-                // 2 - face hugger
-                // 6 - warrior
-                // 7 - queen
-                monsters.Add((type, x, y, z, health, drop, speed, offset));
+                byte drop = br.ReadByte();                  // 255 //
+                byte unk2 = br.ReadByte();                  // 00
+                byte unk3 = br.ReadByte();                  // 00
+                byte unk4 = br.ReadByte();                  // 00
+                byte unk5 = br.ReadByte();                  // 3E
+                byte unk6 = br.ReadByte();                  // 05
+                byte unk7 = br.ReadByte();                  // 9B
+                byte unk8 = br.ReadByte();                  // 0E
+                short speed = br.ReadInt16();               // 100 //
+                byte unk9 = br.ReadByte();                  // 00
+                byte unk10 = br.ReadByte();                 // 00
+                byte unk11 = br.ReadByte();                 // 06
+                byte unk12 = br.ReadByte();                 // 36
+                monsters.Add((type, x, y, z, unk1, health, drop, speed, offset));
             }
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
             // pickup formula = number of elements multiplied by 8 - (8 bytes per pickup)
@@ -190,42 +204,105 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
+                // pickup types (0x)
+                // 00 - Pistol
+                // 01 - Shotgun                 // 478880 ( L111LEV.MAP )
+                // 02 - Pulse Rifle
+                // 03 - Flame Thrower
+                // 04 - Smartgun
+                // 05 - Nothing / Unused
+                // 06 - Seismic Charge
+                // 07 - Battery
+                // 08 - Night Vision Goggles
+                // 09 - Pistol Clip
+                // 0A - Shotgun Cartridge
+                // 0B - Pulse Rifle Clip
+                // 0C - Grenades
+                // 0D - Flamethrower Fuel
+                // 0E - Smartgun Ammunition
+                // 0F - Identity Tag
+                // 10 - Shotgun Shell
+                // 11 - Hypo Pack
+                // 12 - Acid Vest
+                // 13 - Body Suit
+                // 14 - Medi Kit
+                // 15 - Derm Patch
+                // 16 - Auto Mapper             // 478872 ( L111LEV.MAP )
+                // 17 - Adrenaline Burst
+                // 18 - Derm Patch
+                // 19 - Shoulder Lamp
+                // 1A - Shotgun Cartridge   ( Cannot be picked up )
+                // 1B - Grenades            ( Cannot be picked up )
+                // 1C - Crashes when near the object
+                // 1D - Crashes when near the object
+                // 1E - Crashes when near the object
+                // 1F - Nothing / Unused
+                // 20 - Crashes when near the object
                 byte amount = br.ReadByte();
                 byte multiplier = br.ReadByte();
-                br.ReadByte(); // unk1
+                byte unk1 = br.ReadByte(); // unk1
                 byte z = br.ReadByte();
-                br.ReadByte(); // unk2
-                pickups.Add((x, y, type, amount, multiplier, z, offset));
+                byte unk2 = br.ReadByte(); // unk2
+                pickups.Add((x, y, type, amount, multiplier, unk1, z, unk2, offset));
             }
             //MessageBox.Show($"Boxes : {br.BaseStream.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
-            for (int i = 0; i < boxCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
+            for (int i = 0; i < objectCount; i++) // 44 -> 44 objects in L111LEV.MAP ( Barrels, Boxes, Switches )
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte type = br.ReadByte();
                 byte drop = br.ReadByte(); // 0 = Pickup 2 = Enemy
-                br.ReadBytes(2); // unknown bytes
+                byte unk1 = br.ReadByte(); //
+                byte unk2 = br.ReadByte(); //
                 byte dropOne = br.ReadByte(); // index of first pickup dropped
                 byte dropTwo = br.ReadByte(); // index of second pickup dropped
-                br.ReadBytes(8); // unknown bytes
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                byte unk5 = br.ReadByte();
+                byte unk6 = br.ReadByte();
+                byte unk7 = br.ReadByte();
+                byte unk8 = br.ReadByte();
+                byte rotation = br.ReadByte();
+                byte unk9 = br.ReadByte(); // drop spawn rotation or speed?
+                // object types (int)
+                // 19 - a box that cannot be blown up
+                // 20 - a regular box that can be blown up
+                // 21 - empty object(at the moment), maybe a switch for levels on the ship
+                // 22 - another small switch, the difference is at the bottom of the model(lightning is drawn)
+                // 23 - barrel explodes.
+                // 24 - switch with animation(small switch)
+                // 25 - "double box"(two boxes on top of each other that can be blown up)
+                // 26 - wide switch with zipper
+                // 27 - wide switch without zipper
+                // 28 - an empty object that can be shot
+                // 29 - an empty object that can be shot through, something will spawn on death
+                // 30 - is a regular box that can be blown up
                 boxes.Add((x, y, type, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
             // doors formula = value multiplied by 8 - (8 bytes one element)
+            using var test1 = new StreamWriter("test1.bin");
+            using var test2 = new StreamWriter("test2.bin");
             for (int i = 0; i < doorCount; i++) // 6 -> 6 doors in L111LEV.MAP
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
-                br.ReadByte(); // unk1
+                byte unk1 = br.ReadByte(); // unk1 // speed or sound? // always 0 in L111LEV.MAP
+                //test1.WriteLine($"{unk1"); // 64 or 0 on L351LEV.MAP
                 byte time = br.ReadByte();
                 byte tag = br.ReadByte();
-                br.ReadByte(); // unk2
+                byte unk2 = br.ReadByte(); // unk2 // speed or sound? // always 0 in L111LEV.MAP
+                //test2.WriteLine($"{unk2}");
                 byte rotation = br.ReadByte();
+                // 0 - North?
+                // 2 - East?
+                // 4 - South?
+                // 6 - West?
                 byte index = br.ReadByte();
-                doors.Add((x, y, time, tag, rotation, index, offset));
+                doors.Add((x, y, unk1, time, tag, unk2, rotation, index, offset));
             }
             // lifts formula = value multiplied by 16 - (16 bytes one element)
             for (int i = 0; i < liftCount; i++) // 16 doors in L141LEV.MAP
@@ -255,7 +332,7 @@ namespace ALTViewer
             textBox19.Text = remainingBytes.ToString();
             // dump remaining bytes
             remainder = br.ReadBytes((int)remainingBytes);
-            //
+            // not used for now
             button3.Enabled = true; // enable open level button
         }
         // full screen toggle

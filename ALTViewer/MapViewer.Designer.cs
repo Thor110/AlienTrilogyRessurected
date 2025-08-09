@@ -113,6 +113,20 @@
             textBox22 = new TextBox();
             textBox23 = new TextBox();
             label37 = new Label();
+            textBox24 = new TextBox();
+            textBox25 = new TextBox();
+            textBox26 = new TextBox();
+            textBox27 = new TextBox();
+            textBox28 = new TextBox();
+            textBox29 = new TextBox();
+            textBox30 = new TextBox();
+            textBox31 = new TextBox();
+            textBox32 = new TextBox();
+            textBox33 = new TextBox();
+            textBox34 = new TextBox();
+            textBox35 = new TextBox();
+            textBox36 = new TextBox();
+            textBox37 = new TextBox();
             SuspendLayout();
             // 
             // listBox1
@@ -148,7 +162,7 @@
             // 
             button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(512, 12);
+            button1.Location = new Point(620, 12);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
@@ -160,7 +174,7 @@
             // button2
             // 
             button2.AccessibleDescription = "Close the level.";
-            button2.Location = new Point(593, 12);
+            button2.Location = new Point(701, 12);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 4;
@@ -173,7 +187,7 @@
             // 
             button3.AccessibleDescription = "Open the selected level.";
             button3.Enabled = false;
-            button3.Location = new Point(593, 12);
+            button3.Location = new Point(701, 12);
             button3.Name = "button3";
             button3.Size = new Size(75, 23);
             button3.TabIndex = 5;
@@ -522,7 +536,7 @@
             // 
             // textBox13
             // 
-            textBox13.Location = new Point(478, 183);
+            textBox13.Location = new Point(394, 50);
             textBox13.Name = "textBox13";
             textBox13.ReadOnly = true;
             textBox13.Size = new Size(100, 23);
@@ -530,7 +544,7 @@
             // 
             // textBox14
             // 
-            textBox14.Location = new Point(478, 212);
+            textBox14.Location = new Point(394, 79);
             textBox14.Name = "textBox14";
             textBox14.ReadOnly = true;
             textBox14.Size = new Size(100, 23);
@@ -538,7 +552,7 @@
             // 
             // textBox15
             // 
-            textBox15.Location = new Point(478, 241);
+            textBox15.Location = new Point(394, 108);
             textBox15.Name = "textBox15";
             textBox15.ReadOnly = true;
             textBox15.Size = new Size(100, 23);
@@ -547,8 +561,9 @@
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new Point(452, 186);
+            label19.Location = new Point(368, 53);
             label19.Name = "label19";
+            label19.RightToLeft = RightToLeft.No;
             label19.Size = new Size(20, 15);
             label19.TabIndex = 45;
             label19.Text = "X :";
@@ -556,7 +571,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(452, 215);
+            label20.Location = new Point(368, 82);
             label20.Name = "label20";
             label20.Size = new Size(20, 15);
             label20.TabIndex = 46;
@@ -565,7 +580,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(452, 244);
+            label21.Location = new Point(368, 111);
             label21.Name = "label21";
             label21.Size = new Size(20, 15);
             label21.TabIndex = 47;
@@ -573,7 +588,7 @@
             // 
             // textBox16
             // 
-            textBox16.Location = new Point(478, 270);
+            textBox16.Location = new Point(394, 137);
             textBox16.Name = "textBox16";
             textBox16.ReadOnly = true;
             textBox16.Size = new Size(100, 23);
@@ -581,7 +596,7 @@
             // 
             // textBox17
             // 
-            textBox17.Location = new Point(478, 299);
+            textBox17.Location = new Point(394, 166);
             textBox17.Name = "textBox17";
             textBox17.ReadOnly = true;
             textBox17.Size = new Size(100, 23);
@@ -589,7 +604,7 @@
             // 
             // textBox18
             // 
-            textBox18.Location = new Point(478, 328);
+            textBox18.Location = new Point(394, 195);
             textBox18.Name = "textBox18";
             textBox18.ReadOnly = true;
             textBox18.Size = new Size(100, 23);
@@ -598,7 +613,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(435, 273);
+            label22.Location = new Point(351, 140);
             label22.Name = "label22";
             label22.Size = new Size(37, 15);
             label22.TabIndex = 51;
@@ -607,7 +622,7 @@
             // label23
             // 
             label23.AutoSize = true;
-            label23.Location = new Point(424, 302);
+            label23.Location = new Point(340, 169);
             label23.Name = "label23";
             label23.Size = new Size(48, 15);
             label23.TabIndex = 52;
@@ -616,7 +631,7 @@
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(433, 331);
+            label24.Location = new Point(349, 198);
             label24.Name = "label24";
             label24.Size = new Size(39, 15);
             label24.TabIndex = 53;
@@ -625,7 +640,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(415, 302);
+            label25.Location = new Point(331, 169);
             label25.Name = "label25";
             label25.Size = new Size(57, 15);
             label25.TabIndex = 54;
@@ -635,7 +650,7 @@
             // label26
             // 
             label26.AutoSize = true;
-            label26.Location = new Point(408, 331);
+            label26.Location = new Point(324, 198);
             label26.Name = "label26";
             label26.Size = new Size(64, 15);
             label26.TabIndex = 55;
@@ -645,7 +660,7 @@
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(433, 244);
+            label27.Location = new Point(349, 111);
             label27.Name = "label27";
             label27.Size = new Size(39, 15);
             label27.TabIndex = 56;
@@ -655,7 +670,7 @@
             // label28
             // 
             label28.AutoSize = true;
-            label28.Location = new Point(441, 273);
+            label28.Location = new Point(357, 140);
             label28.Name = "label28";
             label28.Size = new Size(31, 15);
             label28.TabIndex = 57;
@@ -665,7 +680,7 @@
             // label29
             // 
             label29.AutoSize = true;
-            label29.Location = new Point(414, 302);
+            label29.Location = new Point(330, 169);
             label29.Name = "label29";
             label29.Size = new Size(58, 15);
             label29.TabIndex = 58;
@@ -675,7 +690,7 @@
             // label30
             // 
             label30.AutoSize = true;
-            label30.Location = new Point(430, 331);
+            label30.Location = new Point(346, 198);
             label30.Name = "label30";
             label30.Size = new Size(42, 15);
             label30.TabIndex = 59;
@@ -685,7 +700,7 @@
             // textBox19
             // 
             textBox19.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox19.Location = new Point(762, 12);
+            textBox19.Location = new Point(876, 12);
             textBox19.Name = "textBox19";
             textBox19.ReadOnly = true;
             textBox19.Size = new Size(100, 23);
@@ -694,7 +709,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(674, 15);
+            label31.Location = new Point(788, 15);
             label31.Name = "label31";
             label31.Size = new Size(82, 15);
             label31.TabIndex = 61;
@@ -746,9 +761,9 @@
             // button7
             // 
             button7.Enabled = false;
-            button7.Location = new Point(868, 12);
+            button7.Location = new Point(982, 12);
             button7.Name = "button7";
-            button7.Size = new Size(114, 23);
+            button7.Size = new Size(120, 23);
             button7.TabIndex = 66;
             button7.Text = "Dump Remainder";
             button7.UseVisualStyleBackColor = true;
@@ -757,9 +772,9 @@
             // button8
             // 
             button8.Enabled = false;
-            button8.Location = new Point(988, 12);
+            button8.Location = new Point(982, 41);
             button8.Name = "button8";
-            button8.Size = new Size(114, 23);
+            button8.Size = new Size(120, 23);
             button8.TabIndex = 67;
             button8.Text = "Dump Remainders";
             button8.UseVisualStyleBackColor = true;
@@ -893,7 +908,7 @@
             // label36
             // 
             label36.AutoSize = true;
-            label36.Location = new Point(651, 44);
+            label36.Location = new Point(765, 44);
             label36.Name = "label36";
             label36.Size = new Size(105, 15);
             label36.TabIndex = 80;
@@ -902,7 +917,7 @@
             // textBox22
             // 
             textBox22.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox22.Location = new Point(762, 41);
+            textBox22.Location = new Point(876, 41);
             textBox22.Name = "textBox22";
             textBox22.ReadOnly = true;
             textBox22.Size = new Size(100, 23);
@@ -911,7 +926,7 @@
             // textBox23
             // 
             textBox23.AccessibleDescription = "Remaining bytes at the end of the MAP0 section which have not been processed.";
-            textBox23.Location = new Point(750, 183);
+            textBox23.Location = new Point(876, 70);
             textBox23.Name = "textBox23";
             textBox23.ReadOnly = true;
             textBox23.Size = new Size(100, 23);
@@ -920,17 +935,143 @@
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(651, 186);
+            label37.Location = new Point(777, 73);
             label37.Name = "label37";
             label37.Size = new Size(92, 15);
             label37.TabIndex = 83;
             label37.Text = "Selected Offset :";
+            // 
+            // textBox24
+            // 
+            textBox24.Location = new Point(394, 224);
+            textBox24.Name = "textBox24";
+            textBox24.ReadOnly = true;
+            textBox24.Size = new Size(100, 23);
+            textBox24.TabIndex = 84;
+            // 
+            // textBox25
+            // 
+            textBox25.Location = new Point(394, 253);
+            textBox25.Name = "textBox25";
+            textBox25.ReadOnly = true;
+            textBox25.Size = new Size(100, 23);
+            textBox25.TabIndex = 85;
+            // 
+            // textBox26
+            // 
+            textBox26.Location = new Point(394, 282);
+            textBox26.Name = "textBox26";
+            textBox26.ReadOnly = true;
+            textBox26.Size = new Size(100, 23);
+            textBox26.TabIndex = 86;
+            // 
+            // textBox27
+            // 
+            textBox27.Location = new Point(394, 311);
+            textBox27.Name = "textBox27";
+            textBox27.ReadOnly = true;
+            textBox27.Size = new Size(100, 23);
+            textBox27.TabIndex = 87;
+            // 
+            // textBox28
+            // 
+            textBox28.Location = new Point(620, 50);
+            textBox28.Name = "textBox28";
+            textBox28.ReadOnly = true;
+            textBox28.Size = new Size(100, 23);
+            textBox28.TabIndex = 97;
+            // 
+            // textBox29
+            // 
+            textBox29.Location = new Point(620, 79);
+            textBox29.Name = "textBox29";
+            textBox29.ReadOnly = true;
+            textBox29.Size = new Size(100, 23);
+            textBox29.TabIndex = 96;
+            // 
+            // textBox30
+            // 
+            textBox30.Location = new Point(620, 108);
+            textBox30.Name = "textBox30";
+            textBox30.ReadOnly = true;
+            textBox30.Size = new Size(100, 23);
+            textBox30.TabIndex = 95;
+            // 
+            // textBox31
+            // 
+            textBox31.Location = new Point(620, 137);
+            textBox31.Name = "textBox31";
+            textBox31.ReadOnly = true;
+            textBox31.Size = new Size(100, 23);
+            textBox31.TabIndex = 94;
+            // 
+            // textBox32
+            // 
+            textBox32.Location = new Point(620, 166);
+            textBox32.Name = "textBox32";
+            textBox32.ReadOnly = true;
+            textBox32.Size = new Size(100, 23);
+            textBox32.TabIndex = 93;
+            // 
+            // textBox33
+            // 
+            textBox33.Location = new Point(620, 195);
+            textBox33.Name = "textBox33";
+            textBox33.ReadOnly = true;
+            textBox33.Size = new Size(100, 23);
+            textBox33.TabIndex = 92;
+            // 
+            // textBox34
+            // 
+            textBox34.Location = new Point(620, 224);
+            textBox34.Name = "textBox34";
+            textBox34.ReadOnly = true;
+            textBox34.Size = new Size(100, 23);
+            textBox34.TabIndex = 91;
+            // 
+            // textBox35
+            // 
+            textBox35.Location = new Point(620, 253);
+            textBox35.Name = "textBox35";
+            textBox35.ReadOnly = true;
+            textBox35.Size = new Size(100, 23);
+            textBox35.TabIndex = 90;
+            // 
+            // textBox36
+            // 
+            textBox36.Location = new Point(620, 282);
+            textBox36.Name = "textBox36";
+            textBox36.ReadOnly = true;
+            textBox36.Size = new Size(100, 23);
+            textBox36.TabIndex = 89;
+            // 
+            // textBox37
+            // 
+            textBox37.Location = new Point(620, 311);
+            textBox37.Name = "textBox37";
+            textBox37.ReadOnly = true;
+            textBox37.Size = new Size(100, 23);
+            textBox37.TabIndex = 88;
             // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1114, 583);
+            Controls.Add(textBox28);
+            Controls.Add(textBox29);
+            Controls.Add(textBox30);
+            Controls.Add(textBox31);
+            Controls.Add(textBox32);
+            Controls.Add(textBox33);
+            Controls.Add(textBox34);
+            Controls.Add(textBox35);
+            Controls.Add(textBox36);
+            Controls.Add(textBox37);
+            Controls.Add(textBox27);
+            Controls.Add(textBox26);
+            Controls.Add(textBox25);
+            Controls.Add(textBox24);
             Controls.Add(label37);
             Controls.Add(textBox23);
             Controls.Add(textBox22);
@@ -1108,5 +1249,19 @@
         private TextBox textBox22;
         private TextBox textBox23;
         private Label label37;
+        private TextBox textBox24;
+        private TextBox textBox25;
+        private TextBox textBox26;
+        private TextBox textBox27;
+        private TextBox textBox28;
+        private TextBox textBox29;
+        private TextBox textBox30;
+        private TextBox textBox31;
+        private TextBox textBox32;
+        private TextBox textBox33;
+        private TextBox textBox34;
+        private TextBox textBox35;
+        private TextBox textBox36;
+        private TextBox textBox37;
     }
 }
