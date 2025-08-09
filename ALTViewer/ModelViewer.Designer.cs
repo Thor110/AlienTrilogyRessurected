@@ -36,6 +36,7 @@
             label1 = new Label();
             label2 = new Label();
             button3 = new Button();
+            label3 = new Label();
             SuspendLayout();
             // 
             // listBox1
@@ -109,11 +110,21 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(138, 171);
+            label3.Name = "label3";
+            label3.Size = new Size(406, 15);
+            label3.TabIndex = 8;
+            label3.Text = "Note : M036 and M039 from OBJ3D are untextured and unused in the game.";
+            // 
             // ModelViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 237);
+            Controls.Add(label3);
             Controls.Add(button3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -137,5 +148,6 @@
         private Label label1;
         private Label label2;
         private Button button3;
+        private Label label3;
     }
 }

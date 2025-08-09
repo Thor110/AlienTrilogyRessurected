@@ -41,7 +41,7 @@ namespace ALTViewer
             byte Speed,
             byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> enemies = new();
-        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Unk1, byte Z, byte Unk2, long Offset)> pickups = new();
+        private List<(byte X, byte Y, byte Type, byte Amount, byte Multiplier, byte Z, byte Unk2, long Offset)> pickups = new();
         private List<(byte X, byte Y, byte ObjectType, byte DropType,
             byte Unk1, byte Unk2, byte DropOne, byte DropTwo, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Rotation, byte Unk9,
             long Offset)> objects = new();
@@ -418,8 +418,8 @@ namespace ALTViewer
                 // 17 - Adrenaline Burst
                 // 18 - Derm Patch
                 // 19 - Shoulder Lamp
-                // 1A - Shotgun Cartridge   ( Cannot be picked up )
-                // 1B - Grenades            ( Cannot be picked up )
+                // 1A - Shotgun Cartridge       ( Cannot be picked up )
+                // 1B - Grenades                ( Cannot be picked up )
                 // 1C - Crashes when near the object
                 // 1D - Crashes when near the object
                 // 1E - Crashes when near the object
@@ -427,10 +427,10 @@ namespace ALTViewer
                 // 20 - Crashes when near the object
                 byte amount = br.ReadByte();
                 byte multiplier = br.ReadByte();
-                byte unk1 = br.ReadByte(); // unk1
-                byte z = br.ReadByte();
-                byte unk2 = br.ReadByte(); // unk2
-                pickups.Add((x, y, type, amount, multiplier, unk1, z, unk2, offset));
+                br.ReadByte();                      // padding / unused / zero for every pickup across every level
+                byte z = br.ReadByte();             // only ever 0 or 1 across every level in the game
+                byte unk2 = br.ReadByte();          // unk2 is always the same as amount for ammunition
+                pickups.Add((x, y, type, amount, multiplier, z, unk2, offset));
             }
             //MessageBox.Show($"Boxes : {br.BaseStream.Position}"); // 478492 + 20 = 478512 + 568 = 479080 ( L111LEV.MAP )
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
@@ -440,32 +440,44 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte objectType = br.ReadByte();
-                byte dropType = br.ReadByte(); // 0 = Pickup 2 = Enemy
-                byte unk1 = br.ReadByte(); //
-                byte unk2 = br.ReadByte(); //
-                byte dropOne = br.ReadByte(); // index of first pickup dropped
-                byte dropTwo = br.ReadByte(); // index of second pickup dropped
-                byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();
-                byte unk5 = br.ReadByte();
-                byte unk6 = br.ReadByte();
-                byte unk7 = br.ReadByte();
-                byte unk8 = br.ReadByte();
-                byte rotation = br.ReadByte();
-                byte unk9 = br.ReadByte(); // drop spawn rotation or speed?
-                // Object Types (int)
-                // 19 - a box that cannot be blown up
-                // 20 - a regular box that can be blown up
-                // 21 - empty object(at the moment), maybe a switch for levels on the ship
-                // 22 - another small switch, the difference is at the bottom of the model(lightning is drawn)
+                // My Object Types (int) - indented = unused
+                    // less than 20 - a box that cannot be blown up
+                // 20 - a regular box that can be blown up ( or an egg husk if in chapter 3 )
+                // 21 - destructible walls
+                // 22 - another small switch, the difference is at the bottom of the model ( lightning is drawn )
                 // 23 - barrel explodes.
-                // 24 - switch with animation(small switch)
-                // 25 - "double box"(two boxes on top of each other that can be blown up)
+                // 24 - switch with animation ( small switch )
+                // 25 - double stacked boxes ( two boxes on top of each other that can be blown up )
                 // 26 - wide switch with zipper
                 // 27 - wide switch without zipper
                 // 28 - an empty object that can be shot
                 // 29 - an empty object that can be shot through, something will spawn on death
-                // 30 - is a regular box that can be blown up
+                    // 30 - is not used across any level in the game
+                    // 31 - a regular box that can be blown up
+                // 32 - Strange Little Yellow Square
+                // 33 - Steel Coil
+                    // 34 - Strange Unused Shape
+                    // 35 - Light Pylon With No Texture, Completely Red...
+                    // 36 - Strange Tall Square ( improperly textured )
+                    // 37 - Egg Husk Shape ( untextured )
+                    // 38 - a regular box that can be blown up
+                    // 39 - a regular box that can be blown up
+                    // 40 - a regular box that can be blown up
+                    // 41 - a regular box that can be blown up
+                //74FC8
+                byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
+                byte dropOne = br.ReadByte();       // index of first pickup dropped
+                byte dropTwo = br.ReadByte();       // index of second pickup dropped
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                byte unk5 = br.ReadByte();
+                byte unk6 = br.ReadByte();          // only ever 0 across every level in the game
+                byte unk7 = br.ReadByte();
+                byte unk8 = br.ReadByte();          // only ever 0 across every level in the game
+                byte rotation = br.ReadByte();      // 0 / 2 / 4 / 6
+                byte unk9 = br.ReadByte();          // only ever 0 across every level in the game
                 objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk6, unk7, unk8, rotation, unk9, offset));
             }
             //MessageBox.Show($"Doors : {br.BaseStream.Position}"); // 479196 + 20 = 479216 + 568 = 479784 ( L111LEV.MAP )
@@ -475,10 +487,10 @@ namespace ALTViewer
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
-                byte unk1 = br.ReadByte(); // unk1 // speed or sound? // always 0 in L111LEV.MAP // 64 or 0 on L351LEV.MAP
+                byte unk1 = br.ReadByte();          // only ever 64 or 0 across every level in the game
                 byte time = br.ReadByte();
                 byte tag = br.ReadByte();
-                byte unk2 = br.ReadByte(); // unk2 // speed or sound? // always 0 in L111LEV.MAP
+                byte unk2 = br.ReadByte();          // only ever 0 across every level in the game
                 byte rotation = br.ReadByte();
                 // Byte Direction  Facing
                 // 00 - North   // Y+
@@ -614,7 +626,7 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             exporting = true;
-            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
@@ -622,7 +634,7 @@ namespace ALTViewer
                 button5_Click(null!, null!);
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            //listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
 
             GenerateDebugTextures();
@@ -673,7 +685,7 @@ namespace ALTViewer
             textBox15.Text = $"Type : {pickups[index].Type}";
             textBox16.Text = $"Amount : {pickups[index].Amount}";
             textBox17.Text = $"Multiplier : {pickups[index].Multiplier}";
-            textBox18.Text = $"Unk1 : {pickups[index].Unk1}";
+            textBox18.Text = "Unused : 0";
             textBox24.Text = $"Z : {pickups[index].Z}";
             textBox25.Text = $"Unk2 : {pickups[index].Unk2}";
             textBox26.Text = "null";
