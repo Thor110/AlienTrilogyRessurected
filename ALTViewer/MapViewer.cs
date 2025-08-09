@@ -34,7 +34,7 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
-        private List<(byte U1, byte U2, byte U3, byte U4, byte U5, byte U6, byte U7, byte U8, long Offset)> unknown = new(); // UNKNOWN
+        private List<(byte X, byte Y, byte U3, byte U4, byte U5, byte U6, byte U7, byte U8, long Offset)> unknown = new(); // UNKNOWN
         private List<(byte Type, byte X, byte Y, byte Z,
             byte Rotation,
             byte Health, byte Drop,
@@ -310,15 +310,15 @@ namespace ALTViewer
             for (int i = 0; i < unknownCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
-                byte U1 = br.ReadByte();
-                byte U2 = br.ReadByte();
+                byte x = br.ReadByte();             // x coordinate of the unknown object
+                byte y = br.ReadByte();             // y coordinate of the unknown object
                 byte U3 = br.ReadByte();
                 byte U4 = br.ReadByte();
                 byte U5 = br.ReadByte();
                 byte U6 = br.ReadByte();
                 byte U7 = br.ReadByte();
                 byte U8 = br.ReadByte();
-                unknown.Add((U1, U2, U3, U4, U5, U6, U7, U8, offset));
+                unknown.Add((x, y, U3, U4, U5, U6, U7, U8, offset));
             }
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
             for (int i = 0; i < monsterCount; i++) // 28
@@ -449,8 +449,8 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte objectType = br.ReadByte();
-                // My Object Types (int) - indented = unused
-                // less than 20 - a box that cannot be blown up
+                // My Object Types (int) - indented = unused across all levels
+                // // // less than 20 - a box that cannot be blown up
                 // 20 - a regular box that can be blown up ( or an egg husk if in chapter 3 )
                 // 21 - destructible walls
                 // 22 - another small switch, the difference is at the bottom of the model ( lightning is drawn )
@@ -461,18 +461,18 @@ namespace ALTViewer
                 // 27 - wide switch without zipper
                 // 28 - an empty object that can be shot
                 // 29 - an empty object that can be shot through, something will spawn on death
-                // 30 - is not used across any level in the game
-                // 31 - a regular box that can be blown up
+                // // // 30 - is not used across any level in the game
+                // // // 31 - a regular box that can be blown up
                 // 32 - Strange Little Yellow Square
                 // 33 - Steel Coil
-                // 34 - Strange Unused Shape
-                // 35 - Light Pylon With No Texture, Completely Red...
-                // 36 - Strange Tall Square ( improperly textured )
-                // 37 - Egg Husk Shape ( untextured )
-                // 38 - a regular box that can be blown up
-                // 39 - a regular box that can be blown up
-                // 40 - a regular box that can be blown up
-                // 41 - a regular box that can be blown up
+                // // // 34 - Strange Unused Shape
+                // // // 35 - Light Pylon With No Texture, Completely Red...
+                // // // 36 - Strange Tall Square ( improperly textured )
+                // // // 37 - Egg Husk Shape ( untextured )
+                // // // 38 - a regular box that can be blown up
+                // // // 39 - a regular box that can be blown up
+                // // // 40 - a regular box that can be blown up
+                // // // 41 - a regular box that can be blown up
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
@@ -798,8 +798,8 @@ namespace ALTViewer
         {
             RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8 });
             int index = listBox9.SelectedIndex;
-            textBox13.Text = $"U1 : {unknown[index].U1}";
-            textBox14.Text = $"U2 : {unknown[index].U2}";
+            textBox13.Text = $"X : {unknown[index].X}";
+            textBox14.Text = $"Y : {unknown[index].Y}";
             textBox16.Text = $"U3 : {unknown[index].U3}";
             textBox15.Text = $"U4 : {unknown[index].U4}";
             textBox17.Text = $"U5 : {unknown[index].U5}";
