@@ -180,8 +180,84 @@ namespace ALTViewer
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
             ushort unknown1 = br.ReadUInt16();              //2 - always different  ( unknown )
+            // Chapter 1 ( unknown 3 )
+            // L111LEV - 0A 00
+            // L112LEV - 1D 00
+            // L113LEV - 6D 00
+            // L122LEV - 16 00
+            // L131LEV - 52 00
+            // L114LEV - 6B 00
+            // L141LEV - 16 00
+            // L115LEV - 6D 00
+            // L154LEV - 5D 00
+            // L155LEV - 03 00
+            // L161LEV - 30 00
+            // L162LEV - 00 00
+            // Chapter 2 ( unknown 3 )
+            // L211LEV - 6F 00
+            // L212LEV - B0 00
+            // L213LEV - 06 00
+            // L222LEV - 9E 00
+            // L242LEV - 00 00
+            // L231LEV - 17 00
+            // L232LEV - 62 00
+            // L243LEV - 00 00
+            // L262LEV - 0A 00
+            // L263LEV - 02 00
+            // Chapter 3 ( unknown 3 )
+            // L311LEV - 0A 00
+            // L321LEV - 12 00
+            // L331LEV - 1C 00
+            // L322LEV - 12 00
+            // L351LEV - 1D 00
+            // L352LEV - 0F 00
+            // L323LEV - 12 00
+            // L371LEV - 1A 00
+            // L353LEV - 0F 00
+            // L324LEV - 12 00
+            // L381LEV - 1C 00
+            // L325LEV - 18 00
+            // L391LEV - 0C 00
             br.ReadBytes(2);                                //2 - always 0x4040     ( unknown )
             ushort unknown2 = br.ReadUInt16();              //2 - always different  ( unknown )
+            // Chapter 1 ( unknown 3 )
+            // L111LEV - 14 00
+            // L112LEV - 57 01
+            // L113LEV - 34 00
+            // L122LEV - 71 00
+            // L131LEV - 8F 00
+            // L114LEV - 2C 00
+            // L141LEV - 30 00
+            // L115LEV - 34 00
+            // L154LEV - 01 01
+            // L155LEV - 0C 00
+            // L161LEV - 54 00
+            // L162LEV - 00 00
+            // Chapter 2 ( unknown 3 )
+            // L211LEV - D1 00
+            // L212LEV - EC 00
+            // L213LEV - 1D 00
+            // L222LEV - 28 01
+            // L242LEV - 00 00
+            // L231LEV - 69 00
+            // L232LEV - 74 01
+            // L243LEV - 00 00
+            // L262LEV - 60 00
+            // L263LEV - 0C 00
+            // Chapter 3 ( unknown 3 )
+            // L311LEV - 52 00
+            // L321LEV - 54 00
+            // L331LEV - 7E 00
+            // L322LEV - 54 00
+            // L351LEV - 8E 00
+            // L352LEV - 78 00
+            // L323LEV - 54 00
+            // L371LEV - 8E 00
+            // L353LEV - 78 00
+            // L324LEV - 54 00
+            // L381LEV - 78 00
+            // L325LEV - 54 00
+            // L391LEV - 55 00
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( unknown 3 )
             // L111LEV - 22 00 // 2 / 6
@@ -285,14 +361,19 @@ namespace ALTViewer
                     offset));
             }
             // L111LEV - 22 00 // 2 / 6
+            // L131LEV - 26 04 // 2 / 6 / 11 / 3
             // for testing purposes only
-            /*BinaryUtility.ReplaceByte(0x34, 0x22, "L111LEV.MAP");
-            BinaryUtility.ReplaceByte(0x35, 0x00, "L111LEV.MAP");
+            /*BinaryUtility.ReplaceByte(0x34, 0x26, "L111LEV.MAP");
+            BinaryUtility.ReplaceByte(0x35, 0x04, "L111LEV.MAP");
             foreach (var enemy in enemies)
             {
                 if(enemy.Type != 6)
                 {
-                    BinaryUtility.ReplaceByte(enemy.Offset, 0x02, "L111LEV.MAP");
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x03, "L111LEV.MAP");
+                }
+                else
+                {
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x0B, "L111LEV.MAP");
                 }
             }*/
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
