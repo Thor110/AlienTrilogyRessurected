@@ -285,20 +285,14 @@ namespace ALTViewer
                     offset));
             }
             // L111LEV - 22 00 // 2 / 6
-            // L154LEV - 23 10 // 6 / 1 / 2 / 13 / 16 / 17 / 19
-            // L155LEV - 0C 00 // 18 / 16 / 19 // ???????
             // for testing purposes only
-            /*BinaryUtility.ReplaceByte(0x34, 0x23, "L111LEV.MAP");
-            BinaryUtility.ReplaceByte(0x35, 0x10, "L111LEV.MAP");
+            /*BinaryUtility.ReplaceByte(0x34, 0x22, "L111LEV.MAP");
+            BinaryUtility.ReplaceByte(0x35, 0x00, "L111LEV.MAP");
             foreach (var enemy in enemies)
             {
                 if(enemy.Type != 6)
                 {
-                    BinaryUtility.ReplaceByte(enemy.Offset, 0x13, "L111LEV.MAP");
-                }
-                else
-                {
-                    BinaryUtility.ReplaceByte(enemy.Offset, 0x13, "L111LEV.MAP");
+                    BinaryUtility.ReplaceByte(enemy.Offset, 0x02, "L111LEV.MAP");
                 }
             }*/
             //MessageBox.Show($"Pickups : {br.BaseStream.Position}"); // 478268 + 20 = 478288 ( L111LEV.MAP )
