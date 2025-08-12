@@ -34,6 +34,10 @@ namespace ALTViewer
         private string selectedLevelFile = ""; // selected level file path
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
+
+        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
+            byte Unk14, byte Unk15, byte Unk16,
+            long Offset)> collisionBlocks = new();
         private List<(byte X, byte Y, byte AlternateNode, byte NodeA, byte NodeB, byte NodeC, byte NodeD, long Offset)> paths = new(); // UNKNOWN
         private List<(byte Type, byte X, byte Y, byte Z,
             byte Rotation,
@@ -349,19 +353,7 @@ namespace ALTViewer
             // L262LEV - 00 00
             // L263LEV - 00 00
             // Chapter 3 ( unknown 3 )
-            // L311LEV - 00 00
-            // L321LEV - 00 00
-            // L331LEV - 00 00
-            // L322LEV - 00 00
-            // L351LEV - 00 00
-            // L352LEV - 00 00
-            // L323LEV - 00 00
-            // L371LEV - 00 00
-            // L353LEV - 00 00
-            // L324LEV - 00 00
-            // L381LEV - 00 00
-            // L325LEV - 00 00
-            // L391LEV - 00 00
+            // All Chapter 3 Levels = 00 00
             // Multiplayer Levels ( unknown 3 )
             // All = 00 00
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
@@ -370,7 +362,32 @@ namespace ALTViewer
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
             // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             // collision 16 //4//2//2//1//1//1//1//2//1//1
-            br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
+            //br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
+
+            int collisionBlockCount = mapLength * mapWidth; // collision blocks size data for now
+
+            for (int i = 0; i < collisionBlockCount; i++)
+            {
+                long offset = br.BaseStream.Position + 20;  // offset for reference
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                byte unk5 = br.ReadByte();
+                byte unk6 = br.ReadByte();
+                byte unk7 = br.ReadByte();
+                byte unk8 = br.ReadByte();
+                byte unk9 = br.ReadByte();
+                byte unk10 = br.ReadByte();
+                byte unk11 = br.ReadByte();
+                byte unk12 = br.ReadByte();
+                byte unk13 = br.ReadByte();
+                byte unk14 = br.ReadByte();
+                byte unk15 = br.ReadByte();
+                byte unk16 = br.ReadByte();
+                collisionBlocks.Add((unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13, unk14, unk15, unk16, offset));
+            }
+
             for (int i = 0; i < pathCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -575,19 +592,19 @@ namespace ALTViewer
                 byte x = br.ReadByte();             // x coordinate of the lift
                 byte y = br.ReadByte();             // y coordinate of the lift
                 byte z = br.ReadByte();             // z coordinate of the lift
-                byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();
-                byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();
-                byte unk5 = br.ReadByte();
-                byte unk6 = br.ReadByte();
-                byte unk7 = br.ReadByte();
-                byte unk8 = br.ReadByte();
-                byte unk9 = br.ReadByte();
-                byte unk10 = br.ReadByte();
-                byte unk11 = br.ReadByte();
-                byte unk12 = br.ReadByte();
-                byte unk13 = br.ReadByte();
+                byte unk1 = br.ReadByte();          // this byte is always 0, 1, 2, 3, 4, 5 or 6 across every level in the game
+                byte unk2 = br.ReadByte();          // this byte is always 0 across every level in the game
+                byte unk3 = br.ReadByte();          // this byte is always 24, 27, 31, 32, 43, 44, 46, 47, 48, 50, 52, 56, 63, 64, 68, 79, 80, 84, 95 or 224 across every level in the game
+                byte unk4 = br.ReadByte();          // this byte is always 1 across every level in the game
+                byte unk5 = br.ReadByte();          // this byte is always 1, 4, 5 or 17 across every level in the game
+                byte unk6 = br.ReadByte();          // this byte is always 0, 1 or 60 across every level in the game
+                byte unk7 = br.ReadByte();          // this byte is always 0, 30, 50, 60, 90, 120, 150, 190, 210, 240 or 255 across every level in the game
+                byte unk8 = br.ReadByte();          // this byte is always 1, 2, 3, 4, 5, 6, 7, 10, 25 or 35  across every level in the game
+                byte unk9 = br.ReadByte();          // this byte is always 0 across every level in the game
+                byte unk10 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 across every level in the game
+                byte unk11 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
+                byte unk12 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
+                byte unk13 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 lifts.Add((x, y, z,
                     unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13,
                     offset));
@@ -597,14 +614,17 @@ namespace ALTViewer
             textBox19.Text = remainingBytes.ToString();                             // display remaining bytes
             remainder = br.ReadBytes((int)remainingBytes);                          // for dumping remaining bytes
             // clear list boxes
-            listBox9.Items.Clear(); // clear unknowns
+            listBox10.Items.Clear(); // clear collision blocks
+            listBox9.Items.Clear(); // clear path nodes
             listBox3.Items.Clear(); // clear monsters
             listBox4.Items.Clear(); // clear pickups
             listBox5.Items.Clear(); // clear objects
             listBox6.Items.Clear(); // clear doors
             listBox8.Items.Clear(); // clear lifts
             // populate list boxes
-            for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Unknown {i}"); }
+            for (int i = 0; i < collisionBlockCount; i++) { listBox10.Items.Add($"Collision Block {i}"); }
+            // TODO : draw level map
+            for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Path Node {i}"); }
             for (int i = 0; i < monsterCount; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickupCount; i++) { listBox4.Items.Add($"Pickup {i}"); }
             for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
@@ -720,7 +740,7 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10 });
             int index = listBox3.SelectedIndex;
             textBox13.Text = $"Type : {monsters[index].Type}";
             textBox14.Text = $"X : {monsters[index].X}";
@@ -747,7 +767,7 @@ namespace ALTViewer
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9, listBox10 });
             int index = listBox4.SelectedIndex;
             textBox13.Text = $"X : {pickups[index].X}";
             textBox14.Text = $"Y : {pickups[index].Y}";
@@ -774,7 +794,7 @@ namespace ALTViewer
         // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9, listBox10 });
             int index = listBox5.SelectedIndex;
             textBox13.Text = $"X : {objects[index].X}";
             textBox14.Text = $"Y : {objects[index].Y}";
@@ -801,7 +821,7 @@ namespace ALTViewer
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9, listBox10 });
             int index = listBox6.SelectedIndex;
             textBox13.Text = $"X : {doors[index].X}";
             textBox14.Text = $"Y : {doors[index].Y}";
@@ -828,7 +848,7 @@ namespace ALTViewer
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9, listBox10 });
             int index = listBox8.SelectedIndex;
             textBox13.Text = $"X : {lifts[index].X}";
             textBox14.Text = $"Y : {lifts[index].Y}";
@@ -855,7 +875,7 @@ namespace ALTViewer
         // path nodes
         private void listBox9_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox10 });
             int index = listBox9.SelectedIndex;
             textBox13.Text = $"X : {paths[index].X}";
             textBox14.Text = $"Y : {paths[index].Y}";
@@ -878,6 +898,33 @@ namespace ALTViewer
             textBox36.Text = "null";
             textBox37.Text = "null";
             textBox23.Text = $"{paths[index].Offset:X2}";
+        }
+        // collision blocks
+        private void listBox10_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox9 });
+            int index = listBox10.SelectedIndex;
+            textBox13.Text = $"Unk1 : {collisionBlocks[index].Unk1}";
+            textBox14.Text = $"Unk2 : {collisionBlocks[index].Unk2}";
+            textBox15.Text = $"Unk3 : {collisionBlocks[index].Unk3}";
+            textBox16.Text = $"Unk4 : {collisionBlocks[index].Unk4}";
+            textBox17.Text = $"Unk5 : {collisionBlocks[index].Unk5}";
+            textBox18.Text = $"Unk6 : {collisionBlocks[index].Unk6}";
+            textBox24.Text = $"Unk7 : {collisionBlocks[index].Unk7}";
+            textBox25.Text = $"Unk8 : {collisionBlocks[index].Unk8}";
+            textBox26.Text = $"Unk9 : {collisionBlocks[index].Unk9}";
+            textBox27.Text = $"Unk10 : {collisionBlocks[index].Unk10}";
+            textBox28.Text = $"Unk11 : {collisionBlocks[index].Unk11}";
+            textBox29.Text = $"Unk12 : {collisionBlocks[index].Unk12}";
+            textBox30.Text = $"Unk13 : {collisionBlocks[index].Unk13}";
+            textBox31.Text = $"Unk14 : {collisionBlocks[index].Unk14}";
+            textBox32.Text = $"Unk15 : {collisionBlocks[index].Unk15}";
+            textBox33.Text = $"Unk16 : {collisionBlocks[index].Unk16}";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{collisionBlocks[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
@@ -904,6 +951,7 @@ namespace ALTViewer
                 ListBox lb when lb == listBox6 => listBox6_SelectedIndexChanged!,
                 ListBox lb when lb == listBox8 => listBox8_SelectedIndexChanged!,
                 ListBox lb when lb == listBox9 => listBox9_SelectedIndexChanged!,
+                ListBox lb when lb == listBox10 => listBox10_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
