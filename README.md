@@ -366,7 +366,7 @@ Here is how the level was originally.
   <img src="Images/L141LEV-texture.png" alt="L141LEV Original">
 </div>
 
-Here it is with the fixes I applied to the level.
+Here it is with the fix I applied to the level.
 
 <div align="center">
   <img src="Images/L141LEV-texture-fixed.png" alt="L141LEV Patched">
