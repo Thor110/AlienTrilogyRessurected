@@ -85,6 +85,9 @@ The road map for this project.
 	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEV-Fix-1)
 	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
 - [✅ 8 : Easter Eggs](#easter-eggs) ( ??% Complete )
+	- [Grade 33 Steel](#easter-egg-1)
+	- [End Times](#easter-egg-2)
+	- [Cheats](#easter-egg-3)
 
 And possibly more to come.
 
