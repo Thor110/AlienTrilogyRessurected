@@ -366,6 +366,14 @@ Here is how the level was originally.
   <img src="Images/L141LEV-texture.png" alt="L141LEV Original">
 </div>
 
+Here it is with the fixes I applied to the level.
+
+<div align="center">
+  <img src="Images/L141LEV-texture-fixed.png" alt="L141LEV Patched">
+</div>
+
+Here is how the level was originally.
+
 <div align="center">
   <img src="Images/L141LEV-texture-2.png" alt="L141LEV Original">
 </div>
@@ -373,14 +381,12 @@ Here is how the level was originally.
 Here it is with the fixes I applied to the level.
 
 <div align="center">
-  <img src="Images/L141LEV-texture-fixed.png" alt="L141LEV Patched">
-</div>
-
-<div align="center">
   <img src="Images/L141LEV-texture-fixed-2.png" alt="L141LEV Patched">
 </div>
 
 Currently this is only fixed when exporting the level model.
+
+There are a few other similar issues with textures that I have fixed but which I have not screenshotted here, the exact indices of the faces which have been adjusted can be found in the code : (https://github.com/Thor110/AlienTrilogyResurrection/blob/main/ALTViewer/ModelRenderer.cs#L267)
 
 ## L161LEV Fix 1
 
