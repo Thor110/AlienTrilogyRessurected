@@ -207,7 +207,7 @@ namespace ALTViewer
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             byte pathCount = br.ReadByte();                 // path count
             textBox21.Text = pathCount.ToString();          // display path count
-            br.ReadByte();                                  // unknown 1 ( unused? 128 on all levels ) - possibly lighting related
+            br.ReadByte();                                  // UNKNOWN 0 ( unused? 128 on all levels ) - possibly lighting related
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
@@ -494,7 +494,7 @@ namespace ALTViewer
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();             // x coordinate of the pathing object
                 byte y = br.ReadByte();             // y coordinate of the pathing object
-                br.ReadByte();                      // padding or unused byte
+                br.ReadByte();                      // only ever 0 across every level in the game
                 byte alternateNode = br.ReadByte(); // alternate node of the pathing object for special behaviours
                 byte nodeA = br.ReadByte();         // node A of the pathing object
                 byte nodeB = br.ReadByte();         // node B of the pathing object
@@ -541,19 +541,19 @@ namespace ALTViewer
                                                     // 07 - North West  // X- Y+
                 byte health = br.ReadByte();        // health of the monster
                 byte drop = br.ReadByte();          // index of object to be dropped
-                byte unk2 = br.ReadByte();          // 
+                byte unk2 = br.ReadByte();          // UNKNOWN
                 byte difficulty = br.ReadByte();    // 0 - Easy, 1 - Medium, 2 - Hard
-                byte unk4 = br.ReadByte();          // 
-                byte unk5 = br.ReadByte();          // 
-                byte unk6 = br.ReadByte();          // 
-                byte unk7 = br.ReadByte();          // 
-                byte unk8 = br.ReadByte();          // 
+                byte unk4 = br.ReadByte();          // UNKNOWN
+                byte unk5 = br.ReadByte();          // UNKNOWN
+                byte unk6 = br.ReadByte();          // UNKNOWN
+                byte unk7 = br.ReadByte();          // UNKNOWN
+                byte unk8 = br.ReadByte();          // UNKNOWN
                 byte speed = br.ReadByte();         // speed of the monster
                 br.ReadByte();                      // only ever 0 across every level in the game
-                byte unk10 = br.ReadByte();         // 
-                byte unk11 = br.ReadByte();         // 
-                byte unk12 = br.ReadByte();         // 
-                byte unk13 = br.ReadByte();         // 
+                byte unk10 = br.ReadByte();         // UNKNOWN
+                byte unk11 = br.ReadByte();         // UNKNOWN
+                byte unk12 = br.ReadByte();         // UNKNOWN
+                byte unk13 = br.ReadByte();         // UNKNOWN
                 monsters.Add((type, x, y, z, rotation, health, drop,
                     unk2, difficulty, unk4, unk5, unk6, unk7, unk8,
                     speed,
@@ -619,9 +619,9 @@ namespace ALTViewer
                 // 20 - Crashes when near the object
                 byte amount = br.ReadByte();        // amount of the pickup
                 byte multiplier = br.ReadByte();    // multiplier for the pickup
-                br.ReadByte();                      // padding / unused / zero for every pickup across every level
+                br.ReadByte();                      // only ever 0 across every level in the game
                 byte z = br.ReadByte();             // only ever 0 or 1 across every level in the game
-                byte unk2 = br.ReadByte();          // unk2 is always the same as amount for ammunition
+                byte unk2 = br.ReadByte();          // UNKNOWN - unk2 is always the same as amount for ammunition
                 pickups.Add((x, y, type, amount, multiplier, z, unk2, offset));
             }
             // boxes formula = number of elements multiplied by 16 - (16 bytes per box)
@@ -653,15 +653,15 @@ namespace ALTViewer
                 // // // 37 - Egg Husk Shape ( untextured )                                                             [INDESTRUCTIBLE]
                 // // // greater than 37 - a regular box that can be blown up                                           [DESTRUCTIBLE]      PISTOL          YES
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
-                byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
+                byte unk1 = br.ReadByte();          // UNKNOWN
+                byte unk2 = br.ReadByte();          // UNKNOWN - only ever 0 or 10 across every level in the game
                 byte dropOne = br.ReadByte();       // index of first pickup dropped
                 byte dropTwo = br.ReadByte();       // index of second pickup dropped
-                byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();
-                byte unk5 = br.ReadByte();
+                byte unk3 = br.ReadByte();          // UNKNOWN
+                byte unk4 = br.ReadByte();          // UNKNOWN
+                byte unk5 = br.ReadByte();          // UNKNOWN
                 br.ReadByte();                      // only ever 0 across every level in the game
-                byte unk7 = br.ReadByte();
+                byte unk7 = br.ReadByte();          // UNKNOWN
                 br.ReadByte();                      // only ever 0 across every level in the game
                 byte rotation = br.ReadByte();      // Byte Direction  Facing
                                                     // 00 - North   // Y+
@@ -677,7 +677,7 @@ namespace ALTViewer
                 long offset = br.BaseStream.Position + 20;  // offset for reference
                 byte x = br.ReadByte();             // x coordinate of the door
                 byte y = br.ReadByte();             // y coordinate of the door
-                byte unk1 = br.ReadByte();          // only ever 64 or 0 across every level in the game
+                byte unk1 = br.ReadByte();          // UNKNOWN - only ever 64 or 0 across every level in the game
                 byte time = br.ReadByte();          // door open time
                 byte tag = br.ReadByte();           // door tag
                 br.ReadByte();                      // only ever 0 across every level in the game
