@@ -84,13 +84,13 @@ There are four variants of the Boneship switch, but they are all identical.
 13 - Smart Gun Ammunition
 14 - ID Badge
 15 - Auto Mapper
-16 - Medikit
-17 - Armour
-18 - Armour
-19 - Medikit
+16 - Hypo Pack
+17 - Acid Vest
+18 - Body Suit
+19 - Medi Kit
 20 - Dermpatch
 21 - Boots
-22 - Medical Gun?
+22 - Adrenaline Burst
 	M024 Doesn't exist.
 23 - Shoulder Lamp
 24 - Shotgun Ammunition
