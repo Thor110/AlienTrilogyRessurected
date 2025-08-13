@@ -427,8 +427,7 @@ The object type is stored in a byte (0-255) so if the assignment is random and e
 
 These two level textures contain the message "SATAN LIVES HERE"
 
-351GFX_TP00
-371GFX_TP00
+351GFX_TP00 and 371GFX_TP00
 
 <div align="center">
   <img src="Images/easteregg-endtimes.png" alt="End Times!">
