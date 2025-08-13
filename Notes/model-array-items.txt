@@ -1,0 +1,97 @@
+Read Models Into Arrays
+
+Special cases for textures and UVs can be found in ModelRenderer.ExportModel
+
+These will be their index values
+
+There are four variants of the Boneship switch, but they are all identical.
+
+	OBJ3D
+0 - Explosive Barrel
+1 - Single Crate
+2 - Double Crate
+3 - Switch Red Left Light
+4 - Switch Red Right Light
+5 - Switch Both Lights Off
+6 - Switch Both Lights Yellow
+7 - Large Switch Red Left Light
+8 - Large Switch Red Right Light
+9 - Large Switch Both Lights Off
+10 - Large Switch Both Lights Yellow
+11 - Switch Battery Red Left Light
+12 - Switch Battery Red Right Light
+13 - Switch Battery Both Lights Off
+14 - Switch Battery Both Lights Yellow
+15 - Large Switch Battery Red Left Light
+16 - Large Switch Battery Red Right Light
+17 - Large Switch Battery Both Lights Off
+18 - Large Switch Battery Both Lights Yellow
+19 - Boneship Switch Red Left Light
+20 - Boneship Switch Red Right Light
+21 - Boneship Switch Both Lights Off
+22 - Boneship Switch Both Lights Yellow
+23 - Boneship Switch Red Left Light
+24 - Boneship Switch Red Right Light
+25 - Boneship Switch Both Lights Off
+26 - Boneship Switch Both Lights Yellow
+27 - Boneship Switch Red Left Light
+28 - Boneship Switch Red Right Light
+29 - Boneship Switch Both Lights Off
+30 - Boneship Switch Both Lights Yellow
+31 - Boneship Switch Red Left Light
+32 - Boneship Switch Red Right Light
+33 - Boneship Switch Both Lights Off
+34 - Boneship Switch Both Lights Yellow
+35 - Steel Coil
+36 - Unused Shape
+37 - Pylon ( Unused )
+38 - Computer ( Unused? )
+39 - Egg Husk Shape Untextured
+40 - Stasis Pod Cover
+41 - Egg Husk
+
+	OPTOBJ
+0 - Joystick
+1 - Camera
+2 - Gamepad
+3 - Multitap?
+4 - Hard Drive Saving <-
+5 - Hard Drive Loading ->
+6 - Camera Crossed Out
+7 - Keyboard
+8 - Mouse
+9 - Computer, Monitor and Keyboard
+10 - Two Linked Computers, Monitors and Keyboards
+11 - Speaker ( Disc )
+12 - Speaker ( Music )
+13 - Headphones
+
+	PICKMOD
+0 - Pistol
+1 - Shotgun
+2 - Pulse Rifle
+3 - Flamethrower
+4 - Smart Gun
+	M005 doesn't exist.
+5 - Seismic Charge
+6 - Battery
+7 - Night Vision Goggles
+8 - Pistol Clip
+9 - Shotgun Shell
+10 - Pulse Rifle Clip
+11 - Pulse Rifle Grenade
+12 - Flamethrower Fuel
+13 - Smart Gun Ammunition
+14 - ID Badge
+15 - Auto Mapper
+16 - Medikit
+17 - Armour
+18 - Armour
+19 - Medikit
+20 - Dermpatch
+21 - Boots
+22 - Medical Gun?
+	M024 Doesn't exist.
+23 - Shoulder Lamp
+24 - Shotgun Ammunition
+25 - Pistol Shell
