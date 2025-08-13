@@ -342,15 +342,59 @@ Currently this is only fixed when exporting the level model.
 
 These fixes are the same as on L900LEV
 
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L111LEV-texture-fixed.png" alt="L111LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L111LEV-texture.png" alt="L111LEV Patched">
+</div>
+
 Currently this is only fixed when exporting the level model.
 
 ## L141LEV Fix 1
 
 These fixes are the same as on L903LEV
 
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L141LEV-texture.png" alt="L141LEV Original">
+</div>
+
+<div align="center">
+  <img src="Images/L141LEV-texture-2.png" alt="L141LEV Original">
+</div>
+
+Here it is with the fixes I applied to the level.
+
+<div align="center">
+  <img src="Images/L141LEV-texture-fixed.png" alt="L141LEV Patched">
+</div>
+
+<div align="center">
+  <img src="Images/L141LEV-texture-fixed-2.png" alt="L141LEV Patched">
+</div>
+
 Currently this is only fixed when exporting the level model.
 
 ## L161LEV Fix 1
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L161LEV-texture.png" alt="L161LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L161LEV-texture-fixed.png" alt="L161LEV Patched">
+</div>
 
 Currently this is only fixed when exporting the level model.
 
