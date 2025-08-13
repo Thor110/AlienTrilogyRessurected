@@ -443,5 +443,5 @@ This texture contains a reference to the cheat "RIPLEYDOESITWITHBIGGUNS" as well
 909GFX_TP00
 
 <div align="center">
-  <img src="Images/easteregg-cheats.png" alt="Cheats>
+  <img src="Images/easteregg-cheats.png" alt="Cheats">
 </div>
