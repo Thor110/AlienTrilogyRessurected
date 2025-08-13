@@ -434,7 +434,7 @@ These two level textures contain the message "SATAN LIVES HERE"
   <img src="Images/easteregg-endtimes.png" alt="End Times!">
 </div>
 
-351GFX_TP00 and 371GFX_TP00 are the names of the textures when extracted by this toolket.
+351GFX_TP00 and 371GFX_TP00 are the names of the textures when extracted by this toolkit.
 
 ## Easter Egg 3
 
@@ -444,4 +444,4 @@ This texture contains a reference to the cheat "RIPLEYDOESITWITHBIGGUNS" as well
   <img src="Images/easteregg-cheats.png" alt="Cheats">
 </div>
 
-909GFX_TP00 is the name of the texture when extracted by this toolket.
+909GFX_TP00 is the name of the texture when extracted by this toolkit.
