@@ -411,6 +411,10 @@ Currently this is only fixed when exporting the level model.
 
 ## Easter Eggs
 
+Here is a collection of the easter eggs I have found within the games files.
+
+## Easter Egg 1
+
 Object type 33 is the Steel Coil, which may be a nod to Grade 33 steel, the first widely adopted U.S. structural steel grade (ASTM A15, 1911).
 
 <div align="center">
@@ -418,3 +422,24 @@ Object type 33 is the Steel Coil, which may be a nod to Grade 33 steel, the firs
 </div>
 
 The object type is stored in a byte (0-255) so if the assignment is random and every one of the 256 potential values is equally likely, the chance the Steel Coil specifically lands on 33 is 1 ÷ 256 = 0.00390625 = 0.390625% (~0.39%).
+
+## Easter Egg 2
+
+These two level textures contain the message "SATAN LIVES HERE"
+
+351GFX_TP00
+371GFX_TP00
+
+<div align="center">
+  <img src="Images/easteregg-endtimes.png" alt="End Times!">
+</div>
+
+## Easter Egg 3
+
+This texture contains a reference to the cheat "RIPLEYDOESITWITHBIGGUNS" as well as two messages.
+
+909GFX_TP00
+
+<div align="center">
+  <img src="Images/easteregg-cheats.png" alt="Cheats>
+</div>
