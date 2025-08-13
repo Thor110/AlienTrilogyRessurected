@@ -328,13 +328,13 @@ Here it is with the fix I applied to the level.
 
 ## L903LEV Multiplayer Map 4 Fix 1
 
-These fixes are the same as on L141LEV
-
+[These fixes are the same as on L141LEV](#L141LEV-Fix-1)
+	
 Currently this is only fixed when exporting the level model.
 
 ## L900LEV Multiplayer Map 1 Fix 1
 
-These fixes are the same as on L111LEV
+[These fixes are the same as on L111LEV](#L111LEV-Fix-1)
 
 Currently this is only fixed when exporting the level model.
 
