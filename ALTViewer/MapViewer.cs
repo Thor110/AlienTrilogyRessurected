@@ -409,7 +409,7 @@ namespace ALTViewer
             Pen pen = Pens.Gray;
             //MessageBox.Show($"L : {mapLength} W : {mapWidth}"); //92/105
             //MessageBox.Show($"{collisionBlockCount}");
-            using var test = new StreamWriter($"{lastSelectedLevel}.bin");
+            //using var test = new StreamWriter($"{lastSelectedLevel}.bin");
             for (int i = 0; i < collisionBlockCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -530,15 +530,15 @@ namespace ALTViewer
                 byte x = br.ReadByte();             // x coordinate of the monster
                 byte y = br.ReadByte();             // y coordinate of the monster
                 byte z = br.ReadByte();             // z coordinate of the monster
-                byte rotation = br.ReadByte();      // rotation of the monster
-                // 00 - North       // Y+
-                // 01 - North East  // X+ Y+
-                // 02 - East        // X+
-                // 03 - South East  // X+ Y-
-                // 04 - South       // Y-
-                // 05 - South West  // X- Y-
-                // 06 - West        // X-
-                // 07 - North West  // X- Y+
+                byte rotation = br.ReadByte();      // Byte Direction  Facing
+                                                    // 00 - North       // Y+
+                                                    // 01 - North East  // X+ Y+
+                                                    // 02 - East        // X+
+                                                    // 03 - South East  // X+ Y-
+                                                    // 04 - South       // Y-
+                                                    // 05 - South West  // X- Y-
+                                                    // 06 - West        // X-
+                                                    // 07 - North West  // X- Y+
                 byte health = br.ReadByte();        // health of the monster
                 byte drop = br.ReadByte();          // index of object to be dropped
                 byte unk2 = br.ReadByte();          // 
@@ -663,7 +663,11 @@ namespace ALTViewer
                 br.ReadByte();                      // only ever 0 across every level in the game
                 byte unk7 = br.ReadByte();
                 br.ReadByte();                      // only ever 0 across every level in the game
-                byte rotation = br.ReadByte();      // 0 / 2 / 4 / 6
+                byte rotation = br.ReadByte();      // Byte Direction  Facing
+                                                    // 00 - North   // Y+
+                                                    // 02 - East    // X+
+                                                    // 04 - South   // Y-
+                                                    // 06 - West    // X-
                 br.ReadByte();                      // only ever 0 across every level in the game
                 objects.Add((x, y, objectType, dropType, unk1, unk2, dropOne, dropTwo, unk3, unk4, unk5, unk7, rotation, offset));
             }
@@ -677,12 +681,11 @@ namespace ALTViewer
                 byte time = br.ReadByte();          // door open time
                 byte tag = br.ReadByte();           // door tag
                 br.ReadByte();                      // only ever 0 across every level in the game
-                byte rotation = br.ReadByte();      // 0 / 2 / 4 / 6
-                // Byte Direction  Facing
-                // 00 - North   // Y+
-                // 02 - East    // X+
-                // 04 - South   // Y-
-                // 06 - West    // X-
+                byte rotation = br.ReadByte();      // Byte Direction  Facing
+                                                    // 00 - North   // Y+
+                                                    // 02 - East    // X+
+                                                    // 04 - South   // Y-
+                                                    // 06 - West    // X-
                 byte index = br.ReadByte();         // index of the door model in the BND file
                 doors.Add((x, y, unk1, time, tag, rotation, index, offset));
             }
@@ -713,13 +716,13 @@ namespace ALTViewer
             textBox19.Text = remainingBytes.ToString();                             // display remaining bytes
             remainder = br.ReadBytes((int)remainingBytes);                          // for dumping remaining bytes
             // clear list boxes
-            listBox10.Items.Clear(); // clear collision blocks
-            listBox9.Items.Clear(); // clear path nodes
-            listBox3.Items.Clear(); // clear monsters
-            listBox4.Items.Clear(); // clear pickups
-            listBox5.Items.Clear(); // clear objects
-            listBox6.Items.Clear(); // clear doors
-            listBox8.Items.Clear(); // clear lifts
+            listBox10.Items.Clear();    // clear collision blocks
+            listBox9.Items.Clear();     // clear path nodes
+            listBox3.Items.Clear();     // clear monsters
+            listBox4.Items.Clear();     // clear pickups
+            listBox5.Items.Clear();     // clear objects
+            listBox6.Items.Clear();     // clear doors
+            listBox8.Items.Clear();     // clear lifts
             // populate list boxes
             for (int i = 0; i < collisionBlockCount; i++) { listBox10.Items.Add($"Collision Block {i}"); }
             for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Path Node {i}"); }
