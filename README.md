@@ -214,19 +214,18 @@ A preview of the lift L000 from L232LEV.
 ## Patches
 
 I am also looking at making patches for any issues I find in the original game.
-- Patched an issue on L906LEV where a vertex had incorrect coordinates.
-- Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.
-- Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
-- Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.
-- Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.
-- Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.
-- Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.
-- Patched an issue on L903LEV where some crates had incorrect textures.
-- Patched an issue on L900LEV where four crates had textures which were sideways.
-- Patched an issue on L111LEV where four crates had textures which were sideways.
-- Patched an issue on L141LEV where some crates had incorrect textures.
-- Patched an issue on L161LEV where one face had an incorrect texture.
-
+- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
+- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)
+- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
+- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
+- [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
+- [Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-1)
+- [Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-2)
+- [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
+- [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
+- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
+- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEV-Fix-1)
+- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
 
 ## L906LEV Multiplayer Map 7 Fix 1
 
