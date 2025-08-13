@@ -77,8 +77,8 @@ The road map for this project.
 	- [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
 	- [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
 	- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
-	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEVFix-1)
-	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEVFix-1)
+	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEV-Fix-1)
+	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
 - [✅ 8 : Easter Eggs](#easter-eggs) ( ??% Complete )
 
 And possibly more to come.
