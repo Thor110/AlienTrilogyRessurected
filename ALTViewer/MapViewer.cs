@@ -583,40 +583,40 @@ namespace ALTViewer
                 byte x = br.ReadByte();             // x coordinate of the pickup
                 byte y = br.ReadByte();             // y coordinate of the pickup
                 byte type = br.ReadByte();          // pickup type
-            // Pickup Types (0x)
-            // 00 - Pistol
-            // 01 - Shotgun
-            // 02 - Pulse Rifle
-            // 03 - Flame Thrower
-            // 04 - Smartgun
-            // 05 - Nothing / Unused
-            // 06 - Seismic Charge
-            // 07 - Battery
-            // 08 - Night Vision Goggles
-            // 09 - Pistol Clip
-            // 0A - Shotgun Cartridge
-            // 0B - Pulse Rifle Clip
-            // 0C - Grenades
-            // 0D - Flamethrower Fuel
-            // 0E - Smartgun Ammunition
-            // 0F - Identity Tag
-            // 10 - Auto Mapper
-            // 11 - Hypo Pack
-            // 12 - Acid Vest
-            // 13 - Body Suit
-            // 14 - Medi Kit
-            // 15 - Derm Patch
-            // 16 - Protective Boots
-            // 17 - Adrenaline Burst
-            // 18 - Derm Patch
-            // 19 - Shoulder Lamp
-            // 1A - Shotgun Cartridge       ( Cannot be picked up )
-            // 1B - Grenades                ( Cannot be picked up )
-            // 1C - Crashes when near the object
-            // 1D - Crashes when near the object
-            // 1E - Crashes when near the object
-            // 1F - Nothing / Unused
-            // 20 - Crashes when near the object
+                // Pickup Types (0x)
+                // 00 - Pistol
+                // 01 - Shotgun
+                // 02 - Pulse Rifle
+                // 03 - Flame Thrower
+                // 04 - Smartgun
+                // 05 - Nothing / Unused
+                // 06 - Seismic Charge
+                // 07 - Battery
+                // 08 - Night Vision Goggles
+                // 09 - Pistol Clip
+                // 0A - Shotgun Cartridge
+                // 0B - Pulse Rifle Clip
+                // 0C - Grenades
+                // 0D - Flamethrower Fuel
+                // 0E - Smartgun Ammunition
+                // 0F - Identity Tag
+                // 10 - Auto Mapper
+                // 11 - Hypo Pack
+                // 12 - Acid Vest
+                // 13 - Body Suit
+                // 14 - Medi Kit
+                // 15 - Derm Patch
+                // 16 - Protective Boots
+                // 17 - Adrenaline Burst
+                // 18 - Derm Patch
+                // 19 - Shoulder Lamp
+                // 1A - Shotgun Cartridge       ( Cannot be picked up )
+                // 1B - Grenades                ( Cannot be picked up )
+                // 1C - Crashes when near the object
+                // 1D - Crashes when near the object
+                // 1E - Crashes when near the object
+                // 1F - Nothing / Unused
+                // 20 - Crashes when near the object
                 byte amount = br.ReadByte();        // amount of the pickup
                 byte multiplier = br.ReadByte();    // multiplier for the pickup
                 br.ReadByte();                      // only ever 0 across every level in the game
