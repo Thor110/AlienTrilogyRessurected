@@ -631,27 +631,27 @@ namespace ALTViewer
                 byte x = br.ReadByte();
                 byte y = br.ReadByte();
                 byte objectType = br.ReadByte();
-                // My Object Types (int) - indented = unused across all levels
-                // // // less than 20 - a box that cannot be blown up
-                // 20 - a regular box that can be blown up ( or an egg husk if in chapter 3 )
-                // 21 - destructible walls
-                // 22 - another small switch, the difference is at the bottom of the model ( lightning is drawn )
-                // 23 - barrel explodes.
-                // 24 - switch with animation ( small switch )
-                // 25 - double stacked boxes ( two boxes on top of each other that can be blown up )
-                // 26 - wide switch with zipper
-                // 27 - wide switch without zipper
-                // 28 - an empty object that can be shot
-                // 29 - an empty object that can be shot through, something will spawn on death
-                // // // 30 - is not used across any level in the game
-                // // // 31 - a regular box that can be blown up
-                // 32 - Strange Little Yellow Square
-                // 33 - Steel Coil
-                // // // 34 - Strange Unused Shape
-                // // // 35 - Light Pylon With No Texture, Completely Red...
-                // // // 36 - Strange Tall Square ( improperly textured )
-                // // // 37 - Egg Husk Shape ( untextured )
-                // // // greater than 37 - a regular box that can be blown up
+                // My Object Types (int) - indented = unused across all levels                                          Object Status       Minimum Damage  Drop
+                // // // less than 20 - a box that cannot be blown up                                                   [INDESTRUCTIBLE]
+                // 20 - a regular box that can be blown up ( or an egg husk if in chapter 3 )                           [DESTRUCTIBLE]      PISTOL          YES
+                // 21 - destructible walls                                                                              [DESTRUCTIBLE]      GRENADE         YES
+                // 22 - another small switch, the difference is at the bottom of the model ( lightning is drawn )       [INDESTRUCTIBLE]
+                // 23 - barrel explodes.                                                                                [DESTRUCTIBLE]      SHOTGUN         NO
+                // 24 - switch with animation ( small switch )                                                          [INDESTRUCTIBLE]
+                // 25 - double stacked boxes ( two boxes on top of each other that can be blown up )                    [DESTRUCTIBLE]      PISTOL          YES
+                // 26 - wide switch with zipper                                                                         [INDESTRUCTIBLE]
+                // 27 - wide switch without zipper                                                                      [INDESTRUCTIBLE]
+                // 28 - an empty object that can be shot                                                                [DESTRUCTIBLE]      PISTOL          NO
+                // 29 - an empty object that can be shot through, something will spawn on death                         [DESTRUCTIBLE]      PISTOL          YES
+                // // // 30 - a regular box that can be blown up                                                        [DESTRUCTIBLE]      PISTOL          YES
+                // // // 31 - a regular box that can be blown up                                                        [DESTRUCTIBLE]      PISTOL          YES
+                // 32 - Strange Little Yellow Square                                                                    [INDESTRUCTIBLE]
+                // 33 - Steel Coil                                                                                      [INDESTRUCTIBLE]
+                // // // 34 - Strange Unused Shape                                                                      [INDESTRUCTIBLE]
+                // // // 35 - Light Pylon With No Texture, Completely Red...                                            [INDESTRUCTIBLE]
+                // // // 36 - Strange Tall Square ( improperly textured )                                               [INDESTRUCTIBLE]
+                // // // 37 - Egg Husk Shape ( untextured )                                                             [INDESTRUCTIBLE]
+                // // // greater than 37 - a regular box that can be blown up                                           [DESTRUCTIBLE]      PISTOL          YES
                 byte dropType = br.ReadByte();      // 0 = Pickup 2 = Enemy
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();          // only ever 0 or 10 across every level in the game
