@@ -16,7 +16,9 @@ Text Editor
 
 Model Viewer
 
-- M036, M039 & M040 textures are not determined yet.
+- M036 is an unused model and does not have a corresponding texture.
+- M039 is an unused model which is the same as the #41 the egg-husk.
+- M040 is the hibernation pod cover which does not have a texture, I believe this is likely coloured in code with a single colour.
 
 Graphics Viewer
 
@@ -27,6 +29,7 @@ Level Viewer
 - Not really a level "viewer" per-se, currently it is just a testing tool for parsing level data, it can also export the level geometry as OBJ files.
 - May or may not extend it to level viewer and editor functionality one day.
 - Need to implement an export feature for the location of level objects, enemies, crates, pickups, switches, doors etc
+- Currently ~4kb remains unparsed in each level file, I am not certain on what this data is yet but the tool provides more information such as the offset and exact number of bytes which have not yet been parsed.
 
 Patches
 
@@ -66,6 +69,8 @@ The road map for this project.
 	- Export levels with debug and unknown byte flags displayed visually.
 	- Export door and lift geometry as OBJ files.
 	- Does not currently extract the associated textures alongside them.
+	- Provides a list based interface for looking through the parsed objects within each level.
+	- Has a preview of the levels map generated using the collision blocks parsed for the level.
 - [❌ 7 : Patches](#patches) ( ??% Complete )
 	- [Patched an issue on L906LEV where a vertex had incorrect coordinates.](#L906LEV-Multiplayer-Map-7-Fix-1)
 	- [Patched an issue on L906LEV where four faces were lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-2)

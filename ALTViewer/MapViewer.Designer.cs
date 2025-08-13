@@ -124,7 +124,11 @@
             listBox10 = new ListBox();
             label24 = new Label();
             pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            label25 = new Label();
+            textBox38 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // listBox1
@@ -160,7 +164,7 @@
             // 
             button1.AccessibleDescription = "Toggle full screen.";
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(1270, 12);
+            button1.Location = new Point(945, 12);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 3;
@@ -342,7 +346,7 @@
             // textBox8
             // 
             textBox8.AccessibleDescription = "Number of monsters in the level.";
-            textBox8.Location = new Point(209, 253);
+            textBox8.Location = new Point(209, 282);
             textBox8.Name = "textBox8";
             textBox8.ReadOnly = true;
             textBox8.Size = new Size(100, 23);
@@ -369,7 +373,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(144, 256);
+            label9.Location = new Point(144, 285);
             label9.Name = "label9";
             label9.Size = new Size(62, 15);
             label9.TabIndex = 24;
@@ -378,7 +382,7 @@
             // textBox9
             // 
             textBox9.AccessibleDescription = "Number of pickups in the level.";
-            textBox9.Location = new Point(209, 282);
+            textBox9.Location = new Point(209, 311);
             textBox9.Name = "textBox9";
             textBox9.ReadOnly = true;
             textBox9.Size = new Size(100, 23);
@@ -387,7 +391,7 @@
             // textBox10
             // 
             textBox10.AccessibleDescription = "Number of objects in the level.";
-            textBox10.Location = new Point(209, 311);
+            textBox10.Location = new Point(209, 340);
             textBox10.Name = "textBox10";
             textBox10.ReadOnly = true;
             textBox10.Size = new Size(100, 23);
@@ -396,7 +400,7 @@
             // textBox11
             // 
             textBox11.AccessibleDescription = "Number of doors in the level.";
-            textBox11.Location = new Point(209, 340);
+            textBox11.Location = new Point(209, 369);
             textBox11.Name = "textBox11";
             textBox11.ReadOnly = true;
             textBox11.Size = new Size(100, 23);
@@ -405,7 +409,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(152, 285);
+            label10.Location = new Point(152, 314);
             label10.Name = "label10";
             label10.Size = new Size(54, 15);
             label10.TabIndex = 28;
@@ -414,7 +418,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(153, 314);
+            label11.Location = new Point(153, 343);
             label11.Name = "label11";
             label11.Size = new Size(53, 15);
             label11.TabIndex = 29;
@@ -423,7 +427,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(162, 343);
+            label12.Location = new Point(162, 372);
             label12.Name = "label12";
             label12.Size = new Size(44, 15);
             label12.TabIndex = 30;
@@ -432,7 +436,7 @@
             // textBox12
             // 
             textBox12.AccessibleDescription = "Player start rotation.";
-            textBox12.Location = new Point(209, 398);
+            textBox12.Location = new Point(209, 427);
             textBox12.Name = "textBox12";
             textBox12.ReadOnly = true;
             textBox12.Size = new Size(100, 23);
@@ -441,7 +445,7 @@
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(121, 401);
+            label13.Location = new Point(121, 430);
             label13.Name = "label13";
             label13.Size = new Size(85, 15);
             label13.TabIndex = 32;
@@ -742,7 +746,7 @@
             // textBox20
             // 
             textBox20.AccessibleDescription = "Number of lifts in the level.";
-            textBox20.Location = new Point(209, 369);
+            textBox20.Location = new Point(209, 398);
             textBox20.Name = "textBox20";
             textBox20.ReadOnly = true;
             textBox20.Size = new Size(100, 23);
@@ -751,7 +755,7 @@
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(171, 372);
+            label33.Location = new Point(171, 401);
             label33.Name = "label33";
             label33.Size = new Size(35, 15);
             label33.TabIndex = 75;
@@ -760,7 +764,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(132, 227);
+            label34.Location = new Point(132, 256);
             label34.Name = "label34";
             label34.Size = new Size(74, 15);
             label34.TabIndex = 77;
@@ -769,7 +773,7 @@
             // textBox21
             // 
             textBox21.AccessibleDescription = "Unknown list of objects, possibly lights.";
-            textBox21.Location = new Point(209, 224);
+            textBox21.Location = new Point(209, 253);
             textBox21.Name = "textBox21";
             textBox21.ReadOnly = true;
             textBox21.Size = new Size(100, 23);
@@ -1015,16 +1019,16 @@
             // 
             listBox10.FormattingEnabled = true;
             listBox10.ItemHeight = 15;
-            listBox10.Location = new Point(551, 372);
+            listBox10.Location = new Point(534, 372);
             listBox10.Name = "listBox10";
-            listBox10.Size = new Size(120, 169);
+            listBox10.Size = new Size(137, 169);
             listBox10.TabIndex = 104;
             listBox10.SelectedIndexChanged += listBox10_SelectedIndexChanged;
             // 
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(551, 354);
+            label24.Location = new Point(534, 355);
             label24.Name = "label24";
             label24.Size = new Size(96, 15);
             label24.TabIndex = 105;
@@ -1032,17 +1036,46 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(329, 50);
+            pictureBox1.Location = new Point(334, 55);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(308, 284);
+            pictureBox1.Size = new Size(246, 246);
             pictureBox1.TabIndex = 106;
             pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackColor = Color.White;
+            pictureBox2.Location = new Point(329, 50);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(256, 256);
+            pictureBox2.TabIndex = 107;
+            pictureBox2.TabStop = false;
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(110, 227);
+            label25.Name = "label25";
+            label25.Size = new Size(96, 15);
+            label25.TabIndex = 109;
+            label25.Text = "Collision Blocks :";
+            // 
+            // textBox38
+            // 
+            textBox38.AccessibleDescription = "Unknown list of objects, possibly lights.";
+            textBox38.Location = new Point(209, 224);
+            textBox38.Name = "textBox38";
+            textBox38.ReadOnly = true;
+            textBox38.Size = new Size(100, 23);
+            textBox38.TabIndex = 108;
             // 
             // MapViewer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1439, 583);
+            Controls.Add(label25);
+            Controls.Add(textBox38);
             Controls.Add(pictureBox1);
             Controls.Add(label24);
             Controls.Add(listBox10);
@@ -1138,10 +1171,12 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(listBox1);
+            Controls.Add(pictureBox2);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MapViewer";
             Text = "Map Viewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1243,5 +1278,8 @@
         private ListBox listBox10;
         private Label label24;
         private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
+        private Label label25;
+        private TextBox textBox38;
     }
 }

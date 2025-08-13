@@ -35,8 +35,8 @@ namespace ALTViewer
         private List<(short X, short Y, short Z)> vertices = new();
         private List<(int A, int B, int C, int D, ushort TexIndex)> quads = new();
 
-        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
-            byte Unk14, byte Unk15, byte Unk16,
+        private List<(int Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk6, byte Unk7,
+            byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13, byte Unk14, byte Unk15, byte Unk16,
             long Offset)> collisionBlocks = new();
         private List<(byte X, byte Y, byte AlternateNode, byte NodeA, byte NodeB, byte NodeC, byte NodeD, long Offset)> paths = new(); // UNKNOWN
         private List<(byte Type, byte X, byte Y, byte Z,
@@ -52,11 +52,12 @@ namespace ALTViewer
             long Offset)> objects = new();
         private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Rotation, byte Index, long Offset)> doors = new();
         private List<(byte X, byte Y, byte Z,
-            byte Unk1, byte Unk2, byte Unk3, byte Unk4, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk9, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
+            byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
+        private List<Pen> pens = new();
         public MapViewer()
         {
             InitializeComponent();
@@ -82,6 +83,41 @@ namespace ALTViewer
             ToolTipHelper.EnableTooltips(this.Controls, tooltip, new Type[] { typeof(Label), typeof(ListBox) });
             ListLevels();
             fullScreen = new FullScreen(this);
+            // draw map border picture box
+            var bmp = new Bitmap(256, 256);
+            var g = Graphics.FromImage(bmp);
+            g.Clear(Color.DarkGreen);
+            Rectangle tileRect = new Rectangle(4, 4, 247, 247);
+            g.DrawRectangle(Pens.LightGreen, tileRect);
+            pictureBox2.Image = bmp;
+            // create pen colour list
+            for (int i = 0; i < 44; i++)
+            {
+                float hue = (360f / 44) * i; // evenly spaced hues
+                Color c = FromHsv(hue, 1f, 1f); // full saturation, full brightness
+                pens.Add(new Pen(c, 1));
+            }
+        }
+        public static Color FromHsv(float hue, float saturation, float value)
+        {
+            int hi = (int)Math.Floor(hue / 60) % 6;
+            float f = hue / 60 - (float)Math.Floor(hue / 60);
+
+            value *= 255;
+            int v = (int)value;
+            int p = (int)(value * (1 - saturation));
+            int q = (int)(value * (1 - f * saturation));
+            int t = (int)(value * (1 - (1 - f) * saturation));
+
+            return hi switch
+            {
+                0 => Color.FromArgb(255, v, t, p),
+                1 => Color.FromArgb(255, q, v, p),
+                2 => Color.FromArgb(255, p, v, t),
+                3 => Color.FromArgb(255, p, q, v),
+                4 => Color.FromArgb(255, t, p, v),
+                _ => Color.FromArgb(255, v, p, q),
+            };
         }
         // list all levels in the game
         public void ListLevels()
@@ -360,34 +396,99 @@ namespace ALTViewer
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
-            // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
-            // collision 16 //4//2//2//1//1//1//1//2//1//1
             //br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
-
+            // collision 16 //4//2//2//1//1//1//1//2//1//1
             int collisionBlockCount = mapLength * mapWidth; // collision blocks size data for now
-
+            textBox38.Text = collisionBlockCount.ToString();
+            // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
+            var bmp = new Bitmap(246, 246);
+            var g = Graphics.FromImage(bmp);
+            g.Clear(Color.Black);
+            int xCount = 0;
+            int yCount = 0;
+            Pen pen = Pens.Gray;
+            //MessageBox.Show($"L : {mapLength} W : {mapWidth}"); //92/105
+            //MessageBox.Show($"{collisionBlockCount}");
+            using var test = new StreamWriter($"{lastSelectedLevel}.bin");
             for (int i = 0; i < collisionBlockCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
-                byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();
-                byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();
-                byte unk5 = br.ReadByte();
-                byte unk6 = br.ReadByte();
-                byte unk7 = br.ReadByte();
-                byte unk8 = br.ReadByte();
-                byte unk9 = br.ReadByte();
-                byte unk10 = br.ReadByte();
-                byte unk11 = br.ReadByte();
-                byte unk12 = br.ReadByte();
-                byte unk13 = br.ReadByte();
-                byte unk14 = br.ReadByte();
-                byte unk15 = br.ReadByte();
-                byte unk16 = br.ReadByte();
-                collisionBlocks.Add((unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13, unk14, unk15, unk16, offset));
+                byte unk1 = br.ReadByte();          // all values exist from 0-255                      ( 256 possible values )
+                byte unk2 = br.ReadByte();          // all values exist from 0-55 and 255               ( 57 possible values )
+                byte unk3 = br.ReadByte();          // only ever 255 or 0 across all levels in the game ( 255 = wall / 0 == traversable )
+                byte unk4 = br.ReadByte();          // only ever 255 or 0 across all levels in the game ( 255 = wall / 0 == traversable )
+                br.ReadByte();                      // only ever 0 across every level in the game       ( 1 possible value )
+                byte unk6 = br.ReadByte();          // only ever 0-21 across every level in the game    ( 22 possible values )
+                byte unk7 = br.ReadByte();          // only ever 0-95 across every level in the game    ( 96 possible values )
+                br.ReadByte();                      // only ever 0 across every level in the game       ( 1 possible value )
+                byte ceilingFog = br.ReadByte();    // a range of different values                      ( 43 possible values )
+                byte floorFog = br.ReadByte();      // a range of different values                      ( 40 possible values )
+                byte ceilingHeight = br.ReadByte(); // a range of different values                      ( 30 possible values )
+                byte floorHeight = br.ReadByte();   // a range of different values                      ( 206 possible values )
+                byte unk13 = br.ReadByte();         // a range of different values                      ( 26 possible values )
+                byte unk14 = br.ReadByte();         // a range of different values                      ( 167 possible values )
+                byte lighting = br.ReadByte();      // a range of different values                      ( 120 possible values )
+                byte action = br.ReadByte();        // only ever 0-41 across every level in the game    ( 42 possible values )
+                // action
+                // 0 - nothing space
+                // 1 - starting door open space
+                // 2 - door open space 0
+                // 3 - switch open space 1
+                // 4 - door open space 1
+                // 5 - switch open space 0
+                // 6 - unknown square space
+                // 7 - door open space 3
+                // 8 - battery switch 1
+                // 9 - end level space
+                // 10 - possibly stairs?
+                // 11 - unknown lines
+                // 12 - barricade line
+                // 13 - door or door open space?
+                // 14-41 - not used in level 1
+                if (unk2 != 255) // if this is not 255, unk3 and unk4 are guaranteed to be 0
+                {
+                    g.DrawRectangle(Pens.Gray, new Rectangle(xCount * 2, yCount * 2, 1, 1)); // * 2 to draw the map at twice the size for viewing
+                    //g.DrawRectangle(pens[unk2], new Rectangle(xCount * 2, yCount * 2, 1, 1)); // hot to cold colour ranges???
+                } // all first four bytes are 255 for non traversable spaces
+                /*if (unk3 == 255) // 255 is wall 0 is traversable
+                { g.DrawRectangle(Pens.Orange, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk4 == 0) // 255 is wall 0 is traversable
+                { g.DrawRectangle(Pens.Red, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }*/
+                //test.WriteLine($"{unk1}");
+                //unk6 is only 0 on the first level
+                //g.DrawRectangle(pens[unk2], new Rectangle(xCount * 2, yCount * 2, 1, 1));
+                //if (action != 0) { g.DrawRectangle(pens[action], new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                /*if (unk14 == 36) { g.DrawRectangle(Pens.Teal, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 40) { g.DrawRectangle(Pens.Tan, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 44) { g.DrawRectangle(Pens.SeaGreen, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 48) { g.DrawRectangle(Pens.Peru, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 52) { g.DrawRectangle(Pens.Maroon, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 56) { g.DrawRectangle(Pens.Lime, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 60) { g.DrawRectangle(Pens.LemonChiffon, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 64) { g.DrawRectangle(Pens.Khaki, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 67) { g.DrawRectangle(Pens.HotPink, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 68) { g.DrawRectangle(Pens.Violet, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 72) { g.DrawRectangle(Pens.FloralWhite, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 76) { g.DrawRectangle(Pens.DeepSkyBlue, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 80) { g.DrawRectangle(Pens.DarkMagenta, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 84) { g.DrawRectangle(Pens.Cyan, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 88) { g.DrawRectangle(Pens.Brown, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 92) { g.DrawRectangle(Pens.Purple, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 96) { g.DrawRectangle(Pens.Orange, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 99) { g.DrawRectangle(Pens.Blue, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 100) { g.DrawRectangle(Pens.Red, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 104) { g.DrawRectangle(Pens.Yellow, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
+                if (unk14 == 112) { g.DrawRectangle(Pens.Green, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }*/
+                collisionBlocks.Add((unk1, unk2, unk3, unk4, unk6, unk7, ceilingFog, floorFog, ceilingHeight, floorHeight, unk13, unk14, lighting, action, offset));
+                xCount++;
+                if (xCount >= mapLength)
+                {
+                    xCount = 0;
+                    yCount++;
+                }
             }
-
+            pictureBox1.Image = bmp;
+            // path node formula = number of elements multiplied by 8 - (8 bytes per path node)
             for (int i = 0; i < pathCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -593,21 +694,19 @@ namespace ALTViewer
                 byte y = br.ReadByte();             // y coordinate of the lift
                 byte z = br.ReadByte();             // z coordinate of the lift
                 byte unk1 = br.ReadByte();          // this byte is always 0, 1, 2, 3, 4, 5 or 6 across every level in the game
-                byte unk2 = br.ReadByte();          // this byte is always 0 across every level in the game
+                br.ReadByte();                      // this byte is always 0 across every level in the game
                 byte unk3 = br.ReadByte();          // this byte is always 24, 27, 31, 32, 43, 44, 46, 47, 48, 50, 52, 56, 63, 64, 68, 79, 80, 84, 95 or 224 across every level in the game
-                byte unk4 = br.ReadByte();          // this byte is always 1 across every level in the game
+                br.ReadByte();                      // this byte is always 1 across every level in the game
                 byte unk5 = br.ReadByte();          // this byte is always 1, 4, 5 or 17 across every level in the game
                 byte unk6 = br.ReadByte();          // this byte is always 0, 1 or 60 across every level in the game
                 byte unk7 = br.ReadByte();          // this byte is always 0, 30, 50, 60, 90, 120, 150, 190, 210, 240 or 255 across every level in the game
                 byte unk8 = br.ReadByte();          // this byte is always 1, 2, 3, 4, 5, 6, 7, 10, 25 or 35  across every level in the game
-                byte unk9 = br.ReadByte();          // this byte is always 0 across every level in the game
+                br.ReadByte();                      // this byte is always 0 across every level in the game
                 byte unk10 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 across every level in the game
                 byte unk11 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 byte unk12 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 byte unk13 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
-                lifts.Add((x, y, z,
-                    unk1, unk2, unk3, unk4, unk5, unk6, unk7, unk8, unk9, unk10, unk11, unk12, unk13,
-                    offset));
+                lifts.Add((x, y, z, unk1, unk3, unk5, unk6, unk7, unk8, unk10, unk11, unk12, unk13, offset));
             }
             textBox22.Text = $"{br.BaseStream.Position + 20:X2}";                   // display data remainder offset plus header
             long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;    // calculate remaining bytes
@@ -623,7 +722,6 @@ namespace ALTViewer
             listBox8.Items.Clear(); // clear lifts
             // populate list boxes
             for (int i = 0; i < collisionBlockCount; i++) { listBox10.Items.Add($"Collision Block {i}"); }
-            // TODO : draw level map
             for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Path Node {i}"); }
             for (int i = 0; i < monsterCount; i++) { listBox3.Items.Add($"Monster {i}"); }
             for (int i = 0; i < pickupCount; i++) { listBox4.Items.Add($"Pickup {i}"); }
@@ -854,14 +952,14 @@ namespace ALTViewer
             textBox14.Text = $"Y : {lifts[index].Y}";
             textBox15.Text = $"Z : {lifts[index].Z}";
             textBox16.Text = $"Unk1 : {lifts[index].Unk1}";
-            textBox17.Text = $"Unk2 : {lifts[index].Unk2}";
+            textBox17.Text = "Unk2 : 0";
             textBox18.Text = $"Unk3 : {lifts[index].Unk3}";
-            textBox24.Text = $"Unk4 : {lifts[index].Unk4}";
+            textBox24.Text = "Unk4 : 1";
             textBox25.Text = $"Unk5 : {lifts[index].Unk5}";
             textBox26.Text = $"Unk6 : {lifts[index].Unk6}";
             textBox27.Text = $"Unk7 :  {lifts[index].Unk7}";
             textBox28.Text = $"Unk8 :  {lifts[index].Unk8}";
-            textBox29.Text = $"Unk9 :  {lifts[index].Unk9}";
+            textBox29.Text = "Unk9 :  0";
             textBox30.Text = $"Unk10 :  {lifts[index].Unk10}";
             textBox31.Text = $"Unk11 :  {lifts[index].Unk11}";
             textBox32.Text = $"Unk12 :  {lifts[index].Unk12}";
@@ -908,10 +1006,10 @@ namespace ALTViewer
             textBox14.Text = $"Unk2 : {collisionBlocks[index].Unk2}";
             textBox15.Text = $"Unk3 : {collisionBlocks[index].Unk3}";
             textBox16.Text = $"Unk4 : {collisionBlocks[index].Unk4}";
-            textBox17.Text = $"Unk5 : {collisionBlocks[index].Unk5}";
+            textBox17.Text = $"Unk5 : 0";
             textBox18.Text = $"Unk6 : {collisionBlocks[index].Unk6}";
             textBox24.Text = $"Unk7 : {collisionBlocks[index].Unk7}";
-            textBox25.Text = $"Unk8 : {collisionBlocks[index].Unk8}";
+            textBox25.Text = $"Unk8 : 0";
             textBox26.Text = $"Unk9 : {collisionBlocks[index].Unk9}";
             textBox27.Text = $"Unk10 : {collisionBlocks[index].Unk10}";
             textBox28.Text = $"Unk11 : {collisionBlocks[index].Unk11}";
