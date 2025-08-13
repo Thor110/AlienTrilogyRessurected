@@ -430,18 +430,18 @@ The object type is stored in a byte (0-255) so if the assignment is random and e
 
 These two level textures contain the message "SATAN LIVES HERE"
 
+351GFX_TP00 and 371GFX_TP00
+
 <div align="center">
   <img src="Images/easteregg-endtimes.png" alt="End Times!">
 </div>
-
-351GFX_TP00 and 371GFX_TP00
 
 ## Easter Egg 3
 
 This texture contains a reference to the cheat "RIPLEYDOESITWITHBIGGUNS" as well as two messages.
 
+909GFX_TP00
+
 <div align="center">
   <img src="Images/easteregg-cheats.png" alt="Cheats>
 </div>
-
-909GFX_TP00
