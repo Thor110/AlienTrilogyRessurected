@@ -1122,26 +1122,6 @@ public class AlienTrilogyMapLoader : MonoBehaviour
 
         UnityEngine.Debug.Log("mesh.subMeshCount = " + mesh.subMeshCount);
     }
-    // Parse BND file sections from a byte array
-    private List<BndSection> LoadSection(byte[] bnd, string section)
-    {
-        var sections = new List<BndSection>();
-        using var br = new BinaryReader(new MemoryStream(bnd));
-        string formTag = Encoding.ASCII.GetString(br.ReadBytes(4)); // Read FORM header
-        if (formTag != "FORM") { throw new Exception("Invalid BND file: missing FORM header."); }
-        int formSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
-        string platform = Encoding.ASCII.GetString(br.ReadBytes(4)); // e.g., "PSXT"
-        while (br.BaseStream.Position + 8 <= br.BaseStream.Length) // Parse chunks
-        {
-            string chunkName = Encoding.ASCII.GetString(br.ReadBytes(4));
-            int chunkSize = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
-            if (br.BaseStream.Position + chunkSize > br.BaseStream.Length) { break; }
-            byte[] chunkData = br.ReadBytes(chunkSize);
-            if (chunkName.StartsWith(section)) { sections.Add(new BndSection { Name = chunkName, Data = chunkData }); }
-            if ((chunkSize % 2) != 0) { br.BaseStream.Seek(1, SeekOrigin.Current); } // IFF padding to 2-byte alignment
-        }
-        return sections;
-    }
     // Export to CSV
     private void ExportToCSV(List<CollisionNode> data, string filePath)
     {
