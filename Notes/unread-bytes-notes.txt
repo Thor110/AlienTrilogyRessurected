@@ -1,0 +1,15 @@
+Still around ~4kb per level file left to decode as well as numerous unknown bytes already parsed.
+
+Level Name = Remainder Offset / Unread Bytes
+
+L111LEV.MAP = 479832 / 4216
+
+512
+map? 3,448
+256
+
+L141LEV.MAP = 516068 / 4376
+
+512
+map? 3,608
+256
