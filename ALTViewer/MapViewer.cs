@@ -91,9 +91,9 @@ namespace ALTViewer
             g.DrawRectangle(Pens.LightGreen, tileRect);
             pictureBox2.Image = bmp;
             // create pen colour list
-            for (int i = 0; i < 44; i++)
+            for (int i = 0; i < 42; i++)
             {
-                float hue = (360f / 44) * i; // evenly spaced hues
+                float hue = (360f / 42) * i; // evenly spaced hues
                 Color c = FromHsv(hue, 1f, 1f); // full saturation, full brightness
                 pens.Add(new Pen(c, 1));
             }
@@ -400,7 +400,7 @@ namespace ALTViewer
             // collision 16 //4//2//2//1//1//1//1//2//1//1
             int collisionBlockCount = mapLength * mapWidth; // collision blocks size data for now
             textBox38.Text = collisionBlockCount.ToString();
-            // size formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
+            // collision block formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             var bmp = new Bitmap(246, 246);
             var g = Graphics.FromImage(bmp);
             g.Clear(Color.Black);

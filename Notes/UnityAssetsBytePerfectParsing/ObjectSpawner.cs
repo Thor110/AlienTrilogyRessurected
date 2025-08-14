@@ -131,12 +131,12 @@ public class ObjectSpawner : MonoBehaviour
 		SpawnPickups();
 		SpawnLifts();
         SpawnDoors();
-        ObjDataPuller.objectPuller.pathNodes.Clear();
-        ObjDataPuller.objectPuller.boxes.Clear();
-        ObjDataPuller.objectPuller.monsters.Clear();
-        ObjDataPuller.objectPuller.pickups.Clear();
-        ObjDataPuller.objectPuller.lifts.Clear();
-        ObjDataPuller.objectPuller.doors.Clear();
+        AlienTrilogyMapLoader.loader.pathNodes.Clear();
+        AlienTrilogyMapLoader.loader.boxes.Clear();
+        AlienTrilogyMapLoader.loader.monsters.Clear();
+        AlienTrilogyMapLoader.loader.pickups.Clear();
+        AlienTrilogyMapLoader.loader.lifts.Clear();
+        AlienTrilogyMapLoader.loader.doors.Clear();
     }
 
     [ContextMenu ("ClearAll")]
@@ -158,7 +158,7 @@ public class ObjectSpawner : MonoBehaviour
         int index = 0;
         int xCount = 1;
         int yCount = 0;
-        foreach (CollisionNode col in ObjDataPuller.objectPuller.collisions)
+        foreach (CollisionNode col in AlienTrilogyMapLoader.loader.collisions)
         {
             Vector3 pos = new Vector3(xCount+.5f, -10, yCount);
             GameObject newObj = Instantiate(colObj, pos, transform.rotation, colCover.transform);
@@ -174,7 +174,7 @@ public class ObjectSpawner : MonoBehaviour
                 }
             }
             xCount--;
-            if (xCount < -int.Parse(ObjDataPuller.objectPuller.mapLengthString)+1)
+            if (xCount < -int.Parse(AlienTrilogyMapLoader.loader.mapLengthString)+1)
             {
                 yCount++;
                 xCount = 0;
@@ -192,7 +192,7 @@ public class ObjectSpawner : MonoBehaviour
         dummyObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         Material spawnMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         spawnMaterial.color = Color.red;
-        foreach (PathNode obj in ObjDataPuller.objectPuller.pathNodes)
+        foreach (PathNode obj in AlienTrilogyMapLoader.loader.pathNodes)
         {
             Vector3 pos = new Vector3(-obj.X, 0 - 10, obj.Y);
             GameObject newObj = GameObject.Instantiate(dummyObj, pos, transform.rotation, pathCover.transform); 
@@ -221,7 +221,7 @@ public class ObjectSpawner : MonoBehaviour
         dummyObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Material crateMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         crateMaterial.color = Color.cyan;
-        foreach (Crate crate in ObjDataPuller.objectPuller.boxes)
+        foreach (Crate crate in AlienTrilogyMapLoader.loader.boxes)
         {
             switch (crate.Type)
             {
@@ -265,7 +265,7 @@ public class ObjectSpawner : MonoBehaviour
         dummyObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
         Material mobMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         mobMaterial.color = Color.yellow;
-        foreach (Monster monster in ObjDataPuller.objectPuller.monsters)
+        foreach (Monster monster in AlienTrilogyMapLoader.loader.monsters)
         {
             switch (monster.Type)
             {
@@ -317,7 +317,7 @@ public class ObjectSpawner : MonoBehaviour
         dummyObj = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         Material pickupMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         pickupMaterial.color = Color.blue;
-        foreach (Pickup pickup in ObjDataPuller.objectPuller.pickups)
+        foreach (Pickup pickup in AlienTrilogyMapLoader.loader.pickups)
         {
             switch (pickup.Type)
             {
@@ -377,7 +377,7 @@ public class ObjectSpawner : MonoBehaviour
         liftMaterial.color = Color.yellow;
         int index = 0;
 
-        foreach (Lifts obj in ObjDataPuller.objectPuller.lifts)
+        foreach (Lifts obj in AlienTrilogyMapLoader.loader.lifts)
         {
             Vector3 pos = new Vector3(-obj.X, 0 - 10, obj.Y);
             GameObject newObj = GameObject.Instantiate(dummyObj, pos, transform.rotation, liftCover.transform);
@@ -407,7 +407,7 @@ public class ObjectSpawner : MonoBehaviour
         Material doorMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         doorMaterial.color = Color.white;
         int index = 0;
-        foreach (Door obj in ObjDataPuller.objectPuller.doors)
+        foreach (Door obj in AlienTrilogyMapLoader.loader.doors)
         {
             Vector3 pos = new Vector3(-obj.X, 0 - 10, obj.Y);
             GameObject newObj = GameObject.Instantiate(dummyObj, pos, transform.rotation, doorCover.transform);
