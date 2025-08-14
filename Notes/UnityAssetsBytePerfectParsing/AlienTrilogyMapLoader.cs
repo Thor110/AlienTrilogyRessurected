@@ -270,7 +270,9 @@ public class AlienTrilogyMapLoader : MonoBehaviour
 	*/
     private void BuildMapTextures()
     {
-        Texture2D texture = null!;
+        Texture2D texture = new Texture2D(1, 1);
+        byte[] TP;
+        byte[] CL;
         int levelID = int.Parse(levelPath.Substring(levelPath.Length - 10, 3)); //Get Level ID from levelPath String
         List<(int X, int Y, int Width, int Height)> rectangles = new();
         using var br = new BinaryReader(File.OpenRead(texturePath));
@@ -278,26 +280,21 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         for (int i = 0; i < 5; i++)                         // perfect read order TP/CL/BX*5
         {
             br.BaseStream.Seek(8, SeekOrigin.Current);      // TP header
-            byte[] TP = br.ReadBytes(65536);                // texture
+            TP = br.ReadBytes(65536);                       // texture
             br.BaseStream.Seek(12, SeekOrigin.Current);     // CL header
-            byte[] CL = br.ReadBytes(512);                  // palette
+            CL = br.ReadBytes(512);                         // palette
             br.BaseStream.Seek(8, SeekOrigin.Current);      // BX header
             rectangles = new();                             // renew rectangles list
             int rectCount = br.ReadInt16();                 // UV rectangle count
             for (int j = 0; j < rectCount; j++)
             {
-                byte x = br.ReadByte();
-                byte y = br.ReadByte();
-                byte width = br.ReadByte();
-                byte height = br.ReadByte();
+                rectangles.Add((br.ReadByte(), br.ReadByte(), br.ReadByte() + 1, br.ReadByte() + 1));
                 br.BaseStream.Seek(2, SeekOrigin.Current);  // unknown bytes
-                rectangles.Add((x, y, width + 1, height + 1));
             }
             if (rectCount % 2 == 0) { br.BaseStream.Seek(2, SeekOrigin.Current); }    // if number of UVs is even, read forward two extra bytes
             uvRects.Add(rectangles);
-            texture = RenderRaw8bppImageUnity(TP, Convert16BitPaletteToRGB(CL), textureSize, levelID, i);
             texture.name = $"Tex_{i:D2}";
-            imgData.Add(texture);
+            imgData.Add(RenderRaw8bppImageUnity(TP, Convert16BitPaletteToRGB(CL), textureSize, levelID, i));
         }
     }
     /*
