@@ -37,6 +37,11 @@ Patches
 - The UVs for the Queens Egg Sack from the final level need fixing.
 - A trigger for a lift with an inaccessible secret needs fixing on L371LEV as noted by Bobblen. ( https://www.avpgalaxy.net/forum/index.php?topic=67544.0 )
 
+Unity
+
+- Merge AlienTrilogyMapLoader.cs and ObjDataPuller.cs so that the MAP0 chunk of the level files is only parsed once.
+- Implement mesh and texture loading for the three model files.
+
 # Road Map
 
 The road map for this project.
