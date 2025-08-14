@@ -80,7 +80,7 @@ namespace ALTViewer
                 vertices.Add((x, y, z));
             }
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
-            for (int i = 1; i < quadCount; i++) // Count Quads ( start at 1 to account for zero based indexing )
+            for (int i = 1; i < quadCount; i++) // Count Quads ( start at 1 to avoid the final face which is always FF FF FF FF )
             {
                 int a = br.ReadInt32();
                 int b = br.ReadInt32();
@@ -168,12 +168,12 @@ namespace ALTViewer
                     localIndex -= count;
                 }
 
-                if (!found || localIndex >= uvRects[texGroup].Count)
-                {
-                    //MessageBox.Show($"{levelName}:{i}");              //L905LEV:6358 //this only pops for one face in one level
-                    //MessageBox.Show($"{localIndex}");                 //65167
-                    //MessageBox.Show($"{uvRects[texGroup].Count}");    //64
-                    //MessageBox.Show($"{q.TexIndex}");                 //65535 ( FF FF ) @ 0x3A6D0
+                if (!found) // L905LEV:6358 // this only pops for one face in one level //MessageBox.Show($"{levelName}:{i}");  
+                {        
+                    // a : 7285 // b : 7340 // c : 7315 // d : 7316
+                    // texIndex : 65535 ( FF FF ) @ 0x3A6D0
+                    // flags : 14
+                    // other : 138
                     // Fallback rectangle or skip invalid quad
                     faceUvs.Add(new int[] { 1, 1, 1, 1 }); // or log + continue
                     continue;
