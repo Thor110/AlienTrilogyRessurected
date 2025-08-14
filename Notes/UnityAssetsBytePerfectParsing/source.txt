@@ -1,0 +1,8 @@
+From both repositories which adapted my code from this repository for use in Unity.
+
+Mesh Loader written by CsCodeDude : https://github.com/CsCodeDude/AlienTrilogyUnity
+Object Loader written by bambamalicious : https://github.com/bambamalicious/AlienTrilogyUnity
+
+I cleaned up the functionality and general layout to be much more in line with the classes from my latest version in this repository.
+
+Updating the documentation and implementing byte perfect parsing.
