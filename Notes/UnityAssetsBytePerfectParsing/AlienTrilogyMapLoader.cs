@@ -274,7 +274,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         byte[] TP;
         byte[] CL;
         int levelID = int.Parse(levelPath.Substring(levelPath.Length - 10, 3)); //Get Level ID from levelPath String
-        List<(int X, int Y, int Width, int Height)> rectangles = new();
+        (int X, int Y, int Width, int Height)[] rectBuffer = new (int, int, int, int)[112];
         using var br = new BinaryReader(File.OpenRead(texturePath));
         br.BaseStream.Seek(36, SeekOrigin.Current);         // skip base header (36)
         for (int i = 0; i < 5; i++)                         // perfect read order TP/CL/BX*5
@@ -284,15 +284,15 @@ public class AlienTrilogyMapLoader : MonoBehaviour
             br.BaseStream.Seek(12, SeekOrigin.Current);     // CL header
             CL = br.ReadBytes(512);                         // palette
             br.BaseStream.Seek(8, SeekOrigin.Current);      // BX header
-            rectangles = new();                             // renew rectangles list
             int rectCount = br.ReadInt16();                 // UV rectangle count
+            Span<(int X, int Y, int Width, int Height)> rectangles = rectBuffer.AsSpan(0, rectCount);
             for (int j = 0; j < rectCount; j++)
             {
-                rectangles.Add((br.ReadByte(), br.ReadByte(), br.ReadByte() + 1, br.ReadByte() + 1));
+                rectBuffer[j] = (br.ReadByte(), br.ReadByte(), br.ReadByte() + 1, br.ReadByte() + 1);
                 br.BaseStream.Seek(2, SeekOrigin.Current);  // unknown bytes
             }
             if (rectCount % 2 == 0) { br.BaseStream.Seek(2, SeekOrigin.Current); }    // if number of UVs is even, read forward two extra bytes
-            uvRects.Add(rectangles);
+            uvRects.Add(new List<(int, int, int, int)>(rectBuffer.AsSpan(0, rectCount).ToArray())); // TODO : change upstream to match so it doesn't have to be converted to List
             texture.name = $"Tex_{i:D2}";
             imgData.Add(RenderRaw8bppImageUnity(TP, Convert16BitPaletteToRGB(CL), textureSize, levelID, i));
         }
