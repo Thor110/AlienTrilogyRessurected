@@ -76,7 +76,7 @@ namespace ALTViewer
                 short x = br.ReadInt16();
                 short y = br.ReadInt16();
                 short z = br.ReadInt16();
-                br.ReadBytes(2); // unknown bytes
+                br.ReadBytes(2);                        // unknown bytes
                 vertices.Add((x, y, z));
             }
             List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)> quads = new();
@@ -86,9 +86,9 @@ namespace ALTViewer
                 int b = br.ReadInt32();
                 int c = br.ReadInt32();
                 int d = br.ReadInt32();
-                ushort texIndex = br.ReadUInt16(); // signed or unsigned?
+                ushort texIndex = br.ReadUInt16();
                 byte flags = br.ReadByte();
-                byte other = br.ReadByte(); // unknown byte
+                byte other = br.ReadByte();             // unknown byte
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
             // Read UV rectangles BX00-BX04
@@ -169,13 +169,9 @@ namespace ALTViewer
                 }
 
                 if (!found) // L905LEV:6358 // this only pops for one face in one level //MessageBox.Show($"{levelName}:{i}");  
-                {        
-                    // a : 7285 // b : 7340 // c : 7315 // d : 7316
-                    // texIndex : 65535 ( FF FF ) @ 0x3A6D0
-                    // flags : 14
-                    // other : 138
-                    // Fallback rectangle or skip invalid quad
-                    faceUvs.Add(new int[] { 1, 1, 1, 1 }); // or log + continue
+                {
+                    // a : 7285 // b : 7340 // c : 7315 // d : 7316 // texIndex : 65535 ( FF FF ) @ 0x3A6D0 // flags : 14 // other : 138 // L905LEV:6358 
+                    faceUvs.Add(new int[] { 1, 1, 1, 1 }); // Fallback rectangle or skip invalid quad // or log + continue
                     continue;
                 }
 
@@ -520,31 +516,10 @@ namespace ALTViewer
                     textureDirectory = Utilities.CheckDirectory() + "LANGUAGE\\PNL1GFXE.16";
                     textureName = "PNL1GFXE";
                 }
-                else if (special && m == 36) // OBJ3D special case -> defaults to PICKGFX for now // UNRESOLVED
-                {
-                    // unknown switch maybe // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
-                    textureDirectory = backupDirectory; // restore previous texture directory
-                    textureName = backupName; // restore previous texture name
-                    // unknown switch maybe
-                }
-                else if (special && m >= 37 && m <= 38) // OBJ3D PYLON AND COMPUTER -> uses PICKGFX
+                else if (special && m >= 36 && m <= 40) // OBJ3D PYLON AND COMPUTER -> uses PICKGFX
                 {
                     textureDirectory = backupDirectory; // restore previous texture directory
                     textureName = backupName; // restore previous texture name
-                }
-                else if (special && m == 39) // OBJ3D special case -> defaults to PICKGFX for now // UNRESOLVED
-                {
-                    // 39 is unknown, same model as EGGHUSK // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
-                    textureDirectory = backupDirectory; // restore previous texture directory
-                    textureName = backupName; // restore previous texture name
-                    // 39 is unknown, same model as EGGHUSK
-                }
-                else if (special && m == 40) // OBJ3D POD COVER -> defaults to PICKGFX for now // UNRESOLVED
-                {
-                    // texture unknown // definitely not PNL0GFXE, PNL1GFXE or PICKGFX
-                    textureDirectory = backupDirectory; // restore previous texture directory
-                    textureName = backupName; // restore previous texture name
-                    // texture unknown
                 }
                 if (uvSections.Count != 1 && !special) // OPTOBJ case
                 {
@@ -562,7 +537,7 @@ namespace ALTViewer
                 int quadCount = br.ReadInt32();
                 int vertexCount = br.ReadInt32();
 
-                var quads = new List<(int A, int B, int C, int D, ushort TexIndex, ushort Flags)>();
+                var quads = new List<(int A, int B, int C, int D, ushort TexIndex, byte Flags, byte Other)>();
                 var vertices = new List<(short X, short Y, short Z)>();
 
                 for (int i = 0; i < quadCount; i++)
@@ -572,9 +547,9 @@ namespace ALTViewer
                     int c = br.ReadInt32();
                     int d = br.ReadInt32();
                     ushort texIndex = br.ReadUInt16();
-                    ushort flags = br.ReadUInt16();
-
-                    quads.Add((a, b, c, d, texIndex, flags));
+                    byte flags = br.ReadByte();
+                    byte other = br.ReadByte();
+                    quads.Add((a, b, c, d, texIndex, flags, other));
                 }
 
                 for (int i = 0; i < vertexCount; i++)
@@ -582,7 +557,7 @@ namespace ALTViewer
                     short x = br.ReadInt16();
                     short y = br.ReadInt16();
                     short z = br.ReadInt16();
-                    br.ReadUInt16(); // padding
+                    br.ReadUInt16();                    // padding
                     vertices.Add((x, y, z));
                 }
 
@@ -704,7 +679,7 @@ namespace ALTViewer
                 byte y = br.ReadByte();
                 byte width = br.ReadByte();
                 byte height = br.ReadByte();
-                br.ReadBytes(2); // unknown bytes
+                br.ReadBytes(2);                        // unknown bytes
                 rectangles.Add((x, y, width + 1, height + 1)); // +/- 1 and no +/- all have their own problems???...
             }
             return rectangles;
@@ -727,8 +702,7 @@ namespace ALTViewer
                 int d = br.ReadInt32();
                 ushort texIndex = br.ReadUInt16();
                 byte flags = br.ReadByte();
-                byte other = br.ReadByte(); // unknown byte
-
+                byte other = br.ReadByte();             // unknown byte
                 quads.Add((a, b, c, d, texIndex, flags, other));
             }
             // Read vertex positions
@@ -737,7 +711,7 @@ namespace ALTViewer
                 short x = br.ReadInt16();
                 short y = br.ReadInt16();
                 short z = br.ReadInt16();
-                br.ReadUInt16(); // padding
+                br.ReadUInt16();                        // padding
                 vertices.Add((x, y, z));
             }
             // Read UV rectangles BX00-BX04
