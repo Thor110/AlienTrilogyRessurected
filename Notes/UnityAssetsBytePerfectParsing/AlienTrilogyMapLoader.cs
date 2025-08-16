@@ -1,15 +1,10 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TimerExample : MonoBehaviour
 {
@@ -50,22 +45,22 @@ public class CollisionNode
 {
     public string Name;
     public GameObject obj;
-    public int unknown1;
-    public int unknown2;
-    public int unknown3;
-    public int unknown4;
-    public int unknown5;
-    public int unknown6;
-    public int unknown7;
-    public int unknown8;
-    public int ceilingFog;
-    public int floorFog;
-    public int ceilingHeight;
-    public int floorHeight;
-    public int unknown13;
-    public int unknown14;
-    public int Lighting;
-    public int Action;
+    public byte unknown1;
+    public byte unknown2;
+    public byte unknown3;
+    public byte unknown4;
+    public byte unknown5;
+    public byte unknown6;
+    public byte unknown7;
+    public byte unknown8;
+    public byte ceilingFog;
+    public byte floorFog;
+    public byte ceilingHeight;
+    public byte floorHeight;
+    public byte unknown13;
+    public byte unknown14;
+    public byte Lighting;
+    public byte Action;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -73,14 +68,14 @@ public class PathNode
 {
     public string Name;
     public GameObject obj;
-    public int X;
-    public int Y;
-    public int unused;
-    public int AlternateNode;
-    public int NodeA;
-    public int NodeB;
-    public int NodeC;
-    public int NodeD;
+    public byte X;
+    public byte Y;
+    public byte unused;
+    public byte AlternateNode;
+    public byte NodeA;
+    public byte NodeB;
+    public byte NodeC;
+    public byte NodeD;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -88,26 +83,26 @@ public class Monster
 {
     public string Name;
     public GameObject spawnedObj;
-    public int Type;
-    public int X;
-    public int Y;
-    public int Z;
-    public int Rotation;
-    public int Health;
-    public int Drop;
-    public int unknown2;
-    public int Difficulty;
-    public int unknown4;
-    public int unknown5;
-    public int unknown6;
-    public int unknown7;
-    public int unknown8;
-    public int Speed;
-    public int unknown9;
-    public int unknown10;
-    public int unknown11;
-    public int unknown12;
-    public int unknown13;
+    public byte Type;
+    public byte X;
+    public byte Y;
+    public byte Z;
+    public byte Rotation;
+    public byte Health;
+    public byte Drop;
+    public byte unknown2;
+    public byte Difficulty;
+    public byte unknown4;
+    public byte unknown5;
+    public byte unknown6;
+    public byte unknown7;
+    public byte unknown8;
+    public byte Speed;
+    public byte unknown9;
+    public byte unknown10;
+    public byte unknown11;
+    public byte unknown12;
+    public byte unknown13;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -115,22 +110,22 @@ public class Crate
 {
     public string Name;
     public GameObject spawnedObject;
-    public int X;
-    public int Y;
-    public int Type;
-    public int Drop;
-    public int unknown1;
-    public int unknown2;
-    public int Drop1;
-    public int Drop2;
-    public int unknown3;
-    public int unknown4;
-    public int unknown5;
-    public int unknown6;
-    public int unknown7;
-    public int unknown8;
-    public int Rotation;
-    public int unknown10;
+    public byte X;
+    public byte Y;
+    public byte Type;
+    public byte Drop;
+    public byte unknown1;
+    public byte unknown2;
+    public byte Drop1;
+    public byte Drop2;
+    public byte unknown3;
+    public byte unknown4;
+    public byte unknown5;
+    public byte unknown6;
+    public byte unknown7;
+    public byte unknown8;
+    public byte Rotation;
+    public byte unknown10;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -138,14 +133,14 @@ public class Pickup
 {
     public string Name;
     public GameObject spawnedObject;
-    public int X;
-    public int Y;
-    public int Type;
-    public int Amount;
-    public int Multiplier;
-    public int unknown1;
-    public int Z;
-    public int unknown2;
+    public byte X;
+    public byte Y;
+    public byte Type;
+    public byte Amount;
+    public byte Multiplier;
+    public byte unknown1;
+    public byte Z;
+    public byte unknown2;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -153,14 +148,14 @@ public class Door
 {
     public string name;
     public GameObject spawnedObject;
-    public int X;
-    public int Y;
-    public int unknown;
-    public int Time;
-    public int Tag;
-    public int unknown2;
-    public int Rotation;
-    public int Index;
+    public byte X;
+    public byte Y;
+    public byte unknown;
+    public byte Time;
+    public byte Tag;
+    public byte unknown2;
+    public byte Rotation;
+    public byte Index;
 }
 
 [System.Serializable] // Makes the class visible in the Inspector
@@ -193,11 +188,12 @@ public class Lifts
 public class AlienTrilogyMapLoader : MonoBehaviour
 {
     //[Header("PATHS")]
-    private string levelPath = ""; // path to the .MAP file
-    private string texturePath = ""; // path to the .B16 file
+    //private string levelPath = ""; // path to the .MAP file
+    //private string texturePath = ""; // path to the .B16 file
 
     [Header("Object Lists")]
     public List<PathNode> pathNodes = new();
+    [HideInInspector]
     public List<CollisionNode> collisions = new();
     public List<Monster> monsters = new();
     public List<Crate> boxes = new();
@@ -205,22 +201,20 @@ public class AlienTrilogyMapLoader : MonoBehaviour
     public List<Door> doors = new();
     public List<Lifts> lifts = new();
 
-    [Header("Map Strings")]
-    public string unknownMapBytes1;
-    public string unknownMapBytes2;
-    public string unknownMapBytes3;
-    //Map strings
-    public string mapLengthString, mapWidthString, playerStartXString, playerStartYString, monsterCountString, pickupCountString, boxCountString, doorCountString, playerStartAngleString, liftCountString;
+    [Header("Map Values")]
+    //Map values
+    public byte pathCount;
+    public UInt16 vertCount, quadCount, mapLength, mapWidth, playerStartX, playerStartY, monsterCount, pickupCount, boxCount, doorCount, liftCount, playerStart, unknownByte1, unknownByte2, unknownByte3;
 
 
     public Byte[] remainderBytes;
 
     [Header("Settings")]
-	// TODO : Adjust this dynamically
+    // TODO : Adjust this dynamically in future if loading higher resolution textures, note that textures must be square
     public int textureSize = 256; // pixel dimensions
     public bool generateCSV;
-    private float scalingFactor = 1/512f; // scaling corrections
-    private Material baseMaterial;
+    private float scalingFactor = 1 / 512f; // scaling corrections
+    public Material baseMaterial;
 
     // These store the mesh data for Unity
     private List<Vector3> meshVertices = new();
@@ -230,11 +224,31 @@ public class AlienTrilogyMapLoader : MonoBehaviour
     // Original vertex data from MAP0 before duplication
     private List<Vector3> originalVertices = new();
 
-    // UV rectangles for each texture group
-    private List<List<(int X, int Y, int Width, int Height)>> uvRects = new();
-
     // Texture image data list
-    private List<Texture2D> imgData = new();
+    private List<Texture2D> imgData = new();    // LEVEL TEXTURES
+    private List<Texture2D> optData = new();    // OPTGFX.B16
+    private List<Texture2D> pnl0Data = new();   // PNL0GFXE.16
+    private List<Texture2D> pnl1Data = new();   // PNL1GFXE.16
+    private List<Texture2D> pickData = new();   // PICKGFX.BND
+    // UV rectangles for each texture group
+    private List<List<(int X, int Y, int Width, int Height)>> uvRects = new();      // LEVEL UVS
+    private List<List<(int X, int Y, int Width, int Height)>> optRects = new();     // OPTGFX.B16 UVS
+    private List<List<(int X, int Y, int Width, int Height)>> pnl0Rects = new();    // PNL0GFXE.16 UVS
+    private List<List<(int X, int Y, int Width, int Height)>> pnl1Rects = new();    // PNL1GFXE.16 UVS
+    private List<List<(int X, int Y, int Width, int Height)>> pickRects = new();    // PICKGFX.BND UVS
+
+    //Final Map Output
+    public GameObject child;
+
+    // 3D models
+    private List<byte[]> obj3dModels = new();   // OBJ3D.BND
+    private List<byte[]> optobjModels = new();  // OPTOBJ.BND
+    private List<byte[]> pickmodModels = new(); // PICKMOD.BND
+
+    // Pass data forward to constructed mesh arrays to eliminate the need for the byte arrays
+    public Mesh[] obj3dMeshes;
+    public Mesh[] optobjMeshes;
+    public Mesh[] pickmodMeshes;
 
     public static AlienTrilogyMapLoader loader;
 
@@ -255,46 +269,112 @@ public class AlienTrilogyMapLoader : MonoBehaviour
     /*
 		Load the file from a given path and build the map in Unity
 	*/
-    [ContextMenu("Load Level")]
     public void Initiate(string levelToLoad, string texturesToLoad)
     {
-		baseMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-        levelPath = levelToLoad;
-        texturePath = texturesToLoad;
-        BuildMapTextures(); // Build map textures
-        BuildMapGeometry(); // Build map geometry
-        BuildMapMesh();     // Build map mesh
+        //baseMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        BuildModelLists();                          // Build model lists
+        BuildLevel(levelToLoad, texturesToLoad);    // Build Level ( so it can be recalled later )
     }
-    /*
-		Build the map textures
-	*/
-    private void BuildMapTextures()
+    private void BuildLevel(string levelToLoad, string texturesToLoad)
     {
-        Texture2D texture = new Texture2D(1, 1);
-        byte[] TP;
-        byte[] CL;
-        int levelID = int.Parse(levelPath.Substring(levelPath.Length - 10, 3)); //Get Level ID from levelPath String
-        (int X, int Y, int Width, int Height)[] rectBuffer = new (int, int, int, int)[112];
+        List<List<(int X, int Y, int Width, int Height)>>[] uvStore = { uvRects };
+        List<Texture2D>[] textureList = { imgData };
+        LoadUncompressedTextures(texturesToLoad, textureList[0], 5, int.Parse(levelToLoad.Substring(levelToLoad.Length - 10, 3)), uvStore[0]); // load map textures
+        BuildMapGeometry(levelToLoad);  // Build map geometry
+        BuildMapMesh();                 // Build map mesh
+    }
+    private void BuildMeshLists()
+    {
+        // build geometry then mesh
+    }
+    private void BuildModelLists()
+    {
+        int[] modelCount = { 42, 14, 26 };
+        string gameDirectory = MapPuller.finder.gameDirectory;
+        string[] modelFiles = {
+            Path.Combine(gameDirectory, "GFX", "OBJ3D.BND"),
+            Path.Combine(gameDirectory, "GFX", "OPTOBJ.BND"),
+            Path.Combine(gameDirectory, "GFX", "PICKMOD.BND")
+        };
+        List<byte[]>[] modelLists = { obj3dModels, optobjModels, pickmodModels };
+        BinaryReader br = null;
+        int i = 0;
+        try
+        {
+            for (i = 0; i < 3; i++)
+            {
+                br = new BinaryReader(File.OpenRead(Path.Combine(modelFiles[i])));
+                listModels(modelCount[i], modelLists[i]);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Failed to load models! : {i}", ex);
+        }
+        finally
+        {
+            br?.Close();
+        }
+        void listModels(int count, List<byte[]> array)
+        {
+            br.BaseStream.Seek(12, SeekOrigin.Current);             // skip base header (12)
+            for (int i = 0; i < count; i++)
+            {
+                br.BaseStream.Seek(6, SeekOrigin.Current);          // model header
+                byte[] lenBytes = br.ReadBytes(2);                  // raw bytes from file
+                Array.Reverse(lenBytes);                            // swap endianness
+                short modelLength = BitConverter.ToInt16(lenBytes, 0);
+                byte[] model = br.ReadBytes(modelLength);
+                array.Add(model);
+            }
+        }
+        string[] textureFiles = {
+            Path.Combine(gameDirectory, "GFX", "OPTGFX.B16"),
+            Path.Combine(gameDirectory, "LANGUAGE", "PNL0GFXE.16"),
+            Path.Combine(gameDirectory, "LANGUAGE", "PNL1GFXE.16"),
+            Path.Combine(gameDirectory, "GFX", "PICKGFX.BND")
+        };
+        List<Texture2D>[] textureList = { optData, pnl0Data, pnl1Data, pickData };
+        int[] textureCount = { 14, 1, 1, 1 };
+        List<List<(int X, int Y, int Width, int Height)>>[] uvStore = { optRects, pnl0Rects, pnl1Rects, pickRects };
+        for (i = 0; i < 4; i++)
+        {
+            LoadUncompressedTextures(textureFiles[i], textureList[i], textureCount[i], 0, uvStore[i]);
+        }
+        BuildMeshLists();
+    }
+    // build and store uncompressed textures with embedded palettes
+    private void LoadUncompressedTextures(string texturePath, List<Texture2D> textureList, int textureCount, int transparencyID,
+        List<List<(int X, int Y, int Width, int Height)>> uvStore)
+    {
+        Texture2D texture = null!;
+        List<(int X, int Y, int Width, int Height)> rectangles = new();
         using var br = new BinaryReader(File.OpenRead(texturePath));
         br.BaseStream.Seek(36, SeekOrigin.Current);         // skip base header (36)
-        for (int i = 0; i < 5; i++)                         // perfect read order TP/CL/BX*5
+        for (int i = 0; i < textureCount; i++)
         {
             br.BaseStream.Seek(8, SeekOrigin.Current);      // TP header
-            TP = br.ReadBytes(65536);                       // texture
+            byte[] TP = br.ReadBytes(65536);                // texture
             br.BaseStream.Seek(12, SeekOrigin.Current);     // CL header
-            CL = br.ReadBytes(512);                         // palette
+            byte[] CL = br.ReadBytes(512);                  // palette
             br.BaseStream.Seek(8, SeekOrigin.Current);      // BX header
+            rectangles = new();                             // renew rectangles list
             int rectCount = br.ReadInt16();                 // UV rectangle count
-            Span<(int X, int Y, int Width, int Height)> rectangles = rectBuffer.AsSpan(0, rectCount);
             for (int j = 0; j < rectCount; j++)
             {
-                rectBuffer[j] = (br.ReadByte(), br.ReadByte(), br.ReadByte() + 1, br.ReadByte() + 1);
+                byte x = br.ReadByte();
+                byte y = br.ReadByte();
+                byte width = br.ReadByte();
+                byte height = br.ReadByte();
                 br.BaseStream.Seek(2, SeekOrigin.Current);  // unknown bytes
+                rectangles.Add((x, y, width + 1, height + 1));
             }
             if (rectCount % 2 == 0) { br.BaseStream.Seek(2, SeekOrigin.Current); }    // if number of UVs is even, read forward two extra bytes
-            uvRects.Add(new List<(int, int, int, int)>(rectBuffer.AsSpan(0, rectCount).ToArray())); // TODO : change upstream to match so it doesn't have to be converted to List
+            uvStore.Add(rectangles);
+            texture = RenderRaw8bppImageUnity(TP, Convert16BitPaletteToRGB(CL), textureSize, transparencyID, i);
+            texture.filterMode = FilterMode.Bilinear;
             texture.name = $"Tex_{i:D2}";
-            imgData.Add(RenderRaw8bppImageUnity(TP, Convert16BitPaletteToRGB(CL), textureSize, levelID, i));
+            textureList.Add(texture);
         }
     }
     /*
@@ -582,7 +662,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
     /*
 		Build the map geometry and prepare mesh data (vertices, uvs, triangles)
 	*/
-    private void BuildMapGeometry()
+    private void BuildMapGeometry(string levelPath)
     {
         // Clear all lists to avoid artefacts
         meshVertices.Clear();
@@ -592,38 +672,28 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         // load MAP0 chunk
         using var br = new BinaryReader(File.OpenRead(levelPath));
         br.BaseStream.Seek(20, SeekOrigin.Current);     // Skip header bytes
-        ushort vertCount = br.ReadUInt16();             // Read number of vertices
-        ushort quadCount = br.ReadUInt16();             // Read number of quads
-        ushort mapLength = br.ReadUInt16();             // map length
-        mapLengthString = mapLength.ToString();         // display map length
-        ushort mapWidth = br.ReadUInt16();              // map width
-        mapWidthString = mapWidth.ToString();           // display map width
-        ushort playerStartX = br.ReadUInt16();          // player start X coordinate
-        playerStartXString = playerStartX.ToString();   // display player start X coordinate
-        ushort playerStartY = br.ReadUInt16();          // player start Y coordinate
-        playerStartYString = playerStartY.ToString();   // display player start Y coordinate
-        byte pathCount = br.ReadByte();                 // path count
+        vertCount = br.ReadUInt16();             // Read number of vertices
+        quadCount = br.ReadUInt16();             // Read number of quads
+        mapLength = br.ReadUInt16();             // map length & display in inspector
+        mapWidth = br.ReadUInt16();              // map width & display in inspector
+        playerStartX = br.ReadUInt16();          // player start X coordinate
+        //playerStartXString = playerStartX.ToString();   // display player start X coordinate
+        playerStartY = br.ReadUInt16();          // player start Y coordinate
+        //playerStartYString = playerStartY.ToString();   // display player start Y coordinate
+        pathCount = br.ReadByte();                 // path count
         br.ReadByte();                                  // UNKNOWN 0 ( unused? 128 on all levels ) - possibly lighting related             
-        ushort monsterCount = br.ReadUInt16();          // monster count
-        monsterCountString = monsterCount.ToString();   // display monster count
-        ushort pickupCount = br.ReadUInt16();           // pickup count
-        pickupCountString = pickupCount.ToString();     // display pickup count
-        ushort boxCount = br.ReadUInt16();              // object count
-        boxCountString = boxCount.ToString();           // display object count
-        ushort doorCount = br.ReadUInt16();             // door count
-        doorCountString = doorCount.ToString();         // display door count
-        ushort liftCount = br.ReadUInt16();             // lift count
-        liftCountString = liftCount.ToString();         // display lift count
-        ushort playerStart = br.ReadUInt16();           // player start angle
-        playerStartAngleString = playerStart.ToString();// display player start angle
+        monsterCount = br.ReadUInt16();          // monster count
+        pickupCount = br.ReadUInt16();           // pickup count
+        boxCount = br.ReadUInt16();              // object count
+        doorCount = br.ReadUInt16();             // door count
+        liftCount = br.ReadUInt16();             // lift count
+        playerStart = br.ReadUInt16();           // player start angle
         // unknown bytes
-        ushort unknown1 = br.ReadUInt16();              // unknown 1
-        unknownMapBytes1 = unknown1.ToString();         // display unknown 1
+        unknownByte1 = br.ReadUInt16();              // unknown 1
         br.ReadBytes(2);                                // always 0x4040    ( unknown )
-        ushort unknown2 = br.ReadUInt16();              // unknown2
-        unknownMapBytes2 = unknown2.ToString();         // display unknown 1
+        unknownByte2 = br.ReadUInt16();              // unknown2
         ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
-        // Chapter 1 ( enemyTypes ) - 16/17/18/19 are likely not a part of the enemyTypes ( example : first two levels )
+        // Chapter 1 ( enemyTypes )
         // L111LEV - 22 00 // 2 / 6
         // L112LEV - 22 00 // 2 / 6 / 16
         // L113LEV - 00 00 // null
@@ -663,8 +733,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         // L391LEV - 43 00 // 7 / 1 / 2
         // Multiplayer Levels ( enemyTypes )
         // All = 00 10
-        ushort unknown3 = br.ReadUInt16();              // unknown3
-        unknownMapBytes3 = unknown3.ToString();         // display unknown 1
+        unknownByte3 = br.ReadUInt16();              // unknown3
         for (int i = 0; i < vertCount; i++)
         {
             try
@@ -682,7 +751,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
             }
         }
 
-        UnityEngine.Debug.Log("originalVertices.Count = " + originalVertices.Count);
+        //UnityEngine.Debug.Log("originalVertices.Count = " + originalVertices.Count);
 
         // Read and process quads, duplicating vertices & uvs per quad
         for (int i = 0; i < quadCount; i++)
@@ -723,7 +792,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
                     a >= originalVertices.Count || b >= originalVertices.Count ||
                     c >= originalVertices.Count || d >= originalVertices.Count)
                 {
-                    UnityEngine.Debug.LogWarning($"Invalid quad indices at quad {i}: {a}, {b}, {c}, {d}, {flags}");
+                    //UnityEngine.Debug.LogWarning($"Invalid quad indices at quad {i}: {a}, {b}, {c}, {d}, {flags}");
                     d = a; // Triangle instead of quad
                     issueFound = true;
                 }
@@ -813,7 +882,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         // collision block formula = multiply length by width - (16 bytes per collision node.)
         for (int i = 0; i < collisionBlockCount; i++)
         {
-            CollisionNode node = new CollisionNode
+            CollisionNode node = new()
             {
                 unknown1 = br.ReadByte(),       // all values exist from 0-255                      ( 256 possible values )
                 unknown2 = br.ReadByte(),       // all values exist from 0-55 and 255               ( 57 possible values )
@@ -889,7 +958,7 @@ public class AlienTrilogyMapLoader : MonoBehaviour
                 // 07 - Queen
                 // 08 - Ceiling Warrior Drone
                 // 09 - Ceiling Dog Alien
-                // 0A - Colonist
+                // 10 - Colonist
                 // 0B - Guard
                 // 0C - Soldier
                 // 0D - Synthetic
@@ -1100,10 +1169,9 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        GameObject child = new GameObject("Map");
+        child = new GameObject("Map");
         child.transform.parent = this.transform;
-        child.transform.localPosition = Vector3.zero;
-        child.transform.localRotation = Quaternion.identity;
+        child.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         child.transform.localScale = Vector3.one;
 
         var mf = child.AddComponent<MeshFilter>();
@@ -1114,7 +1182,8 @@ public class AlienTrilogyMapLoader : MonoBehaviour
 
         // Un-mirror
         child.transform.localScale = new Vector3(-1f, 1f, 1f) * scalingFactor;
-        child.transform.localPosition = new Vector3(-int.Parse(mapLengthString) / 2, 2, int.Parse(mapWidthString) / 2);
+        //position correctly for ALT co-ord system - To add, offset
+        child.transform.localPosition = new Vector3(-mapLength / 2, 2, mapWidth / 2);
         child.AddComponent<MeshCollider>();
 
         UnityEngine.Debug.Log("mesh.subMeshCount = " + mesh.subMeshCount);
