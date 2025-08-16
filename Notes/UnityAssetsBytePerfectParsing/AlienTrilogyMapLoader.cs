@@ -283,9 +283,11 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         BuildMapGeometry(levelToLoad);  // Build map geometry
         BuildMapMesh();                 // Build map mesh
     }
-    private void BuildMeshLists()
+    private void BuildModelGeometry(byte[] data)
     {
-        // build geometry then mesh
+        BinaryReader br = new BinaryReader(new MemoryStream(data));
+        //quads then verts!!!
+        //different flags etc
     }
     private void BuildModelLists()
     {
@@ -341,7 +343,46 @@ public class AlienTrilogyMapLoader : MonoBehaviour
         {
             LoadUncompressedTextures(textureFiles[i], textureList[i], textureCount[i], 0, uvStore[i]);
         }
-        BuildMeshLists();
+        for (i = 0; i < 42; i++)
+        {
+            BuildModelGeometry(obj3dModels[i]);
+            if (i >= 3 && i <= 18 || i == 35) // OBJ3D LOCKERS & COIL OBSTACLE
+            {
+                BuildModelMesh(pnl0Data, pnl0Rects);
+            }
+            else if (i >= 19 && i <= 34 || i == 41) // OBJ3D BONESHIP SWITCHES && EGGHUSK
+            {
+                BuildModelMesh(pnl1Data, pnl1Rects);
+            }
+            else
+            {
+                BuildModelMesh(pickData, pickRects);
+            }
+            meshVertices.Clear();
+            meshUVs.Clear();
+            meshTriangles.Clear();
+        }
+        for (i = 0; i < 14; i++)
+        {
+            BuildModelGeometry(optobjModels[i]);
+            BuildModelMesh(optData, optRects);
+            meshVertices.Clear();
+            meshUVs.Clear();
+            meshTriangles.Clear();
+        }
+        for (i = 0; i < 26; i++)
+        {
+            BuildModelGeometry(pickmodModels[i]);
+            BuildModelMesh(pickData, pickRects);
+            meshVertices.Clear();
+            meshUVs.Clear();
+            meshTriangles.Clear();
+        }
+    }
+
+    private void BuildModelMesh(List<Texture2D> textureList, List<List<(int X, int Y, int Width, int Height)>> uvStore)
+    {
+        // no sub meshes!
     }
     // build and store uncompressed textures with embedded palettes
     private void LoadUncompressedTextures(string texturePath, List<Texture2D> textureList, int textureCount, int transparencyID,
