@@ -1065,20 +1065,22 @@ namespace ALTViewer
         {
             if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first!"); return; }
             File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
-            MessageBox.Show("Remainder dumped.");
+            if(!exporting) { MessageBox.Show("Remainder dumped."); }
         }
         // dump all remainders from all levels data
         private void button8_Click(object sender, EventArgs e)
         {
-            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
+            exporting = true;
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
                 listBox1.SelectedIndex = i;
-                File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
+                button7_Click(null!, null!);
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            exporting = false;
+            //listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             MessageBox.Show("All remainders dumped.");
         }
         // door models
