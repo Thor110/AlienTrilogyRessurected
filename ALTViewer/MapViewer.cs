@@ -207,7 +207,7 @@ namespace ALTViewer
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             byte pathCount = br.ReadByte();                 // path count
             textBox21.Text = pathCount.ToString();          // display path count
-            br.ReadByte();                                  // UNKNOWN 0 ( unused? 128 on all levels ) - possibly lighting related
+            br.ReadByte();                                  // action / logic count ( 128 on all levels )
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
