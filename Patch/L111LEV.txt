@@ -1,1 +1,29 @@
 Incorrect UVs on some faces, fixed in code on export for now.
+
+Some faces, 16 to be specific, wrongly have flag 4 on L111LEV, this doesn't make any real noticeable difference, except from very specific angles.
+
+Main Room = 00
+
+1822, 1896, 1897, 1819		0x2E33E
+1823, 1822, 1819, 1820		0x2F3E2
+1820, 1819, 1818, 1821		0x2F40A
+1821, 1818, 11858, 11859	0x2F432
+1815, 1823, 1820, 1811		0x307BA
+1811, 1820, 1821, 11847		0x307E2
+11847, 1821, 11859, 11856	0x3080A
+
+End Hallway Ceiling
+
+8443, 8442, 8444, 8445		0x2EE92	= 00
+
+Above Door Wall Sides
+
+11555, 11564, 11549, 11565	0x3054E	= 02
+11564, 11563, 11548, 11549	0x3053A	= 02
+11971, 12055, 11988, 12026	0x391DA	= 02
+12055, 12053, 11989, 11988	0x391C6	= 02
+
+11567, 11506, 11566, 11497	0x38D7A	= 00
+11506, 11507, 11556, 11566	0x38D66	= 00
+12013, 11993, 12054, 11951	0x30936	= 00
+11993, 11996, 12052, 12054	0x30922	= 00

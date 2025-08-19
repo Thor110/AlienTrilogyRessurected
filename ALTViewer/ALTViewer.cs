@@ -79,6 +79,16 @@ namespace ALTViewer
             0x487D2, 0x462F2, 0x4632E, 0x4637E // fix 2 ( pipes )
             };
             foreach (long value in flip00905) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            // L111LEV.MAP - incorrect texture flags
+            patchDirectory = Utilities.CheckDirectory() + "SECT11\\L111LEV.MAP";
+            long[] flip00111 = { 0x2E33E, 0x2F3E2, 0x2F40A, 0x2F432, 0x307BA, 0x307E2, 0x3080A, 0x2EE92, 0x38D7A, 0x38D66, 0x30936, 0x30922 };
+            foreach (long value in flip00111) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            long[] flip02111 = { 0x3054E, 0x3053A, 0x391DA, 0x391C6 };
+            foreach (long value in flip02111) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
+            // L900LEV.MAP - incorrect texture flags
+            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L900LEV.MAP";
+            foreach (long value in flip00111) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            foreach (long value in flip02111) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");

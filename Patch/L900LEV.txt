@@ -1,1 +1,3 @@
+Incorrect texture flags patched.
+
 Incorrect UVs on some faces, fixed in code on export for now. ( same as L111LEV )
