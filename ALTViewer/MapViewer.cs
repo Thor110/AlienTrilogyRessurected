@@ -54,6 +54,8 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Z,
             byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
+        private List<(ushort Unk1, ushort Unk2, long Offset)> actionListA = new();
+        private List<(ushort Unk1, ushort Unk2, long Offset)> actionListB = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
@@ -165,6 +167,8 @@ namespace ALTViewer
             objects.Clear();
             doors.Clear();
             lifts.Clear();
+            actionListA.Clear();
+            actionListB.Clear();
             // clear textboxes
             textBox13.Text = "";
             textBox14.Text = "";
@@ -207,7 +211,7 @@ namespace ALTViewer
             textBox7.Text = playerStartY.ToString();        // display player start Y coordinate
             byte pathCount = br.ReadByte();                 // path count
             textBox21.Text = pathCount.ToString();          // display path count
-            br.ReadByte();                                  // action / logic count ( 128 on all levels )
+            br.ReadByte();                                  // UNKNOWN ( 128 on all levels )
             ushort monsterCount = br.ReadUInt16();          // monster count
             textBox8.Text = monsterCount.ToString();        // display monster count
             ushort pickupCount = br.ReadUInt16();           // pickup count
@@ -271,9 +275,9 @@ namespace ALTViewer
             // L907LEV - 17 00
             // L908LEV - 0A 00
             // L909LEV - 0A 00
-            br.ReadBytes(2);                                // always 0x4040    ( unknown )
-            ushort unknown2 = br.ReadUInt16();              // unknown2
-            // Chapter 1 ( unknown 2 )
+            br.ReadBytes(2);                                // always 0x4040    ( unknown ) - 64 64 action sequence block counts - not needed, always 64.
+            ushort endMapChunk = br.ReadUInt16();
+            // Chapter 1 ( endMapChunk )
             // L111LEV - 14 00
             // L112LEV - 57 01
             // L113LEV - 34 00
@@ -286,7 +290,7 @@ namespace ALTViewer
             // L155LEV - 0C 00
             // L161LEV - 54 00
             // L162LEV - 00 00
-            // Chapter 2 ( unknown 2 )
+            // Chapter 2 ( endMapChunk )
             // L211LEV - D1 00
             // L212LEV - EC 00
             // L213LEV - 1D 00
@@ -297,7 +301,7 @@ namespace ALTViewer
             // L243LEV - 00 00
             // L262LEV - 60 00
             // L263LEV - 0C 00
-            // Chapter 3 ( unknown 2 )
+            // Chapter 3 ( endMapChunk )
             // L311LEV - 52 00
             // L321LEV - 54 00
             // L331LEV - 7E 00
@@ -311,7 +315,7 @@ namespace ALTViewer
             // L381LEV - 78 00
             // L325LEV - 54 00
             // L391LEV - 55 00
-            // Multiplayer Levels ( unknown 2 )
+            // Multiplayer Levels ( endMapChunk )
             // L900LEV - 14 00
             // L901LEV - 71 00
             // L902LEV - 95 00
@@ -711,8 +715,34 @@ namespace ALTViewer
                 byte unk13 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 lifts.Add((x, y, z, unk1, unk3, unk5, unk6, unk7, unk8, unk10, unk11, unk12, unk13, offset));
             }
+            // action sequence 1 formula = 64 * 4 - (4 bytes per action sequence) - specifically 2 ushorts
+            for (int i = 0; i < 64; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                ushort unk1 = br.ReadUInt16();
+                ushort unk2 = br.ReadUInt16();
+                actionListA.Add((unk1, unk2, offset)); // add to action sequence A
+            }
+            // action sequence 2 formula = 64 * 4 - (4 bytes per action sequence) - specifically 2 ushorts
+            for (int i = 0; i < 64; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                ushort unk1 = br.ReadUInt16();
+                ushort unk2 = br.ReadUInt16();
+                actionListB.Add((unk1, unk2, offset)); // add to action sequence B
+            }
+            // minimap data goes here : TODO
+            int endMapBlock = endMapChunk * 4; // calculate end map block offset
+            /*for (int i = 0; i < endMapChunk; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+            }*/
             textBox22.Text = $"{br.BaseStream.Position + 20:X2}";                   // display data remainder offset plus header
-            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position;    // calculate remaining bytes
+            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position - endMapBlock;    // calculate remaining bytes
             textBox19.Text = remainingBytes.ToString();                             // display remaining bytes
             remainder = br.ReadBytes((int)remainingBytes);                          // for dumping remaining bytes
             // clear list boxes
@@ -723,6 +753,8 @@ namespace ALTViewer
             listBox5.Items.Clear();     // clear objects
             listBox6.Items.Clear();     // clear doors
             listBox8.Items.Clear();     // clear lifts
+            listBox11.Items.Clear();    // clear action sequence A
+            listBox12.Items.Clear();    // clear action sequence B
             // populate list boxes
             for (int i = 0; i < collisionBlockCount; i++) { listBox10.Items.Add($"Collision Block {i}"); }
             for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Path Node {i}"); }
@@ -731,6 +763,8 @@ namespace ALTViewer
             for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doorCount; i++) { listBox6.Items.Add($"Door {i}"); }
             for (int i = 0; i < liftCount; i++) { listBox8.Items.Add($"Lift {i}"); }
+            for (int i = 0; i < 64; i++) { listBox11.Items.Add($"Action : {i}"); }
+            for (int i = 0; i < 64; i++) { listBox12.Items.Add($"Action : {i}"); }
             // not used for now
             button3.Enabled = true; // enable open level button
         }
@@ -841,7 +875,7 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
             int index = listBox3.SelectedIndex;
             textBox13.Text = $"Type : {monsters[index].Type}";
             textBox14.Text = $"X : {monsters[index].X}";
@@ -868,7 +902,7 @@ namespace ALTViewer
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
             int index = listBox4.SelectedIndex;
             textBox13.Text = $"X : {pickups[index].X}";
             textBox14.Text = $"Y : {pickups[index].Y}";
@@ -895,7 +929,7 @@ namespace ALTViewer
         // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
             int index = listBox5.SelectedIndex;
             textBox13.Text = $"X : {objects[index].X}";
             textBox14.Text = $"Y : {objects[index].Y}";
@@ -922,7 +956,7 @@ namespace ALTViewer
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9, listBox10, listBox11, listBox12 });
             int index = listBox6.SelectedIndex;
             textBox13.Text = $"X : {doors[index].X}";
             textBox14.Text = $"Y : {doors[index].Y}";
@@ -949,7 +983,7 @@ namespace ALTViewer
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9, listBox10, listBox11, listBox12 });
             int index = listBox8.SelectedIndex;
             textBox13.Text = $"X : {lifts[index].X}";
             textBox14.Text = $"Y : {lifts[index].Y}";
@@ -976,7 +1010,7 @@ namespace ALTViewer
         // path nodes
         private void listBox9_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox10 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox10, listBox11, listBox12 });
             int index = listBox9.SelectedIndex;
             textBox13.Text = $"X : {paths[index].X}";
             textBox14.Text = $"Y : {paths[index].Y}";
@@ -1003,7 +1037,7 @@ namespace ALTViewer
         // collision blocks
         private void listBox10_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox9 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox9, listBox11, listBox12 });
             int index = listBox10.SelectedIndex;
             textBox13.Text = $"Unk1 : {collisionBlocks[index].Unk1}";
             textBox14.Text = $"Unk2 : {collisionBlocks[index].Unk2}";
@@ -1026,6 +1060,60 @@ namespace ALTViewer
             textBox36.Text = "null";
             textBox37.Text = "null";
             textBox23.Text = $"{collisionBlocks[index].Offset:X2}";
+        }
+
+        private void listBox11_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox3, listBox12 });
+            int index = listBox11.SelectedIndex;
+            textBox13.Text = $"Unk1 : {actionListA[index].Unk1}";
+            textBox14.Text = $"Unk2 : {actionListA[index].Unk2}";
+            textBox15.Text = "null";
+            textBox16.Text = "null";
+            textBox17.Text = "null";
+            textBox18.Text = "null";
+            textBox24.Text = "null";
+            textBox25.Text = "null";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{actionListA[index].Offset:X2}";
+        }
+
+        private void listBox12_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3 });
+            int index = listBox12.SelectedIndex;
+            textBox13.Text = $"Unk1 : {actionListB[index].Unk1}";
+            textBox14.Text = $"Unk2 : {actionListB[index].Unk2}";
+            textBox15.Text = "null";
+            textBox16.Text = "null";
+            textBox17.Text = "null";
+            textBox18.Text = "null";
+            textBox24.Text = "null";
+            textBox25.Text = "null";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{actionListA[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
@@ -1053,6 +1141,8 @@ namespace ALTViewer
                 ListBox lb when lb == listBox8 => listBox8_SelectedIndexChanged!,
                 ListBox lb when lb == listBox9 => listBox9_SelectedIndexChanged!,
                 ListBox lb when lb == listBox10 => listBox10_SelectedIndexChanged!,
+                ListBox lb when lb == listBox11 => listBox11_SelectedIndexChanged!,
+                ListBox lb when lb == listBox12 => listBox12_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
@@ -1065,7 +1155,7 @@ namespace ALTViewer
         {
             if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first!"); return; }
             File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
-            if(!exporting) { MessageBox.Show("Remainder dumped."); }
+            if (!exporting) { MessageBox.Show("Remainder dumped."); }
         }
         // dump all remainders from all levels data
         private void button8_Click(object sender, EventArgs e)
