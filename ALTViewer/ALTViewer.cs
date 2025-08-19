@@ -70,6 +70,9 @@ namespace ALTViewer
             0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
             };
             foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            //L906LEV.MAP - D000 - flip texture
+            long[] flip0B = { 0x801C2, 0x80172, 0x80262 };
+            foreach (long value in flip0B) { BinaryUtility.ReplaceByte(value, 0x0B, patchDirectory); }
             // L905LEV.MAP
             patchDirectory = Utilities.CheckDirectory() + "SECT90\\L905LEV.MAP";
             long[] flip00905 = { 0x56ADA, 0x57A8E, // fix 1 ( pipes )
@@ -89,6 +92,13 @@ namespace ALTViewer
             patchDirectory = Utilities.CheckDirectory() + "SECT90\\L900LEV.MAP";
             foreach (long value in flip00111) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
             foreach (long value in flip02111) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
+            // L162LEV.MAP - D001 - incorrect texture index
+            patchDirectory = Utilities.CheckDirectory() + "SECT12\\L162LEV.MAP";
+            BinaryUtility.ReplaceByte(0x323E8, 0x67, patchDirectory);
+            // L161LEV.MAP - D002 - incorrect texture index
+            patchDirectory = Utilities.CheckDirectory() + "SECT12\\L162LEV.MAP";
+            BinaryUtility.ReplaceByte(0x72800, 0xD3, patchDirectory);
+            BinaryUtility.ReplaceByte(0x72802, 0x00, patchDirectory);
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");

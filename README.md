@@ -82,6 +82,7 @@ The road map for this project.
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
 	- [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
 	- [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
+	- [Patched an issue on L906LEV where doors had incorrectly flipped textures.](#L906LEV-Multiplayer-Map-7-Fix-6)
 	- [Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-1)
 	- [Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-2)
 	- [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
@@ -91,6 +92,8 @@ The road map for this project.
 	- [Patched an issue on L900LEV where multiple texture flags were incorrectly set.](#L111LEV-Fix-2)
 	- [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEV-Fix-1)
 	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
+	- [Patched an issue on L161LEV where one face on a door had an incorrect texture.](#L161LEV-Fix-2)
+	- [Patched an issue on L162LEV where one face on the starting door had an incorrect texture.](#L162LEV-Fix-1)
 - [✅ 8 : Easter Eggs](#easter-eggs) ( ??% Complete )
 	- [Grade 33 Steel](#easter-egg-1)
 	- [End Times](#easter-egg-2)
@@ -312,6 +315,20 @@ Here it is with the fix I applied to the level.
 
 Currently this is only fixed when exporting the model and partially fixed in the original game files.
 
+## L906LEV Multiplayer Map 7 Fix 6
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L906-D000.png" alt="L906LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L906-D000-FIX.png" alt="L906LEV Patched">
+</div>
+
 ## L905LEV Multiplayer Map 6 Fix 1
 
 Here is how the level was originally.
@@ -437,6 +454,28 @@ Here it is with the fix I applied to the level.
 </div>
 
 Currently this is only fixed when exporting the level model.
+
+## L161LEV Fix 2
+
+Here is the incorrect texture, I don't think this can even be seen in-game.
+
+<div align="center">
+  <img src="Images/L161LEV-D002.png" alt="L161LEV Original">
+</div>
+
+## L162LEV Fix 1
+
+Here is how the level was originally.
+
+<div align="center">
+  <img src="Images/L162LEV-D001.png" alt="L161LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L162LEV-D001-FIX.png" alt="L161LEV Patched">
+</div>
 
 ## Easter Eggs
 
