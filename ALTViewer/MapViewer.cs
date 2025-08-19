@@ -54,8 +54,10 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Z,
             byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Unk10, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
-        private List<(ushort Unk1, ushort Unk2, long Offset)> actionListA = new();
-        private List<(ushort Unk1, ushort Unk2, long Offset)> actionListB = new();
+        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListA = new();
+        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListB = new();
+        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> unknownListA = new();
+        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> unknownListB = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
@@ -225,107 +227,9 @@ namespace ALTViewer
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
-            ushort unknown1 = br.ReadUInt16();              // unknown1
-            // Chapter 1 ( unknown 1 )
-            // L111LEV - 0A 00
-            // L112LEV - 1D 00
-            // L113LEV - 6D 00
-            // L122LEV - 16 00
-            // L131LEV - 52 00
-            // L114LEV - 6B 00
-            // L141LEV - 16 00
-            // L115LEV - 6D 00
-            // L154LEV - 5D 00
-            // L155LEV - 03 00
-            // L161LEV - 30 00
-            // L162LEV - 00 00
-            // Chapter 2 ( unknown 1 )
-            // L211LEV - 6F 00
-            // L212LEV - B0 00
-            // L213LEV - 06 00
-            // L222LEV - 9E 00
-            // L242LEV - 00 00
-            // L231LEV - 17 00
-            // L232LEV - 62 00
-            // L243LEV - 00 00
-            // L262LEV - 0A 00
-            // L263LEV - 02 00
-            // Chapter 3 ( unknown 1 )
-            // L311LEV - 0A 00
-            // L321LEV - 12 00
-            // L331LEV - 1C 00
-            // L322LEV - 12 00
-            // L351LEV - 1D 00
-            // L352LEV - 0F 00
-            // L323LEV - 12 00
-            // L371LEV - 1A 00
-            // L353LEV - 0F 00
-            // L324LEV - 12 00
-            // L381LEV - 1C 00
-            // L325LEV - 18 00
-            // L391LEV - 0C 00
-            // Multiplayer Levels ( unknown 1 )
-            // L900LEV - 0A 00
-            // L901LEV - 16 00
-            // L902LEV - 52 00
-            // L903LEV - 16 00
-            // L904LEV - 6F 00
-            // L905LEV - B0 00
-            // L906LEV - 17 00
-            // L907LEV - 17 00
-            // L908LEV - 0A 00
-            // L909LEV - 0A 00
+            ushort unknownBlockA = br.ReadUInt16();         // unknownListA = unknownBlock * 4
             br.ReadBytes(2);                                // always 0x4040    ( unknown ) - 64 64 action sequence block counts - not needed, always 64.
-            ushort endMapChunk = br.ReadUInt16();
-            // Chapter 1 ( endMapChunk )
-            // L111LEV - 14 00
-            // L112LEV - 57 01
-            // L113LEV - 34 00
-            // L122LEV - 71 00
-            // L131LEV - 8F 00
-            // L114LEV - 2C 00
-            // L141LEV - 30 00
-            // L115LEV - 34 00
-            // L154LEV - 01 01
-            // L155LEV - 0C 00
-            // L161LEV - 54 00
-            // L162LEV - 00 00
-            // Chapter 2 ( endMapChunk )
-            // L211LEV - D1 00
-            // L212LEV - EC 00
-            // L213LEV - 1D 00
-            // L222LEV - 28 01
-            // L242LEV - 00 00
-            // L231LEV - 69 00
-            // L232LEV - 74 01
-            // L243LEV - 00 00
-            // L262LEV - 60 00
-            // L263LEV - 0C 00
-            // Chapter 3 ( endMapChunk )
-            // L311LEV - 52 00
-            // L321LEV - 54 00
-            // L331LEV - 7E 00
-            // L322LEV - 54 00
-            // L351LEV - 8E 00
-            // L352LEV - 78 00
-            // L323LEV - 54 00
-            // L371LEV - 8E 00
-            // L353LEV - 78 00
-            // L324LEV - 54 00
-            // L381LEV - 78 00
-            // L325LEV - 54 00
-            // L391LEV - 55 00
-            // Multiplayer Levels ( endMapChunk )
-            // L900LEV - 14 00
-            // L901LEV - 71 00
-            // L902LEV - 95 00
-            // L903LEV - 30 00
-            // L904LEV - D1 00
-            // L905LEV - EC 00
-            // L906LEV - 69 00
-            // L907LEV - 69 00
-            // L908LEV - 52 00
-            // L909LEV - 52 00
+            ushort unknownBlockB = br.ReadUInt16();         // unknownListB = unknownBlockB * 4 - UNKNOWN
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( enemyTypes ) - 16/17/18/19 are likely not a part of the enemyTypes ( example : first two levels )
             // L111LEV - 22 00 // 2 / 6
@@ -367,53 +271,28 @@ namespace ALTViewer
             // L391LEV - 43 00 // 7 / 1 / 2
             // Multiplayer Levels ( enemyTypes )
             // All = 00 10
-            ushort unknown3 = br.ReadUInt16();              // unknown3
-            // Chapter 1 ( unknown 3 )
-            // L111LEV - 00 00
+            ushort unknown3 = br.ReadUInt16();              // timer for resupply missions possibly?
+            // unknown 3
             // L112LEV - 04 00
-            // L113LEV - 00 00
             // L122LEV - 04 00
-            // L131LEV - 00 00
-            // L114LEV - 00 00
-            // L141LEV - 00 00
-            // L115LEV - 00 00
             // L154LEV - 34 00
             // L155LEV - 2C 00
-            // L161LEV - 00 00
-            // L162LEV - 00 00
-            // Chapter 2 ( unknown 3 )
-            // L211LEV - 00 00
-            // L212LEV - 00 00
-            // L213LEV - 00 00
             // L222LEV - 30 00
-            // L242LEV - 00 00
-            // L231LEV - 00 00
             // L232LEV - 14 00
-            // L243LEV - 00 00
-            // L262LEV - 00 00
-            // L263LEV - 00 00
-            // Chapter 3 ( unknown 3 )
-            // All Chapter 3 Levels = 00 00
-            // Multiplayer Levels ( unknown 3 )
-            // All = 00 00
+            // All other levels = 00 00
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
             // quad formula - the value of these 2 bytes multiply by 20 - (16 bytes dot indices and 4 bytes info)
             br.BaseStream.Seek(quadCount * 20, SeekOrigin.Current);
-            //br.BaseStream.Seek(mapLength * mapWidth * 16, SeekOrigin.Current); // skip cell size data for now
-            // collision 16 //4//2//2//1//1//1//1//2//1//1
+            // collision block formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             int collisionBlockCount = mapLength * mapWidth; // collision blocks size data for now
             textBox38.Text = collisionBlockCount.ToString();
-            // collision block formula - for these bytes = multiply length by width and multiply the resulting value by 16 - (16 bytes describe one cell.)
             var bmp = new Bitmap(246, 246);
             var g = Graphics.FromImage(bmp);
             g.Clear(Color.Black);
             int xCount = 0;
             int yCount = 0;
             Pen pen = Pens.Gray;
-            //MessageBox.Show($"L : {mapLength} W : {mapWidth}"); //92/105
-            //MessageBox.Show($"{collisionBlockCount}");
-            //using var test = new StreamWriter($"{lastSelectedLevel}.bin");
             for (int i = 0; i < collisionBlockCount; i++)
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -564,6 +443,7 @@ namespace ALTViewer
                     unk10, unk11, unk12, unk13,
                     offset));
             }
+            // Lazy enemy remapper - used for testing
             // L111LEV - 22 00 // 2 / 6
             // L131LEV - 26 04 // 2 / 6 / 11 / 3
             // for testing purposes only
@@ -715,36 +595,47 @@ namespace ALTViewer
                 byte unk13 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 lifts.Add((x, y, z, unk1, unk3, unk5, unk6, unk7, unk8, unk10, unk11, unk12, unk13, offset));
             }
-            // action sequence 1 formula = 64 * 4 - (4 bytes per action sequence) - specifically 2 ushorts
+            // action sequence 1 formula = 64 * 4 - (4 bytes per action sequence)
             for (int i = 0; i < 64; i++)
-            {
-                long offset = br.BaseStream.Position + 20;
-                ushort unk1 = br.ReadUInt16();
-                ushort unk2 = br.ReadUInt16();
-                actionListA.Add((unk1, unk2, offset)); // add to action sequence A
-            }
-            // action sequence 2 formula = 64 * 4 - (4 bytes per action sequence) - specifically 2 ushorts
-            for (int i = 0; i < 64; i++)
-            {
-                long offset = br.BaseStream.Position + 20;
-                ushort unk1 = br.ReadUInt16();
-                ushort unk2 = br.ReadUInt16();
-                actionListB.Add((unk1, unk2, offset)); // add to action sequence B
-            }
-            // minimap data goes here : TODO
-            int endMapBlock = endMapChunk * 4; // calculate end map block offset
-            /*for (int i = 0; i < endMapChunk; i++)
             {
                 long offset = br.BaseStream.Position + 20;
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();
                 byte unk3 = br.ReadByte();
                 byte unk4 = br.ReadByte();
-            }*/
-            textBox22.Text = $"{br.BaseStream.Position + 20:X2}";                   // display data remainder offset plus header
-            long remainingBytes = br.BaseStream.Length - br.BaseStream.Position - endMapBlock;    // calculate remaining bytes
-            textBox19.Text = remainingBytes.ToString();                             // display remaining bytes
-            remainder = br.ReadBytes((int)remainingBytes);                          // for dumping remaining bytes
+                actionListA.Add((unk1, unk2, unk3, unk4, offset)); // add to action sequence A
+            }
+            // action sequence 2 formula = 64 * 4 - (4 bytes per action sequence)
+            for (int i = 0; i < 64; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                actionListB.Add((unk1, unk2, unk3, unk4, offset)); // add to action sequence B
+            }
+            br.BaseStream.Seek(3584, SeekOrigin.Current); // suspected minimap data length
+            // unknownListA formula = unknownBlockA * 4 - (4 bytes per sequence)
+            for (int i = 0; i < unknownBlockA; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                unknownListA.Add((unk1, unk2, unk3, unk4, offset));
+            }
+            // unknownListB formula = unknownBlockB * 4 - (4 bytes per sequence)
+            for (int i = 0; i < unknownBlockB; i++)
+            {
+                long offset = br.BaseStream.Position + 20;
+                byte unk1 = br.ReadByte();
+                byte unk2 = br.ReadByte();
+                byte unk3 = br.ReadByte();
+                byte unk4 = br.ReadByte();
+                unknownListB.Add((unk1, unk2, unk3, unk4, offset));
+            }
             // clear list boxes
             listBox10.Items.Clear();    // clear collision blocks
             listBox9.Items.Clear();     // clear path nodes
