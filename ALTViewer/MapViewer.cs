@@ -158,8 +158,7 @@ namespace ALTViewer
             //Lift Models parsed separately for now
             liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse lift sections from the selected level file
             foreach (var section in liftSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
-            // TODO : reenable this when done analysing remaining bytes
-            //if (exporting) { return; } // if exporting, do not parse level data meant for viewing
+            if (exporting) { return; } // if exporting, do not parse level data meant for viewing
             // clear lists
             vertices.Clear();
             quads.Clear();
@@ -171,6 +170,8 @@ namespace ALTViewer
             lifts.Clear();
             actionListA.Clear();
             actionListB.Clear();
+            unknownListA.Clear();
+            unknownListB.Clear();
             // clear textboxes
             textBox13.Text = "";
             textBox14.Text = "";
@@ -227,8 +228,8 @@ namespace ALTViewer
             ushort playerStartAngle = br.ReadUInt16();      // player start angle
             textBox12.Text = playerStartAngle.ToString();   // display player start angle
             // unknown bytes
-            ushort unknownBlockA = br.ReadUInt16();         // unknownListA = unknownBlock * 4
-            br.ReadBytes(2);                                // always 0x4040    ( unknown ) - 64 64 action sequence block counts - not needed, always 64.
+            ushort unknownBlockA = br.ReadUInt16();         // unknownListA = unknownBlockA * 4 - UNKNOWN
+            br.ReadBytes(2);                                // action sequence block counts - not needed, always 64.
             ushort unknownBlockB = br.ReadUInt16();         // unknownListB = unknownBlockB * 4 - UNKNOWN
             ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
             // Chapter 1 ( enemyTypes ) - 16/17/18/19 are likely not a part of the enemyTypes ( example : first two levels )
@@ -646,6 +647,8 @@ namespace ALTViewer
             listBox8.Items.Clear();     // clear lifts
             listBox11.Items.Clear();    // clear action sequence A
             listBox12.Items.Clear();    // clear action sequence B
+            listBox13.Items.Clear();    // clear unknown list A
+            listBox14.Items.Clear();    // clear unknown list B
             // populate list boxes
             for (int i = 0; i < collisionBlockCount; i++) { listBox10.Items.Add($"Collision Block {i}"); }
             for (int i = 0; i < pathCount; i++) { listBox9.Items.Add($"Path Node {i}"); }
@@ -654,8 +657,10 @@ namespace ALTViewer
             for (int i = 0; i < objectCount; i++) { listBox5.Items.Add($"Object {i}"); }
             for (int i = 0; i < doorCount; i++) { listBox6.Items.Add($"Door {i}"); }
             for (int i = 0; i < liftCount; i++) { listBox8.Items.Add($"Lift {i}"); }
-            for (int i = 0; i < 64; i++) { listBox11.Items.Add($"Action : {i}"); }
-            for (int i = 0; i < 64; i++) { listBox12.Items.Add($"Action : {i}"); }
+            for (int i = 0; i < 64; i++) { listBox11.Items.Add($"Action A : {i}"); }
+            for (int i = 0; i < 64; i++) { listBox12.Items.Add($"Action B : {i}"); }
+            for (int i = 0; i < unknownBlockA; i++) { listBox13.Items.Add($"Unknown A : {i}"); }
+            for (int i = 0; i < unknownBlockB; i++) { listBox14.Items.Add($"Unknown B : {i}"); }
             // not used for now
             button3.Enabled = true; // enable open level button
         }
@@ -740,8 +745,7 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             exporting = true;
-            // TODO : re-enable this event handler removal when done determining all the unknown bytes
-            //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
@@ -749,9 +753,8 @@ namespace ALTViewer
                 button5_Click(null!, null!);
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
-            //listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
-
             GenerateDebugTextures();
             MessageBox.Show($"Exported all levels with UVs!");
         }
@@ -766,7 +769,7 @@ namespace ALTViewer
         // monsters
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox3.SelectedIndex;
             textBox13.Text = $"Type : {monsters[index].Type}";
             textBox14.Text = $"X : {monsters[index].X}";
@@ -793,7 +796,7 @@ namespace ALTViewer
         // pickups
         private void listBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox4.SelectedIndex;
             textBox13.Text = $"X : {pickups[index].X}";
             textBox14.Text = $"Y : {pickups[index].Y}";
@@ -820,7 +823,7 @@ namespace ALTViewer
         // objects
         private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox6, listBox8, listBox9, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox5.SelectedIndex;
             textBox13.Text = $"X : {objects[index].X}";
             textBox14.Text = $"Y : {objects[index].Y}";
@@ -847,7 +850,7 @@ namespace ALTViewer
         // doors
         private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox8, listBox9, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox6.SelectedIndex;
             textBox13.Text = $"X : {doors[index].X}";
             textBox14.Text = $"Y : {doors[index].Y}";
@@ -874,7 +877,7 @@ namespace ALTViewer
         // lifts
         private void listBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox9, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox8.SelectedIndex;
             textBox13.Text = $"X : {lifts[index].X}";
             textBox14.Text = $"Y : {lifts[index].Y}";
@@ -901,7 +904,7 @@ namespace ALTViewer
         // path nodes
         private void listBox9_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox10, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox10, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox9.SelectedIndex;
             textBox13.Text = $"X : {paths[index].X}";
             textBox14.Text = $"Y : {paths[index].Y}";
@@ -928,7 +931,7 @@ namespace ALTViewer
         // collision blocks
         private void listBox10_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox9, listBox11, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox3, listBox4, listBox5, listBox6, listBox8, listBox9, listBox11, listBox12, listBox13, listBox14 });
             int index = listBox10.SelectedIndex;
             textBox13.Text = $"Unk1 : {collisionBlocks[index].Unk1}";
             textBox14.Text = $"Unk2 : {collisionBlocks[index].Unk2}";
@@ -955,12 +958,12 @@ namespace ALTViewer
 
         private void listBox11_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox3, listBox12 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox3, listBox12, listBox13, listBox14 });
             int index = listBox11.SelectedIndex;
             textBox13.Text = $"Unk1 : {actionListA[index].Unk1}";
             textBox14.Text = $"Unk2 : {actionListA[index].Unk2}";
-            textBox15.Text = "null";
-            textBox16.Text = "null";
+            textBox15.Text = $"Unk3 : {actionListA[index].Unk3}";
+            textBox16.Text = $"Unk4 : {actionListA[index].Unk4}";
             textBox17.Text = "null";
             textBox18.Text = "null";
             textBox24.Text = "null";
@@ -982,12 +985,12 @@ namespace ALTViewer
 
         private void listBox12_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3 });
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox13, listBox14 });
             int index = listBox12.SelectedIndex;
             textBox13.Text = $"Unk1 : {actionListB[index].Unk1}";
             textBox14.Text = $"Unk2 : {actionListB[index].Unk2}";
-            textBox15.Text = "null";
-            textBox16.Text = "null";
+            textBox15.Text = $"Unk3 : {actionListB[index].Unk3}";
+            textBox16.Text = $"Unk4 : {actionListB[index].Unk4}";
             textBox17.Text = "null";
             textBox18.Text = "null";
             textBox24.Text = "null";
@@ -1005,6 +1008,60 @@ namespace ALTViewer
             textBox36.Text = "null";
             textBox37.Text = "null";
             textBox23.Text = $"{actionListA[index].Offset:X2}";
+        }
+
+        private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox12, listBox14 });
+            int index = listBox12.SelectedIndex;
+            textBox13.Text = $"Unk1 : {unknownListA[index].Unk1}";
+            textBox14.Text = $"Unk2 : {unknownListA[index].Unk2}";
+            textBox15.Text = $"Unk3 : {unknownListA[index].Unk3}";
+            textBox16.Text = $"Unk4 : {unknownListA[index].Unk4}";
+            textBox17.Text = "null";
+            textBox18.Text = "null";
+            textBox24.Text = "null";
+            textBox25.Text = "null";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{unknownListA[index].Offset:X2}";
+        }
+
+        private void listBox14_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox13, listBox12 });
+            int index = listBox12.SelectedIndex;
+            textBox13.Text = $"Unk1 : {unknownListB[index].Unk1}";
+            textBox14.Text = $"Unk2 : {unknownListB[index].Unk2}";
+            textBox15.Text = $"Unk3 : {unknownListB[index].Unk3}";
+            textBox16.Text = $"Unk4 : {unknownListB[index].Unk4}";
+            textBox17.Text = "null";
+            textBox18.Text = "null";
+            textBox24.Text = "null";
+            textBox25.Text = "null";
+            textBox26.Text = "null";
+            textBox27.Text = "null";
+            textBox28.Text = "null";
+            textBox29.Text = "null";
+            textBox30.Text = "null";
+            textBox31.Text = "null";
+            textBox32.Text = "null";
+            textBox33.Text = "null";
+            textBox34.Text = "null";
+            textBox35.Text = "null";
+            textBox36.Text = "null";
+            textBox37.Text = "null";
+            textBox23.Text = $"{unknownListB[index].Offset:X2}";
         }
         // Refresh all list boxes to clear selections and reset indices
         private void RefreshListBoxes(ListBox[] listBoxes)
@@ -1034,6 +1091,8 @@ namespace ALTViewer
                 ListBox lb when lb == listBox10 => listBox10_SelectedIndexChanged!,
                 ListBox lb when lb == listBox11 => listBox11_SelectedIndexChanged!,
                 ListBox lb when lb == listBox12 => listBox12_SelectedIndexChanged!,
+                ListBox lb when lb == listBox13 => listBox13_SelectedIndexChanged!,
+                ListBox lb when lb == listBox14 => listBox14_SelectedIndexChanged!,
                 _ => throw new ArgumentException("Unknown list box")
             };
         }
