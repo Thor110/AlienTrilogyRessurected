@@ -52,7 +52,7 @@ namespace ALTViewer
             long Offset)> objects = new();
         private List<(byte X, byte Y, byte Unk1, byte Time, byte Tag, byte Rotation, byte Index, long Offset)> doors = new();
         private List<(byte X, byte Y, byte Z,
-            byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Tag, byte Unk11, byte Unk12, byte Unk13,
+            byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Index, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
         private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListA = new();
         private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListB = new();
@@ -564,7 +564,7 @@ namespace ALTViewer
                 byte y = br.ReadByte();             // y coordinate of the door
                 byte unk1 = br.ReadByte();          // UNKNOWN - only ever 64 or 0 across every level in the game
                 byte time = br.ReadByte();          // door open time
-                byte tag = br.ReadByte();           // door model tag
+                byte tag = br.ReadByte();           // door tag
                 br.ReadByte();                      // only ever 0 across every level in the game
                 byte rotation = br.ReadByte();      // Byte Direction  Facing
                                                     // 00 - North   // Y+
@@ -590,11 +590,11 @@ namespace ALTViewer
                 byte unk7 = br.ReadByte();          // this byte is always 0, 30, 50, 60, 90, 120, 150, 190, 210, 240 or 255 across every level in the game
                 byte unk8 = br.ReadByte();          // this byte is always 1, 2, 3, 4, 5, 6, 7, 10, 25 or 35  across every level in the game
                 br.ReadByte();                      // this byte is always 0 across every level in the game
-                byte tag = br.ReadByte();           // lift model tag
+                byte index = br.ReadByte();         // lift model index
                 byte unk11 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 byte unk12 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
                 byte unk13 = br.ReadByte();         // this byte is always 0, 1, 2, 3, 4, 5, 6, 7 or 8 across every level in the game ( these three bytes always match )
-                lifts.Add((x, y, z, unk1, unk3, unk5, unk6, unk7, unk8, tag, unk11, unk12, unk13, offset));
+                lifts.Add((x, y, z, unk1, unk3, unk5, unk6, unk7, unk8, index, unk11, unk12, unk13, offset));
             }
             // action sequence 1 formula = 64 * 4 - (4 bytes per action sequence)
             for (int i = 0; i < 64; i++)
@@ -891,7 +891,7 @@ namespace ALTViewer
             textBox27.Text = $"Unk7 :  {lifts[index].Unk7}";
             textBox28.Text = $"Unk8 :  {lifts[index].Unk8}";
             textBox29.Text = "Unk9 :  0";
-            textBox30.Text = $"Unk10 :  {lifts[index].Tag}";
+            textBox30.Text = $"Index :  {lifts[index].Index}";
             textBox31.Text = $"Unk11 :  {lifts[index].Unk11}";
             textBox32.Text = $"Unk12 :  {lifts[index].Unk12}";
             textBox33.Text = $"Unk13 :  {lifts[index].Unk13}";
