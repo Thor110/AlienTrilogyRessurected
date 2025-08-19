@@ -813,6 +813,7 @@ namespace ALTViewer
                         uvs = new[] { baseUvs[0], baseUvs[2], baseUvs[3], baseUvs[3] };
                         break;
                     case 11:
+                    case 139:
                         // Flip texture 180
                         uvs = new[] { baseUvs[1], baseUvs[0], baseUvs[3], baseUvs[2] };
                         break;
