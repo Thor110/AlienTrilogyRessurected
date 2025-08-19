@@ -98,6 +98,7 @@ namespace ALTViewer
             // L161LEV.MAP - D002 - incorrect texture index
             patchDirectory = Utilities.CheckDirectory() + "SECT12\\L162LEV.MAP";
             BinaryUtility.ReplaceByte(0x72800, 0xD3, patchDirectory);
+            BinaryUtility.ReplaceByte(0x72801, 0x00, patchDirectory);
             BinaryUtility.ReplaceByte(0x72802, 0x00, patchDirectory);
             //
             button6.Visible = false; // hide button after patching

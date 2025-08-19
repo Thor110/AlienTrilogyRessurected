@@ -457,10 +457,16 @@ Currently this is only fixed when exporting the level model.
 
 ## L161LEV Fix 2
 
-Here is the incorrect texture, I don't think this can even be seen in-game.
+Here is how the level was originally.
 
 <div align="center">
   <img src="Images/L161LEV-D002.png" alt="L161LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L161LEV-D002-FIX.png" alt="L161LEV Original">
 </div>
 
 ## L162LEV Fix 1

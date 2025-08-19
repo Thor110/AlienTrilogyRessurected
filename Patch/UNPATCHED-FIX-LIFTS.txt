@@ -1,0 +1,39 @@
+L213LEV_LIFT01 - needs editing
+L213LEV_LIFT02 - needs corners from L211LEV_LIFT00 - is fine corners?
+L213LEV_LIFT03 - needs corners from L211LEV_LIFT00 - is fine corners?
+L213LEV_LIFT04 - needs corners from L211LEV_LIFT00 - is fine corners?
+
+L311LEV_LIFT00 - oddity
+L311LEV_LIFT01 - oddity
+L311LEV_LIFT02 - oddity
+L311LEV_LIFT03 - oddity
+
+L331LEV_LIFT03 - strange???
+L331LEV_LIFT04 - strange???
+
+L361LEV_LIFT00 - rotate???
+
+L361LEV_LIFT06 - very wrong
+L361LEV_LIFT07 - very wrong
+
+L371LEV_LIFT01 - sizes wrong
+L371LEV_LIFT02 - sizes wrong
+
+L371LEV_LIFT03 - tiled wrong
+L371LEV_LIFT04 - tiled wrong
+
+L381LEV_LIFT00 - corner triangles wrong
+
+L381LEV_LIFT01 - might contain usable uv index for earlier "oddity" ??? ( textures often in same place? )
+
+L908LEV_LIFT00 - "oddity" again
+L908LEV_LIFT01 - "oddity" again
+L908LEV_LIFT02 - "oddity" again
+L908LEV_LIFT03 - "oddity" again
+
+L909LEV_LIFT02 - doesn't look right
+L909LEV_LIFT03 - doesn't look right
+L909LEV_LIFT06 - doesn't look right
+
+L909LEV_LIFT00 - doesn't look right - not used
+L391LEV_LIFT00 - very wrong looking - not used
