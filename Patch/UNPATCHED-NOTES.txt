@@ -1,0 +1,5 @@
+L155LEV-DOOR00
+L162LEV-DOOR00
+L906LEV-DOOR01
+
+These three doors have texture issues, but the models themselves are not used in the game
