@@ -1,4 +1,5 @@
-L213LEV_LIFT01 - needs editing
+L213LEV_LIFT01 - needs editing - 0x62FA0 = 5A ( Fixes the angled side texture )
+
 L213LEV_LIFT02 - needs corners from L211LEV_LIFT00 - is fine corners?
 L213LEV_LIFT03 - needs corners from L211LEV_LIFT00 - is fine corners?
 L213LEV_LIFT04 - needs corners from L211LEV_LIFT00 - is fine corners?
