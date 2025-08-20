@@ -1013,7 +1013,7 @@ namespace ALTViewer
         private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox12, listBox14 });
-            int index = listBox12.SelectedIndex;
+            int index = listBox13.SelectedIndex;
             textBox13.Text = $"Unk1 : {unknownListA[index].Unk1}";
             textBox14.Text = $"Unk2 : {unknownListA[index].Unk2}";
             textBox15.Text = $"Unk3 : {unknownListA[index].Unk3}";
@@ -1040,7 +1040,7 @@ namespace ALTViewer
         private void listBox14_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox13, listBox12 });
-            int index = listBox12.SelectedIndex;
+            int index = listBox14.SelectedIndex;
             textBox13.Text = $"Unk1 : {unknownListB[index].Unk1}";
             textBox14.Text = $"Unk2 : {unknownListB[index].Unk2}";
             textBox15.Text = $"Unk3 : {unknownListB[index].Unk3}";
