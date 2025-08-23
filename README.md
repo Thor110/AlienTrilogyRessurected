@@ -86,6 +86,7 @@ The road map for this project.
 	- [Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-1)
 	- [Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-2)
 	- [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
+	- [Patched an issue on L901LEV where player storage was located within the level boundaries.](#L901LEV-Multiplayer-Map-2-Fix-1)
 	- [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
 	- [Patched an issue on L900LEV where multiple texture flags were incorrectly set.](#L900LEV-Multiplayer-Map-1-Fix-2)
 	- [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
@@ -362,6 +363,22 @@ Here it is with the fix I applied to the level.
 [These fixes are the same as on L141LEV](#L141LEV-Fix-1)
 	
 Currently this is only fixed when exporting the level model.
+
+## L901LEV Multiplayer Map 1 Fix 1
+
+This shows where four enemy types are spawned within the level, in other levels these are clustered together off of the map.
+
+I believe these enemy types are placeholders for the players. Image taken within our Unity based toolkit.
+
+<div align="center">
+  <img src="Images/L901LEV-spawns.png" alt="L901LEV Original">
+</div>
+
+Here it is with the fix I applied to the level.
+
+<div align="center">
+  <img src="Images/L901LEV-spawns-fix.png" alt="L901LEV Patched">
+</div>
 
 ## L900LEV Multiplayer Map 1 Fix 1
 
