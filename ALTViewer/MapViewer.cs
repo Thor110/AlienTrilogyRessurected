@@ -1007,7 +1007,7 @@ namespace ALTViewer
             textBox35.Text = "null";
             textBox36.Text = "null";
             textBox37.Text = "null";
-            textBox23.Text = $"{actionListA[index].Offset:X2}";
+            textBox23.Text = $"{actionListB[index].Offset:X2}";
         }
 
         private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
