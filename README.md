@@ -368,6 +368,8 @@ Currently this is only fixed when exporting the level model.
 
 This shows where four enemy types are spawned within the level, in other levels these are clustered together off of the map.
 
+The four highlighted objects show where player movement was previously blocked.
+
 I believe these enemy types are placeholders for the players. Image taken within our Unity based toolkit.
 
 <div align="center">
