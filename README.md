@@ -364,7 +364,7 @@ Here it is with the fix I applied to the level.
 	
 Currently this is only fixed when exporting the level model.
 
-## L901LEV Multiplayer Map 1 Fix 1
+## L901LEV Multiplayer Map 2 Fix 1
 
 This shows where four enemy types are spawned within the level, in other levels these are clustered together off of the map.
 
