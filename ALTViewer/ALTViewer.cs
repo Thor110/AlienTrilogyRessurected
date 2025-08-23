@@ -100,6 +100,16 @@ namespace ALTViewer
             BinaryUtility.ReplaceByte(0x72800, 0xD3, patchDirectory);
             BinaryUtility.ReplaceByte(0x72801, 0x00, patchDirectory);
             BinaryUtility.ReplaceByte(0x72802, 0x00, patchDirectory);
+            // L901LEV.MAP - Incorrect player store positioning
+            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L901LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x5BAD5L, new byte[] { 0x15, 0x29 }),
+                Tuple.Create(0x5BAE9L, new byte[] { 0x16, 0x29 }),
+                Tuple.Create(0x5BAFDL, new byte[] { 0x17, 0x29 }),
+                Tuple.Create(0x5BB11L, new byte[] { 0x18, 0x29 })
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
