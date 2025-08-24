@@ -54,10 +54,10 @@ namespace ALTViewer
         private List<(byte X, byte Y, byte Z,
             byte Unk1, byte Unk3, byte Unk5, byte Unk6, byte Unk7, byte Unk8, byte Index, byte Unk11, byte Unk12, byte Unk13,
             long Offset)> lifts = new();
-        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListA = new();
+        private List<(byte Unk1, byte Unk2, byte Unk3, long Offset)> actionListA = new();
         private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> actionListB = new();
-        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> unknownListA = new();
-        private List<(byte Unk1, byte Unk2, byte Unk3, byte Unk4, long Offset)> unknownListB = new();
+        private List<(byte Unk1, byte Unk4, long Offset)> unknownListA = new();
+        private List<(byte Unk1, byte Unk3, byte Unk4, long Offset)> unknownListB = new();
         private bool exporting;
         private byte[] remainder = null!; // remainder of the file data after parsing
         private bool patch;
@@ -393,8 +393,7 @@ namespace ALTViewer
                 paths.Add((x, y, alternateNode, nodeA, nodeB, nodeC, nodeD, offset));
             }
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
-            using var test = new StreamWriter($"{lastSelectedLevel}.bin");
-            
+            //using var test = new StreamWriter($"{lastSelectedLevel}.bin");
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -447,7 +446,7 @@ namespace ALTViewer
                 byte unk12 = br.ReadByte();         // UNKNOWN
                 byte unk13 = br.ReadByte();         // UNKNOWN
                 // TODO : figure out each and every byte
-                test.WriteLine($"{(int)type} : X : Y : Z : Rotation : {(int)health} : Drop : {(int)unk2} : Difficulty : {(int)unk4} : {(int)unk5} : {(int)unk6} : {(int)unk7} : {(int)unk8} : {(int)speed} : 0 : {(int)unk10} : {(int)unk11} : {(int)unk12} : {(int)unk13}");
+                //test.WriteLine($"{(int)type} : X : Y : Z : Rotation : {(int)health} : Drop : {(int)unk2} : Difficulty : {(int)unk4} : {(int)unk5} : {(int)unk6} : {(int)unk7} : {(int)unk8} : {(int)speed} : 0 : {(int)unk10} : {(int)unk11} : {(int)unk12} : {(int)unk13}");
                 monsters.Add((type, x, y, z, rotation, health, drop,
                     unk2, difficulty, unk4, unk5, unk6, unk7, unk8,
                     speed,
@@ -613,8 +612,8 @@ namespace ALTViewer
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();
                 byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();          // always 0 across all maps
-                actionListA.Add((unk1, unk2, unk3, unk4, offset)); // add to action sequence A
+                br.ReadByte();                      // always 0 across all maps
+                actionListA.Add((unk1, unk2, unk3, offset)); // add to action sequence A
             }
             // action sequence 2 formula = 64 * 4 - (4 bytes per action sequence)
             for (int i = 0; i < 64; i++)
@@ -632,20 +631,19 @@ namespace ALTViewer
             {
                 long offset = br.BaseStream.Position + 20;
                 byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();          // always 0 across all maps
-                byte unk3 = br.ReadByte();          // always 0 across all maps
+                br.ReadBytes(2);                    // both bytes always 0 across all maps
                 byte unk4 = br.ReadByte();
-                unknownListA.Add((unk1, unk2, unk3, unk4, offset));
+                unknownListA.Add((unk1, unk4, offset));
             }
             // unknownListB formula = unknownBlockB * 4 - (4 bytes per sequence)
             for (int i = 0; i < unknownBlockB; i++)
             {
                 long offset = br.BaseStream.Position + 20;
                 byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();          // always 0 across all maps
+                br.ReadByte();                      // always 0 across all maps
                 byte unk3 = br.ReadByte();
                 byte unk4 = br.ReadByte();
-                unknownListB.Add((unk1, unk2, unk3, unk4, offset));
+                unknownListB.Add((unk1, unk3, unk4, offset));
             }
             // clear list boxes
             listBox10.Items.Clear();    // clear collision blocks
@@ -965,7 +963,7 @@ namespace ALTViewer
             textBox37.Text = "null";
             textBox23.Text = $"{collisionBlocks[index].Offset:X2}";
         }
-
+        // action sequence A
         private void listBox11_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox3, listBox12, listBox13, listBox14 });
@@ -992,7 +990,7 @@ namespace ALTViewer
             textBox37.Text = "null";
             textBox23.Text = $"{actionListA[index].Offset:X2}";
         }
-
+        // action sequence B
         private void listBox12_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox13, listBox14 });
@@ -1019,14 +1017,14 @@ namespace ALTViewer
             textBox37.Text = "null";
             textBox23.Text = $"{actionListB[index].Offset:X2}";
         }
-
+        // unknown list A
         private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox12, listBox14 });
             int index = listBox13.SelectedIndex;
             textBox13.Text = $"Unk1 : {unknownListA[index].Unk1}";
-            textBox14.Text = $"Unk2 : {unknownListA[index].Unk2}";
-            textBox15.Text = $"Unk3 : {unknownListA[index].Unk3}";
+            textBox14.Text = $"Unk2 : 0";
+            textBox15.Text = $"Unk3 : 0";
             textBox16.Text = $"Unk4 : {unknownListA[index].Unk4}";
             textBox17.Text = "null";
             textBox18.Text = "null";
@@ -1046,13 +1044,13 @@ namespace ALTViewer
             textBox37.Text = "null";
             textBox23.Text = $"{unknownListA[index].Offset:X2}";
         }
-
+        // unknown list B
         private void listBox14_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshListBoxes(new ListBox[] { listBox4, listBox5, listBox6, listBox8, listBox9, listBox10, listBox11, listBox3, listBox13, listBox12 });
             int index = listBox14.SelectedIndex;
             textBox13.Text = $"Unk1 : {unknownListB[index].Unk1}";
-            textBox14.Text = $"Unk2 : {unknownListB[index].Unk2}";
+            textBox14.Text = $"Unk2 : 0";
             textBox15.Text = $"Unk3 : {unknownListB[index].Unk3}";
             textBox16.Text = $"Unk4 : {unknownListB[index].Unk4}";
             textBox17.Text = "null";
