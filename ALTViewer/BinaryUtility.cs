@@ -54,7 +54,7 @@ public static class BinaryUtility
     /// </summary>
     /// <param name="offset">The address at which to replace a byte.</param>
     /// <param name="value">The byte to write as a replacement.</param>
-    /// <param name="filename">The BinaryWriter Object.</param>
+    /// <param name="filename">The address of the file.</param>
     public static void ReplaceByte(long offset, byte value, string filename)
     {
         using var fs = new FileStream(filename, FileMode.Open, FileAccess.Write, FileShare.None);
@@ -64,8 +64,8 @@ public static class BinaryUtility
     /// <summary>
     /// The ReplaceByte method opens the relevant file to replace multiple bytes in a sequence.
     /// </summary>
-    /// <param name="replacements">The byte to replace and the address at which to replace it.</param>
-    /// <param name="filename">The BinaryWriter Object.</param>
+    /// <param name="replacements">The bytes to replace and the address at which to replace them.</param>
+    /// <param name="filename">The address of the file.</param>
     public static void ReplaceBytes(List<Tuple<long, byte[]>> replacements, string filename)
     {
         using (var stream = new FileStream(filename, FileMode.Open, FileAccess.ReadWrite))
@@ -77,6 +77,19 @@ public static class BinaryUtility
                     Replace(reader, writer, replacements);
                 }
             }
+        }
+    }
+    /// <summary>
+    /// The ReplaceBytesAcrossFiles method replaces bytes across different files.
+    /// Note : That the arrays must be constructed so that the indexes match.
+    /// </summary>
+    /// <param name="replacements">The bytes to replace and the address at which to replace them.</param>
+    /// <param name="filename">The addresses of the files.</param>
+    public static void ReplaceBytesAcrossFiles(List<Tuple<long, byte[]>>[] replacements, string[] filename)
+    {
+        for (int i = 0; i < filename.Length; i++)
+        {
+            ReplaceBytes(replacements[i], filename[i]);
         }
     }
     /// <summary>
