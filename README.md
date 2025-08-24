@@ -95,6 +95,9 @@ The road map for this project.
 	- [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
 	- [Patched an issue on L161LEV where one face on a door had an incorrect texture.](#L161LEV-Fix-2)
 	- [Patched an issue on L162LEV where one face on the starting door had an incorrect texture.](#L162LEV-Fix-1)
+	- [Patched an issue on L371LEV where a secret area was inaccessible.](#L371LEV-Fix-1)
+	- [Patched an issue on L371LEV where two faces had incorrect textures.](#L371LEV-Fix-2)
+	- [Patched an issue on L371LEV where one of the textures unused tiles showed up at the edges of some faces.](#L371LEV-Fix-3)
 - [✅ 8 : Easter Eggs](#easter-eggs) ( ??% Complete )
 	- [Grade 33 Steel](#easter-egg-1)
 	- [End Times](#easter-egg-2)
@@ -230,13 +233,22 @@ I am also looking at making patches for any issues I find in the original game.
 - [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-3)
 - [Patched an issue on L906LEV where one railing was lacking the double sided transparency flag.](#L906LEV-Multiplayer-Map-7-Fix-4)
 - [Patched an issue on L906LEV where 8 different bridge sections had incorrect textures and UV coordinates.](#L906LEV-Multiplayer-Map-7-Fix-5)
+- [Patched an issue on L906LEV where doors had incorrectly flipped textures.](#L906LEV-Multiplayer-Map-7-Fix-6)
 - [Patched an issue on L905LEV where 2 textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-1)
 - [Patched an issue on L905LEV where lots of different textures were flipped when they shouldn't have been.](#L905LEV-Multiplayer-Map-6-Fix-2)
 - [Patched an issue on L903LEV where some crates had incorrect textures.](#L903LEV-Multiplayer-Map-4-Fix-1)
+- [Patched an issue on L901LEV where player storage was located within the level boundaries.](#L901LEV-Multiplayer-Map-2-Fix-1)
 - [Patched an issue on L900LEV where four crates had textures which were sideways.](#L900LEV-Multiplayer-Map-1-Fix-1)
+- [Patched an issue on L900LEV where multiple texture flags were incorrectly set.](#L900LEV-Multiplayer-Map-1-Fix-2)
 - [Patched an issue on L111LEV where four crates had textures which were sideways.](#L111LEV-Fix-1)
+- [Patched an issue on L111LEV where multiple texture flags were incorrectly set.](#L111LEV-Fix-2)
 - [Patched an issue on L141LEV where some crates had incorrect textures.](#L141LEV-Fix-1)
 - [Patched an issue on L161LEV where one face had an incorrect texture.](#L161LEV-Fix-1)
+- [Patched an issue on L161LEV where one face on a door had an incorrect texture.](#L161LEV-Fix-2)
+- [Patched an issue on L162LEV where one face on the starting door had an incorrect texture.](#L162LEV-Fix-1)
+- [Patched an issue on L371LEV where a secret area was inaccessible.](#L371LEV-Fix-1)
+- [Patched an issue on L371LEV where two faces had incorrect textures.](#L371LEV-Fix-2)
+- [Patched an issue on L371LEV where one of the textures unused tiles showed up at the edges of some faces.](#L371LEV-Fix-3)
 
 ## L906LEV Multiplayer Map 7 Fix 1
 
@@ -501,6 +513,18 @@ Here it is with the fix I applied to the level.
 <div align="center">
   <img src="Images/L162LEV-D001-FIX.png" alt="L161LEV Patched">
 </div>
+
+## L371LEV Fix 1
+
+bambamalicious tracked down the fix for this issue, which turned out to just be a single incorrect byte.
+
+## L371LEV Fix 2
+
+One face towards the end of the level was textured with an unused tile instead of the correct texture, this is now fixed.
+
+## L371LEV Fix 3
+
+The empty textures on the fourth texture sheet were previously purple, which showed up on the edges of some faces in the level, the background is now a similar dark shade to the rest of the textures.
 
 ## Easter Eggs
 
