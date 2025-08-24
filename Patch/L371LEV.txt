@@ -1,5 +1,5 @@
 Offset	From   To
-0x274AC == 95 = EA
+0x274AC == 9F = EA
 ^ Lift Fix
 
 Green Square Fix
