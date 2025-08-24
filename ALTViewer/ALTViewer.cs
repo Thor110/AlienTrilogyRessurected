@@ -70,7 +70,7 @@ namespace ALTViewer
             0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
             };
             foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
-            //L906LEV.MAP - D000 - flip texture
+            // L906LEV.MAP - D000 - flip texture
             long[] flip0B = { 0x801C2, 0x80172, 0x80262 };
             foreach (long value in flip0B) { BinaryUtility.ReplaceByte(value, 0x0B, patchDirectory); }
             // L905LEV.MAP
@@ -110,6 +110,9 @@ namespace ALTViewer
                 Tuple.Create(0x5BB11L, new byte[] { 0x18, 0x29 })
             };
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            // L371LEV.MAP - inaccessible secret fix discovered by @bambamalicious
+            patchDirectory = Utilities.CheckDirectory() + "SECT32\\L371LEV.MAP";
+            BinaryUtility.ReplaceByte(0x6F78E, 0x01, patchDirectory);
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
