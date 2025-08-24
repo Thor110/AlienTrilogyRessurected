@@ -1,0 +1,6 @@
+Offset	From   To
+0x274AC == 95 = EA
+^ Lift Fix
+
+Green Square Fix
+0x1EDE8 == 00 = 23

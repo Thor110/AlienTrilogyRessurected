@@ -11,7 +11,7 @@ namespace ALTViewer
             using var ms = new MemoryStream(patched);
             using var br = new BinaryReader(ms);
             br.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
-            byte check = br.ReadByte(); // this checks if the patch v1 has been applied ( first five fixes )
+            byte check = br.ReadByte(); // this checks if the patch v1 has been applied ( up to 371GFX.B16 fix )
             if (check == 0xFF) { button6.Visible = true; }
         }
         // create new form method
@@ -113,6 +113,46 @@ namespace ALTViewer
             // L371LEV.MAP - inaccessible secret fix discovered by @bambamalicious
             patchDirectory = Utilities.CheckDirectory() + "SECT32\\L371LEV.MAP";
             BinaryUtility.ReplaceByte(0x6F78E, 0x01, patchDirectory);
+            // L371LEV.MAP - incorrect texture indexes fixed by @thor110
+            BinaryUtility.ReplaceByte(0x274AC, 0xEA, patchDirectory);
+            BinaryUtility.ReplaceByte(0x1EDE8, 0x23, patchDirectory);
+            // 371GFX.B16 - graphics background fix
+            patchDirectory = Utilities.CheckDirectory() + "SECT32\\371GFX.B16";
+            long i = 0x0; // single allocation
+            // TODO : tuple list for these or something rather than 33 for loops and 20,480 filestreams!!!
+            for (i = 0x3AB0C; i < 0x3AB4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AB0C - 64 bytes of FA - 3AB4C
+            for (i = 0x3ABCC; i < 0x3AC4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ABCC - 128 bytes of FA
+            for (i = 0x3ACCC; i < 0x3AD4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ACCC - 128 bytes of FA
+            for (i = 0x3ADCC; i < 0x3AE4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ADCC - 128 bytes of FA
+            for (i = 0x3AECC; i < 0x3AF4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AECC - 128 bytes of FA
+            for (i = 0x3AFCC; i < 0x3B04C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AFCC - 128 bytes of FA
+            for (i = 0x3B0CC; i < 0x3B14C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B0CC - 128 bytes of FA
+            for (i = 0x3B1CC; i < 0x3B24C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B1CC - 128 bytes of FA
+            for (i = 0x3B2CC; i < 0x3B34C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B2CC - 128 bytes of FA
+            for (i = 0x3B3CC; i < 0x3B44C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B3CC - 128 bytes of FA
+            for (i = 0x3B4CC; i < 0x3B54C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B4CC - 128 bytes of FA
+            for (i = 0x3B5CC; i < 0x3B64C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B5CC - 128 bytes of FA
+            for (i = 0x3B6CC; i < 0x3B74C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B6CC - 128 bytes of FA
+            for (i = 0x3B7CC; i < 0x3B84C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B7CC - 128 bytes of FA
+            for (i = 0x3B8CC; i < 0x3B94C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B8CC - 128 bytes of FA
+            for (i = 0x3B9CC; i < 0x3BA4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B9CC - 128 bytes of FA
+            for (i = 0x3BACC; i < 0x3BB4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BACC - 128 bytes of FA
+            for (i = 0x3BBCC; i < 0x3BC4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BBCC - 128 bytes of FA
+            for (i = 0x3BCCC; i < 0x3BD4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BCCC - 128 bytes of FA
+            for (i = 0x3BDCC; i < 0x3BE4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BDCC - 128 bytes of FA
+            for (i = 0x3BECC; i < 0x3BF4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BECC - 128 bytes of FA
+            for (i = 0x3BFCC; i < 0x3C04C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BFCC - 128 bytes of FA
+            for (i = 0x3C0CC; i < 0x3C14C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C0CC - 128 bytes of FA
+            for (i = 0x3C1CC; i < 0x3C24C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C1CC - 128 bytes of FA
+            for (i = 0x3C2CC; i < 0x3C34C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C2CC - 128 bytes of FA
+            for (i = 0x3C3CC; i < 0x3C44C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C3CC - 128 bytes of FA
+            for (i = 0x3C4CC; i < 0x3C54C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C4CC - 128 bytes of FA
+            for (i = 0x3C5CC; i < 0x3C64C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C5CC - 128 bytes of FA
+            for (i = 0x3C6CC; i < 0x3C74C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C6CC - 128 bytes of FA
+            for (i = 0x3C7CC; i < 0x3C84C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C7CC - 128 bytes of FA
+            for (i = 0x3C8CC; i < 0x3C94C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C8CC - 128 bytes of FA
+            for (i = 0x3C9CC; i < 0x3CA4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C9CC - 128 bytes of FA
+            for (i = 0x3CACC; i < 0x40B0C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3CACC - 16448 bytes of FA
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
