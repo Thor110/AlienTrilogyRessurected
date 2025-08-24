@@ -158,7 +158,7 @@ namespace ALTViewer
             //Lift Models parsed separately for now
             liftSections = TileRenderer.ParseBndFormSections(File.ReadAllBytes(selectedLevelFile), "L0"); // parse lift sections from the selected level file
             foreach (var section in liftSections) { listBox7.Items.Add(section.Name); } // Populate ListBox with section names
-            if (exporting) { return; } // if exporting, do not parse level data meant for viewing
+            //if (exporting) { return; } // if exporting, do not parse level data meant for viewing
             // clear lists
             vertices.Clear();
             quads.Clear();
@@ -231,7 +231,9 @@ namespace ALTViewer
             ushort unknownBlockA = br.ReadUInt16();         // unknownListA = unknownBlockA * 4 - UNKNOWN
             br.ReadBytes(2);                                // action sequence block counts - not needed, always 64.
             ushort unknownBlockB = br.ReadUInt16();         // unknownListB = unknownBlockB * 4 - UNKNOWN
-            ushort enemyTypes = br.ReadUInt16();            // Available Enemy Types
+            ushort enemyTypes = br.ReadUInt16();            // Enemy Types (bitmask)
+                                                            // This is a bitmask that determines what enemy types are loaded into memory. Enemy Types : 1 - 15
+                                                            // The game will crash if an enemy type is declared but not actually used
             // Chapter 1 ( enemyTypes ) - 16/17/18/19 are likely not a part of the enemyTypes ( example : first two levels )
             // L111LEV - 22 00 // 2 / 6
             // L112LEV - 22 00 // 2 / 6 / 16
@@ -272,14 +274,18 @@ namespace ALTViewer
             // L391LEV - 43 00 // 7 / 1 / 2
             // Multiplayer Levels ( enemyTypes )
             // All = 00 10
-            ushort unknown = br.ReadUInt16();               // timer for resupply missions possibly?
-            // unknown 3
-            // L112LEV - 04 00
-            // L122LEV - 04 00
-            // L154LEV - 34 00
-            // L155LEV - 2C 00
-            // L222LEV - 30 00
-            // L232LEV - 14 00
+            ushort ventTypes = br.ReadUInt16();             // Vent Types (bitmask) Always loaded into memory
+            // It seems this bitmask is not actually used by the game and might just be leftover metadata from the original editor.
+            // 10 - Horizontal Steam Vent                           // 00000100
+            // 11 - Horizontal Flame Vent                           // 00010000
+            // 12 - Vertical Steam Vent                             // 00001000
+            // 13 - Vertical Flame Vent                             // 00100000
+            // L112LEV - 04 00                                      // 00000100 - 00000000 // 16
+            // L122LEV - 04 00                                      // 00000100 - 00000000 // 16
+            // L154LEV - 34 00                                      // 00110100 - 00000000 // 16/17/19
+            // L155LEV - 2C 00                                      // 00101100 - 00000000 // 16/18/19
+            // L222LEV - 30 00                                      // 00110000 - 00000000 // 17/19
+            // L232LEV - 14 00                                      // 00010100 - 00000000 // 16/17
             // All other levels = 00 00
             // vertice formula - multiply the value of these two bytes by 8 - (6 bytes for 3 points + 2 bytes zeros)
             br.BaseStream.Seek(vertCount * 8, SeekOrigin.Current);
@@ -387,6 +393,8 @@ namespace ALTViewer
                 paths.Add((x, y, alternateNode, nodeA, nodeB, nodeC, nodeD, offset));
             }
             // monster formula = number of elements multiplied by 20 - (20 bytes per monster)
+            using var test = new StreamWriter($"{lastSelectedLevel}.bin");
+            
             for (int i = 0; i < monsterCount; i++) // 28
             {
                 long offset = br.BaseStream.Position + 20;  // offset for reference
@@ -438,6 +446,8 @@ namespace ALTViewer
                 byte unk11 = br.ReadByte();         // UNKNOWN
                 byte unk12 = br.ReadByte();         // UNKNOWN
                 byte unk13 = br.ReadByte();         // UNKNOWN
+                // TODO : figure out each and every byte
+                test.WriteLine($"{(int)type} : X : Y : Z : Rotation : {(int)health} : Drop : {(int)unk2} : Difficulty : {(int)unk4} : {(int)unk5} : {(int)unk6} : {(int)unk7} : {(int)unk8} : {(int)speed} : 0 : {(int)unk10} : {(int)unk11} : {(int)unk12} : {(int)unk13}");
                 monsters.Add((type, x, y, z, rotation, health, drop,
                     unk2, difficulty, unk4, unk5, unk6, unk7, unk8,
                     speed,
@@ -564,7 +574,7 @@ namespace ALTViewer
                 byte y = br.ReadByte();             // y coordinate of the door
                 byte unk1 = br.ReadByte();          // UNKNOWN - only ever 64 or 0 across every level in the game
                 byte time = br.ReadByte();          // door open time
-                byte tag = br.ReadByte();           // door tag
+                byte tag = br.ReadByte();           // door tag is lock state. 1 = unlocked, 2 = locked, 10+ = shootable.
                 br.ReadByte();                      // only ever 0 across every level in the game
                 byte rotation = br.ReadByte();      // Byte Direction  Facing
                                                     // 00 - North   // Y+
@@ -603,7 +613,7 @@ namespace ALTViewer
                 byte unk1 = br.ReadByte();
                 byte unk2 = br.ReadByte();
                 byte unk3 = br.ReadByte();
-                byte unk4 = br.ReadByte();
+                byte unk4 = br.ReadByte();          // always 0 across all maps
                 actionListA.Add((unk1, unk2, unk3, unk4, offset)); // add to action sequence A
             }
             // action sequence 2 formula = 64 * 4 - (4 bytes per action sequence)
@@ -622,8 +632,8 @@ namespace ALTViewer
             {
                 long offset = br.BaseStream.Position + 20;
                 byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();
-                byte unk3 = br.ReadByte();
+                byte unk2 = br.ReadByte();          // always 0 across all maps
+                byte unk3 = br.ReadByte();          // always 0 across all maps
                 byte unk4 = br.ReadByte();
                 unknownListA.Add((unk1, unk2, unk3, unk4, offset));
             }
@@ -632,7 +642,7 @@ namespace ALTViewer
             {
                 long offset = br.BaseStream.Position + 20;
                 byte unk1 = br.ReadByte();
-                byte unk2 = br.ReadByte();
+                byte unk2 = br.ReadByte();          // always 0 across all maps
                 byte unk3 = br.ReadByte();
                 byte unk4 = br.ReadByte();
                 unknownListB.Add((unk1, unk2, unk3, unk4, offset));
@@ -745,7 +755,7 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             exporting = true;
-            listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
+            //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
             int previouslySelectedIndex = listBox1.SelectedIndex; // store previously selected index
             for (int i = 0; i < listBox1.Items.Count; i++) // loop through all levels and export each map
             {
@@ -753,7 +763,7 @@ namespace ALTViewer
                 button5_Click(null!, null!);
             }
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
+            //listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
             exporting = false;
             GenerateDebugTextures();
             MessageBox.Show($"Exported all levels with UVs!");
