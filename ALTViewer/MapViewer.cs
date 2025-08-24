@@ -971,7 +971,7 @@ namespace ALTViewer
             textBox13.Text = $"Unk1 : {actionListA[index].Unk1}";
             textBox14.Text = $"Unk2 : {actionListA[index].Unk2}";
             textBox15.Text = $"Unk3 : {actionListA[index].Unk3}";
-            textBox16.Text = $"Unk4 : {actionListA[index].Unk4}";
+            textBox16.Text = $"Unk4 : 0";
             textBox17.Text = "null";
             textBox18.Text = "null";
             textBox24.Text = "null";
