@@ -87,8 +87,6 @@
             button10 = new Button();
             button11 = new Button();
             button12 = new Button();
-            button13 = new Button();
-            button14 = new Button();
             textBox20 = new TextBox();
             label33 = new Label();
             label34 = new Label();
@@ -713,28 +711,6 @@
             button12.UseVisualStyleBackColor = true;
             button12.Click += button12_Click;
             // 
-            // button13
-            // 
-            button13.Enabled = false;
-            button13.Location = new Point(1485, 110);
-            button13.Name = "button13";
-            button13.Size = new Size(120, 23);
-            button13.TabIndex = 72;
-            button13.Text = "Export Collision";
-            button13.UseVisualStyleBackColor = true;
-            button13.Click += button13_Click;
-            // 
-            // button14
-            // 
-            button14.Enabled = false;
-            button14.Location = new Point(1611, 110);
-            button14.Name = "button14";
-            button14.Size = new Size(120, 23);
-            button14.TabIndex = 73;
-            button14.Text = "Export All Collision";
-            button14.UseVisualStyleBackColor = true;
-            button14.Click += button14_Click;
-            // 
             // textBox20
             // 
             textBox20.AccessibleDescription = "Number of lifts in the level.";
@@ -1214,8 +1190,6 @@
             Controls.Add(textBox21);
             Controls.Add(label33);
             Controls.Add(textBox20);
-            Controls.Add(button14);
-            Controls.Add(button13);
             Controls.Add(button12);
             Controls.Add(button11);
             Controls.Add(button10);
@@ -1345,8 +1319,6 @@
         private Button button10;
         private Button button11;
         private Button button12;
-        private Button button13;
-        private Button button14;
         private TextBox textBox20;
         private Label label33;
         private Label label34;
