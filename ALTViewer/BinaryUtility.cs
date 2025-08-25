@@ -8,11 +8,10 @@ public static class BinaryUtility
     /// </summary>
     public static byte ReadByteAtOffset(string path, long offset)
     {
-        // The 'using var' syntax guarantees Dispose() is called even if an exception is thrown.
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
         using var reader = new BinaryReader(stream);
 
-        stream.Seek(offset, SeekOrigin.Begin);   // seek to the absolute offset
+        stream.Seek(offset, SeekOrigin.Begin);  // seek to the absolute offset
         return reader.ReadByte();               // read the byte
     }
     /// <summary>
