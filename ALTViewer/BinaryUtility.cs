@@ -4,6 +4,18 @@
 public static class BinaryUtility
 {
     /// <summary>
+    /// Reads a single byte from *path* at *offset* and disposes the stream automatically.
+    /// </summary>
+    public static byte ReadByteAtOffset(string path, long offset)
+    {
+        // The 'using var' syntax guarantees Dispose() is called even if an exception is thrown.
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+        using var reader = new BinaryReader(stream);
+
+        stream.Seek(offset, SeekOrigin.Begin);   // seek to the absolute offset
+        return reader.ReadByte();               // read the byte
+    }
+    /// <summary>
     /// The ReplaceBndFrameWith8ByteAlignment method replaces a section of a BND file with new data, ensuring that the new data is aligned to 8-byte boundaries.
     /// </summary>
     public static void ReplaceBndFrameWith8ByteAlignment(string filePath, long offset, int lengthToReplace, byte[] newData)

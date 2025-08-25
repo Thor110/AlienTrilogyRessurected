@@ -3,16 +3,19 @@ namespace ALTViewer
     public partial class ALTViewer : Form
     {
         public string patchDirectory = "";
+        public string gameDirectory = "";
         public ALTViewer()
         {
             InitializeComponent();
-            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L906LEV.MAP";
-            byte[] patched = File.ReadAllBytes(patchDirectory);
-            using var ms = new MemoryStream(patched);
-            using var br = new BinaryReader(ms);
-            br.BaseStream.Seek(0x50BC8, SeekOrigin.Current);
-            byte check = br.ReadByte(); // this checks if the patch v1 has been applied ( up to 371GFX.B16 fix )
-            if (check == 0xFF) { button6.Visible = true; }
+            gameDirectory = Utilities.CheckDirectory();
+            if(gameDirectory == "") { MessageBox.Show("Game directory not found. Please ensure this program is in the correct directory."); Close(); }
+            patchDirectory = Path.Combine(gameDirectory, "SECT90", "L906LEV.MAP"); // setup patchDirectory for the first patch
+            string sect32File = Path.Combine(gameDirectory, "SECT32", "371GFX.B16");
+            // first patch – SECT90
+            byte first = BinaryUtility.ReadByteAtOffset(patchDirectory, 0x50BC8); // checks if the first byte of the current patch has been applied
+            // second patch – SECT32
+            byte last = BinaryUtility.ReadByteAtOffset(gameDirectory + "SECT32\\371GFX.B16", 0x40B0B); // checks if the last byte of the current patch has been applied
+            if (first == 0xFF && last != 0xFA) { button6.Visible = true; }
         }
         // create new form method
         private void newForm(Form form)
@@ -33,75 +36,238 @@ namespace ALTViewer
         private void button6_Click(object sender, EventArgs e)
         {
             // L906LEV.MAP
-            long[] transparency = { 0x51342, 0x51A0E, 0x51EBE, 0x5236E, 0x52AEE, 0x22BF9 };
-            foreach (long value in transparency) { BinaryUtility.ReplaceByte(value, 0x04, patchDirectory); } // fix 2, 3 & 4 ( railing transparency )
             List<Tuple<long, byte[]>> replacements = new List<Tuple<long, byte[]>>()
             {
+                Tuple.Create(0x51342L, new byte[] { 0x04 }), // fix 2, 3 & 4 ( railing transparency )
+                Tuple.Create(0x51A0EL, new byte[] { 0x04 }),
+                Tuple.Create(0x51EBEL, new byte[] { 0x04 }),
+                Tuple.Create(0x5236EL, new byte[] { 0x04 }),
+                Tuple.Create(0x52AEEL, new byte[] { 0x04 }),
+                Tuple.Create(0x22BF9L, new byte[] { 0x04 }), // fix 2, 3 & 4 ( railing transparency )
                 Tuple.Create(0x50BC8L, new byte[] { 0xB4, 0x22, 0x00, 0x00 }), // fix 1 ( triangle )
                 Tuple.Create(0x45680L, new byte[] { 0x75, 0x00 }), // fix 5 ( bridge section )
                 Tuple.Create(0x22BF9L, new byte[] { 0x01, 0x04 }), //0x22BF9 == 01 04 ( railing texture fix )
             // NOTE : This face still isn't visible in-game
-                Tuple.Create(0x50BE8L, new byte[] { 0x75, 0x00 }) //0x50BE8 == 75 00 ( under railing texture fix )
+                Tuple.Create(0x50BE8L, new byte[] { 0x75, 0x00 }), //0x50BE8 == 75 00 ( under railing texture fix ) // NOTE : This face still isn't visible in-game
             // NOTE : This face still isn't visible in-game
+                Tuple.Create(0x456A8L, new byte[] { 0x75 }), // fix 5 ( bridge section 1 )
+                Tuple.Create(0x457E8L, new byte[] { 0x75 }),
+                Tuple.Create(0x45810L, new byte[] { 0x75 }),
+                Tuple.Create(0x45838L, new byte[] { 0x75 }),
+                Tuple.Create(0x45860L, new byte[] { 0x75 }),
+                Tuple.Create(0x45888L, new byte[] { 0x75 }), // fix 5 ( bridge section 1 )
+                Tuple.Create(0x41C60L, new byte[] { 0x75 }), // fix 5 ( bridge section 2 )
+                Tuple.Create(0x41C38L, new byte[] { 0x75 }),
+                Tuple.Create(0x41C10L, new byte[] { 0x75 }),
+                Tuple.Create(0x41BE8L, new byte[] { 0x75 }),
+                Tuple.Create(0x41BC0L, new byte[] { 0x75 }),
+                Tuple.Create(0x41B98L, new byte[] { 0x75 }), // fix 5 ( bridge section 2 )
+                Tuple.Create(0x3D00CL, new byte[] { 0x75 }), // fix 5 ( bridge section 3 )
+                Tuple.Create(0x3CA94L, new byte[] { 0x75 }),
+                Tuple.Create(0x36E64L, new byte[] { 0x75 }),
+                Tuple.Create(0x36068L, new byte[] { 0x75 }), // fix 5 ( bridge section 3 )
+                Tuple.Create(0x35F00L, new byte[] { 0x75 }), // fix 5 ( bridge section 4 )
+                Tuple.Create(0x36CC0L, new byte[] { 0x75 }),
+                Tuple.Create(0x37B5CL, new byte[] { 0x75 }),
+                Tuple.Create(0x38908L, new byte[] { 0x75 }),
+                Tuple.Create(0x396A0L, new byte[] { 0x75 }),
+                Tuple.Create(0x3A474L, new byte[] { 0x75 }),
+                Tuple.Create(0x3AD34L, new byte[] { 0x75 }),
+                Tuple.Create(0x3C044L, new byte[] { 0x75 }),
+                Tuple.Create(0x3C8F0L, new byte[] { 0x75 }),
+                Tuple.Create(0x3CEA4L, new byte[] { 0x75 }), // fix 5 ( bridge section 4 )
+                Tuple.Create(0x35C44L, new byte[] { 0x75 }), // fix 5 ( bridge section 5 )
+                Tuple.Create(0x35C6CL, new byte[] { 0x75 }),
+                Tuple.Create(0x35C94L, new byte[] { 0x75 }),
+                Tuple.Create(0x35CBCL, new byte[] { 0x75 }),
+                Tuple.Create(0x35CE4L, new byte[] { 0x75 }),
+                Tuple.Create(0x35D0CL, new byte[] { 0x75 }), // fix 5 ( bridge section 5 )
+                Tuple.Create(0x31BD0L, new byte[] { 0x75 }), // fix 5 ( bridge section 6 )
+                Tuple.Create(0x31BA8L, new byte[] { 0x75 }),
+                Tuple.Create(0x31B80L, new byte[] { 0x75 }),
+                Tuple.Create(0x31B58L, new byte[] { 0x75 }),
+                Tuple.Create(0x31B30L, new byte[] { 0x75 }),
+                Tuple.Create(0x31B08L, new byte[] { 0x75 }), // fix 5 ( bridge section 6 )
+                Tuple.Create(0x3C620L, new byte[] { 0x75 }), // fix 5 ( bridge section 7 )
+                Tuple.Create(0x3CDF0L, new byte[] { 0x75 }),
+                Tuple.Create(0x3D1ECL, new byte[] { 0x75 }),
+                Tuple.Create(0x3D5E8L, new byte[] { 0x75 }),
+                Tuple.Create(0x3DB38L, new byte[] { 0x75 }),
+                Tuple.Create(0x3E164L, new byte[] { 0x75 }), // fix 5 ( bridge section 7 )
+                Tuple.Create(0x3E1DCL, new byte[] { 0x75 }), // fix 5 ( bridge section 8 )
+                Tuple.Create(0x3DBB0L, new byte[] { 0x75 }),
+                Tuple.Create(0x3D660L, new byte[] { 0x75 }),
+                Tuple.Create(0x3D264L, new byte[] { 0x75 }),
+                Tuple.Create(0x3CE68L, new byte[] { 0x75 }),
+                Tuple.Create(0x3C698L, new byte[] { 0x75 }), // fix 5 ( bridge section 8 )
+                // fix texture flips
+                Tuple.Create(0x3A476L, new byte[] { 0x02 }),
+                Tuple.Create(0x35D36L, new byte[] { 0x02 }),
+                Tuple.Create(0x35E26L, new byte[] { 0x02 }),
+                Tuple.Create(0x35D86L, new byte[] { 0x02 }),
+                Tuple.Create(0x35DD6L, new byte[] { 0x02 }),
+                Tuple.Create(0x35E76L, new byte[] { 0x02 }),
+                Tuple.Create(0x35EC6L, new byte[] { 0x02 }),
+                Tuple.Create(0x2549AL, new byte[] { 0x02 }),
+                Tuple.Create(0x278B2L, new byte[] { 0x02 }),
+                Tuple.Create(0x293A6L, new byte[] { 0x02 }),
+                Tuple.Create(0x2B0B6L, new byte[] { 0x02 }),
+                Tuple.Create(0x2D2EEL, new byte[] { 0x02 }),
+                Tuple.Create(0x2F116L, new byte[] { 0x02 }),
+                Tuple.Create(0x30476L, new byte[] { 0x02 }),
+                Tuple.Create(0x31DB2L, new byte[] { 0x02 }),
+                Tuple.Create(0x5132EL, new byte[] { 0x02 }),
+                Tuple.Create(0x4F51AL, new byte[] { 0x02 }),
+                Tuple.Create(0x4E2D2L, new byte[] { 0x02 }),
+                Tuple.Create(0x4CFEAL, new byte[] { 0x02 }),
+                Tuple.Create(0x4BE1AL, new byte[] { 0x02 }),
+                Tuple.Create(0x458B2L, new byte[] { 0x02 }),
+                Tuple.Create(0x45902L, new byte[] { 0x02 }),
+                Tuple.Create(0x408B2L, new byte[] { 0x02 }),
+                Tuple.Create(0x3E936L, new byte[] { 0x02 }),
+                Tuple.Create(0x41B72L, new byte[] { 0x02 }),
+                Tuple.Create(0x4123AL, new byte[] { 0x02 }),
+                Tuple.Create(0x3EB66L, new byte[] { 0x02 }),
+                Tuple.Create(0x3DDE2L, new byte[] { 0x02 }),
+                // fix texture flips
+                Tuple.Create(0x35D5EL, new byte[] { 0x00 }),
+                Tuple.Create(0x35DAEL, new byte[] { 0x00 }),
+                Tuple.Create(0x35DFEL, new byte[] { 0x00 }),
+                Tuple.Create(0x35E4EL, new byte[] { 0x00 }),
+                Tuple.Create(0x35E9EL, new byte[] { 0x00 }),
+                Tuple.Create(0x254C2L, new byte[] { 0x00 }),
+                Tuple.Create(0x269EEL, new byte[] { 0x00 }),
+                Tuple.Create(0x2A0DAL, new byte[] { 0x00 }),
+                Tuple.Create(0x2E496L, new byte[] { 0x00 }),
+                Tuple.Create(0x30FDEL, new byte[] { 0x00 }),
+                Tuple.Create(0x4EC46L, new byte[] { 0x00 }),
+                Tuple.Create(0x4D8FAL, new byte[] { 0x00 }),
+                Tuple.Create(0x4C8BAL, new byte[] { 0x00 }),
+                Tuple.Create(0x4B442L, new byte[] { 0x00 }),
+                Tuple.Create(0x458DAL, new byte[] { 0x00 }),
+                Tuple.Create(0x4592AL, new byte[] { 0x00 }),
+                Tuple.Create(0x3F552L, new byte[] { 0x00 }),
+                Tuple.Create(0x41B4AL, new byte[] { 0x00 }),
+                Tuple.Create(0x3FACAL, new byte[] { 0x00 }),
+                Tuple.Create(0x3E40EL, new byte[] { 0x00 }),
+                Tuple.Create(0x3D842L, new byte[] { 0x00 }),
+                Tuple.Create(0x3D306L, new byte[] { 0x00 }),
+                // L906LEV.MAP - D000 - flip texture
+                Tuple.Create(0x801C2L, new byte[] { 0x0B }),
+                Tuple.Create(0x80172L, new byte[] { 0x0B }),
+                Tuple.Create(0x80262L, new byte[] { 0x0B }),
             };
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
-            //
-            long[] bridge = { 0x456A8L, 0x457E8L, 0x45810L, 0x45838L, 0x45860L, 0x45888L,                       // fix 5 ( bridge section 1 )
-            0x41C60L, 0x41C38L,  0x41C10L, 0x41BE8L, 0x41BC0L, 0x41B98L,                                        // fix 5 ( bridge section 2 )
-            0x3D00CL, 0x3CA94L, 0x36E64L, 0x36068L,                                                             // fix 5 ( bridge section 3 )
-            0x35F00L, 0x36CC0L, 0x37B5CL, 0x38908L, 0x396A0L, 0x3A474L, 0x3AD34L, 0x3C044L, 0x3C8F0L, 0x3CEA4L, // fix 5 ( bridge section 4 )
-            0x35C44L, 0x35C6CL, 0x35C94L, 0x35CBCL, 0x35CE4L, 0x35D0CL,                                         // fix 5 ( bridge section 5 )
-            0x31BD0L, 0x31BA8L, 0x31B80L, 0x31B58L, 0x31B30L, 0x31B08L,                                         // fix 5 ( bridge section 6 )
-            0x3C620L, 0x3CDF0L, 0x3D1ECL, 0x3D5E8L, 0x3DB38L, 0x3E164L,                                         // fix 5 ( bridge section 7 )
-            0x3E1DCL, 0x3DBB0L, 0x3D660L, 0x3D264L, 0x3CE68L, 0x3C698L };                                       // fix 5 ( bridge section 8 )
-            foreach (long value in bridge) { BinaryUtility.ReplaceByte(value, 0x75, patchDirectory); }          // fix 5 ( bridge section )
-            // fix texture flips
-            long[] flip02 = { 0x3A476L, 0x35D36L, 0x35E26L, 0x35D86L, 0x35DD6L, 0x35E76L, 0x35EC6L, 0x2549AL,
-            0x278B2L, 0x293A6L, 0x2B0B6L, 0x2D2EEL, 0x2F116L, 0x30476L, 0x31DB2L,
-            0x5132EL, 0x4F51AL, 0x4E2D2L, 0x4CFEAL, 0x4BE1AL,
-            0x458B2L, 0x45902L,
-            0x408B2L, 0x3E936L, 0x41B72L, 0x4123AL, 0x3EB66L, 0x3DDE2L
-            };
-            foreach (long value in flip02) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
-            long[] flip00 = { 0x35D5EL, 0x35DAEL, 0x35DFEL, 0x35E4EL, 0x35E9EL, 0x254C2L, 0x269EEL,
-            0x2A0DAL, 0x2E496L, 0x30FDEL,
-            0x4EC46L, 0x4D8FAL, 0x4C8BAL, 0x4B442L,
-            0x458DAL, 0x4592AL,
-            0x3F552L, 0x41B4AL, 0x3FACAL, 0x3E40EL, 0x3D842L, 0x3D306L
-            };
-            foreach (long value in flip00) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
-            // L906LEV.MAP - D000 - flip texture
-            long[] flip0B = { 0x801C2, 0x80172, 0x80262 };
-            foreach (long value in flip0B) { BinaryUtility.ReplaceByte(value, 0x0B, patchDirectory); }
             // L905LEV.MAP
-            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L905LEV.MAP";
-            long[] flip00905 = { 0x56ADA, 0x57A8E, // fix 1 ( pipes )
-            0x41356, 0x4645A, 0x46432, 0x4A8F2, 0x50F4A, 0x5186E, 0x5211A, 0x50FC2, 0x51896, 0x52142, 0x51012, 0x518BE, 0x5216A, // fix 2 ( pipes )
-            0x5103A, 0x518E6, 0x52192, 0x42C42, 0x4434E, 0x44222, 0x44236, 0x42B2A, 0x4410A, 0x42B66, 0x42B7A, 0x42B8E, 0x442AE, 0x42BCA, 0x42BF2, 0x462B6, 0x4619E, // fix 2 ( pipes )
-            0x461DA, 0x461EE, 0x46216, 0x4622A, 0x46266, 0x48796, 0x4867E, 0x48692, 0x49E52, 0x49D3A, 0x49D76, 0x49D8A, 0x49D9E, 0x49DDA, 0x49E16, 0x488C2, 0x487AA, // fix 2 ( pipes )
-            0x487D2, 0x462F2, 0x4632E, 0x4637E // fix 2 ( pipes )
+            patchDirectory = gameDirectory + "SECT90\\L905LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x56ADAL, new byte[] { 0x00 }), // fix 1 ( pipes )
+                Tuple.Create(0x57A8EL, new byte[] { 0x00 }), // fix 1 ( pipes )
+                Tuple.Create(0x41356L, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x4645AL, new byte[] { 0x00 }),
+                Tuple.Create(0x46432L, new byte[] { 0x00 }),
+                Tuple.Create(0x4A8F2L, new byte[] { 0x00 }),
+                Tuple.Create(0x50F4AL, new byte[] { 0x00 }),
+                Tuple.Create(0x5186EL, new byte[] { 0x00 }),
+                Tuple.Create(0x5211AL, new byte[] { 0x00 }),
+                Tuple.Create(0x50FC2L, new byte[] { 0x00 }),
+                Tuple.Create(0x51896L, new byte[] { 0x00 }),
+                Tuple.Create(0x52142L, new byte[] { 0x00 }),
+                Tuple.Create(0x51012L, new byte[] { 0x00 }),
+                Tuple.Create(0x518BEL, new byte[] { 0x00 }),
+                Tuple.Create(0x5216AL, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x5103AL, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x518E6L, new byte[] { 0x00 }),
+                Tuple.Create(0x52192L, new byte[] { 0x00 }),
+                Tuple.Create(0x42C42L, new byte[] { 0x00 }),
+                Tuple.Create(0x4434EL, new byte[] { 0x00 }),
+                Tuple.Create(0x44222L, new byte[] { 0x00 }),
+                Tuple.Create(0x44236L, new byte[] { 0x00 }),
+                Tuple.Create(0x42B2AL, new byte[] { 0x00 }),
+                Tuple.Create(0x4410AL, new byte[] { 0x00 }),
+                Tuple.Create(0x42B66L, new byte[] { 0x00 }),
+                Tuple.Create(0x42B7AL, new byte[] { 0x00 }),
+                Tuple.Create(0x42B8EL, new byte[] { 0x00 }),
+                Tuple.Create(0x442AEL, new byte[] { 0x00 }),
+                Tuple.Create(0x42BCAL, new byte[] { 0x00 }),
+                Tuple.Create(0x42BF2L, new byte[] { 0x00 }),
+                Tuple.Create(0x462B6L, new byte[] { 0x00 }),
+                Tuple.Create(0x4619EL, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x461DAL, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x461EEL, new byte[] { 0x00 }),
+                Tuple.Create(0x46216L, new byte[] { 0x00 }),
+                Tuple.Create(0x4622AL, new byte[] { 0x00 }),
+                Tuple.Create(0x46266L, new byte[] { 0x00 }),
+                Tuple.Create(0x48796L, new byte[] { 0x00 }),
+                Tuple.Create(0x4867EL, new byte[] { 0x00 }),
+                Tuple.Create(0x48692L, new byte[] { 0x00 }),
+                Tuple.Create(0x49E52L, new byte[] { 0x00 }),
+                Tuple.Create(0x49D3AL, new byte[] { 0x00 }),
+                Tuple.Create(0x49D76L, new byte[] { 0x00 }),
+                Tuple.Create(0x49D8AL, new byte[] { 0x00 }),
+                Tuple.Create(0x49D9EL, new byte[] { 0x00 }),
+                Tuple.Create(0x49DDAL, new byte[] { 0x00 }),
+                Tuple.Create(0x49E16L, new byte[] { 0x00 }),
+                Tuple.Create(0x488C2L, new byte[] { 0x00 }),
+                Tuple.Create(0x487AAL, new byte[] { 0x00 }), // fix 2 ( pipes )
+                Tuple.Create(0x487D2L, new byte[] { 0x00 }),
+                Tuple.Create(0x462F2L, new byte[] { 0x00 }),
+                Tuple.Create(0x4632EL, new byte[] { 0x00 }),
+                Tuple.Create(0x4637EL, new byte[] { 0x00 })
             };
-            foreach (long value in flip00905) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+
+
+
+            // TODO : this could be cleaner >>
             // L111LEV.MAP - incorrect texture flags
-            patchDirectory = Utilities.CheckDirectory() + "SECT11\\L111LEV.MAP";
-            long[] flip00111 = { 0x2E33E, 0x2F3E2, 0x2F40A, 0x2F432, 0x307BA, 0x307E2, 0x3080A, 0x2EE92, 0x38D7A, 0x38D66, 0x30936, 0x30922 };
-            foreach (long value in flip00111) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
-            long[] flip02111 = { 0x3054E, 0x3053A, 0x391DA, 0x391C6 };
-            foreach (long value in flip02111) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
-            // L900LEV.MAP - incorrect texture flags
-            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L900LEV.MAP";
-            foreach (long value in flip00111) { BinaryUtility.ReplaceByte(value, 0x00, patchDirectory); }
-            foreach (long value in flip02111) { BinaryUtility.ReplaceByte(value, 0x02, patchDirectory); }
+            patchDirectory = gameDirectory + "SECT11\\L111LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x2E33EL, new byte[] { 0x00 }),
+                Tuple.Create(0x2F3E2L, new byte[] { 0x00 }),
+                Tuple.Create(0x2F40AL, new byte[] { 0x00 }),
+                Tuple.Create(0x2F432L, new byte[] { 0x00 }),
+                Tuple.Create(0x307BAL, new byte[] { 0x00 }),
+                Tuple.Create(0x307E2L, new byte[] { 0x00 }),
+                Tuple.Create(0x3080AL, new byte[] { 0x00 }),
+                Tuple.Create(0x2EE92L, new byte[] { 0x00 }),
+                Tuple.Create(0x38D7AL, new byte[] { 0x00 }),
+                Tuple.Create(0x38D66L, new byte[] { 0x00 }),
+                Tuple.Create(0x30936L, new byte[] { 0x00 }),
+                Tuple.Create(0x30922L, new byte[] { 0x00 })
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            patchDirectory = gameDirectory + "SECT90\\L900LEV.MAP";
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            patchDirectory = gameDirectory + "SECT11\\L111LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x3054EL, new byte[] { 0x02 }),
+                Tuple.Create(0x3053AL, new byte[] { 0x02 }),
+                Tuple.Create(0x391DAL, new byte[] { 0x02 }),
+                Tuple.Create(0x391C6L, new byte[] { 0x02 })
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            patchDirectory = gameDirectory + "SECT90\\L900LEV.MAP";
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
+            // TODO : this could be cleaner ^^
+
             // L162LEV.MAP - D001 - incorrect texture index
-            patchDirectory = Utilities.CheckDirectory() + "SECT12\\L162LEV.MAP";
+            patchDirectory = gameDirectory + "SECT12\\L162LEV.MAP";
             BinaryUtility.ReplaceByte(0x323E8, 0x67, patchDirectory);
             // L161LEV.MAP - D002 - incorrect texture index
-            patchDirectory = Utilities.CheckDirectory() + "SECT12\\L162LEV.MAP";
-            BinaryUtility.ReplaceByte(0x72800, 0xD3, patchDirectory);
-            BinaryUtility.ReplaceByte(0x72801, 0x00, patchDirectory);
-            BinaryUtility.ReplaceByte(0x72802, 0x00, patchDirectory);
+            patchDirectory = gameDirectory + "SECT12\\L161LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x72800L, new byte[] { 0xD3 }),
+                Tuple.Create(0x72801L, new byte[] { 0x00 }),
+                Tuple.Create(0x72802L, new byte[] { 0x00 })
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             // L901LEV.MAP - Incorrect player store positioning
-            patchDirectory = Utilities.CheckDirectory() + "SECT90\\L901LEV.MAP";
+            patchDirectory = gameDirectory + "SECT90\\L901LEV.MAP";
             replacements = new List<Tuple<long, byte[]>>()
             {
                 Tuple.Create(0x5BAD5L, new byte[] { 0x15, 0x29 }),
@@ -111,48 +277,60 @@ namespace ALTViewer
             };
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             // L371LEV.MAP - inaccessible secret fix discovered by @bambamalicious
-            patchDirectory = Utilities.CheckDirectory() + "SECT32\\L371LEV.MAP";
-            BinaryUtility.ReplaceByte(0x6F78E, 0x01, patchDirectory);
-            // L371LEV.MAP - incorrect texture indexes fixed by @thor110
-            BinaryUtility.ReplaceByte(0x274AC, 0xEA, patchDirectory);
-            BinaryUtility.ReplaceByte(0x1EDE8, 0x23, patchDirectory);
+            patchDirectory = gameDirectory + "SECT32\\L371LEV.MAP";
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x6F78EL, new byte[] { 0x01 }),    // inaccessible secret fix discovered by @bambamalicious
+                Tuple.Create(0x274ACL, new byte[] { 0xEA }),    // incorrect texture indexes fixed by @thor110
+                Tuple.Create(0x1EDE8L, new byte[] { 0x23 })     // incorrect texture indexes fixed by @thor110
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             // 371GFX.B16 - graphics background fix
-            patchDirectory = Utilities.CheckDirectory() + "SECT32\\371GFX.B16";
-            long i = 0x0; // single allocation
-            // TODO : tuple list for these or something rather than 33 for loops and 20,480 filestreams!!!
-            for (i = 0x3AB0C; i < 0x3AB4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AB0C - 64 bytes of FA - 3AB4C
-            for (i = 0x3ABCC; i < 0x3AC4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ABCC - 128 bytes of FA
-            for (i = 0x3ACCC; i < 0x3AD4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ACCC - 128 bytes of FA
-            for (i = 0x3ADCC; i < 0x3AE4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3ADCC - 128 bytes of FA
-            for (i = 0x3AECC; i < 0x3AF4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AECC - 128 bytes of FA
-            for (i = 0x3AFCC; i < 0x3B04C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3AFCC - 128 bytes of FA
-            for (i = 0x3B0CC; i < 0x3B14C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B0CC - 128 bytes of FA
-            for (i = 0x3B1CC; i < 0x3B24C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B1CC - 128 bytes of FA
-            for (i = 0x3B2CC; i < 0x3B34C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B2CC - 128 bytes of FA
-            for (i = 0x3B3CC; i < 0x3B44C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B3CC - 128 bytes of FA
-            for (i = 0x3B4CC; i < 0x3B54C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B4CC - 128 bytes of FA
-            for (i = 0x3B5CC; i < 0x3B64C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B5CC - 128 bytes of FA
-            for (i = 0x3B6CC; i < 0x3B74C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B6CC - 128 bytes of FA
-            for (i = 0x3B7CC; i < 0x3B84C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B7CC - 128 bytes of FA
-            for (i = 0x3B8CC; i < 0x3B94C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B8CC - 128 bytes of FA
-            for (i = 0x3B9CC; i < 0x3BA4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3B9CC - 128 bytes of FA
-            for (i = 0x3BACC; i < 0x3BB4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BACC - 128 bytes of FA
-            for (i = 0x3BBCC; i < 0x3BC4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BBCC - 128 bytes of FA
-            for (i = 0x3BCCC; i < 0x3BD4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BCCC - 128 bytes of FA
-            for (i = 0x3BDCC; i < 0x3BE4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BDCC - 128 bytes of FA
-            for (i = 0x3BECC; i < 0x3BF4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BECC - 128 bytes of FA
-            for (i = 0x3BFCC; i < 0x3C04C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3BFCC - 128 bytes of FA
-            for (i = 0x3C0CC; i < 0x3C14C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C0CC - 128 bytes of FA
-            for (i = 0x3C1CC; i < 0x3C24C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C1CC - 128 bytes of FA
-            for (i = 0x3C2CC; i < 0x3C34C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C2CC - 128 bytes of FA
-            for (i = 0x3C3CC; i < 0x3C44C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C3CC - 128 bytes of FA
-            for (i = 0x3C4CC; i < 0x3C54C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C4CC - 128 bytes of FA
-            for (i = 0x3C5CC; i < 0x3C64C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C5CC - 128 bytes of FA
-            for (i = 0x3C6CC; i < 0x3C74C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C6CC - 128 bytes of FA
-            for (i = 0x3C7CC; i < 0x3C84C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C7CC - 128 bytes of FA
-            for (i = 0x3C8CC; i < 0x3C94C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C8CC - 128 bytes of FA
-            for (i = 0x3C9CC; i < 0x3CA4C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3C9CC - 128 bytes of FA
-            for (i = 0x3CACC; i < 0x40B0C; i++) { BinaryUtility.ReplaceByte(i, 0xFA, patchDirectory); } //3CACC - 16448 bytes of FA
+            patchDirectory = gameDirectory + "SECT32\\371GFX.B16";
+            int i;
+            byte[] bufferA = new byte[64];
+            for (i = 0; i < 64; i++) { bufferA[i] = 0xFA; }
+            byte[] bufferB = new byte[128];
+            for (i = 0; i < 128; i++) { bufferB[i] = 0xFA; }
+            byte[] bufferC = new byte[16448];
+            for (i = 0; i < 16448; i++) { bufferC[i] = 0xFA; }
+            replacements = new List<Tuple<long, byte[]>>()
+            {
+                Tuple.Create(0x3AB0CL, bufferA),    //3AB0C - 64 bytes of FA
+                Tuple.Create(0x3ABCCL, bufferB),    //3ABCC - 128 bytes of FA
+                Tuple.Create(0x3ACCCL, bufferB),    //3ACCC - 128 bytes of FA
+                Tuple.Create(0x3ADCCL, bufferB),    //3ADCC - 128 bytes of FA
+                Tuple.Create(0x3AECCL, bufferB),    //3AECC - 128 bytes of FA
+                Tuple.Create(0x3AFCCL, bufferB),    //3AFCC - 128 bytes of FA
+                Tuple.Create(0x3B0CCL, bufferB),    //3B0CC - 128 bytes of FA
+                Tuple.Create(0x3B1CCL, bufferB),    //3B1CC - 128 bytes of FA
+                Tuple.Create(0x3B2CCL, bufferB),    //3B2CC - 128 bytes of FA
+                Tuple.Create(0x3B3CCL, bufferB),    //3B3CC - 128 bytes of FA
+                Tuple.Create(0x3B4CCL, bufferB),    //3B4CC - 128 bytes of FA
+                Tuple.Create(0x3B5CCL, bufferB),    //3B5CC - 128 bytes of FA
+                Tuple.Create(0x3B6CCL, bufferB),    //3B6CC - 128 bytes of FA
+                Tuple.Create(0x3B7CCL, bufferB),    //3B7CC - 128 bytes of FA
+                Tuple.Create(0x3B8CCL, bufferB),    //3B8CC - 128 bytes of FA
+                Tuple.Create(0x3B9CCL, bufferB),    //3B9CC - 128 bytes of FA
+                Tuple.Create(0x3BACCL, bufferB),    //3BACC - 128 bytes of FA
+                Tuple.Create(0x3BBCCL, bufferB),    //3BBCC - 128 bytes of FA
+                Tuple.Create(0x3BCCCL, bufferB),    //3BCCC - 128 bytes of FA
+                Tuple.Create(0x3BDCCL, bufferB),    //3BDCC - 128 bytes of FA
+                Tuple.Create(0x3BECCL, bufferB),    //3BECC - 128 bytes of FA
+                Tuple.Create(0x3BFCCL, bufferB),    //3BFCC - 128 bytes of FA
+                Tuple.Create(0x3C0CCL, bufferB),    //3C0CC - 128 bytes of FA
+                Tuple.Create(0x3C1CCL, bufferB),    //3C1CC - 128 bytes of FA
+                Tuple.Create(0x3C2CCL, bufferB),    //3C2CC - 128 bytes of FA
+                Tuple.Create(0x3C3CCL, bufferB),    //3C3CC - 128 bytes of FA
+                Tuple.Create(0x3C4CCL, bufferB),    //3C4CC - 128 bytes of FA
+                Tuple.Create(0x3C5CCL, bufferB),    //3C5CC - 128 bytes of FA
+                Tuple.Create(0x3C6CCL, bufferB),    //3C6CC - 128 bytes of FA
+                Tuple.Create(0x3C7CCL, bufferB),    //3C7CC - 128 bytes of FA
+                Tuple.Create(0x3C8CCL, bufferB),    //3C8CC - 128 bytes of FA
+                Tuple.Create(0x3C9CCL, bufferB),    //3C9CC - 128 bytes of FA
+                Tuple.Create(0x3CACCL, bufferC)     //3CACC - 16448 bytes of FA
+            };
+            BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             //
             button6.Visible = false; // hide button after patching
             MessageBox.Show("Patch applied successfully!");
