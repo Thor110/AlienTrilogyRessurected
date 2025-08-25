@@ -15,7 +15,7 @@ namespace ALTViewer
             byte first = BinaryUtility.ReadByteAtOffset(patchDirectory, 0x50BC8); // checks if the first byte of the current patch has been applied
             // second patch – SECT32
             byte last = BinaryUtility.ReadByteAtOffset(gameDirectory + "SECT32\\371GFX.B16", 0x40B0B); // checks if the last byte of the current patch has been applied
-            if (first == 0xFF && last != 0xFA) { button6.Visible = true; }
+            if (first == 0xFF || last != 0xFA) { button6.Visible = true; } // show patch button if the first byte is unchanged or the last byte is not patched
         }
         // create new form method
         private void newForm(Form form)

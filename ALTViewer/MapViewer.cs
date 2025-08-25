@@ -59,7 +59,7 @@ namespace ALTViewer
         private List<(byte Unk1, byte Unk4, long Offset)> unknownListA = new();
         private List<(byte Unk1, byte Unk3, byte Unk4, long Offset)> unknownListB = new();
         private bool exporting;
-        private byte[] remainder = null!; // remainder of the file data after parsing
+        private byte[] minimap = null!;
         private bool patch;
         private List<Pen> pens = new();
         public MapViewer()
@@ -335,11 +335,15 @@ namespace ALTViewer
                 // 12 - barricade line
                 // 13 - door or door open space?
                 // 14-41 - not used in level 1
+                //
+                // previous collision block based minimap
                 if (unk2 != 255) // if this is not 255, unk3 and unk4 are guaranteed to be 0
                 {
                     g.DrawRectangle(Pens.Gray, new Rectangle(xCount * 2, yCount * 2, 1, 1)); // * 2 to draw the map at twice the size for viewing
                     //g.DrawRectangle(pens[unk2], new Rectangle(xCount * 2, yCount * 2, 1, 1)); // hot to cold colour ranges???
-                } // all first four bytes are 255 for non traversable spaces
+                }
+                // previous noisy tests
+                // all first four bytes are 255 for non traversable spaces
                 /*if (unk3 == 255) // 255 is wall 0 is traversable
                 { g.DrawRectangle(Pens.Orange, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
                 if (unk4 == 0) // 255 is wall 0 is traversable
@@ -370,6 +374,7 @@ namespace ALTViewer
                 if (unk14 == 104) { g.DrawRectangle(Pens.Yellow, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }
                 if (unk14 == 112) { g.DrawRectangle(Pens.Green, new Rectangle(xCount * 2, yCount * 2, 1, 1)); }*/
                 collisionBlocks.Add((unk1, unk2, unk3, unk4, unk6, unk7, ceilingFog, floorFog, ceilingHeight, floorHeight, unk13, unk14, lighting, action, offset));
+                // previous collision block based minimap
                 xCount++;
                 if (xCount >= mapLength)
                 {
@@ -625,7 +630,27 @@ namespace ALTViewer
                 byte unk4 = br.ReadByte();
                 actionListB.Add((unk1, unk2, unk3, unk4, offset)); // add to action sequence B
             }
-            br.BaseStream.Seek(3584, SeekOrigin.Current); // suspected minimap data length
+            minimap = br.ReadBytes(3584); // suspected minimap data
+
+
+            // minimap rendering test
+
+            var mmBmp = new Bitmap(64, 56, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            for (int y = 0; y < 56; y++)
+            {
+                for (int x = 0; x < 64; x++)
+                {
+                    byte v = minimap[y * 64 + x];
+                    // first pass: treat as occupancy. 0 = black, nonzero = white (or scale)
+                    int c = (v == 0) ? 0 : 255;
+                    mmBmp.SetPixel(x, y, Color.FromArgb(c, c, c));
+                }
+            }
+            pictureBox3.Image = new Bitmap(mmBmp, 256, 256); // 4x scale to roughly fit your 256 frame (leaves 32px for your border)
+            
+
+
+
             // unknownListA formula = unknownBlockA * 4 - (4 bytes per sequence)
             for (int i = 0; i < unknownBlockA; i++)
             {
@@ -1108,14 +1133,14 @@ namespace ALTViewer
         private void checkBox1_CheckedChanged(object sender, EventArgs e) { if (checkBox1.Checked) { checkBox2.Checked = false; } }
         // debug unknown flags
         private void checkBox2_CheckedChanged(object sender, EventArgs e) { if (checkBox2.Checked) { checkBox1.Checked = false; } }
-        // dump remainder of the file data
+        // dump minimap of the selected level
         private void button7_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex == -1) { MessageBox.Show("Please select a level first!"); return; }
-            File.WriteAllBytes(Path.Combine(outputPath, $"remainder_{listBox1.SelectedItem!.ToString()!}.bin"), remainder);
-            if (!exporting) { MessageBox.Show("Remainder dumped."); }
+            File.WriteAllBytes(Path.Combine(outputPath, $"MiniMap_{listBox1.SelectedItem!.ToString()!}.bin"), minimap);
+            if (!exporting) { MessageBox.Show("MiniMap data dumped."); }
         }
-        // dump all remainders from all levels data
+        // dump all minimaps from all levels
         private void button8_Click(object sender, EventArgs e)
         {
             //listBox1.SelectedIndexChanged -= listBox1_SelectedIndexChanged!;
@@ -1129,7 +1154,7 @@ namespace ALTViewer
             if (previouslySelectedIndex != -1) { listBox1.SelectedIndex = previouslySelectedIndex; } // restore previously selected index
             exporting = false;
             //listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged!;
-            MessageBox.Show("All remainders dumped.");
+            MessageBox.Show("All MiniMap data dumped.");
         }
         // door models
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
