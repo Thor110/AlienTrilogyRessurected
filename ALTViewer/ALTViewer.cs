@@ -217,10 +217,6 @@ namespace ALTViewer
                 Tuple.Create(0x4637EL, new byte[] { 0x00 })
             };
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
-
-
-
-            // TODO : this could be cleaner >>
             // L111LEV.MAP - incorrect texture flags
             patchDirectory = gameDirectory + "SECT11\\L111LEV.MAP";
             replacements = new List<Tuple<long, byte[]>>()
@@ -252,8 +248,6 @@ namespace ALTViewer
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
             patchDirectory = gameDirectory + "SECT90\\L900LEV.MAP";
             BinaryUtility.ReplaceBytes(replacements, patchDirectory);
-            // TODO : this could be cleaner ^^
-
             // L162LEV.MAP - D001 - incorrect texture index
             patchDirectory = gameDirectory + "SECT12\\L162LEV.MAP";
             BinaryUtility.ReplaceByte(0x323E8, 0x67, patchDirectory);

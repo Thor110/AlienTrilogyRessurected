@@ -10,7 +10,6 @@ public static class BinaryUtility
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
         using var reader = new BinaryReader(stream);
-
         stream.Seek(offset, SeekOrigin.Begin);  // seek to the absolute offset
         return reader.ReadByte();               // read the byte
     }
